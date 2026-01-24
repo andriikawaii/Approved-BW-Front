@@ -1,0 +1,76 @@
+import { ServiceCounty } from "@/src/types/service-areas";
+
+export const SERVICE_AREAS: ServiceCounty[] = [
+  {
+    title: "Fairfield County",
+    image: "/images/fairfield-landmark.jpg",
+    towns: [
+      // LEFT COLUMN
+      { name: "Bethel" },
+      { name: "Brookfield" },
+      { name: "Cos Cob" },
+      { name: "Darien", highlight: true },
+      { name: "Fairfield", highlight: true },
+      { name: "Monroe" },
+      { name: "New Fairfield" },
+      { name: "Norwalk", highlight: true },
+      { name: "Redding" },
+      { name: "Riverside" },
+      { name: "Sherman" },
+      { name: "Stratford" },
+      { name: "Weston" },
+      { name: "Wilton" },
+
+      // RIGHT COLUMN
+      { name: "Bridgeport" },
+      { name: "Byram" },
+      { name: "Danbury" },
+      { name: "Easton" },
+      { name: "Greenwich", highlight: true },
+      { name: "New Canaan", highlight: true },
+      { name: "Newtown" },
+      { name: "Old Greenwich" },
+      { name: "Ridgefield", highlight: true },
+      { name: "Shelton" },
+      { name: "Stamford", highlight: true },
+      { name: "Trumbull" },
+      { name: "Westport", highlight: true },
+    ],
+  },
+  {
+    title: "New Haven County",
+    image: "/images/new-haven-landmark.jpg",
+    towns: [
+      // LEFT COLUMN
+      { name: "Ansonia" },
+      { name: "Bethany" },
+      { name: "Cheshire" },
+      { name: "East Haven" },
+      { name: "Hamden", highlight: true },
+      { name: "Meriden" },
+      { name: "Milford", highlight: true },
+      { name: "New Haven", highlight: true },
+      { name: "North Haven" },
+      { name: "Oxford" },
+      { name: "Seymour" },
+      { name: "Wallingford" },
+      { name: "West Haven" },
+      { name: "Woodbridge", highlight: true },
+
+      // RIGHT COLUMN
+      { name: "Beacon Falls" },
+      { name: "Branford", highlight: true },
+      { name: "Derby" },
+      { name: "Guilford", highlight: true },
+      { name: "Madison", highlight: true },
+      { name: "Middlebury" },
+      { name: "Naugatuck" },
+      { name: "North Branford" },
+      { name: "Orange", highlight: true },
+      { name: "Prospect" },
+      { name: "Southbury" },
+      { name: "Waterbury" },
+      { name: "Wolcott" },
+    ],
+  },
+];
