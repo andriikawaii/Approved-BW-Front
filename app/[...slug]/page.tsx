@@ -5,8 +5,18 @@ import { PageDataProvider } from '@/src/context/PageDataContext';
 import { renderTemplate } from '@/src/templates';
 import { JsonLd } from '@/src/components/seo/JsonLd';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPageBySlug('/');
+type Props = {
+  params: Promise<{ slug: string[] }>;
+};
+
+async function fetchPage(params: Props['params']) {
+  const { slug } = await params;
+  const path = slug.join('/');
+  return getPageBySlug(path);
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const page = await fetchPage(params);
   if (!page) return {};
 
   return {
@@ -16,8 +26,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function HomePage() {
-  const page = await getPageBySlug('/');
+export default async function DynamicPage({ params }: Props) {
+  const page = await fetchPage(params);
   if (!page) notFound();
 
   return (

@@ -1,3 +1,4 @@
+import Hero from './Hero';
 import HeroSlider from './HeroSlider';
 import TrustBar from './TrustBar';
 import { RichText } from './RichText';
@@ -10,7 +11,8 @@ import Warranty from './Warranty';
 import FAQSection from './FAQ';
 import ServiceAreas from './ServiceAreas';
 
-export const sectionMap = {
+export const sectionMap: Record<string, React.ComponentType<{ data: any }>> = {
+  hero: Hero,
   hero_slider: HeroSlider,
   trust_bar: TrustBar,
   rich_text: RichText,

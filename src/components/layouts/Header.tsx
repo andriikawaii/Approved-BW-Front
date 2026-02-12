@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Container from '@/src/components/ui/Container';
 import Button from '@/src/components/ui/Button';
+import { usePageData } from '@/src/context/PageDataContext';
 
 function Caret() {
   return (
@@ -33,7 +34,6 @@ function Chevron({ open }: { open: boolean }) {
   );
 }
 
-
 const NAV = {
   services: [
     { label: 'Kitchen Remodeling', href: '/kitchen-remodeling/' },
@@ -55,34 +55,34 @@ const NAV = {
 };
 
 export default function Header() {
+  const { phones } = usePageData();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [areasOpen, setAreasOpen] = useState(false);
 
+  const phoneItems = phones?.items ?? [];
 
   return (
     <header className="bg-[#1A2B45] text-white">
       {/* TOP BAR */}
-      <div className="border-b border-white/10">
-        <Container>
-          <div className="flex flex-col gap-2 py-2 text-xs sm:flex-row sm:justify-end sm:gap-6">
-            <a href="tel:+12039199616" className="hover:text-[#C68E4D]">
-              <span className="text-white/70">Fairfield County:</span>{' '}
-              <span className="font-semibold">(203) 919-9616</span>
-            </a>
-            <a href="tel:+12034669148" className="hover:text-[#C68E4D]">
-              <span className="text-white/70">New Haven County:</span>{' '}
-              <span className="font-semibold">(203) 466-9148</span>
-            </a>
-          </div>
-        </Container>
-      </div>
+      {phoneItems.length > 0 && (
+        <div className="border-b border-white/10">
+          <Container>
+            <div className="flex flex-col gap-2 py-2 text-xs sm:flex-row sm:justify-end sm:gap-6">
+              {phoneItems.map((phone) => (
+                <a key={phone.label} href={`tel:${phone.number.replace(/\D/g, '')}`} className="hover:text-[#C68E4D]">
+                  <span className="text-white/70">{phone.label}:</span>{' '}
+                  <span className="font-semibold">{phone.number}</span>
+                </a>
+              ))}
+            </div>
+          </Container>
+        </div>
+      )}
 
       {/* MAIN HEADER */}
       <Container>
         <div className="flex h-16 items-center justify-between">
-          {/* LOGO */}
           <Link href="/" className="text-2xl font-serif font-semibold">
             Built<span className="text-[#C68E4D]">Well</span>
           </Link>
@@ -95,7 +95,6 @@ export default function Header() {
                 Services <Caret />
               </button>
 
-              {/* hover bridge */}
               <div className="absolute left-0 top-full h-3 w-full" />
 
               <div
@@ -108,7 +107,6 @@ export default function Header() {
                   transition
                 "
               >
-                {/* top gold line */}
                 <div className="h-1 bg-[#C68E4D]" />
 
                 <div className="py-2">
@@ -144,14 +142,12 @@ export default function Header() {
               </div>
             </div>
 
-
             {/* AREAS DROPDOWN */}
             <div className="relative group">
               <button className="flex items-center gap-1 text-sm font-medium hover:text-[#C68E4D]">
                 Areas We Serve <Caret />
               </button>
 
-              {/* hover bridge */}
               <div className="absolute left-0 top-full h-3 w-full" />
 
               <div
@@ -186,7 +182,6 @@ export default function Header() {
               </div>
             </div>
 
-
             {NAV.main.map((item) => (
               <Link
                 key={item.href}
@@ -216,15 +211,12 @@ export default function Header() {
       {/* MOBILE MENU */}
       {mobileOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          {/* overlay */}
           <div
             className="absolute inset-0 bg-black/40"
             onClick={() => setMobileOpen(false)}
           />
 
-          {/* panel */}
           <div className="relative h-full w-full bg-[#1A2B45] px-6 py-6 text-white">
-            {/* HEADER */}
             <div className="flex items-center justify-between">
               <Link href="/" className="text-2xl font-serif font-semibold">
                 Built<span className="text-[#C68E4D]">Well</span>
@@ -239,9 +231,7 @@ export default function Header() {
               </button>
             </div>
 
-            {/* NAV */}
             <nav className="mt-10 flex flex-col text-lg">
-              {/* HOME */}
               <Link
                 href="/"
                 onClick={() => setMobileOpen(false)}
@@ -250,7 +240,6 @@ export default function Header() {
                 Home
               </Link>
 
-              {/* SERVICES */}
               <button
                 onClick={() => setServicesOpen(!servicesOpen)}
                 className="flex items-center justify-between border-b border-white/10 py-4"
@@ -283,7 +272,6 @@ export default function Header() {
                 </div>
               )}
 
-              {/* AREAS */}
               <button
                 onClick={() => setAreasOpen(!areasOpen)}
                 className="flex items-center justify-between border-b border-white/10 py-4"
@@ -308,7 +296,6 @@ export default function Header() {
                 </div>
               )}
 
-              {/* MAIN LINKS */}
               {NAV.main.map((item) => (
                 <Link
                   key={item.href}
@@ -320,7 +307,6 @@ export default function Header() {
                 </Link>
               ))}
 
-              {/* SUBCONTRACTORS */}
               <Link
                 href="/subcontractors/"
                 onClick={() => setMobileOpen(false)}
@@ -329,7 +315,6 @@ export default function Header() {
                 Subcontractors
               </Link>
 
-              {/* CTA */}
               <Link
                 href="/free-consultation/"
                 onClick={() => setMobileOpen(false)}
@@ -338,26 +323,25 @@ export default function Header() {
                 Get a Free Quote
               </Link>
 
-              {/* CONTACT INFO */}
-              <div className="mt-10 space-y-3 text-sm">
-                <div>
-                  <span className="text-[#C68E4D]">Fairfield County:</span>{' '}
-                  <a href="tel:+12039199616">(203) 919-9616</a>
+              {/* CONTACT INFO from API */}
+              {phoneItems.length > 0 && (
+                <div className="mt-10 space-y-3 text-sm">
+                  {phoneItems.map((phone) => (
+                    <div key={phone.label}>
+                      <span className="text-[#C68E4D]">{phone.label}:</span>{' '}
+                      <a href={`tel:${phone.number.replace(/\D/g, '')}`}>{phone.number}</a>
+                    </div>
+                  ))}
+                  <div>
+                    <span className="text-[#C68E4D]">Email:</span>{' '}
+                    <a href="mailto:info@builtwellct.com">info@builtwellct.com</a>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-[#C68E4D]">New Haven County:</span>{' '}
-                  <a href="tel:+12034669148">(203) 466-9148</a>
-                </div>
-                <div>
-                  <span className="text-[#C68E4D]">Email:</span>{' '}
-                  <a href="mailto:info@builtwellct.com">info@builtwellct.com</a>
-                </div>
-              </div>
+              )}
             </nav>
           </div>
         </div>
       )}
-
     </header>
   );
 }
