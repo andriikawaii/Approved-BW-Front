@@ -1,27 +1,28 @@
 'use client';
 
 import { createContext, useContext, type ReactNode } from 'react';
-import type { PagePhones, PageFooter } from '../types/page';
+import type { FooterVariant } from '../../lib/footer';
+import type { PhoneItem } from '../../lib/phones';
 
 type PageDataContextValue = {
-  phones: PagePhones;
-  footer: PageFooter;
+  footerVariant: FooterVariant;
+  phones: PhoneItem[];
 };
 
 const defaultValue: PageDataContextValue = {
-  phones: { mode: '', items: [] },
-  footer: {},
+  footerVariant: 'A',
+  phones: [],
 };
 
 const PageDataContext = createContext<PageDataContextValue>(defaultValue);
 
 export function PageDataProvider({
+  footerVariant,
   phones,
-  footer,
   children,
 }: PageDataContextValue & { children: ReactNode }) {
   return (
-    <PageDataContext.Provider value={{ phones, footer }}>
+    <PageDataContext.Provider value={{ footerVariant, phones }}>
       {children}
     </PageDataContext.Provider>
   );

@@ -9,6 +9,11 @@ type Slide = {
   caption?: string;
 };
 
+type Badge = {
+  label: string;
+  value?: string;
+};
+
 type HeroProps = {
   data: {
     headline?: string;
@@ -16,15 +21,15 @@ type HeroProps = {
     cta_primary?: { label: string; url: string };
     cta_secondary?: { label: string; url: string };
     slides?: Slide[];
-    badges?: { label: string; value?: string }[];
+    badges?: Badge[];
   };
 };
 
 export default function HeroSlider({ data }: HeroProps) {
   const { headline, subheadline, cta_primary, cta_secondary } = data;
 
-  // Extract slides as objects and filter out ones without image
-  const slides: Slide[] = (data.slides ?? []).filter((s) => s.image);
+  const slides: Slide[] = data.slides ?? [];
+  const badges: Badge[] = data.badges ?? [];
 
   const [active, setActive] = useState(0);
 
@@ -43,7 +48,6 @@ export default function HeroSlider({ data }: HeroProps) {
 
   return (
     <section className="relative h-[85svh] min-h-[620px] w-full overflow-hidden md:h-[60vh] md:min-h-[520px]">
-      {/* SLIDES */}
       {slides.length > 0 ? (
         slides.map((slide, i) => (
           <div
@@ -62,7 +66,6 @@ export default function HeroSlider({ data }: HeroProps) {
         <div className="absolute inset-0 bg-[#1A2B45]" />
       )}
 
-      {/* CONTENT */}
       <div className="relative z-10 flex h-full flex-col items-center justify-start px-4 pt-16 pb-16 text-center text-white md:justify-center md:pt-0 md:pb-0">
         {headline && (
           <h1 className="font-serif text-4xl font-semibold md:text-6xl">
@@ -76,7 +79,6 @@ export default function HeroSlider({ data }: HeroProps) {
           </p>
         )}
 
-        {/* CTA BUTTONS */}
         {(cta_primary || cta_secondary) && (
           <div className="mt-8 flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-center">
             {cta_primary && (
@@ -99,44 +101,28 @@ export default function HeroSlider({ data }: HeroProps) {
           </div>
         )}
 
-        {/* SLIDE CAPTION */}
         {slides[active]?.caption && (
           <p className="absolute bottom-20 left-1/2 z-20 -translate-x-1/2 text-sm text-white/80">
             {slides[active].caption}
           </p>
         )}
 
-        {/* TRUST BAR – MOBILE */}
-        <div className="mt-8 flex w-full flex-col items-center gap-6 md:hidden">
-          <div className="flex flex-col items-center">
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-semibold">Google</span>
-              <div className="flex gap-1 text-[#FBBC05]">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <svg key={i} viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.43 8.719c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
+        {badges.length > 0 && (
+          <div className="mt-8 flex w-full flex-col items-center gap-6 md:hidden">
+            {badges.map((badge, i) => (
+              <div key={i} className="text-center">
+                {badge.value && (
+                  <div className="text-xl font-semibold">{badge.value}</div>
+                )}
+                <div className="text-[11px] uppercase tracking-widest text-white/70">
+                  {badge.label}
+                </div>
               </div>
-            </div>
-            <span className="mt-1 text-[11px] uppercase tracking-widest text-white/70">
-              5.0 STAR RATING
-            </span>
+            ))}
           </div>
-
-          <div className="text-center">
-            <div className="text-xl font-semibold">BBB</div>
-            <div className="text-[11px] uppercase tracking-widest text-white/70">A+ RATING</div>
-          </div>
-
-          <div className="text-center">
-            <div className="text-xl font-semibold">15+</div>
-            <div className="text-[11px] uppercase tracking-widest text-white/70">YEARS EXPERIENCE</div>
-          </div>
-        </div>
+        )}
       </div>
 
-      {/* ARROWS – DESKTOP ONLY */}
       {slides.length > 1 && (
         <>
           <button
@@ -161,40 +147,26 @@ export default function HeroSlider({ data }: HeroProps) {
         </>
       )}
 
-      {/* TRUST BAR – DESKTOP */}
-      <div className="absolute bottom-16 left-1/2 z-20 hidden w-full -translate-x-1/2 justify-center px-4 md:flex">
-        <div className="flex items-center gap-10 text-white">
-          <div className="flex flex-col items-center">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-semibold">Google</span>
-              <div className="flex gap-1 text-[#FBBC05]">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <svg key={i} viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.43 8.719c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
+      {badges.length > 0 && (
+        <div className="absolute bottom-16 left-1/2 z-20 hidden w-full -translate-x-1/2 justify-center px-4 md:flex">
+          <div className="flex items-center gap-10 text-white">
+            {badges.map((badge, i) => (
+              <div key={i} className="flex items-center gap-10">
+                {i > 0 && <div className="h-10 w-px bg-white/20" />}
+                <div className="text-center">
+                  {badge.value && (
+                    <div className="text-2xl font-semibold">{badge.value}</div>
+                  )}
+                  <div className="text-[11px] uppercase tracking-widest text-white/70">
+                    {badge.label}
+                  </div>
+                </div>
               </div>
-            </div>
-            <span className="text-[11px] uppercase tracking-widest text-white/70">5.0 STAR RATING</span>
-          </div>
-
-          <div className="h-10 w-px bg-white/20" />
-
-          <div className="text-center">
-            <div className="text-2xl font-semibold">BBB</div>
-            <div className="text-[11px] uppercase tracking-widest text-white/70">A+ RATING</div>
-          </div>
-
-          <div className="h-10 w-px bg-white/20" />
-
-          <div className="text-center">
-            <div className="text-2xl font-semibold">15+</div>
-            <div className="text-[11px] uppercase tracking-widest text-white/70">YEARS EXPERIENCE</div>
+            ))}
           </div>
         </div>
-      </div>
+      )}
 
-      {/* DOTS */}
       {slides.length > 1 && (
         <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-2 md:bottom-6">
           {slides.map((_, i) => (

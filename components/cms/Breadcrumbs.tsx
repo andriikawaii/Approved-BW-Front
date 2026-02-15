@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 type BreadcrumbsProps = {
   slug: string[];
@@ -11,8 +11,7 @@ function toLabel(segment: string): string {
 }
 
 function resolveHomeHref(): string {
-  const homeSlug = (process.env.CMS_HOME_SLUG ?? "home").trim().replace(/^\/+|\/+$/g, "");
-  return `/${homeSlug || "home"}`;
+  return "/";
 }
 
 export default async function Breadcrumbs({ slug }: BreadcrumbsProps) {

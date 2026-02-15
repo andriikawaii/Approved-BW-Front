@@ -1,3 +1,4 @@
+import type { ReactElement } from "react";
 import type { CMSSection } from "../../types/cms";
 
 type SectionRendererProps = {
@@ -8,7 +9,7 @@ type SectionComponentProps = {
   section: CMSSection;
 };
 
-type SectionComponent = (props: SectionComponentProps) => JSX.Element | null;
+type SectionComponent = (props: SectionComponentProps) => ReactElement | null;
 
 function readString(data: Record<string, unknown>, key: string): string | null {
   const value = data[key];

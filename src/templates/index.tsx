@@ -1,4 +1,4 @@
-import type { Page, TemplateType } from '../types/page';
+import type { Page } from '../types/page';
 import { DefaultPageTemplate } from './DefaultPageTemplate';
 
 const templateMap: Record<string, React.ComponentType<{ page: Page }>> = {

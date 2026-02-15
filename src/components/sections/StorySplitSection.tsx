@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { ShieldCheck } from 'lucide-react';
 
@@ -37,8 +37,8 @@ export default function StorySplitSection({ data }: Props) {
           <div>
             {/* BADGE */}
             <span className="inline-flex items-center gap-2 rounded-full bg-[#F3E6D6] px-4 py-1 text-xs font-semibold uppercase tracking-wider text-[#C68E4D]">
-                <ShieldCheck className="h-4 w-4" />
-                {badge}
+              <ShieldCheck className="h-4 w-4" />
+              {badge}
             </span>
 
             {/* TITLE */}
@@ -57,7 +57,7 @@ export default function StorySplitSection({ data }: Props) {
             {/* QUOTE */}
             {quote && (
               <div className="mt-8 border-l-4 border-[#C68E4D] pl-6 text-lg italic text-[#1E2F45]">
-                “{quote}”
+                {quote}
               </div>
             )}
           </div>

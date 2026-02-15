@@ -3,37 +3,62 @@ import { notFound } from 'next/navigation';
 import { getPageBySlug } from '@/src/api/pages';
 import { PageDataProvider } from '@/src/context/PageDataContext';
 import { renderTemplate } from '@/src/templates';
-import { JsonLd } from '@/src/components/seo/JsonLd';
+import { resolveFooterVariant } from '@/lib/footer';
+import { resolvePhones } from '@/lib/phones';
+import Layout from '@/src/components/layouts/Layout';
+import Breadcrumbs from '@/components/cms/Breadcrumbs';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
+
+if (!SITE_URL) {
+  throw new Error('NEXT_PUBLIC_SITE_URL environment variable is required');
+}
 
 type Props = {
   params: Promise<{ slug: string[] }>;
 };
 
-async function fetchPage(params: Props['params']) {
+async function resolveSlugPath(params: Props['params']) {
   const { slug } = await params;
-  const path = slug.join('/');
-  return getPageBySlug(path);
+  return slug.join('/');
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const page = await fetchPage(params);
+  const path = await resolveSlugPath(params);
+  const page = await getPageBySlug(path);
   if (!page) return {};
+
+  const normalizedPath = path.replace(/^\/+|\/+$/g, '');
+  const canonical = normalizedPath ? `${SITE_URL}/${normalizedPath}/` : `${SITE_URL}/`;
 
   return {
     title: page.seo.title,
     description: page.seo.description,
-    ...(page.seo.canonical ? { alternates: { canonical: page.seo.canonical } } : {}),
+    alternates: { canonical },
+    openGraph: {
+      title: page.seo.title,
+      description: page.seo.description,
+      url: canonical,
+      type: 'website',
+    },
   };
 }
 
 export default async function DynamicPage({ params }: Props) {
-  const page = await fetchPage(params);
+  const { slug } = await params;
+  const path = slug.join('/');
+  const page = await getPageBySlug(path);
   if (!page) notFound();
 
+  const footerVariant = resolveFooterVariant(page.template, page.slug);
+  const phones = resolvePhones(footerVariant);
+
   return (
-    <PageDataProvider phones={page.phones} footer={page.footer}>
-      <JsonLd schemas={page.seo.schemas} />
-      {renderTemplate(page)}
+    <PageDataProvider footerVariant={footerVariant} phones={phones}>
+      <Layout>
+        <Breadcrumbs slug={slug} />
+        {renderTemplate(page)}
+      </Layout>
     </PageDataProvider>
   );
 }

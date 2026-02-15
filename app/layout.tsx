@@ -1,8 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import Layout from '@/src/components/layouts/Layout';
 
-// Fallback metadata — pages override via generateMetadata()
 export const metadata: Metadata = {
   title: {
     default: 'BuiltWell',
@@ -18,9 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="antialiased">
-        <Layout>{children}</Layout>
-      </body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }

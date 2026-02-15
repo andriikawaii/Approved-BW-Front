@@ -1,36 +1,22 @@
-type PhoneResolverContext = {
-  template?: string;
-  slugPath?: string;
+import type { FooterVariant } from "./footer";
+
+export type PhoneItem = {
+  label: string;
+  number: string;
 };
 
-const DEFAULT_PHONE = "(800) 555-0100";
+const FAIRFIELD_PHONE: PhoneItem = { label: "Fairfield County", number: "(203) 555-0100" };
+const NEWHAVEN_PHONE: PhoneItem = { label: "New Haven County", number: "(203) 555-0200" };
 
-const TEMPLATE_PHONE_MAP: Record<string, string> = {
-  service: "(800) 555-0110",
-  location: "(800) 555-0120",
-  blog: "(800) 555-0130",
-};
-
-const SLUG_PHONE_MATCHERS: Array<{ pattern: RegExp; phone: string }> = [
-  { pattern: /^locations\//i, phone: "(800) 555-0120" },
-  { pattern: /^services\//i, phone: "(800) 555-0110" },
-  { pattern: /^blog\//i, phone: "(800) 555-0130" },
-];
-
-export function resolvePhone(context: PhoneResolverContext = {}): string {
-  const normalizedTemplate = (context.template ?? "").trim().toLowerCase();
-  const normalizedSlug = (context.slugPath ?? "").trim().replace(/^\/+|\/+$/g, "");
-
-  if (normalizedTemplate && TEMPLATE_PHONE_MAP[normalizedTemplate]) {
-    return TEMPLATE_PHONE_MAP[normalizedTemplate];
+export function resolvePhones(variant: FooterVariant): PhoneItem[] {
+  switch (variant) {
+    case "B":
+      return [FAIRFIELD_PHONE];
+    case "C":
+    case "D":
+      return [NEWHAVEN_PHONE];
+    case "A":
+    default:
+      return [FAIRFIELD_PHONE, NEWHAVEN_PHONE];
   }
-
-  if (normalizedSlug) {
-    const matched = SLUG_PHONE_MATCHERS.find((matcher) => matcher.pattern.test(normalizedSlug));
-    if (matched) {
-      return matched.phone;
-    }
-  }
-
-  return DEFAULT_PHONE;
 }

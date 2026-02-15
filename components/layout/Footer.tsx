@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { resolveFooterVariant, type FooterVariant } from "../../lib/footer";
-import { resolvePhone } from "../../lib/phones";
+import { resolvePhones } from "../../lib/phones";
 
 type FooterProps = {
   template: string;
@@ -53,18 +53,21 @@ const FOOTER_CONTENT: Record<FooterVariant, FooterContent> = {
 };
 
 export default async function Footer({ template, slugPath }: FooterProps) {
-  const variant = resolveFooterVariant(template);
+  const variant = resolveFooterVariant(template, slugPath ?? "");
   const content = FOOTER_CONTENT[variant];
-  const phone = resolvePhone({ template, slugPath });
+  const phones = resolvePhones(variant);
 
   return (
     <footer data-variant={variant}>
       <section>
         <h2>{content.heading}</h2>
         <p>{content.copy}</p>
-        <p>
-          <a href={`tel:${phone.replace(/[^\d]/g, "")}`}>{phone}</a>
-        </p>
+        {phones.map((phone) => (
+          <p key={phone.label}>
+            <span>{phone.label}: </span>
+            <a href={`tel:${phone.number.replace(/\D/g, "")}`}>{phone.number}</a>
+          </p>
+        ))}
       </section>
       <nav aria-label="Footer">
         <ul>

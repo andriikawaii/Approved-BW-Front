@@ -43,7 +43,6 @@ export default function Warranty({ data }: WarrantyProps) {
 
   return (
     <section className="relative overflow-hidden bg-[#1A2B45] py-20 text-white">
-      {/* PATTERN */}
       <div className="absolute inset-0 opacity-5">
         <div
           className="absolute inset-0"
@@ -57,7 +56,6 @@ export default function Warranty({ data }: WarrantyProps) {
 
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <div className="grid gap-12 md:grid-cols-2 items-center">
-          {/* LEFT */}
           <div>
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#C68E4D]/30 bg-[#C68E4D]/10 px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#C68E4D]">
               <ShieldCheck className="h-4 w-4" />
@@ -65,8 +63,7 @@ export default function Warranty({ data }: WarrantyProps) {
             </div>
 
             <h2 className="mb-6 font-serif text-4xl font-bold leading-tight md:text-5xl">
-              {title.replace(highlight, '')}
-              <span className="text-[#C68E4D]"> {highlight}</span>
+              {title}
             </h2>
 
             <p className="mb-8 text-lg leading-relaxed text-gray-300">
@@ -91,7 +88,6 @@ export default function Warranty({ data }: WarrantyProps) {
             </div>
           </div>
 
-          {/* RIGHT */}
           <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm md:p-10">
             <h3 className="mb-6 text-center font-serif text-2xl font-bold">
               What's Included
@@ -108,7 +104,7 @@ export default function Warranty({ data }: WarrantyProps) {
 
             <div className="mt-8 border-t border-white/10 pt-8 text-center">
               <p className="text-sm italic text-gray-400">
-                “{footer_quote}”
+                "{footer_quote}"
               </p>
             </div>
           </div>

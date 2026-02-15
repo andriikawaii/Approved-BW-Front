@@ -1,29 +1,23 @@
-export type FooterVariant = "A" | "B" | "C" | "D";
+﻿export type FooterVariant = "A" | "B" | "C" | "D";
 
-const TEMPLATE_VARIANT_MAP: Record<string, FooterVariant> = {
-  landing: "A",
-  service: "B",
-  location: "C",
-  blog: "D",
-};
+export function resolveFooterVariant(templateKey: string, slug: string): FooterVariant {
+  const normalizedTemplate = templateKey.trim().toLowerCase().replace(/^\/+|\/+$/g, "");
+  const normalizedSlug = slug.trim().toLowerCase().replace(/^\/+|\/+$/g, "");
 
-export function resolveFooterVariant(template: string): FooterVariant {
-  const normalized = template.trim().toLowerCase();
-
-  if (TEMPLATE_VARIANT_MAP[normalized]) {
-    return TEMPLATE_VARIANT_MAP[normalized];
+  if (normalizedSlug === "orange" || normalizedSlug.endsWith("/orange")) {
+    return "D";
   }
 
-  if (normalized.includes("service")) {
+  if (normalizedTemplate.includes("fairfield") || normalizedSlug.includes("fairfield-county")) {
     return "B";
   }
 
-  if (normalized.includes("location")) {
+  if (
+    normalizedTemplate.includes("new_haven") ||
+    normalizedTemplate.includes("new-haven") ||
+    normalizedSlug.includes("new-haven-county")
+  ) {
     return "C";
-  }
-
-  if (normalized.includes("blog") || normalized.includes("article") || normalized.includes("news")) {
-    return "D";
   }
 
   return "A";

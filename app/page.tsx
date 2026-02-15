@@ -1,29 +1,14 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import { getPageBySlug } from '@/src/api/pages';
-import { PageDataProvider } from '@/src/context/PageDataContext';
-import { renderTemplate } from '@/src/templates';
-import { JsonLd } from '@/src/components/seo/JsonLd';
+import CatchAllPage, {
+  generateMetadata as catchAllGenerateMetadata,
+} from './[...slug]/page';
+
+const rootParams = Promise.resolve({ slug: [] });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPageBySlug('/');
-  if (!page) return {};
-
-  return {
-    title: page.seo.title,
-    description: page.seo.description,
-    ...(page.seo.canonical ? { alternates: { canonical: page.seo.canonical } } : {}),
-  };
+  return catchAllGenerateMetadata({ params: rootParams });
 }
 
-export default async function HomePage() {
-  const page = await getPageBySlug('/');
-  if (!page) notFound();
-
-  return (
-    <PageDataProvider phones={page.phones} footer={page.footer}>
-      <JsonLd schemas={page.seo.schemas} />
-      {renderTemplate(page)}
-    </PageDataProvider>
-  );
+export default function HomePage() {
+  return CatchAllPage({ params: rootParams });
 }

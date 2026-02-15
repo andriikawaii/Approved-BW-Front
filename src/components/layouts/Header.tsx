@@ -60,7 +60,7 @@ export default function Header() {
   const [servicesOpen, setServicesOpen] = useState(false);
   const [areasOpen, setAreasOpen] = useState(false);
 
-  const phoneItems = phones?.items ?? [];
+  const phoneItems = phones ?? [];
 
   return (
     <header className="bg-[#1A2B45] text-white">

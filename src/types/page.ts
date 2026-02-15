@@ -1,3 +1,9 @@
+import type { CMSPage, CMSSection, CMSSeo } from '../../types/cms';
+
+export type Page = CMSPage;
+export type PageSection = CMSSection;
+export type PageSeo = CMSSeo;
+
 export type SectionType =
   | 'hero'
   | 'hero_slider'
@@ -21,58 +27,3 @@ export type TemplateType =
   | 'faq'
   | 'contact'
   | (string & {});
-
-export interface PageSection {
-  id: number;
-  type: SectionType;
-  data: Record<string, any>;
-  is_active: boolean;
-}
-
-export interface Breadcrumb {
-  label: string;
-  url: string;
-}
-
-export interface PageBreadcrumbs {
-  items: Breadcrumb[];
-  schema: Record<string, any>;
-}
-
-export interface PageSeo {
-  title: string;
-  description: string;
-  canonical: string | null;
-  schemas: Record<string, any>[];
-}
-
-export interface PhoneItem {
-  label: string;
-  number: string;
-}
-
-export interface PagePhones {
-  mode: string;
-  items: PhoneItem[];
-}
-
-export interface PageFooter {
-  template?: string;
-  tagline?: string;
-  columns?: { title: string; links: { label: string; url: string }[] }[];
-  email?: string;
-  address?: string;
-  copyright?: string;
-  [key: string]: any;
-}
-
-export interface Page {
-  id: number;
-  slug: string;
-  template: TemplateType;
-  phones: PagePhones;
-  footer: PageFooter;
-  breadcrumbs: PageBreadcrumbs;
-  seo: PageSeo;
-  sections: PageSection[];
-}

@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import { getPreviewPage } from '@/src/api/pages';
 import { PageDataProvider } from '@/src/context/PageDataContext';
 import { renderTemplate } from '@/src/templates';
-import { JsonLd } from '@/src/components/seo/JsonLd';
+import { resolveFooterVariant } from '@/lib/footer';
+import { resolvePhones } from '@/lib/phones';
 
 export const metadata: Metadata = {
   robots: 'noindex, nofollow',
@@ -21,13 +22,15 @@ export default async function PreviewPage({ searchParams }: Props) {
   const page = await getPreviewPage(path, signature);
   if (!page) notFound();
 
+  const footerVariant = resolveFooterVariant(page.template, page.slug);
+  const phones = resolvePhones(footerVariant);
+
   return (
-    <PageDataProvider phones={page.phones} footer={page.footer}>
+    <PageDataProvider footerVariant={footerVariant} phones={phones}>
       {/* Preview banner */}
       <div className="bg-yellow-400 text-black text-center py-2 text-sm font-semibold">
         PREVIEW MODE — This page is not published
       </div>
-      <JsonLd schemas={page.seo.schemas} />
       {renderTemplate(page)}
     </PageDataProvider>
   );

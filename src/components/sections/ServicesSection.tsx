@@ -67,7 +67,7 @@ export default function ServicesSection({ data }: ServicesSectionProps) {
                   href={cta.url}
                   className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold uppercase tracking-wide text-[#C68E4D] transition-colors duration-300 hover:text -[#1A2B45]"
                 >
-                  Book Consultation
+                  {cta.label}
                   <span aria-hidden>→</span>
                 </Link>
               </div>
