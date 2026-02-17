@@ -1,6 +1,6 @@
 import { Page } from '../types/page';
 
-const API_URL = process.env.API_URL ?? 'http://localhost:8000';
+const API_URL = process.env.LARAVEL_API_URL ?? 'http://localhost:8000';
 const isDev = process.env.NODE_ENV === 'development';
 
 export async function getPageBySlug(slug: string): Promise<Page | null> {
@@ -19,8 +19,11 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
       return null;
     }
 
-    return res.json();
+    const data = await res.json();
+    console.log('[getPageBySlug]', url, 'template:', data?.template, 'sections:', data?.sections?.length);
+    return data;
   } catch (error) {
+    console.error('[getPageBySlug] error:', error);
     return null;
   }
 }

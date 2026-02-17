@@ -15,15 +15,15 @@ export default function Button({
   className?: string;
 }) {
   const base =
-    'inline-flex items-center justify-center whitespace-nowrap font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2';
+    'inline-flex items-center justify-center whitespace-nowrap rounded-md font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2';
 
   const styles =
     variant === 'primary'
-      ? 'bg-[#BC9155] text-white hover:opacity-90 focus:ring-[#BC9155]'
-      : 'bg-transparent text-white/90 hover:text-white focus:ring-white';
+      ? 'bg-[#C89B5B] text-white hover:bg-[#b98747] focus:ring-[#C89B5B]'
+      : 'border border-white text-white hover:bg-white/10 focus:ring-white';
 
   return (
-    <Link href={href} className={`${base} ${styles} px-5 py-2.5 ${className}`}>
+    <Link href={href} className={`${base} ${styles} px-5 py-2.5 text-sm ${className}`}>
       {children}
     </Link>
   );

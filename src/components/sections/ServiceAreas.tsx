@@ -1,111 +1,131 @@
+import Link from 'next/link';
 import { MapPin } from 'lucide-react';
 
-type Town = {
-  name: string;
-  highlight?: boolean;
-};
+type TownValue = string | { name: string; highlight?: boolean; url?: string };
 
 type County = {
-  title: string;
-  image: string;
-  towns: Town[];
+  name?: string;
+  county_name?: string;
+  title?: string;
+  image?: string | null;
+  url?: string;
+  towns?: TownValue[];
+  cities?: TownValue[];
 };
 
 type Props = {
   data: {
     title: string;
-    subtitle: string;
+    subtitle?: string;
     counties: County[];
-    map_image?: string;
-    show_google_map?: boolean;
+    show_map?: boolean;
+    map_image?: string | null;
+    map_embed?: string | null;
+    map_embed_url?: string | null;
+    google_map_embed?: string | null;
+    map_iframe_src?: string | null;
   };
 };
 
-export default function ServiceAreas({ data }: Props) {
-  return (
-    <section id="areas" className="bg-white py-24">
-      <div className="flex justify-center">
-        <div className="container w-full px-4 sm:px-6">
-          {/* Header */}
-          <div className="mx-auto mb-16 max-w-3xl text-center">
-            <h2 className="mb-6 font-serif text-4xl font-bold text-[#1A2B45] md:text-5xl">
-              {data.title}
-            </h2>
-            <p className="text-lg text-gray-600">{data.subtitle}</p>
-          </div>
+function countyImageFallback(countyName: string) {
+  if (/new haven/i.test(countyName)) {
+    return '/images/new-haven-landmark.jpg';
+  }
+  return '/images/fairfield-landmark.jpg';
+}
 
-          {/* Counties */}
-          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 md:grid-cols-2">
-            {data.counties.map((county) => (
-              <div
-                key={county.title}
-                className="flex flex-col overflow-hidden rounded-xl shadow-lg"
+function resolveMapEmbedUrl(data: Props['data']) {
+  return (
+    data.map_embed ||
+    data.map_embed_url ||
+    data.google_map_embed ||
+    data.map_iframe_src ||
+    'https://www.google.com/maps?q=Fairfield%20County%20CT&output=embed'
+  );
+}
+
+function normalizeTowns(county: County): TownValue[] {
+  return county.towns || county.cities || [];
+}
+
+export default function ServiceAreas({ data }: Props) {
+  const showMap = data.show_map ?? true;
+  const mapImage = data.map_image || '/images/ct-map-final-labeled.png';
+  const embedUrl = resolveMapEmbedUrl(data);
+
+  return (
+    <section id="areas" className="bg-[#f3f3f2] py-24">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto mb-12 max-w-3xl text-center">
+          <h2 className="text-[44px] font-semibold text-[#1E2F4A] md:text-[50px]">{data.title}</h2>
+          {data.subtitle ? <p className="mt-3 text-base text-[#4f5f78] md:text-lg">{data.subtitle}</p> : null}
+        </div>
+
+        <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-2">
+          {data.counties.map((county) => {
+            const countyName = county.name || county.county_name || county.title || '';
+            const imageSrc = county.image || countyImageFallback(countyName);
+            const towns = normalizeTowns(county);
+
+            return (
+              <article
+                key={countyName}
+                className="overflow-hidden rounded-lg border border-[#e5ddd0] bg-white shadow-[0_10px_24px_rgba(30,47,74,0.1)]"
               >
-                {/* Image */}
-                <div className="relative h-64">
-                  <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#1A2B45]/90 via-[#1A2B45]/30 to-transparent" />
-                  <img
-                    src={county.image}
-                    alt={county.title}
-                    className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                  />
-                  <h3 className="absolute bottom-0 left-0 z-20 p-8 font-serif text-3xl font-bold text-white">
-                    {county.title}
-                  </h3>
+                <div className="relative h-44">
+                  <img src={imageSrc} alt={countyName} className="h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/20 to-transparent" />
+                  <h3 className="absolute bottom-3 left-4 text-[28px] font-semibold text-white">{countyName}</h3>
                 </div>
 
-                {/* Towns */}
-                <div className="bg-white p-8">
-                  <div
-                    className="
-                      grid
-                      grid-cols-2
-                      grid-flow-col
-                      grid-rows-[repeat(14,minmax(0,1fr))]
-                      gap-x-6
-                      gap-y-3
-                    "
-                  >
-                    {county.towns.map((town) => (
-                      <div
-                        key={`${county.title}-${town.name}`}
-                        className={`flex items-center text-[15px] ${
-                          town.highlight
-                            ? 'font-bold text-[#1A2B45] underline decoration-[#C68E4D] decoration-2 underline-offset-4'
-                            : 'text-gray-500'
-                        }`}
-                      >
-                        <MapPin
-                          className={`mr-2 h-3.5 w-3.5 shrink-0 ${
-                            town.highlight ? 'text-[#C68E4D]' : 'text-gray-300'
-                          }`}
-                        />
-                        <span className="truncate">{town.name}</span>
-                      </div>
-                    ))}
+                <div className="p-5">
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-2.5">
+                    {towns.map((town) => {
+                      const townName = typeof town === 'string' ? town : town.name;
+                      const townUrl = typeof town === 'object' ? town.url : undefined;
+                      const highlight = typeof town === 'object' ? Boolean(town.highlight) : false;
+
+                      const content = (
+                        <span
+                          className={`inline-flex items-center text-[14px] ${highlight ? 'font-semibold text-[#C89B5B]' : 'text-[#5b6b84]'}`}
+                        >
+                          <MapPin className={`mr-1.5 h-3.5 w-3.5 ${highlight ? 'text-[#C89B5B]' : 'text-[#cfd5df]'}`} />
+                          <span className="truncate">{townName}</span>
+                        </span>
+                      );
+
+                      return townUrl ? (
+                        <Link key={`${countyName}-${townName}`} href={townUrl} className="hover:underline">
+                          {content}
+                        </Link>
+                      ) : (
+                        <div key={`${countyName}-${townName}`}>{content}</div>
+                      );
+                    })}
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Map */}
-          {data.map_image && (
-            <div className="mx-auto mt-16 grid max-w-6xl grid-cols-1 gap-8 lg:grid-cols-2">
-              <div className="flex h-[400px] items-center justify-center rounded-xl border bg-white shadow-2xl">
-                <img
-                  src={data.map_image}
-                  alt="Connecticut Service Areas"
-                  className="h-full w-full object-contain p-4"
-                />
-              </div>
-
-              <div className="h-[400px] overflow-hidden rounded-xl border bg-white shadow-2xl">
-                {/* Google Map placeholder */}
-              </div>
-            </div>
-          )}
+              </article>
+            );
+          })}
         </div>
+
+        {showMap ? (
+          <div className="mx-auto mt-10 grid max-w-4xl gap-7 md:grid-cols-2">
+            <div className="overflow-hidden rounded-lg border border-[#e5ddd0] bg-white shadow-[0_10px_24px_rgba(30,47,74,0.1)]">
+              <img src={mapImage} alt="Connecticut service map" className="h-[250px] w-full object-cover" />
+            </div>
+
+            <div className="overflow-hidden rounded-lg border border-[#e5ddd0] bg-white shadow-[0_10px_24px_rgba(30,47,74,0.1)]">
+              <iframe
+                src={embedUrl}
+                title="Service area map"
+                loading="lazy"
+                className="h-[250px] w-full border-0"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+          </div>
+        ) : null}
       </div>
     </section>
   );

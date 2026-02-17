@@ -11,7 +11,7 @@ export const AccordionItem = React.forwardRef<
 >(({ className = '', ...props }, ref) => (
   <AccordionPrimitive.Item
     ref={ref}
-    className={`border-b border-slate-200 ${className}`}
+    className={`border-b border-[#ddd8cd] transition-colors duration-200 hover:bg-[#f8f7f3] ${className}`}
     {...props}
   />
 ));
@@ -24,18 +24,18 @@ export const AccordionTrigger = React.forwardRef<
   <AccordionPrimitive.Header className="flex">
     <AccordionPrimitive.Trigger
       ref={ref}
-      className={`flex flex-1 items-start text-[#1a2b45] justify-between py-5 text-left text-lg font-medium transition hover:text-[#C68E4D] ${className}`}
+      className={`group flex flex-1 items-start justify-between gap-3 py-5 text-left text-base font-semibold text-[#1E2F4A] transition-colors hover:text-[#C89B5B] ${className}`}
       {...props}
     >
-      {children}
+      <span>{children}</span>
       <svg
-        className="mt-1 h-4 w-4 shrink-0 text-slate-400 transition-transform duration-200 data-[state=open]:rotate-180"
+        className="mt-1 h-4 w-4 shrink-0 text-[#8891a0] transition-transform duration-200 group-data-[state=open]:rotate-90"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
         strokeWidth="2"
       >
-        <path d="m6 9 6 6 6-6" />
+        <path d="m9 6 6 6-6 6" />
       </svg>
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
@@ -51,9 +51,7 @@ export const AccordionContent = React.forwardRef<
     className="overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up"
     {...props}
   >
-    <div className={`pb-6 text-base text-slate-600 ${className}`}>
-      {children}
-    </div>
+    <div className={`pb-6 pr-7 text-[15px] leading-relaxed text-[#6B7280] ${className}`}>{children}</div>
   </AccordionPrimitive.Content>
 ));
 AccordionContent.displayName = 'AccordionContent';

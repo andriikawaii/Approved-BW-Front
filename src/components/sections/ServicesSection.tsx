@@ -1,11 +1,14 @@
 'use client';
 
 import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 
 type ServiceItem = {
   title: string;
   description: string;
   image: string;
+  url?: string;
+  cta_label?: string;
 };
 
 type ServicesSectionProps = {
@@ -24,65 +27,55 @@ export default function ServicesSection({ data }: ServicesSectionProps) {
   const { title, subtitle, items, cta } = data;
 
   return (
-    <section className="bg-[#F9FAFB] py-24">
+    <section className="bg-[#F5F3EF] py-24">
       <div className="mx-auto max-w-7xl px-6">
-        {/* HEADER */}
         <div className="mb-16 text-center">
-          <h2 className="font-serif text-4xl text-[#1E2F45] md:text-5xl">
-            {title}
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base text-slate-600 md:text-lg">
-            {subtitle}
-          </p>
+          <h2 className="text-4xl font-semibold text-[#1E2F4A] md:text-[44px]">{title}</h2>
+          <p className="mx-auto mt-5 max-w-2xl text-base text-[#6B7280] md:text-lg">{subtitle}</p>
         </div>
 
-        {/* GRID */}
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((item, i) => (
-            <div key={i} className="group flex h-full flex-col overflow-hidden rounded-lg bg-white shadow-[0_6px_18px_rgba(15,31,51,0.08)] transition-all duration-300 ease-out hover:-translate-y-[2px] hover:shadow-[0_22px_45px_rgba(15,31,51,0.16)]">
-              {/* IMAGE */}
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#1A2B4533]">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+          {items.map((item, i) => {
+            const href = item.url || cta.url;
+            const ctaLabel = item.cta_label || cta.label;
 
-                {/* overlay remove on hover */}
-                <div className="absolute inset-0 bg-[#1A2B4533] transition-opacity duration-300 group-hover:opacity-0" />
-              </div>
+            return (
+              <Link
+                key={i}
+                href={href}
+                className="group flex h-full flex-col overflow-hidden rounded-xl border border-[#ece7dc] bg-white shadow-[0_8px_22px_rgba(30,47,74,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_38px_rgba(30,47,74,0.14)]"
+              >
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#1E2F4A]/10">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  />
+                </div>
 
-              {/* CONTENT */}
-              <div className="flex flex-1 flex-col p-6">
-                <h3 className="font-serif text-2xl text-[#1E2F45] transition-colors duration-300 group-hover:text-[#C68E4D]">
-                  {item.title}
-                </h3>
+                <div className="flex flex-1 flex-col p-6">
+                  <h3 className="text-[22px] font-semibold text-[#1E2F4A] transition-colors duration-300 group-hover:text-[#C89B5B]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-[15px] leading-relaxed text-[#6B7280]">{item.description}</p>
 
-                <p className="mt-3 text-sm leading-relaxed text-slate-600">
-                  {item.description}
-                </p>
-
-                {/* CTA */}
-                <Link
-                  href={cta.url}
-                  className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold uppercase tracking-wide text-[#C68E4D] transition-colors duration-300 hover:text -[#1A2B45]"
-                >
-                  {cta.label}
-                  <span aria-hidden>→</span>
-                </Link>
-              </div>
-            </div>
-          ))}
+                  <span className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-[#C89B5B]">
+                    {ctaLabel}
+                    <ArrowRight className="h-4 w-4" />
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
         </div>
 
-        {/* BOTTOM CTA */}
-        <div className="mt-20 text-center">
-        <Link
+        <div className="mt-12 text-center">
+          <Link
             href={cta.url}
-            className="inline-flex h-[60px] items-center justify-center bg-[#C68E4D] px-10 text-sm font-semibold uppercase tracking-wide text-white transition-colors duration-300 hover:bg-[#1A2B45] cursor-pointer"
-            >
+            className="inline-flex items-center justify-center rounded-md bg-[#C89B5B] px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-[#b98747]"
+          >
             {cta.label}
-        </Link>
+          </Link>
         </div>
       </div>
     </section>

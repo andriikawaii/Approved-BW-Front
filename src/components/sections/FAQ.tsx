@@ -8,32 +8,38 @@ import {
 } from '@/src/components/ui/Accordion';
 
 type FaqItem = {
-  q: string;
-  a: string;
+  question?: string;
+  answer?: string;
+  q?: string;
+  a?: string;
 };
 
 type Props = {
   data: {
     title: string;
+    subtitle?: string;
     items: FaqItem[];
   };
 };
 
 export default function FAQ({ data }: Props) {
   return (
-    <section id="faq" className="py-24 bg-[#F9FAFB]">
-      <div className="mx-auto max-w-4xl px-6">
-        <div className="mb-16 text-center">
-          <h2 className="font-serif text-4xl md:text-5xl text-[#1A2B45]">
-            {data.title}
-          </h2>
+    <section id="faq" className="bg-[#F5F3EF] py-24">
+      <div className="mx-auto max-w-5xl px-6">
+        <div className="mb-14 text-center">
+          <h2 className="text-4xl font-semibold text-[#1E2F4A] md:text-[44px]">{data.title}</h2>
+          {data.subtitle && (
+            <p className="mx-auto mt-4 max-w-2xl text-base text-[#6B7280] md:text-lg">
+              {data.subtitle}
+            </p>
+          )}
         </div>
 
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion type="single" collapsible className="mx-auto w-full max-w-[700px]">
           {data.items.map((item, i) => (
             <AccordionItem key={i} value={`faq-${i}`}>
-              <AccordionTrigger>{item.q}</AccordionTrigger>
-              <AccordionContent>{item.a}</AccordionContent>
+              <AccordionTrigger>{item.question || item.q}</AccordionTrigger>
+              <AccordionContent>{item.answer || item.a}</AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>

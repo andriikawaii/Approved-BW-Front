@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { ArrowRight, Clock3, ShieldCheck, Star } from 'lucide-react';
 
 type Slide = {
   image: string;
@@ -17,19 +18,78 @@ type Badge = {
 type HeroProps = {
   data: {
     headline?: string;
+    headline_highlight?: string;
+    highlight?: string;
     subheadline?: string;
     cta_primary?: { label: string; url: string };
     cta_secondary?: { label: string; url: string };
     slides?: Slide[];
     badges?: Badge[];
+    background_image?: string;
   };
 };
+
+function resolveHeadlineLines(
+  headline?: string,
+  explicitHighlight?: string
+): { lineOne: string; lineTwo: string } {
+  const text = (headline ?? '').replace(/\r/g, '').trim();
+  const highlight = (explicitHighlight ?? '').trim();
+
+  if (!text) {
+    return { lineOne: '', lineTwo: '' };
+  }
+
+  if (highlight) {
+    if (text.includes(highlight)) {
+      const lineOne = text.replace(highlight, '').replace(/\s+/g, ' ').trim();
+      return { lineOne, lineTwo: highlight };
+    }
+    return { lineOne: text, lineTwo: highlight };
+  }
+
+  if (text.includes('\n')) {
+    const [first, ...rest] = text.split('\n').map((part) => part.trim()).filter(Boolean);
+    return { lineOne: first ?? text, lineTwo: rest.join(' ') };
+  }
+
+  if (text.includes('|')) {
+    const [first, ...rest] = text.split('|').map((part) => part.trim()).filter(Boolean);
+    return { lineOne: first ?? text, lineTwo: rest.join(' ') };
+  }
+
+  const words = text.split(/\s+/).filter(Boolean);
+  if (words.length > 4) {
+    const splitPoint = Math.max(words.length - 2, 1);
+    return {
+      lineOne: words.slice(0, splitPoint).join(' '),
+      lineTwo: words.slice(splitPoint).join(' '),
+    };
+  }
+
+  return { lineOne: text, lineTwo: '' };
+}
+
+function getBadgeIcon(label: string) {
+  const normalized = label.toLowerCase();
+  if (normalized.includes('rating') || normalized.includes('google') || normalized.includes('star')) {
+    return Star;
+  }
+  if (normalized.includes('bbb') || normalized.includes('licensed') || normalized.includes('license')) {
+    return ShieldCheck;
+  }
+  return Clock3;
+}
 
 export default function HeroSlider({ data }: HeroProps) {
   const { headline, subheadline, cta_primary, cta_secondary } = data;
 
   const slides: Slide[] = data.slides ?? [];
   const badges: Badge[] = data.badges ?? [];
+  const { lineOne, lineTwo } = resolveHeadlineLines(
+    headline,
+    data.headline_highlight || data.highlight
+  );
 
   const [active, setActive] = useState(0);
 
@@ -47,11 +107,11 @@ export default function HeroSlider({ data }: HeroProps) {
   }, [slides.length]);
 
   return (
-    <section className="relative h-[85svh] min-h-[620px] w-full overflow-hidden md:h-[60vh] md:min-h-[520px]">
+    <section className="relative isolate w-full overflow-hidden">
       {slides.length > 0 ? (
         slides.map((slide, i) => (
           <div
-            key={slide.image}
+            key={i}
             role="img"
             aria-label={slide.alt || `Slide ${i + 1}`}
             className={`absolute inset-0 bg-cover bg-center transition-opacity duration-700 ${
@@ -59,41 +119,50 @@ export default function HeroSlider({ data }: HeroProps) {
             }`}
             style={{ backgroundImage: `url(${slide.image})` }}
           >
-            <div className="absolute inset-0 bg-black/40" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/65" />
           </div>
         ))
       ) : (
-        <div className="absolute inset-0 bg-[#1A2B45]" />
+        <div className="absolute inset-0 bg-[#1E2F4A] bg-cover bg-center" style={{ backgroundImage: `url(${data.background_image || ''})` }}>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/65" />
+        </div>
       )}
 
-      <div className="relative z-10 flex h-full flex-col items-center justify-start px-4 pt-16 pb-16 text-center text-white md:justify-center md:pt-0 md:pb-0">
-        {headline && (
-          <h1 className="font-serif text-4xl font-semibold md:text-6xl">
-            {headline}
+      <div className="relative z-10 mx-auto flex min-h-[620px] max-w-7xl flex-col items-center justify-center px-6 py-24 text-center text-white sm:min-h-[680px] md:min-h-[620px]">
+        {(lineOne || lineTwo) && (
+          <h1 className="max-w-4xl text-5xl font-semibold leading-[1.03] text-white md:text-[64px]">
+            {lineOne}
+            {lineTwo ? (
+              <>
+                <br />
+                <span className="text-[#C89B5B]">{lineTwo}</span>
+              </>
+            ) : null}
           </h1>
         )}
 
         {subheadline && (
-          <p className="mt-6 max-w-2xl text-base text-white/90 md:text-lg">
+          <p className="mt-7 max-w-[600px] text-base leading-relaxed text-white/88 md:text-lg">
             {subheadline}
           </p>
         )}
 
         {(cta_primary || cta_secondary) && (
-          <div className="mt-8 flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <div className="mt-10 flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-center">
             {cta_primary && (
               <Link
                 href={cta_primary.url}
-                className="inline-flex h-[60px] w-full items-center justify-center bg-[#B07C3C] px-8 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#C68E4D] sm:w-auto"
+                className="inline-flex items-center justify-center rounded-md bg-[#C89B5B] px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-[#b98747]"
               >
                 {cta_primary.label}
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             )}
 
             {cta_secondary && (
               <Link
                 href={cta_secondary.url}
-                className="inline-flex h-[60px] w-full items-center justify-center border border-white/80 px-8 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-white/10 sm:w-auto"
+                className="inline-flex items-center justify-center rounded-md border border-white px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-white/10"
               >
                 {cta_secondary.label}
               </Link>
@@ -101,88 +170,73 @@ export default function HeroSlider({ data }: HeroProps) {
           </div>
         )}
 
-        {slides[active]?.caption && (
-          <p className="absolute bottom-20 left-1/2 z-20 -translate-x-1/2 text-sm text-white/80">
-            {slides[active].caption}
-          </p>
-        )}
-
         {badges.length > 0 && (
-          <div className="mt-8 flex w-full flex-col items-center gap-6 md:hidden">
-            {badges.map((badge, i) => (
-              <div key={i} className="text-center">
-                {badge.value && (
-                  <div className="text-xl font-semibold">{badge.value}</div>
-                )}
-                <div className="text-[11px] uppercase tracking-widest text-white/70">
-                  {badge.label}
-                </div>
-              </div>
-            ))}
+          <div className="mt-10 w-full max-w-2xl rounded-md border border-white/20 bg-white/10 px-6 py-5 backdrop-blur-sm">
+            <div className="grid grid-cols-1 gap-5 text-center sm:grid-cols-3">
+              {badges.slice(0, 3).map((badge, i) => {
+                const Icon = getBadgeIcon(badge.label);
+                return (
+                  <div key={i} className="relative flex flex-col items-center justify-center">
+                    {i > 0 ? (
+                      <div className="absolute -left-2 hidden h-8 w-px bg-white/20 sm:block" />
+                    ) : null}
+                    <Icon className="mb-2 h-4 w-4 text-[#C89B5B]" />
+                    {badge.value ? (
+                      <div className="text-sm font-semibold text-white">{badge.value}</div>
+                    ) : null}
+                    <div className="text-[11px] uppercase tracking-[0.1em] text-white/75">
+                      {badge.label}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
+
+        {slides[active]?.caption ? (
+          <p className="mt-5 text-sm text-white/75">{slides[active].caption}</p>
+        ) : null}
       </div>
 
-      {slides.length > 1 && (
+      {slides.length > 1 ? (
         <>
           <button
             onClick={prev}
-            className="absolute left-6 top-1/2 z-20 hidden -translate-y-1/2 text-white/60 transition hover:text-white md:block"
+            className="absolute left-6 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-white/35 bg-black/15 p-2 text-white/70 transition hover:text-white md:block"
             aria-label="Previous slide"
           >
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
 
           <button
             onClick={next}
-            className="absolute right-6 top-1/2 z-20 hidden -translate-y-1/2 text-white/60 transition hover:text-white md:block"
+            className="absolute right-6 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-white/35 bg-black/15 p-2 text-white/70 transition hover:text-white md:block"
             aria-label="Next slide"
           >
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
         </>
-      )}
+      ) : null}
 
-      {badges.length > 0 && (
-        <div className="absolute bottom-16 left-1/2 z-20 hidden w-full -translate-x-1/2 justify-center px-4 md:flex">
-          <div className="flex items-center gap-10 text-white">
-            {badges.map((badge, i) => (
-              <div key={i} className="flex items-center gap-10">
-                {i > 0 && <div className="h-10 w-px bg-white/20" />}
-                <div className="text-center">
-                  {badge.value && (
-                    <div className="text-2xl font-semibold">{badge.value}</div>
-                  )}
-                  <div className="text-[11px] uppercase tracking-widest text-white/70">
-                    {badge.label}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {slides.length > 1 && (
-        <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-2 md:bottom-6">
+      {slides.length > 1 ? (
+        <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 gap-2">
           {slides.map((_, i) => (
             <button
               key={i}
               onClick={() => setActive(i)}
               className={`h-2 rounded-full transition-all ${
-                i === active
-                  ? 'w-8 bg-[#C68E4D]'
-                  : 'w-2 bg-white/50 hover:bg-white'
+                i === active ? 'w-8 bg-[#C89B5B]' : 'w-2 bg-white/55 hover:bg-white/80'
               }`}
               aria-label={`Go to slide ${i + 1}`}
             />
           ))}
         </div>
-      )}
+      ) : null}
     </section>
   );
 }

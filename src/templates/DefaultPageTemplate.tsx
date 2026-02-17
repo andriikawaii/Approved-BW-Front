@@ -1,17 +1,14 @@
-import type { Page } from '../types/page';
-import { sectionMap } from '../components/sections';
+import SectionRenderer from '@/components/cms/SectionRenderer';
+import type { CMSPage } from '@/types/cms';
 
-export function DefaultPageTemplate({ page }: { page: Page }) {
+type DefaultPageTemplateProps = {
+  page: CMSPage;
+};
+
+export function DefaultPageTemplate({ page }: DefaultPageTemplateProps) {
   return (
-    <>
-      {page.sections
-        .filter((section) => section.is_active)
-        .map((section) => {
-          const Component = sectionMap[section.type as keyof typeof sectionMap];
-          if (!Component) return null;
-
-          return <Component key={section.id} data={section.data} />;
-        })}
-    </>
+    <div data-template={page.template}>
+      <SectionRenderer sections={page.sections} />
+    </div>
   );
 }

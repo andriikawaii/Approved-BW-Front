@@ -1,16 +1,11 @@
 'use client';
 
-import {
-  ShieldCheck,
-  Hammer,
-  Clock,
-  CircleCheck
-} from 'lucide-react';
+import { CircleCheck, Clock3, Hammer, ShieldCheck } from 'lucide-react';
 
 type Feature = {
   title: string;
   text: string;
-  icon: 'hammer' | 'clock';
+  icon?: 'hammer' | 'clock' | 'shield';
 };
 
 type WarrantyProps = {
@@ -20,6 +15,7 @@ type WarrantyProps = {
     highlight: string;
     description: string;
     features: Feature[];
+    included_title?: string;
     included: string[];
     footer_quote: string;
   };
@@ -27,8 +23,33 @@ type WarrantyProps = {
 
 const ICONS = {
   hammer: Hammer,
-  clock: Clock
+  clock: Clock3,
+  shield: ShieldCheck,
 };
+
+function renderHighlightedTitle(title: string, highlight: string) {
+  if (!highlight) {
+    return title;
+  }
+
+  const idx = title.indexOf(highlight);
+  if (idx === -1) {
+    return (
+      <>
+        {title}
+        <span className="text-[#C89B5B]"> {highlight}</span>
+      </>
+    );
+  }
+
+  return (
+    <>
+      {title.slice(0, idx)}
+      <span className="text-[#C89B5B]">{highlight}</span>
+      {title.slice(idx + highlight.length)}
+    </>
+  );
+}
 
 export default function Warranty({ data }: WarrantyProps) {
   const {
@@ -37,50 +58,47 @@ export default function Warranty({ data }: WarrantyProps) {
     highlight,
     description,
     features,
+    included_title,
     included,
-    footer_quote
+    footer_quote,
   } = data;
 
   return (
-    <section className="relative overflow-hidden bg-[#1A2B45] py-20 text-white">
-      <div className="absolute inset-0 opacity-5">
+    <section className="relative overflow-hidden bg-[#1E2F4A] py-24 text-white">
+      <div className="pointer-events-none absolute inset-0 opacity-35">
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage:
-              'radial-gradient(rgb(198,142,77) 1px, transparent 1px)',
-            backgroundSize: '30px 30px'
+            backgroundImage: 'radial-gradient(rgba(200,155,91,0.22) 0.7px, transparent 0.7px)',
+            backgroundSize: '18px 18px',
           }}
         />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-6">
-        <div className="grid gap-12 md:grid-cols-2 items-center">
+        <div className="grid items-start gap-10 lg:grid-cols-2">
           <div>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#C68E4D]/30 bg-[#C68E4D]/10 px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#C68E4D]">
-              <ShieldCheck className="h-4 w-4" />
+            <span className="inline-block text-xs font-bold uppercase tracking-[0.1em] text-[#C89B5B]">
               {badge.label}
-            </div>
+            </span>
 
-            <h2 className="mb-6 font-serif text-4xl font-bold leading-tight md:text-5xl">
-              {title}
+            <h2 className="mt-4 text-[36px] font-semibold leading-[1.1] text-white md:text-[44px]">
+              {renderHighlightedTitle(title, highlight)}
             </h2>
 
-            <p className="mb-8 text-lg leading-relaxed text-gray-300">
-              {description}
-            </p>
+            <p className="mt-6 text-base leading-[1.75] text-white/80 md:text-[18px]">{description}</p>
 
-            <div className="space-y-4">
+            <div className="mt-8 space-y-4">
               {features.map((f, i) => {
-                const Icon = ICONS[f.icon];
+                const Icon = ICONS[f.icon || 'shield'];
                 return (
-                  <div key={i} className="flex gap-4">
-                    <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#C68E4D]/20">
-                      <Icon className="h-5 w-5 text-[#C68E4D]" />
-                    </div>
+                  <div key={i} className="flex items-start gap-3">
+                    <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#C89B5B]/15">
+                      <Icon className="h-4 w-4 text-[#C89B5B]" />
+                    </span>
                     <div>
-                      <h4 className="mb-1 text-xl font-bold">{f.title}</h4>
-                      <p className="text-sm text-gray-400">{f.text}</p>
+                      <h3 className="text-base font-semibold text-white">{f.title}</h3>
+                      <p className="mt-1 text-sm leading-relaxed text-white/70">{f.text}</p>
                     </div>
                   </div>
                 );
@@ -88,25 +106,23 @@ export default function Warranty({ data }: WarrantyProps) {
             </div>
           </div>
 
-          <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm md:p-10">
-            <h3 className="mb-6 text-center font-serif text-2xl font-bold">
-              What's Included
+          <div className="rounded-2xl border border-white/10 bg-[#243a59] p-7 shadow-[0_20px_50px_rgba(0,0,0,0.3)] md:p-8">
+            <h3 className="text-center text-[28px] font-semibold text-white">
+              {included_title || "What's Included"}
             </h3>
 
-            <ul className="flex-grow space-y-5">
+            <ul className="mt-6 space-y-3">
               {included.map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-gray-200">
-                  <CircleCheck className="h-5 w-5 shrink-0 text-[#C68E4D]" />
-                  <span className="font-medium">{item}</span>
+                <li key={i} className="flex items-start gap-3 text-white/90">
+                  <CircleCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#C89B5B]" />
+                  <span>{item}</span>
                 </li>
               ))}
             </ul>
 
-            <div className="mt-8 border-t border-white/10 pt-8 text-center">
-              <p className="text-sm italic text-gray-400">
-                "{footer_quote}"
-              </p>
-            </div>
+            <p className="mt-8 border-t border-white/12 pt-5 text-sm italic text-white/60">
+              &ldquo;{footer_quote}&rdquo;
+            </p>
           </div>
         </div>
       </div>

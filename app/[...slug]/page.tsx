@@ -52,11 +52,14 @@ export default async function DynamicPage({ params }: Props) {
 
   const footerVariant = resolveFooterVariant(page.template, page.slug);
   const phones = resolvePhones(footerVariant);
+  const normalizedTemplate = page.template.trim().toLowerCase();
+  const isServiceTemplate = normalizedTemplate.includes('service');
+  const shouldShowBreadcrumbs = slug.length > 0 && slug[0] !== 'about' && !isServiceTemplate;
 
   return (
     <PageDataProvider footerVariant={footerVariant} phones={phones}>
       <Layout>
-        <Breadcrumbs slug={slug} />
+        {shouldShowBreadcrumbs ? <Breadcrumbs slug={slug} /> : null}
         {renderTemplate(page)}
       </Layout>
     </PageDataProvider>
