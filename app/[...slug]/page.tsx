@@ -6,7 +6,6 @@ import { renderTemplate } from '@/src/templates';
 import { resolveFooterVariant } from '@/lib/footer';
 import { resolvePhones } from '@/lib/phones';
 import Layout from '@/src/components/layouts/Layout';
-import Breadcrumbs from '@/components/cms/Breadcrumbs';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
@@ -52,14 +51,10 @@ export default async function DynamicPage({ params }: Props) {
 
   const footerVariant = resolveFooterVariant(page.template, page.slug);
   const phones = resolvePhones(footerVariant);
-  const normalizedTemplate = page.template.trim().toLowerCase();
-  const isServiceTemplate = normalizedTemplate.includes('service');
-  const shouldShowBreadcrumbs = slug.length > 0 && slug[0] !== 'about' && !isServiceTemplate;
 
   return (
     <PageDataProvider footerVariant={footerVariant} phones={phones}>
       <Layout>
-        {shouldShowBreadcrumbs ? <Breadcrumbs slug={slug} /> : null}
         {renderTemplate(page)}
       </Layout>
     </PageDataProvider>

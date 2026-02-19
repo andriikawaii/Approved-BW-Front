@@ -64,7 +64,11 @@ function Column({ title, links }: { title: string; links: ReadonlyArray<{ label:
   );
 }
 
-export default function Footer() {
+type FooterProps = {
+  currentYear: number;
+};
+
+export default function Footer({ currentYear }: FooterProps) {
   const { footerVariant, phones } = usePageData();
   const serviceLinks = SERVICE_LINKS[footerVariant];
 
@@ -99,7 +103,7 @@ export default function Footer() {
           </div>
 
           <div className="mt-10 border-t border-white/12 pt-6 text-xs text-white/60 sm:flex sm:items-center sm:justify-between">
-            <p>Copyright {new Date().getFullYear()} BuiltWell CT. All rights reserved.</p>
+            <p>Copyright {currentYear} BuiltWell CT. All rights reserved.</p>
             <p className="mt-2 sm:mt-0">CT HIC License #HIC.0654321</p>
           </div>
         </div>

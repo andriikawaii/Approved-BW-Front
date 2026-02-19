@@ -40,13 +40,27 @@ import ServiceTwoColumn from './ServiceTwoColumn';
 import BeforeAfterShowcase from './BeforeAfterShowcase';
 import ServiceAreaHighlight from './ServiceAreaHighlight';
 import ConsultationCtaSplit from './ConsultationCtaSplit';
+import ProjectCategoryFilter from './ProjectCategoryFilter';
+import ProjectsMasonryGrid from './ProjectsMasonryGrid';
+import CaseStudyHighlight from './CaseStudyHighlight';
+import StatsBar from './StatsBar';
+import CtaDarkBand from './CtaDarkBand';
+import CtaLightSection from './CtaLightSection';
+import ContactSplitLayout from './ContactSplitLayout';
+import OfficeInfoCards from './OfficeInfoCards';
+import MapEmbedSection from './MapEmbedSection';
+import RequirementsSection from './RequirementsSection';
+import BenefitsGrid from './BenefitsGrid';
+import ApplicationFormSection from './ApplicationFormSection';
 
 export const sectionMap: Record<string, React.ComponentType<{ data: any }>> = {
   hero: Hero,
   hero_slider: HeroSlider,
   trust_bar: TrustBar,
   rich_text: RichText,
+  local_context: RichText,
   call_to_action: CallToAction,
+  cta_block: CallToAction,
   problem: ProblemSection,
   services: ServicesSection,
   services_grid: ServicesGrid,
@@ -59,6 +73,7 @@ export const sectionMap: Record<string, React.ComponentType<{ data: any }>> = {
   faq_list: FAQSection,
   service_areas: ServiceAreas,
   areas_served: ServiceAreas,
+  town_list: ServiceAreas,
   process_steps: ProcessSteps,
   testimonials: Testimonials,
   project_highlights: ProjectHighlights,
@@ -86,4 +101,16 @@ export const sectionMap: Record<string, React.ComponentType<{ data: any }>> = {
   before_after_showcase: BeforeAfterShowcase,
   service_area_highlight: ServiceAreaHighlight,
   consultation_cta_split: ConsultationCtaSplit,
+  project_category_filter: ProjectCategoryFilter,
+  projects_masonry_grid: ProjectsMasonryGrid,
+  case_study_highlight: CaseStudyHighlight,
+  stats_bar: StatsBar,
+  cta_dark_band: CtaDarkBand,
+  cta_light_section: CtaLightSection,
+  contact_split_layout: ContactSplitLayout,
+  office_info_cards: OfficeInfoCards,
+  map_embed: MapEmbedSection,
+  requirements_section: RequirementsSection,
+  benefits_grid: BenefitsGrid,
+  application_form_section: ApplicationFormSection,
 };

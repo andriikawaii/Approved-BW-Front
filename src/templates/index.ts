@@ -13,6 +13,8 @@ const TEMPLATE_COMPONENTS: Record<string, TemplateComponent> = {
   about: DefaultPageTemplate,
   faq: DefaultPageTemplate,
   contact: DefaultPageTemplate,
+  portfolio: DefaultPageTemplate,
+  subcontractors: DefaultPageTemplate,
   service: ServicePageTemplate,
   service_page: ServicePageTemplate,
   service_global: ServicePageTemplate,
@@ -58,4 +60,3 @@ export function renderTemplate(page: CMSPage) {
   const Template = resolveTemplateComponent(page.template);
   return createElement(Template, { page });
 }
-

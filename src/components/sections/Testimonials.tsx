@@ -6,18 +6,23 @@ import { Star } from 'lucide-react';
 type Testimonial = {
   name: string;
   location?: string;
-  quote: string;
+  city?: string;
+  quote?: string;
+  text?: string;
   avatar?: string | null;
   rating?: number;
 };
 
 type Props = {
   data: {
-    title: string;
+    title?: string;
+    headline?: string;
     subtitle?: string;
+    subheadline?: string;
     cta_label?: string;
     cta_url?: string;
-    items: Testimonial[];
+    items?: Testimonial[];
+    testimonials?: Testimonial[];
   };
 };
 
@@ -32,17 +37,35 @@ function initialsFromName(name: string) {
     .join('');
 }
 
+function resolveGridClass(count: number) {
+  if (count >= 4) return 'sm:grid-cols-2 xl:grid-cols-4';
+  if (count === 3) return 'sm:grid-cols-2 lg:grid-cols-3';
+  if (count === 2) return 'sm:grid-cols-2';
+  return 'grid-cols-1';
+}
+
 export default function Testimonials({ data }: Props) {
+  const title = data.title || data.headline || '';
+  const subtitle = data.subtitle || data.subheadline;
+  const normalizedItems = (data.items || data.testimonials || [])
+    .map((item) => ({
+      ...item,
+      quote: item.quote || item.text || '',
+      location: item.location || item.city,
+    }))
+    .filter((item) => Boolean(item.name) && Boolean(item.quote));
+  const gridClass = resolveGridClass(normalizedItems.length);
+
   return (
     <section className="bg-[#1E2F4A] py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-12 text-center">
-          <h2 className="text-4xl font-semibold text-white md:text-[44px]">{data.title}</h2>
-          {data.subtitle ? <p className="mx-auto mt-4 max-w-2xl text-base text-white/75 md:text-lg">{data.subtitle}</p> : null}
+          <h2 className="text-4xl font-semibold text-white md:text-[44px]">{title}</h2>
+          {subtitle ? <p className="mx-auto mt-4 max-w-2xl text-base text-white/75 md:text-lg">{subtitle}</p> : null}
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-          {data.items.map((item, i) => (
+        <div className={`grid gap-6 ${gridClass}`}>
+          {normalizedItems.map((item, i) => (
             <article
               key={`${item.name}-${i}`}
               className={`relative border border-[#efe7d7] bg-white p-5 shadow-[0_12px_30px_rgba(0,0,0,0.2)] ${CARD_ROTATIONS[i % CARD_ROTATIONS.length]}`}

@@ -15,9 +15,11 @@ type County = {
 
 type Props = {
   data: {
-    title: string;
+    title?: string;
+    headline?: string;
     subtitle?: string;
-    counties: County[];
+    subheadline?: string;
+    counties?: County[];
     show_map?: boolean;
     map_image?: string | null;
     map_embed?: string | null;
@@ -49,20 +51,24 @@ function normalizeTowns(county: County): TownValue[] {
 }
 
 export default function ServiceAreas({ data }: Props) {
+  const title = data.title || data.headline || '';
+  const subtitle = data.subtitle || data.subheadline;
+  const counties = data.counties || [];
   const showMap = data.show_map ?? true;
   const mapImage = data.map_image || '/images/ct-map-final-labeled.png';
   const embedUrl = resolveMapEmbedUrl(data);
+  const countiesGridClass = counties.length > 1 ? 'md:grid-cols-2' : 'md:grid-cols-1';
 
   return (
     <section id="areas" className="bg-[#f3f3f2] py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto mb-12 max-w-3xl text-center">
-          <h2 className="text-[44px] font-semibold text-[#1E2F4A] md:text-[50px]">{data.title}</h2>
-          {data.subtitle ? <p className="mt-3 text-base text-[#4f5f78] md:text-lg">{data.subtitle}</p> : null}
+          <h2 className="text-[44px] font-semibold text-[#1E2F4A] md:text-[50px]">{title}</h2>
+          {subtitle ? <p className="mt-3 text-base text-[#4f5f78] md:text-lg">{subtitle}</p> : null}
         </div>
 
-        <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-2">
-          {data.counties.map((county) => {
+        <div className={`mx-auto grid max-w-6xl gap-8 ${countiesGridClass}`}>
+          {counties.map((county) => {
             const countyName = county.name || county.county_name || county.title || '';
             const imageSrc = county.image || countyImageFallback(countyName);
             const towns = normalizeTowns(county);

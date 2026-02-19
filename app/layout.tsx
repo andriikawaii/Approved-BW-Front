@@ -22,6 +22,8 @@ export const metadata: Metadata = {
   description: "The Last Contractor You'll Hire",
 };
 
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 export default function RootLayout({
   children,
 }: {
@@ -29,7 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+      <body suppressHydrationWarning={isDevelopment} className="font-sans antialiased">{children}</body>
     </html>
   );
 }

@@ -2,28 +2,34 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 type ServiceItem = {
-  title: string;
+  title?: string;
   summary?: string;
   description?: string;
   image?: string | null;
-  url: string;
+  url?: string;
   cta_label?: string;
 };
 
 type Props = {
   data: {
-    title: string;
+    title?: string;
+    headline?: string;
     subtitle?: string;
+    subheadline?: string;
     cta?: {
       label: string;
       url: string;
     };
-    items: ServiceItem[];
+    items?: ServiceItem[];
+    services?: ServiceItem[];
   };
 };
 
 export default function ServicesGrid({ data }: Props) {
-  const { title, subtitle, items, cta } = data;
+  const title = data.title || data.headline || '';
+  const subtitle = data.subtitle || data.subheadline;
+  const items = (data.items || data.services || []).filter(Boolean);
+  const cta = data.cta;
 
   return (
     <section className="bg-[#F5F3EF] py-24">
@@ -39,26 +45,26 @@ export default function ServicesGrid({ data }: Props) {
           {items.map((item, i) => (
             <Link
               key={i}
-              href={item.url}
+              href={item.url || cta?.url || '#'}
               className="group flex h-full flex-col overflow-hidden rounded-xl border border-[#ece7dc] bg-white shadow-[0_8px_22px_rgba(30,47,74,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_38px_rgba(30,47,74,0.14)]"
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#1E2F4A]/10">
                 {item.image ? (
                   <img
                     src={item.image}
-                    alt={item.title}
+                    alt={item.title || 'Service image'}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-[#1E2F4A]/10">
-                    <span className="text-xl text-[#1E2F4A]/30">{item.title}</span>
+                    <span className="text-xl text-[#1E2F4A]/30">{item.title || 'Service'}</span>
                   </div>
                 )}
               </div>
 
               <div className="flex flex-1 flex-col p-6">
                 <h3 className="text-[22px] font-semibold text-[#1E2F4A] transition-colors duration-300 group-hover:text-[#C89B5B]">
-                  {item.title}
+                  {item.title || 'Service'}
                 </h3>
                 <p className="mt-3 text-[15px] leading-relaxed text-[#6B7280]">
                   {item.summary || item.description}

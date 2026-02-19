@@ -24,6 +24,7 @@ const NAV = {
     { label: 'Reviews', href: '/reviews/' },
     { label: 'About', href: '/about/' },
     { label: 'Contact', href: '/contact/' },
+    { label: 'Subcontractors', href: '/subcontractors/' },
   ],
 };
 

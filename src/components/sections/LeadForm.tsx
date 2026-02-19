@@ -1,30 +1,40 @@
 'use client';
 
 import { useState } from 'react';
+import { CheckCircle2, ShieldCheck } from 'lucide-react';
 
 type Field = {
   name: string;
   label: string;
   type: string;
   required?: boolean;
-  options?: { label: string; value: string }[];
+  options?: Array<string | { label: string; value: string }>;
+  placeholder?: string;
 };
 
 type Step = {
-  number: number;
-  text: string;
+  number?: number;
+  text?: string;
+  title?: string;
+  description?: string;
 };
 
 type Props = {
   data: {
-    title: string;
+    title?: string;
+    headline?: string;
     subtitle?: string;
+    subheadline?: string;
     title_highlight?: string;
     background_image?: string;
     form_title?: string;
     steps?: Step[];
-    fields: Field[];
+    fields?: Field[];
+    form_fields?: Field[];
     submit_label?: string;
+    success_message?: string;
+    privacy_note?: string;
+    form_placeholder?: boolean;
     consent_text?: string;
   };
 };
@@ -50,8 +60,19 @@ function splitTitle(title: string, highlight?: string) {
 export default function LeadForm({ data }: Props) {
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
+  const title = data.title || data.headline || 'Tell Us About Your Project';
+  const subtitle = data.subtitle || data.subheadline;
+  const fields = data.fields || data.form_fields || [];
+  const privacyText = data.consent_text || data.privacy_note;
+  const successMessage = data.success_message || 'We received your request and our team will contact you shortly.';
+  const defaultSteps: Step[] = [
+    { number: 1, text: 'We call you within one business day.' },
+    { number: 2, text: 'We schedule a home visit and discuss scope.' },
+    { number: 3, text: 'You receive a detailed fixed-price proposal.' },
+  ];
+  const steps = data.steps && data.steps.length > 0 ? data.steps : defaultSteps;
 
-  const { main, accent } = splitTitle(data.title, data.title_highlight);
+  const { main, accent } = splitTitle(title, data.title_highlight);
 
   const handleChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -62,10 +83,16 @@ export default function LeadForm({ data }: Props) {
     setSubmitted(true);
   };
 
+  const normalizeOptions = (options: Field['options']) =>
+    (options || []).map((option) =>
+      typeof option === 'string' ? { label: option, value: option } : option,
+    );
+
   return (
-    <section id="lead-form" className="bg-[#F5F3EF] py-24">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="overflow-hidden rounded-2xl border border-[#e7e0d3] bg-white shadow-[0_16px_40px_rgba(30,47,74,0.14)] lg:grid lg:grid-cols-[1fr_1.08fr]">
+    <section id="lead-form" className="relative overflow-hidden bg-[#f4f1ea] py-24">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(200,155,91,0.18),transparent_35%)]" />
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="overflow-hidden rounded-[28px] border border-[#e7e0d3] bg-white shadow-[0_20px_48px_rgba(30,47,74,0.15)] lg:grid lg:grid-cols-[0.95fr_1.05fr]">
           <div
             className="relative min-h-[460px] p-8 text-white md:p-10"
             style={{
@@ -77,6 +104,10 @@ export default function LeadForm({ data }: Props) {
           >
             <div className="absolute inset-0 bg-[#1E2F4A]/72" />
             <div className="relative z-10">
+              <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-white/90">
+                <ShieldCheck className="h-3.5 w-3.5 text-[#C89B5B]" />
+                Free Consultation
+              </p>
               <h2 className="text-[38px] font-semibold leading-[1.05] text-white md:text-[44px]">
                 {main}
                 {accent ? (
@@ -86,16 +117,21 @@ export default function LeadForm({ data }: Props) {
                   </>
                 ) : null}
               </h2>
-              {data.subtitle ? <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/80">{data.subtitle}</p> : null}
+              {subtitle ? <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/80">{subtitle}</p> : null}
 
-              {data.steps && data.steps.length > 0 ? (
+              {steps.length > 0 ? (
                 <div className="mt-8 space-y-4">
-                  {data.steps.map((step) => (
-                    <div key={step.number} className="flex items-start gap-3">
+                  {steps.map((step, index) => (
+                    <div key={`step-${step.number || index + 1}`} className="flex items-start gap-3">
                       <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#C89B5B] text-xs font-bold text-white">
-                        {step.number}
+                        {step.number || index + 1}
                       </span>
-                      <span className="pt-1 text-sm text-white/90">{step.text}</span>
+                      <span className="pt-1 text-sm text-white/90">
+                        {step.text || step.title}
+                        {step.description ? (
+                          <span className="block pt-1 text-white/75">{step.description}</span>
+                        ) : null}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -108,15 +144,22 @@ export default function LeadForm({ data }: Props) {
               <div className="flex h-full min-h-[380px] flex-col items-center justify-center text-center">
                 <h3 className="text-[34px] font-semibold text-[#1E2F4A]">Thank You</h3>
                 <p className="mt-4 max-w-md text-base leading-relaxed text-[#6B7280]">
-                  We received your request and our team will contact you shortly.
+                  {successMessage}
                 </p>
               </div>
             ) : (
               <>
-                <h3 className="text-[30px] font-semibold text-[#1E2F4A]">{data.form_title || 'Schedule Your Free Consultation'}</h3>
-                <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                  {data.fields.map((field) => (
-                    <div key={field.name}>
+                <h3 className="text-[30px] font-semibold text-[#1E2F4A]">{data.form_title || title || 'Schedule Your Free Consultation'}</h3>
+                {subtitle ? <p className="mt-3 text-sm text-[#68778f]">{subtitle}</p> : null}
+                <form onSubmit={handleSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
+                  {fields.map((field, index) => {
+                    const isTextarea = field.type === 'textarea';
+                    const isFullRow = isTextarea || field.name === 'address' || field.name === 'message';
+                    const wrapperClass = isFullRow ? 'sm:col-span-2' : '';
+                    const options = normalizeOptions(field.options);
+
+                    return (
+                    <div key={`${field.name}-${index}`} className={wrapperClass}>
                       <label htmlFor={field.name} className="mb-2 block text-xs font-semibold uppercase tracking-[0.08em] text-[#6B7280]">
                         {field.label}
                         {field.required ? <span className="text-[#b33f3f]"> *</span> : null}
@@ -131,8 +174,8 @@ export default function LeadForm({ data }: Props) {
                           onChange={(e) => handleChange(field.name, e.target.value)}
                           className="w-full rounded-md border border-[#d9d2c5] bg-white px-3 py-3 text-sm text-[#1E2F4A] outline-none transition-colors focus:border-[#C89B5B]"
                         >
-                          <option value="">Select...</option>
-                          {field.options?.map((opt) => (
+                          <option value="">{field.placeholder || 'Select...'}</option>
+                          {options.map((opt) => (
                             <option key={opt.value} value={opt.value}>
                               {opt.label}
                             </option>
@@ -146,6 +189,7 @@ export default function LeadForm({ data }: Props) {
                           rows={4}
                           value={formData[field.name] || ''}
                           onChange={(e) => handleChange(field.name, e.target.value)}
+                          placeholder={field.placeholder}
                           className="w-full rounded-md border border-[#d9d2c5] bg-white px-3 py-3 text-sm text-[#1E2F4A] outline-none transition-colors focus:border-[#C89B5B]"
                         />
                       ) : (
@@ -156,20 +200,28 @@ export default function LeadForm({ data }: Props) {
                           required={field.required}
                           value={formData[field.name] || ''}
                           onChange={(e) => handleChange(field.name, e.target.value)}
+                          placeholder={field.placeholder}
                           className="w-full rounded-md border border-[#d9d2c5] bg-white px-3 py-3 text-sm text-[#1E2F4A] outline-none transition-colors focus:border-[#C89B5B]"
                         />
                       )}
                     </div>
-                  ))}
+                  )})}
 
-                  {data.consent_text ? <p className="text-xs leading-relaxed text-[#6B7280]">{data.consent_text}</p> : null}
-
-                  <button
-                    type="submit"
-                    className="w-full rounded-md bg-[#C89B5B] px-5 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-[#b98747]"
-                  >
-                    {data.submit_label || 'Submit'}
-                  </button>
+                  <div className="sm:col-span-2">
+                    {privacyText ? <p className="text-xs leading-relaxed text-[#6B7280]">{privacyText}</p> : null}
+                    {data.form_placeholder ? (
+                      <p className="mt-2 inline-flex items-center gap-2 rounded-md bg-[#f6f2e9] px-3 py-1.5 text-xs text-[#6b5a3d]">
+                        <CheckCircle2 className="h-4 w-4 text-[#C89B5B]" />
+                        Form is in placeholder mode.
+                      </p>
+                    ) : null}
+                    <button
+                      type="submit"
+                      className="mt-4 w-full rounded-md bg-[#C89B5B] px-5 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-[#b98747]"
+                    >
+                      {data.submit_label || 'Submit'}
+                    </button>
+                  </div>
                 </form>
               </>
             )}
