@@ -49,7 +49,7 @@ export default function StatsCounterSection({ data }: Props) {
   return (
     <section
       ref={ref}
-      className={`py-20 md:py-24 ${isDark ? 'bg-[#1E2F4A] text-white' : 'bg-white text-[#1E2F4A]'}`}
+      className={`py-20 md:py-24 ${isDark ? 'bg-[#1A2B45] text-white' : 'bg-white text-[#1E2F4A]'}`}
     >
       <div className="mx-auto max-w-7xl px-6">
         <div className="grid gap-10 text-center sm:grid-cols-2 lg:grid-cols-4">
@@ -105,14 +105,19 @@ function Counter({ value, suffix, label, start, dark }: CounterProps) {
   }, [start, value]);
 
   return (
-    <div>
-      <div className="text-[36px] font-semibold text-[#C89B5B] md:text-[42px]">
-        {count}
-        {suffix}
-      </div>
-      <div className={`mt-2 text-[11px] font-semibold uppercase tracking-[0.1em] ${dark ? 'text-white/90' : 'text-[#1E2F4A]/75'}`}>
-        {label}
-      </div>
+  <div className="flex flex-col items-center">
+    <div className="font-serif text-5xl md:text-6xl font-bold text-[#C68E4D] mb-3">
+      {count}
+      {suffix}
     </div>
-  );
+
+    <div
+      className={`text-[12px] md:text-[13px] font-semibold uppercase tracking-[0.18em] ${
+        dark ? 'text-white/80' : 'text-[#1E2F4A]/70'
+      }`}
+    >
+      {label}
+    </div>
+  </div>
+);
 }

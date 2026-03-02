@@ -85,61 +85,45 @@ export function RichText({ data }: RichTextProps) {
   const alignClass = data.align === 'center' ? 'text-center' : data.align === 'right' ? 'text-right' : 'text-left';
 
   return (
-    <section className={`${data.variant === 'light' ? 'bg-[#F5F3EF]' : 'bg-white'} py-24`}>
-      <div className="mx-auto max-w-6xl px-6">
-        {data.eyebrow && (
-          <span className={`mb-3 block text-xs font-bold uppercase tracking-[0.1em] text-[#C89B5B] ${alignClass}`}>
-            {data.eyebrow}
-          </span>
-        )}
+    <section className="bg-[#F5F5F5] py-24">
+  <div className="mx-auto max-w-3xl px-6 text-center">
+    {data.eyebrow && (
+      <span className="mb-4 block font-mono text-s uppercase tracking-widest text-[#C89B5B]">
+        {data.eyebrow}
+      </span>
+    )}
 
-        {title && (
-          <h2 className={`mb-7 text-4xl font-semibold text-[#1E2F4A] md:text-[44px] ${alignClass}`}>
-            {title}
-          </h2>
-        )}
+    {title && (
+      <h2 className="mb-8 font-serif text-4xl md:text-5xl font-bold uppercase tracking-tight text-[#1E2F4A]">
+        {title.split('Disappear?')[0]}
+        <span className="text-[#C89B5B]"> Disappear?</span>
+      </h2>
+    )}
 
-        {shouldRenderAsCards ? (
-          <div className="grid gap-6 md:grid-cols-2">
-            {cards.map((card, i) => (
-              <article
-                key={`${card.title}-${i}`}
-                className="group rounded-xl border border-[#e8decb] bg-[#f9f7f2] p-6 shadow-[0_10px_26px_rgba(30,47,74,0.08)] transition-shadow duration-300 hover:shadow-[0_16px_34px_rgba(30,47,74,0.14)]"
-              >
-                <h3 className="text-[24px] font-semibold text-[#1E2F4A]">{card.title}</h3>
-                <p className="mt-3 text-[15px] leading-relaxed text-[#5e6f86]">{card.description}</p>
-                {card.linkUrl && card.linkLabel ? (
-                  <Link
-                    href={card.linkUrl}
-                    className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#C89B5B]"
-                  >
-                    {card.linkLabel}
-                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </Link>
-                ) : null}
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div className={`space-y-5 text-base leading-[1.8] text-[#5e6f86] md:text-[18px] ${alignClass}`}>
-            {paragraphs.map((paragraph, i) => (
-              <p key={i}>{renderInlineMarkdown(paragraph)}</p>
-            ))}
-          </div>
-        )}
+    <div className="space-y-6 text-lg leading-relaxed text-[#5e6f86]">
+      {paragraphs.map((paragraph, i) => (
+        <p
+          key={i}
+          className={i === 2 ? 'font-medium text-[#1E2F4A]' : ''}
+        >
+          {renderInlineMarkdown(paragraph)}
+        </p>
+      ))}
+    </div>
 
-        {data.cta && (
-          <div className={`mt-8 ${alignClass}`}>
-            <Link
-              href={data.cta.url}
-              className="inline-flex items-center justify-center rounded-md bg-[#C89B5B] px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-[#b98747]"
-            >
-              {data.cta.label}
-            </Link>
-          </div>
-        )}
+    {data.cta && (
+      <div className="mt-12">
+        <Link
+          href={data.cta.url}
+          className="group inline-flex items-center gap-2 font-serif text-xl uppercase tracking-widest text-[#C89B5B] transition-colors hover:text-[#b98747]"
+        >
+          {data.cta.label}
+          <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+        </Link>
       </div>
-    </section>
+    )}
+  </div>
+</section>
   );
 }
 

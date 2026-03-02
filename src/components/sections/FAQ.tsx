@@ -28,25 +28,36 @@ type Props = {
 export default function FAQ({ data }: Props) {
   const title = data.title || data.headline || 'Frequently Asked Questions';
   const subtitle = data.subtitle || data.subheadline;
-  const items = data.items || data.faqs || [];
+  const items = (data.items || data.faqs || []).filter(
+    (x) => (x?.question || x?.q) && (x?.answer || x?.a)
+  );
 
   return (
-    <section id="faq" className="bg-[#F5F3EF] py-24">
-      <div className="mx-auto max-w-5xl px-6">
-        <div className="mb-14 text-center">
-          <h2 className="text-4xl font-semibold text-[#1E2F4A] md:text-[44px]">{title}</h2>
-          {subtitle && (
-            <p className="mx-auto mt-4 max-w-2xl text-base text-[#6B7280] md:text-lg">
+    <section id="faq" className="py-24 bg-background">
+      <div className="container px-4 mx-auto max-w-4xl">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-primary mb-4">
+            {title}
+          </h2>
+
+          {subtitle ? (
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               {subtitle}
             </p>
-          )}
+          ) : null}
         </div>
 
-        <Accordion type="single" collapsible className="mx-auto w-full max-w-[700px]">
+        <Accordion type="single" collapsible className="w-full">
           {items.map((item, i) => (
-            <AccordionItem key={i} value={`faq-${i}`}>
-              <AccordionTrigger>{item.question || item.q}</AccordionTrigger>
-              <AccordionContent>{item.answer || item.a}</AccordionContent>
+            <AccordionItem key={i} value={`faq-${i}`} className="border-b last:border-b-0">
+              <AccordionTrigger
+                className="text-left text-lg font-medium py-4 hover:underline hover:bg-transparent !bg-transparent"
+              >
+                {item.question || item.q}
+              </AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground pb-4">
+                {item.answer || item.a}
+              </AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>

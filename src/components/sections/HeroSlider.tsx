@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Clock3, ShieldCheck, Star } from 'lucide-react';
+import { Clock3, ShieldCheck, Star } from 'lucide-react';
 
 type Slide = {
   image: string;
@@ -114,55 +114,54 @@ export default function HeroSlider({ data }: HeroProps) {
             key={i}
             role="img"
             aria-label={slide.alt || `Slide ${i + 1}`}
-            className={`absolute inset-0 bg-cover bg-center transition-opacity duration-700 ${
+            className={`absolute inset-0 bg-cover bg-top transition-opacity duration-1000 ease-in-out ${
               i === active ? 'opacity-100' : 'opacity-0'
             }`}
             style={{ backgroundImage: `url(${slide.image})` }}
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/65" />
+            <div className="absolute inset-0 bg-[#1A2B45]/40" />
           </div>
         ))
       ) : (
-        <div className="absolute inset-0 bg-[#1E2F4A] bg-cover bg-center" style={{ backgroundImage: `url(${data.background_image || ''})` }}>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/65" />
+        <div className="absolute inset-0 bg-[#1A2B45] bg-cover bg-top" style={{ backgroundImage: `url(${data.background_image || ''})` }}>
+          <div className="absolute inset-0 bg-[#1A2B45]/40" />
         </div>
       )}
 
-      <div className="relative z-10 mx-auto flex min-h-[620px] max-w-7xl flex-col items-center justify-center px-6 py-24 text-center text-white sm:min-h-[680px] md:min-h-[620px]">
+      <div className="relative z-10 mx-auto flex min-h-[600px] max-w-7xl flex-col items-center justify-center px-6 pb-12 pt-20 text-center text-white">
         {(lineOne || lineTwo) && (
-          <h1 className="max-w-4xl text-5xl font-semibold leading-[1.03] text-white md:text-[64px]">
+          <h1 className="max-w-5xl font-serif text-5xl font-bold leading-tight text-white md:text-6xl lg:text-7xl">
             {lineOne}
             {lineTwo ? (
               <>
                 <br />
-                <span className="text-[#C89B5B]">{lineTwo}</span>
+                <span className="text-[#C68E4D]">{lineTwo}</span>
               </>
             ) : null}
           </h1>
         )}
 
         {subheadline && (
-          <p className="mt-7 max-w-[600px] text-base leading-relaxed text-white/88 md:text-lg">
+          <p className="mx-auto mt-6 max-w-2xl font-sans text-xl font-light leading-relaxed text-gray-100">
             {subheadline}
           </p>
         )}
 
         {(cta_primary || cta_secondary) && (
-          <div className="mt-10 flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <div className="mt-8 flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
             {cta_primary && (
               <Link
                 href={cta_primary.url}
-                className="inline-flex items-center justify-center rounded-md bg-[#C89B5B] px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-[#b98747]"
+                className="inline-flex h-[60px] min-w-[280px] items-center justify-center rounded-md bg-[#C68E4D] px-8 py-4 font-sans text-base font-bold uppercase tracking-wider text-white shadow-md transition-all hover:bg-[#B07C3C]"
               >
                 {cta_primary.label}
-                <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             )}
 
             {cta_secondary && (
               <Link
                 href={cta_secondary.url}
-                className="inline-flex items-center justify-center rounded-md border border-white px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-white/10"
+                className="inline-flex h-[60px] min-w-[280px] items-center justify-center whitespace-nowrap rounded-md border-2 border-white/20 px-8 py-4 font-sans text-sm font-bold uppercase tracking-wider text-white transition-all hover:bg-white/10 md:text-base"
               >
                 {cta_secondary.label}
               </Link>
@@ -171,20 +170,20 @@ export default function HeroSlider({ data }: HeroProps) {
         )}
 
         {badges.length > 0 && (
-          <div className="mt-10 w-full max-w-2xl rounded-md border border-white/20 bg-white/10 px-6 py-5 backdrop-blur-sm">
-            <div className="grid grid-cols-1 gap-5 text-center sm:grid-cols-3">
+          <div className="pt-12 text-white opacity-90">
+            <div className="flex flex-col items-center justify-center gap-8 md:flex-row md:gap-12">
               {badges.slice(0, 3).map((badge, i) => {
                 const Icon = getBadgeIcon(badge.label);
                 return (
-                  <div key={i} className="relative flex flex-col items-center justify-center">
+                  <div key={i} className="relative flex flex-col items-center justify-center gap-1">
                     {i > 0 ? (
-                      <div className="absolute -left-2 hidden h-8 w-px bg-white/20 sm:block" />
+                      <div className="absolute -left-6 hidden h-8 w-px bg-white/30 md:block" />
                     ) : null}
-                    <Icon className="mb-2 h-4 w-4 text-[#C89B5B]" />
+                    
                     {badge.value ? (
-                      <div className="text-sm font-semibold text-white">{badge.value}</div>
+                      <div className="font-sans text-3xl font-bold tracking-tight text-white">{badge.value}</div>
                     ) : null}
-                    <div className="text-[11px] uppercase tracking-[0.1em] text-white/75">
+                    <div className="font-sans text-xs font-bold uppercase tracking-widest text-white/80">
                       {badge.label}
                     </div>
                   </div>
@@ -203,20 +202,20 @@ export default function HeroSlider({ data }: HeroProps) {
         <>
           <button
             onClick={prev}
-            className="absolute left-6 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-white/35 bg-black/15 p-2 text-white/70 transition hover:text-white md:block"
+            className="absolute left-4 top-1/2 z-20 hidden -translate-y-1/2 p-2 text-white/50 transition-colors hover:text-white md:block"
             aria-label="Previous slide"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="h-10 w-10">
               <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
 
           <button
             onClick={next}
-            className="absolute right-6 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-white/35 bg-black/15 p-2 text-white/70 transition hover:text-white md:block"
+            className="absolute right-4 top-1/2 z-20 hidden -translate-y-1/2 p-2 text-white/50 transition-colors hover:text-white md:block"
             aria-label="Next slide"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="h-10 w-10">
               <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
@@ -224,13 +223,13 @@ export default function HeroSlider({ data }: HeroProps) {
       ) : null}
 
       {slides.length > 1 ? (
-        <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 gap-2">
+        <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 gap-3">
           {slides.map((_, i) => (
             <button
               key={i}
               onClick={() => setActive(i)}
               className={`h-2 rounded-full transition-all ${
-                i === active ? 'w-8 bg-[#C89B5B]' : 'w-2 bg-white/55 hover:bg-white/80'
+                i === active ? 'h-3 w-8 bg-[#C68E4D]' : 'h-3 w-3 bg-white/50 hover:bg-white'
               }`}
               aria-label={`Go to slide ${i + 1}`}
             />

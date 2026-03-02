@@ -104,7 +104,7 @@ export default function ContactSplitLayout({ data }: Props) {
           <div className="relative overflow-hidden bg-[#1E2F4A] p-8 text-white md:p-10">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(255,255,255,0.18),transparent_36%)]" />
             <div className="relative z-10">
-              <h2 className="text-3xl font-semibold leading-tight md:text-[40px]">
+              <h2 className="text-3xl !text-[#C89B5B] font-semibold leading-tight md:text-[40px]">
                 {left.headline || 'Why Homeowners Trust BuiltWell'}
               </h2>
               {left.content ? (

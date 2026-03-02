@@ -26,7 +26,7 @@ export default function Hero({ data }: Props) {
   return (
     <section className="bg-[#1E2F4A] py-24 text-white md:py-28">
       <div className="mx-auto max-w-7xl px-6 text-center">
-        <h1 className="text-5xl font-semibold leading-[1.04] text-white md:text-[64px]">
+        <h1 className="text-5xl font-semibold leading-[1.04] !text-[#C89B5B] md:text-[64px]">
           {data.headline}
           {data.highlight ? (
             <>

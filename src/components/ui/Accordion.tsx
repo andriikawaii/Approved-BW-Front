@@ -11,7 +11,7 @@ export const AccordionItem = React.forwardRef<
 >(({ className = '', ...props }, ref) => (
   <AccordionPrimitive.Item
     ref={ref}
-    className={`border-b border-[#ddd8cd] transition-colors duration-200 hover:bg-[#f8f7f3] ${className}`}
+    className={`border-b border-[#ddd8cd] transition-colors duration-200 hover:bg-transparent ${className}`}
     {...props}
   />
 ));

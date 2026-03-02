@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Star } from 'lucide-react';
+import { Quote } from 'lucide-react';
 
 type Testimonial = {
   name: string;
@@ -10,7 +10,7 @@ type Testimonial = {
   quote?: string;
   text?: string;
   avatar?: string | null;
-  rating?: number;
+  rating?: number; // nije obavezno u Manus varijanti, ali ostavljamo
 };
 
 type Props = {
@@ -26,83 +26,121 @@ type Props = {
   };
 };
 
-const CARD_ROTATIONS = ['rotate-[-1deg]', 'rotate-[1deg]', 'rotate-[-0.7deg]', 'rotate-[0.7deg]'];
+function resolveGridClass(count: number) {
+  // Manus: md=2, lg=4
+  return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8';
+}
+
+const CARD_ROTATIONS = ['rotate-1', 'rotate-[-1]', 'rotate-1', 'rotate-[-1]'];
 
 function initialsFromName(name: string) {
   return name
     .split(' ')
     .filter(Boolean)
     .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
+    .map((p) => p[0]?.toUpperCase())
     .join('');
 }
 
-function resolveGridClass(count: number) {
-  if (count >= 4) return 'sm:grid-cols-2 xl:grid-cols-4';
-  if (count === 3) return 'sm:grid-cols-2 lg:grid-cols-3';
-  if (count === 2) return 'sm:grid-cols-2';
-  return 'grid-cols-1';
-}
-
 export default function Testimonials({ data }: Props) {
-  const title = data.title || data.headline || '';
-  const subtitle = data.subtitle || data.subheadline;
-  const normalizedItems = (data.items || data.testimonials || [])
+  const title = data.title || data.headline || 'What Our Clients Say';
+  const subtitle = data.subtitle || data.subheadline || 'Testimonials';
+
+  const items = (data.items || data.testimonials || [])
     .map((item) => ({
       ...item,
       quote: item.quote || item.text || '',
-      location: item.location || item.city,
+      location: item.location || item.city || '',
     }))
-    .filter((item) => Boolean(item.name) && Boolean(item.quote));
-  const gridClass = resolveGridClass(normalizedItems.length);
+    .filter((i) => Boolean(i.name) && Boolean(i.quote));
 
   return (
-    <section className="bg-[#1E2F4A] py-24">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-12 text-center">
-          <h2 className="text-4xl font-semibold text-white md:text-[44px]">{title}</h2>
-          {subtitle ? <p className="mx-auto mt-4 max-w-2xl text-base text-white/75 md:text-lg">{subtitle}</p> : null}
+    <section id="reviews" className="py-24 bg-[#1A2B45] text-white relative overflow-hidden">
+      {/* dotted overlay */}
+      <div className="absolute inset-0 opacity-5 pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px]" />
+      </div>
+
+      <div className="mx-auto max-w-7xl px-6 relative z-10">
+        <div className="text-center mb-16">
+          <span className="font-mono text-[#C68E4D] text-sm uppercase tracking-widest mb-4 block">
+            {subtitle}
+          </span>
+          <h2 className="font-serif text-4xl md:text-5xl font-bold !text-white uppercase tracking-tight">
+            {title}
+          </h2>
         </div>
 
-        <div className={`grid gap-6 ${gridClass}`}>
-          {normalizedItems.map((item, i) => (
-            <article
-              key={`${item.name}-${i}`}
-              className={`relative border border-[#efe7d7] bg-white p-5 shadow-[0_12px_30px_rgba(0,0,0,0.2)] ${CARD_ROTATIONS[i % CARD_ROTATIONS.length]}`}
-            >
-              <span className="absolute -top-2.5 left-1/2 h-4 w-4 -translate-x-1/2 rounded-full bg-[#d83e3e]" />
+        <div className={resolveGridClass(items.length)}>
+          {items.map((item, i) => (
+            <div key={`${item.name}-${i}`} className="relative group">
+              {/* red pin */}
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-red-800 shadow-sm z-20 border border-red-900/50" />
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white/30 z-30 mt-1 ml-1" />
 
-              <div className="mb-3 flex items-center gap-1 text-[#C89B5B]">
-                {Array.from({ length: item.rating || 5 }).map((_, index) => (
-                  <Star key={index} className="h-4 w-4 fill-current" />
-                ))}
-              </div>
+              <article
+                className={[
+                  "bg-[#F4F1EA] text-[#1A2B45] p-6 pt-8 relative shadow-lg",
+                  "hover:rotate-0 transition-transform duration-300 h-full flex flex-col",
+                  CARD_ROTATIONS[i % CARD_ROTATIONS.length],
+                ].join(' ')}
+              >
+                {/* paper texture overlay */}
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] opacity-50 pointer-events-none" />
 
-              <p className="text-[15px] italic leading-relaxed text-[#334155]">
-                &ldquo;{item.quote}&rdquo;
-              </p>
-
-              <div className="mt-5 flex items-center gap-3 border-t border-[#ede7dc] pt-4">
-                {item.avatar ? (
-                  <img src={item.avatar} alt={item.name} className="h-9 w-9 rounded-full object-cover" />
-                ) : (
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#1E2F4A] text-xs font-semibold text-white">
-                    {initialsFromName(item.name)}
-                  </span>
-                )}
-                <div>
-                  <p className="text-sm font-semibold text-[#1E2F4A]">{item.name}</p>
-                  {item.location ? <p className="text-xs text-[#6B7280]">{item.location}</p> : null}
+                {/* stamp */}
+                <div className="absolute top-4 right-4 font-mono text-[10px] text-gray-500 opacity-60 border border-gray-400 px-1 rotate-[-5deg]">
+                  1935
                 </div>
-              </div>
-            </article>
+
+                <div className="relative z-10 flex flex-col h-full">
+                  {/* header */}
+                  <div className="flex items-center gap-4 mb-6 border-b border-gray-300 pb-4 border-dashed">
+                    <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#1A2B45]/20 sepia-[.5] grayscale-[.3]">
+                      {item.avatar ? (
+                        <img
+                          alt={item.name}
+                          className="w-full h-full object-cover"
+                          src={item.avatar}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-[#1A2B45] text-white text-xs font-semibold">
+                          {initialsFromName(item.name)}
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      <p className="font-serif font-bold text-[#1A2B45] text-sm leading-tight">
+                        {item.name}
+                      </p>
+                      {item.location ? (
+                        <p className="font-mono text-[10px] text-gray-600 uppercase tracking-wider mt-0.5">
+                          {item.location}
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  {/* quote icon (ghost) */}
+                  <Quote className="w-6 h-6 text-[#1A2B45]/20 mb-2 absolute top-20 right-4" />
+
+                  <p
+                    className="font-serif text-sm leading-relaxed text-gray-800 flex-grow text-justify"
+                    style={{ fontFeatureSettings: '"liga"' }}
+                  >
+                    &quot;{item.quote}&quot;
+                  </p>
+                </div>
+              </article>
+            </div>
           ))}
         </div>
 
-        <div className="mt-10 text-center">
+        <div className="mt-16 text-center">
           <Link
             href={data.cta_url || '/reviews/'}
-            className="inline-flex items-center justify-center rounded-md border border-white px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-[#C89B5B] hover:text-white hover:border-[#C89B5B]"
+            className="inline-flex items-center justify-center rounded-md border-2 border-white text-white hover:bg-white hover:text-[#1A2B45] font-bold uppercase tracking-widest px-8 py-6 text-base transition-colors"
           >
             {data.cta_label || 'Read More Reviews'}
           </Link>

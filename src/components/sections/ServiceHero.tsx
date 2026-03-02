@@ -97,7 +97,7 @@ export default function ServiceHero({ data }: Props) {
       <div className="relative z-10 mx-auto h-full max-w-6xl px-6">
         <div className="flex h-full items-center">
           <div className="w-full max-w-[560px] text-left">
-            <h1 className="font-serif text-[44px] font-bold leading-[1.05] text-white sm:text-[52px] md:text-[60px] lg:text-[64px]">
+            <h1 className="font-serif text-[44px] font-bold leading-[1.05] !text-white sm:text-[52px] md:text-[60px] lg:text-[64px]">
               {titleParts.before}
               {titleParts.accent ? (
                 <span className="text-[#C89B5B]">{titleParts.accent}</span>

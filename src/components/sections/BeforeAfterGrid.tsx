@@ -38,36 +38,101 @@ function getAfterImage(project: Project, index: number) {
 
 export default function BeforeAfterGrid({ data }: Props) {
   return (
-    <section className="bg-[#F5F3EF] py-20">
+    <section className="py-24 bg-white overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 lg:px-16">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold md:text-[36px]">{data.title}</h2>
-          {data.subtitle ? <p className="mt-4 text-[18px] text-[#6B7280]">{data.subtitle}</p> : null}
+        
+        {/* HEADER */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          {data.subtitle && (
+            <span className="text-[#C68E4D] font-bold uppercase tracking-widest text-sm mb-2 block">
+              {data.subtitle}
+            </span>
+          )}
+          <h2 className="font-serif text-4xl md:text-5xl font-bold text-[#1A2B45]">
+            {data.title}
+          </h2>
         </div>
 
-        <div className="mt-12 space-y-12">
-          {data.projects.map((project, index) => (
-            <div key={`${project.location}-${index}`} className="grid gap-12 lg:grid-cols-2">
-              <div className="space-y-6">
-                <div>
-                  <p className="text-xl font-bold">{`Before ${project.location ? `- ${project.location}` : ''}`}</p>
-                  <img src={getBeforeImage(project, index)} alt={`Before ${project.location}`} className="mt-3 w-full rounded-lg shadow-md" />
-                  <p className="mt-2 text-sm text-[#6B7280]">{project.description}</p>
-                </div>
-              </div>
+        {/* PROJECTS */}
+        <div className="space-y-24">
+          {data.projects.map((project, index) => {
+            const isReversed = index % 2 === 1;
 
-              <div className="space-y-6">
-                <div>
-                  <p className="text-xl font-bold">{`After ${project.location ? `- ${project.location}` : ''}`}</p>
-                  <img src={getAfterImage(project, index)} alt={`After ${project.location}`} className="mt-3 w-full rounded-lg shadow-md" />
-                  <p className="mt-2 text-sm text-[#6B7280]">
-                    {project.testimonial_quote || project.description}
-                  </p>
+            return (
+              <div
+                key={`${project.location}-${index}`}
+                className="grid md:grid-cols-2 gap-12 items-center"
+              >
+                
+                {/* TEXT SIDE */}
+                <div className={`space-y-8 ${isReversed ? 'order-2 md:order-1' : ''}`}>
+                  <div>
+                    <h3 className="font-serif text-2xl font-bold text-[#1A2B45] mb-3">
+                      Before
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      {project.description}
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="font-serif text-2xl font-bold text-[#1A2B45] mb-3">
+                      After
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      {project.testimonial_quote || project.description}
+                    </p>
+                  </div>
+
+                  {project.testimonial_quote && (
+                    <blockquote className="border-l-4 border-[#C68E4D] pl-6 italic text-gray-600 my-8">
+                      “{project.testimonial_quote}”
+                      <footer className="text-[#1A2B45] font-bold not-italic mt-2">
+                        — {project.location}
+                      </footer>
+                    </blockquote>
+                  )}
+                </div>
+
+                {/* IMAGE SIDE */}
+                <div
+                  className={`relative group h-full min-h-[400px] ${
+                    isReversed ? 'order-1 md:order-2' : ''
+                  }`}
+                >
+                  <div className="grid grid-cols-2 gap-4 h-full">
+                    
+                    {/* BEFORE */}
+                    <div className="relative h-full">
+                      <span className="absolute top-4 left-4 bg-black/70 text-white text-xs font-bold px-3 py-1.5 rounded z-10 tracking-wider">
+                        BEFORE
+                      </span>
+                      <img
+                        src={getBeforeImage(project, index)}
+                        alt={`Before ${project.location}`}
+                        className="w-full h-full object-cover rounded-lg shadow-md"
+                      />
+                    </div>
+
+                    {/* AFTER */}
+                    <div className="relative h-full">
+                      <span className="absolute top-4 left-4 bg-[#C68E4D] text-white text-xs font-bold px-3 py-1.5 rounded z-10 tracking-wider">
+                        AFTER
+                      </span>
+                      <img
+                        src={getAfterImage(project, index)}
+                        alt={`After ${project.location}`}
+                        className="w-full h-full object-cover rounded-lg shadow-md"
+                      />
+                    </div>
+
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+
       </div>
     </section>
   );

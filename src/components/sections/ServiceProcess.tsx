@@ -15,18 +15,37 @@ type Props = {
 
 export default function ServiceProcess({ data }: Props) {
   return (
-    <section className="bg-[#F5F3EF] py-20">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-10 text-center px-6 lg:px-16">
-          <h2 className="text-3xl font-bold md:text-[36px]">{data.title}</h2>
+    <section className="py-24 bg-gray-50">
+      <div className="mx-auto max-w-7xl px-6 lg:px-16">
+        
+        {/* Section Title */}
+        <div className="mb-16 text-center">
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-[#1A2B45]">
+            {data.title}
+          </h2>
         </div>
 
-        <div className="grid gap-8 px-6 text-center lg:grid-cols-5 lg:px-16">
+        {/* Steps Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {data.steps.map((step) => (
-            <div key={step.step_number} className="rounded-lg bg-white py-6 px-4 shadow-lg">
-              <div className="text-xl font-bold">{String(step.step_number).padStart(2, '0')}</div>
-              <div className="mt-2 font-semibold">{step.title}</div>
-              <p className="mt-2 text-sm text-[#6B7280]">{step.description}</p>
+            <div
+              key={step.step_number}
+              className="bg-white p-8 rounded-lg shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col h-full group"
+            >
+              {/* STEP LABEL */}
+              <span className="text-[#C68E4D] font-bold text-sm tracking-[0.2em] mb-6 block">
+                STEP {String(step.step_number).padStart(2, '0')}
+              </span>
+
+              {/* TITLE */}
+              <h3 className="font-serif text-2xl font-bold text-[#1A2B45] mb-4 group-hover:text-[#C68E4D] transition-colors">
+                {step.title}
+              </h3>
+
+              {/* DESCRIPTION */}
+              <p className="text-gray-600 text-[15px] leading-relaxed">
+                {step.description}
+              </p>
             </div>
           ))}
         </div>

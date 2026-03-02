@@ -18,7 +18,7 @@ export default function DarkTextSection({ data }: Props) {
         {eyebrow ? (
           <p className="mb-3 text-xs font-bold uppercase tracking-[0.1em] text-[#C89B5B]">{eyebrow}</p>
         ) : null}
-        <h2 className="text-[34px] font-semibold text-white md:text-[40px]">{title}</h2>
+        <h2 className="text-[34px] font-semibold !text-[#C89B5B] md:text-[40px]">{title}</h2>
         <div className="mt-6 space-y-5 text-[15px] leading-[1.8] text-white/80 md:text-base">
           {paragraphs.map((p, i) => (
             <p key={i}>{p}</p>

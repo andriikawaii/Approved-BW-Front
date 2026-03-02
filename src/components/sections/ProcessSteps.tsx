@@ -15,48 +15,79 @@ type Props = {
 };
 
 export default function ProcessSteps({ data }: Props) {
-  const title = data.title || data.headline || '';
+  const title = data.title || data.headline || "";
   const steps = data.steps || [];
+
   const desktopColsClass =
     steps.length >= 5
-      ? 'lg:grid-cols-5'
+      ? "lg:grid-cols-5"
       : steps.length === 4
-        ? 'lg:grid-cols-4'
+        ? "lg:grid-cols-4"
         : steps.length === 3
-          ? 'lg:grid-cols-3'
+          ? "lg:grid-cols-3"
           : steps.length === 2
-            ? 'lg:grid-cols-2'
-            : 'lg:grid-cols-1';
-  const tabletColsClass = steps.length > 1 ? 'md:grid-cols-2' : 'md:grid-cols-1';
+            ? "lg:grid-cols-2"
+            : "lg:grid-cols-1";
+
+  const tabletColsClass = steps.length > 1 ? "md:grid-cols-2" : "md:grid-cols-1";
 
   return (
-    <section className="bg-[#efefee] py-24">
+    <section className="py-16 md:py-24 bg-[#efefee] border-b border-[#e5dccb]">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="mx-auto mb-14 max-w-4xl text-center">
-          <h2 className="text-4xl font-semibold uppercase text-[#1E2F4A] md:text-[44px]">{title}</h2>
+        {/* Header */}
+        <div className="text-center mb-16">
+          <span className="font-mono text-[#C89B5B] text-sm md:text-lg font-bold uppercase tracking-widest mb-4 block">
+            How We Work
+          </span>
+
+          <h2 className="font-serif text-4xl md:text-5xl font-bold text-[#1E2F4A] uppercase tracking-tight">
+            {title || "From First Call to "}
+            <span className="text-[#C89B5B]">Finished Project</span>
+          </h2>
+
           {data.subtitle ? (
-            <p className="mx-auto mt-4 max-w-2xl text-base text-[#6B7280] md:text-lg">{data.subtitle}</p>
+            <p className="mx-auto mt-4 max-w-2xl text-base md:text-lg text-[#6B7280]">
+              {data.subtitle}
+            </p>
           ) : null}
         </div>
 
+        {/* Timeline */}
         <div className="relative">
-          <div className="absolute left-6 right-6 top-6 hidden h-px bg-[#d6cab2] lg:block" />
+          {/* horizontal line behind boxes (desktop only) */}
+          <div className="hidden lg:block absolute top-12 left-0 right-0 h-0.5 bg-[#e5dccb] z-0" />
 
-          <div className={`grid gap-6 ${tabletColsClass} ${desktopColsClass} lg:gap-8`}>
-            {steps.map((step, i) => (
-              <div key={i} className="relative rounded-xl border border-[#e5dccb] bg-white p-6 shadow-[0_10px_22px_rgba(30,47,74,0.08)]">
-                <div className="relative z-10 flex h-12 w-12 items-center justify-center border border-[#C89B5B] bg-white text-[20px] font-semibold text-[#1E2F4A]">
-                  {String(step.step_number || i + 1).padStart(2, '0')}
+          <div className={`grid grid-cols-1 ${tabletColsClass} ${desktopColsClass} gap-8 relative z-10`}>
+            {steps.map((step, i) => {
+              const num = String(step.step_number || i + 1).padStart(2, "0");
+
+              return (
+                <div key={i} className="group">
+                  {/* number box */}
+                  <div className="w-24 h-24 bg-white border-2 border-[#e5dccb] group-hover:border-[#C89B5B] flex items-center justify-center mb-6 mx-auto lg:mx-0 transition-colors duration-300 relative">
+                    <span className="font-serif text-3xl font-bold text-[#94A3B8] group-hover:text-[#C89B5B] transition-colors">
+                      {num}
+                    </span>
+
+                    {/* little dot connector to the right (desktop only) */}
+                    <div className="hidden lg:block absolute top-1/2 -translate-y-1/2 -right-4 w-2 h-2 bg-[#e5dccb] rounded-full" />
+                  </div>
+
+                  {/* text */}
+                  <div className="text-center lg:text-left">
+                    <h3 className="font-serif text-xl font-bold text-[#1E2F4A] uppercase tracking-wide mb-3">
+                      {step.title}
+                    </h3>
+
+                    {step.description ? (
+                      <p className="text-sm text-[#6B7280] leading-relaxed">
+                        {step.description}
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
-                <h3 className="mt-4 text-base font-bold uppercase tracking-[0.04em] text-[#1E2F4A]">{step.title}</h3>
-                {step.short ? (
-                  <p className="mt-2 text-sm font-semibold uppercase tracking-[0.1em] text-[#C89B5B]">{step.short}</p>
-                ) : null}
-                {step.description ? (
-                  <p className="mt-3 text-sm leading-relaxed text-[#6B7280]">{step.description}</p>
-                ) : null}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

@@ -24,7 +24,7 @@ export const CallToAction = ({ data }: CallToActionProps) => {
   return (
     <section className="bg-[#1E2F4A] py-24">
       <div className="mx-auto max-w-7xl px-6 text-center">
-        <h2 className="text-4xl font-semibold text-white md:text-[44px]">
+        <h2 className="text-4xl font-semibold !text-[#C89B5B] md:text-[44px]">
           {title}
         </h2>
 

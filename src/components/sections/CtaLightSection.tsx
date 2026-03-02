@@ -21,7 +21,7 @@ export default function CtaLightSection({ data }: Props) {
     <section className="bg-[#f7f4ed] py-20">
       <div className="mx-auto max-w-6xl px-6">
         <div className="rounded-2xl border border-[#e3d8c3] bg-white p-10 text-center shadow-[0_14px_30px_rgba(30,47,74,0.1)] md:p-12">
-          <h2 className="text-3xl font-semibold text-[#1E2F4A] md:text-[42px]">{title}</h2>
+          <h2 className="text-3xl font-semibold !text-[#1E2F4A] md:text-[42px]">{title}</h2>
           {subtitle ? (
             <p className="mx-auto mt-4 max-w-2xl text-base text-[#5f6f87] md:text-lg">{subtitle}</p>
           ) : null}

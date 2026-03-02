@@ -59,7 +59,7 @@ export default function PageHero({ data }: Props) {
       ) : null}
 
       <div className={`relative z-10 mx-auto max-w-5xl px-6 ${alignClass} ${isAboutHero ? 'py-20 md:py-24' : 'py-16 md:py-20'}`}>
-        <h1 className={`${isAboutHero ? 'text-[62px] leading-[1.04] md:text-[70px]' : 'text-[44px] leading-[1.06] md:text-[52px]'} font-semibold text-white`}>
+        <h1 className={`${isAboutHero ? 'text-[62px] leading-[1.04] md:text-[70px]' : 'text-[44px] leading-[1.06] md:text-[52px]'} font-semibold !text-white`}>
           {renderHeadingWithGold(heading)}
         </h1>
         {data.subtitle ? (
