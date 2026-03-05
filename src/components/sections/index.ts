@@ -13,6 +13,7 @@ import FeatureListTwoColumn from './FeatureListTwoColumn';
 import Warranty from './Warranty';
 import FAQSection from './FAQ';
 import ServiceAreas from './ServiceAreas';
+import TownList from './TownList';
 import ProcessSteps from './ProcessSteps';
 import Testimonials from './Testimonials';
 import ProjectHighlights from './ProjectHighlights';
@@ -52,8 +53,12 @@ import MapEmbedSection from './MapEmbedSection';
 import RequirementsSection from './RequirementsSection';
 import BenefitsGrid from './BenefitsGrid';
 import ApplicationFormSection from './ApplicationFormSection';
+import CaseStudyHeader from './CaseStudyHeader';
+import CaseStudyMeta from './CaseStudyMeta';
+import CaseStudyBody from './CaseStudyBody';
+import CaseStudyGallery from './CaseStudyGallery';
 
-export const sectionMap: Record<string, React.ComponentType<{ data: any }>> = {
+export const sectionMap: Record<string, React.ComponentType<{ data: never }>> = {
   hero: Hero,
   hero_slider: HeroSlider,
   trust_bar: TrustBar,
@@ -73,7 +78,7 @@ export const sectionMap: Record<string, React.ComponentType<{ data: any }>> = {
   faq_list: FAQSection,
   service_areas: ServiceAreas,
   areas_served: ServiceAreas,
-  town_list: ServiceAreas,
+  town_list: TownList,
   process_steps: ProcessSteps,
   testimonials: Testimonials,
   project_highlights: ProjectHighlights,
@@ -113,4 +118,8 @@ export const sectionMap: Record<string, React.ComponentType<{ data: any }>> = {
   requirements_section: RequirementsSection,
   benefits_grid: BenefitsGrid,
   application_form_section: ApplicationFormSection,
+  case_study_header: CaseStudyHeader,
+  case_study_meta: CaseStudyMeta,
+  case_study_body: CaseStudyBody,
+  case_study_gallery: CaseStudyGallery,
 };
