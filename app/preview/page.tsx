@@ -9,7 +9,7 @@ import { resolvePhones } from '@/lib/phones';
 export const metadata: Metadata = {
   robots: 'noindex, nofollow',
 };
-
+ 
 type Props = {
   searchParams: Promise<{ path?: string; signature?: string }>;
 };

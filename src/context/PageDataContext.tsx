@@ -14,7 +14,7 @@ const defaultValue: PageDataContextValue = {
   phones: [],
 };
 
-const PageDataContext = createContext<PageDataContextValue>(defaultValue);
+  const PageDataContext = createContext<PageDataContextValue>(defaultValue);
 
 export function PageDataProvider({
   footerVariant,
