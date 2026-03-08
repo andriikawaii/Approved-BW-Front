@@ -2,6 +2,7 @@ import { createElement } from 'react';
 import type { CMSPage } from '@/types/cms';
 import { CountyPageTemplate } from './CountyPageTemplate';
 import { DefaultPageTemplate } from './DefaultPageTemplate';
+import { HomePageTemplate } from './HomePageTemplate';
 import { ServicePageTemplate } from './ServicePageTemplate';
 import { TownPageTemplate } from './TownPageTemplate';
 
@@ -9,7 +10,7 @@ type TemplateComponent = (props: { page: CMSPage }) => React.JSX.Element;
 
 const TEMPLATE_COMPONENTS: Record<string, TemplateComponent> = {
   default: DefaultPageTemplate,
-  home: DefaultPageTemplate,
+  home: HomePageTemplate,
   about: DefaultPageTemplate,
   faq: DefaultPageTemplate,
   contact: DefaultPageTemplate,

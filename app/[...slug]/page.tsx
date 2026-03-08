@@ -54,7 +54,7 @@ export default async function DynamicPage({ params }: Props) {
 
   return (
     <PageDataProvider footerVariant={footerVariant} phones={phones}>
-      <Layout>
+      <Layout pageTemplate={page.template}>
         {renderTemplate(page)}
       </Layout>
     </PageDataProvider>
