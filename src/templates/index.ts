@@ -1,19 +1,30 @@
 import { createElement } from 'react';
 import type { CMSPage } from '@/types/cms';
+import { AboutPageTemplate } from './AboutPageTemplate';
+import { AreasWeServeTemplate } from './AreasWeServeTemplate';
+import { BathroomRemodelingPageTemplate } from './BathroomRemodelingPageTemplate';
+import { ContactPageTemplate } from './ContactPageTemplate';
 import { CountyPageTemplate } from './CountyPageTemplate';
 import { DefaultPageTemplate } from './DefaultPageTemplate';
+import { FaqPageTemplate } from './FaqPageTemplate';
 import { HomePageTemplate } from './HomePageTemplate';
+import { KitchenRemodelingPageTemplate } from './KitchenRemodelingPageTemplate';
+import { PremiumServicePageTemplate } from './PremiumServicePageTemplate';
+import { PricingPageTemplate } from './PricingPageTemplate';
+import { PrivacyPolicyPageTemplate } from './PrivacyPolicyPageTemplate';
+import { ProcessPageTemplate } from './ProcessPageTemplate';
 import { ServicePageTemplate } from './ServicePageTemplate';
 import { TownPageTemplate } from './TownPageTemplate';
+import { CountyHubPageTemplate } from './CountyHubPageTemplate';
 
 type TemplateComponent = (props: { page: CMSPage }) => React.JSX.Element;
 
 const TEMPLATE_COMPONENTS: Record<string, TemplateComponent> = {
   default: DefaultPageTemplate,
   home: HomePageTemplate,
-  about: DefaultPageTemplate,
-  faq: DefaultPageTemplate,
-  contact: DefaultPageTemplate,
+  about: AboutPageTemplate,
+  contact: ContactPageTemplate,
+  faq: FaqPageTemplate,
   portfolio: DefaultPageTemplate,
   subcontractors: DefaultPageTemplate,
   service: ServicePageTemplate,
@@ -28,6 +39,10 @@ const TEMPLATE_COMPONENTS: Record<string, TemplateComponent> = {
 
 function normalizeTemplateKey(template: string): string {
   return template.trim().toLowerCase().replace(/[\s-]+/g, '_');
+}
+
+function normalizePageSlug(slug: string): string {
+  return slug.trim().toLowerCase().replace(/^\/+|\/+$/g, '');
 }
 
 function resolveTemplateComponent(template: string): TemplateComponent {
@@ -58,6 +73,52 @@ function resolveTemplateComponent(template: string): TemplateComponent {
 }
 
 export function renderTemplate(page: CMSPage) {
+  if ([
+    'attic-conversions',
+    'basement-finishing',
+    'comfort-accessibility-remodeling',
+    'decks-porches',
+    'flooring',
+    'home-additions',
+    'interior-carpentry',
+    'interior-painting',
+    'remodeling-design-planning',
+  ].includes(normalizePageSlug(page.slug))) {
+    return createElement(PremiumServicePageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'bathroom-remodeling') {
+    return createElement(BathroomRemodelingPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'kitchen-remodeling') {
+    return createElement(KitchenRemodelingPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'areas-we-serve') {
+    return createElement(AreasWeServeTemplate, { page });
+  }
+
+  if (['fairfield-county', 'new-haven-county'].includes(normalizePageSlug(page.slug))) {
+    return createElement(CountyHubPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'faq') {
+    return createElement(FaqPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'pricing') {
+    return createElement(PricingPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'process') {
+    return createElement(ProcessPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'privacy-policy') {
+    return createElement(PrivacyPolicyPageTemplate, { page });
+  }
+
   const Template = resolveTemplateComponent(page.template);
   return createElement(Template, { page });
 }

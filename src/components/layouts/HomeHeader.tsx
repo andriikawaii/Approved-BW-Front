@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
+import ConsultationModal from './ConsultationModal';
 
 type PhoneItem = {
   label: string;
@@ -24,6 +25,7 @@ const NAV_ITEMS = [
 export default function HomeHeader({ phones }: HomeHeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [consultationOpen, setConsultationOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -56,12 +58,13 @@ export default function HomeHeader({ phones }: HomeHeaderProps) {
                 {item.label}
               </a>
             ))}
-            <Link
-              href="/free-consultation/"
+            <button
+              type="button"
+              onClick={() => setConsultationOpen(true)}
               className="rounded-sm bg-[#BC9155] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#a57d48]"
             >
               Free Consultation
-            </Link>
+            </button>
             {phones[0] ? (
               <a
                 href={`tel:${phones[0].number.replace(/\D/g, '')}`}
@@ -120,13 +123,16 @@ export default function HomeHeader({ phones }: HomeHeaderProps) {
                   {item.label}
                 </a>
               ))}
-              <Link
-                href="/free-consultation/"
+              <button
+                type="button"
                 className="mt-6 inline-flex items-center justify-center rounded-sm bg-[#BC9155] px-4 py-4 text-sm font-semibold uppercase tracking-[0.15em] text-white transition-colors hover:bg-[#a57d48]"
-                onClick={() => setMobileOpen(false)}
+                onClick={() => {
+                  setMobileOpen(false);
+                  setConsultationOpen(true);
+                }}
               >
                 Free Consultation
-              </Link>
+              </button>
             </nav>
 
             {phones.length > 0 ? (
@@ -147,6 +153,8 @@ export default function HomeHeader({ phones }: HomeHeaderProps) {
           </div>
         </div>
       ) : null}
+
+      <ConsultationModal open={consultationOpen} onClose={() => setConsultationOpen(false)} />
     </>
   );
 }
