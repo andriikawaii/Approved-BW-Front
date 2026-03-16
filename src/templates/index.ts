@@ -3,17 +3,21 @@ import type { CMSPage } from '@/types/cms';
 import { AboutPageTemplate } from './AboutPageTemplate';
 import { AreasWeServeTemplate } from './AreasWeServeTemplate';
 import { BathroomRemodelingPageTemplate } from './BathroomRemodelingPageTemplate';
+import { CaseStudiesPageTemplate } from './CaseStudiesPageTemplate';
 import { ContactPageTemplate } from './ContactPageTemplate';
 import { CountyPageTemplate } from './CountyPageTemplate';
 import { DefaultPageTemplate } from './DefaultPageTemplate';
 import { FaqPageTemplate } from './FaqPageTemplate';
 import { HomePageTemplate } from './HomePageTemplate';
+import { InsuranceRestorationPageTemplate } from './InsuranceRestorationPageTemplate';
+import { KitchenRemodelingCityPageTemplate } from './KitchenRemodelingCityPageTemplate';
 import { KitchenRemodelingPageTemplate } from './KitchenRemodelingPageTemplate';
 import { PremiumServicePageTemplate } from './PremiumServicePageTemplate';
 import { PricingPageTemplate } from './PricingPageTemplate';
 import { PrivacyPolicyPageTemplate } from './PrivacyPolicyPageTemplate';
 import { ProcessPageTemplate } from './ProcessPageTemplate';
 import { ServicePageTemplate } from './ServicePageTemplate';
+import { TermsPageTemplate } from './TermsPageTemplate';
 import { TownPageTemplate } from './TownPageTemplate';
 import { CountyHubPageTemplate } from './CountyHubPageTemplate';
 
@@ -73,6 +77,10 @@ function resolveTemplateComponent(template: string): TemplateComponent {
 }
 
 export function renderTemplate(page: CMSPage) {
+  if (normalizePageSlug(page.slug) === 'insurance-restoration') {
+    return createElement(InsuranceRestorationPageTemplate, { page });
+  }
+
   if ([
     'attic-conversions',
     'basement-finishing',
@@ -95,8 +103,16 @@ export function renderTemplate(page: CMSPage) {
     return createElement(KitchenRemodelingPageTemplate, { page });
   }
 
+  if (['kitchen-remodeling/stamford-ct', 'kitchen-remodeling/new-haven-ct'].includes(normalizePageSlug(page.slug))) {
+    return createElement(KitchenRemodelingCityPageTemplate, { page });
+  }
+
   if (normalizePageSlug(page.slug) === 'areas-we-serve') {
     return createElement(AreasWeServeTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'case-studies') {
+    return createElement(CaseStudiesPageTemplate, { page });
   }
 
   if (['fairfield-county', 'new-haven-county'].includes(normalizePageSlug(page.slug))) {
@@ -117,6 +133,10 @@ export function renderTemplate(page: CMSPage) {
 
   if (normalizePageSlug(page.slug) === 'privacy-policy') {
     return createElement(PrivacyPolicyPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'terms') {
+    return createElement(TermsPageTemplate, { page });
   }
 
   const Template = resolveTemplateComponent(page.template);

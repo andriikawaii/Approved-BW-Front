@@ -227,6 +227,16 @@ function toTelHref(number?: string) {
   return `tel:${(number || "").replace(/\D/g, "")}`;
 }
 
+function toCountyKey(value?: string) {
+  return (value || "").toLowerCase().replace(/[^a-z]+/g, " ").trim();
+}
+
+function resolveCountyPhone(phones: PhoneItem[], countyName?: string, fallback?: string) {
+  const countyKey = toCountyKey(countyName);
+  const matchedPhone = phones.find((phone) => toCountyKey(phone.label).includes(countyKey));
+  return matchedPhone?.number || fallback || "";
+}
+
 function getHighlightParts(text?: string, highlight?: string | null) {
   const safeText = text || "";
   const accent = highlight || (safeText.includes("Connecticut") ? "Connecticut" : "");
@@ -409,67 +419,67 @@ function AreasHeader({ phones }: { phones: PhoneItem[] }) {
   );
 }
 
-function AreasHero({ data }: { data?: HeroData }) {
+function AreasHero({ data, phones }: { data?: HeroData; phones: PhoneItem[] }) {
   const parts = getHighlightParts(data?.headline, "Connecticut");
   const backgroundImage = normalizeMediaPath(data?.background_image) || "/portfolio/builtwell-job-site-aerial-ct.jpg";
-  const badges = data?.badges || [];
+  const fairfieldPhone = resolveCountyPhone(phones, "Fairfield County", "(203) 919-9616");
+  const newHavenPhone = resolveCountyPhone(phones, "New Haven County", "(203) 466-9148");
 
   return (
-    <section className="relative overflow-hidden bg-[#151e30] pt-16 text-white">
+    <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pb-12 pt-[120px] text-white md:px-10 md:pb-14">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${backgroundImage})`, backgroundPosition: "center 32%" }}
       />
-      <div className="absolute inset-0 bg-[#151e30]/60" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#151e30]/20 via-[#151e30]/45 to-[#151e30]/88" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_97%_97%,rgba(21,30,48,1)_0%,rgba(21,30,48,0.9)_8%,transparent_30%),radial-gradient(ellipse_at_3%_97%,rgba(21,30,48,0.9)_0%,transparent_25%),linear-gradient(180deg,rgba(21,30,48,0.35)_0%,rgba(21,30,48,0.2)_30%,rgba(21,30,48,0.45)_65%,rgba(21,30,48,0.92)_100%)]" />
 
-      <div className="relative mx-auto flex min-h-[560px] max-w-[1240px] flex-col items-center justify-center px-6 py-20 text-center md:min-h-[640px]">
-        <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/65">
-          Home / Areas We Serve
-        </p>
-        {data?.eyebrow ? (
-          <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#bc9155]">
-            {data.eyebrow}
-          </p>
-        ) : null}
+      <div className="relative mx-auto flex min-h-[360px] max-w-[1240px] flex-col items-center justify-center text-center md:min-h-[440px]">
+        <ol className="mb-5 flex list-none items-center text-[13px] font-medium text-white/92 [text-shadow:0_1px_6px_rgba(0,0,0,0.7)]">
+          <li>
+            <ExternalOrInternalLink href="/" className="text-white/85 transition-colors hover:text-[#bc9155]">
+              Home
+            </ExternalOrInternalLink>
+          </li>
+          <li className="before:px-2.5 before:text-[#bc9155] before:content-['›']">
+            <span className="font-semibold text-white">Areas We Serve</span>
+          </li>
+        </ol>
 
-        <h1 className="max-w-4xl text-[2.75rem] leading-[0.98] font-bold text-white md:text-[4.25rem]">
+        <h1 className="max-w-[900px] font-serif text-[clamp(40px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.03em] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]">
           {parts.before}
           {parts.accent ? <span className="text-[#bc9155]">{parts.accent}</span> : null}
           {parts.after}
         </h1>
 
         {data?.subheadline ? (
-          <p className="mt-5 max-w-[760px] text-[1rem] leading-8 text-white/88 md:text-[1.15rem]">
+          <p className="mt-4 max-w-[560px] text-[17px] leading-[1.7] text-white/82">
             {data.subheadline}
           </p>
         ) : null}
 
-        {badges.length > 0 ? (
-          <div className="mt-9 grid w-full max-w-3xl gap-3 md:grid-cols-3">
-            {badges.map((badge, index) => {
-              const isPrimary = Boolean(badge.is_primary);
-              const cardClass = isPrimary
-                ? "border-[#bc9155] bg-[#bc9155] text-white shadow-[0_14px_30px_rgba(188,145,85,0.25)]"
-                : "border-white/15 bg-[#151e30]/40 text-white backdrop-blur";
-
-              return (
-                <ExternalOrInternalLink
-                  key={`${badge.label}-${badge.value}-${index}`}
-                  href={badge.url || "#contact"}
-                  className={`rounded-md border px-5 py-4 text-left transition-transform hover:-translate-y-0.5 ${cardClass}`}
-                >
-                  <span className={`block text-[10px] font-semibold uppercase tracking-[0.18em] ${isPrimary ? "text-white/80" : "text-white/60"}`}>
-                    {badge.label}
-                  </span>
-                  <span className="mt-1 block text-base font-semibold">
-                    {badge.value}
-                  </span>
-                </ExternalOrInternalLink>
-              );
-            })}
-          </div>
-        ) : null}
+        <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <ExternalOrInternalLink
+            href={toTelHref(fairfieldPhone)}
+            className="flex min-w-[180px] flex-col items-center rounded-[8px] border border-white/18 border-b-2 border-b-[#bc9155] bg-[rgba(10,18,35,0.42)] px-7 py-4 text-center text-white backdrop-blur-[12px] transition-all hover:-translate-y-0.5 hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
+          >
+            <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/70">Fairfield County</span>
+            <span className="mt-1 font-serif text-[18px] font-semibold">{fairfieldPhone}</span>
+          </ExternalOrInternalLink>
+          <ExternalOrInternalLink
+            href={toTelHref(newHavenPhone)}
+            className="flex min-w-[180px] flex-col items-center rounded-[8px] border border-white/18 border-b-2 border-b-[#bc9155] bg-[rgba(10,18,35,0.42)] px-7 py-4 text-center text-white backdrop-blur-[12px] transition-all hover:-translate-y-0.5 hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
+          >
+            <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/70">New Haven County</span>
+            <span className="mt-1 font-serif text-[18px] font-semibold">{newHavenPhone}</span>
+          </ExternalOrInternalLink>
+          <ExternalOrInternalLink
+            href="#contact"
+            className="flex min-w-[180px] flex-col items-center rounded-[8px] border border-[#bc9155] border-b-2 border-b-[#a57d48] bg-[#bc9155] px-7 py-4 text-center text-white transition-all hover:-translate-y-0.5 hover:bg-[#d4a95a] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
+          >
+            <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/90">Free Estimate</span>
+            <span className="mt-1 font-serif text-[18px] font-semibold">Schedule Now</span>
+          </ExternalOrInternalLink>
+        </div>
       </div>
     </section>
   );
@@ -479,22 +489,22 @@ function StatsBar({ data }: { data?: TrustBarData }) {
   const items = data?.items || [];
 
   return (
-    <section className="bg-[#151e30] py-5 text-white">
-      <div className="mx-auto max-w-[1240px] px-6">
-        <div className="grid gap-6 md:grid-cols-4 md:gap-0">
+    <section className="border-y border-[#bc9155]/20 bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] text-white">
+      <div className="mx-auto max-w-[1280px]">
+        <div className="grid grid-cols-2 md:grid-cols-4">
           {items.map((item, index) => (
             <div
               key={`${item.label}-${index}`}
-              className={`flex flex-col items-center justify-center px-4 text-center ${index < items.length - 1 ? "md:border-r md:border-white/10" : ""}`}
+              className={`flex min-h-[124px] flex-col items-center justify-center border-[#bc9155]/12 px-5 py-9 text-center transition-all hover:-translate-y-0.5 hover:bg-[#bc9155]/8 ${index < items.length - 1 ? "border-r" : ""}`}
             >
               <div className="flex items-center gap-2 text-[#bc9155]">
                 {item.value ? (
-                  <span className="font-serif text-[1.9rem] leading-none font-bold">{item.value}</span>
+                  <span className="font-serif text-[42px] leading-none font-bold">{item.value}</span>
                 ) : (
                   getTrustIcon(item.icon)
                 )}
               </div>
-              <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.18em] text-white/70">
+              <p className="mt-2 text-[13px] font-medium uppercase tracking-[0.08em] text-white/60">
                 {item.label}
               </p>
             </div>
@@ -505,7 +515,7 @@ function StatsBar({ data }: { data?: TrustBarData }) {
   );
 }
 
-function AreasSection({ data }: { data?: AreasServedData }) {
+function AreasSection({ data, phones }: { data?: AreasServedData; phones: PhoneItem[] }) {
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const titleParts = getHighlightParts(data?.title, data?.highlight_text || undefined);
   const counties = data?.counties || [];
@@ -538,6 +548,7 @@ function AreasSection({ data }: { data?: AreasServedData }) {
             const imageSrc = normalizeMediaPath(county.image) || "/images/fairfield-landmark.jpg";
             const featuredTowns = county.towns || [];
             const extraTowns = county.extra_towns || [];
+            const displayPhone = resolveCountyPhone(phones, countyName, county.phone);
 
             return (
               <article
@@ -554,11 +565,11 @@ function AreasSection({ data }: { data?: AreasServedData }) {
 
                 <div className="p-6 md:p-7">
                   <h3 className="text-[1.9rem] font-bold text-[#151e30]">{countyName}</h3>
-                  {county.phone ? (
+                  {displayPhone ? (
                     <p className="mt-1 text-sm text-[#5c677d]">
                       Call:{" "}
-                      <a href={toTelHref(county.phone)} className="font-semibold text-[#151e30] transition-colors hover:text-[#bc9155]">
-                        {county.phone}
+                      <a href={toTelHref(displayPhone)} className="font-semibold text-[#151e30] transition-colors hover:text-[#bc9155]">
+                        {displayPhone}
                       </a>
                     </p>
                   ) : null}
@@ -611,7 +622,7 @@ function AreasSection({ data }: { data?: AreasServedData }) {
                   {extraTowns.length > 0 ? (
                     <button
                       type="button"
-                      className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[#bc9155]"
+                      className="mt-4 inline-flex items-center text-sm font-medium text-[#bc9155]"
                       onClick={() =>
                         setExpanded((current) => ({
                           ...current,
@@ -619,8 +630,7 @@ function AreasSection({ data }: { data?: AreasServedData }) {
                         }))
                       }
                     >
-                      {isExpanded ? "Show Fewer Towns" : "See All Towns"}
-                      <ChevronDown className={`h-4 w-4 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
+                      {isExpanded ? "Show Less −" : "See All Towns +"}
                     </button>
                   ) : null}
 
@@ -678,10 +688,6 @@ function ServicesSection({ data }: { data?: ServicesGridData }) {
           {visibleItems.map((item) => (
             <ServiceCard key={item.title} item={item} />
           ))}
-          {showAll
-            ? hiddenItems.map((item) => <ServiceCard key={item.title} item={item} />)
-            : null}
-          {showAll && data?.cta_card ? <ServiceCtaCard card={data.cta_card} /> : null}
         </div>
 
         {(hiddenItems.length > 0 || data?.cta_card) ? (
@@ -694,6 +700,13 @@ function ServicesSection({ data }: { data?: ServicesGridData }) {
               {showAll ? data?.toggle_less_label || "Show Fewer Services" : data?.toggle_label || "Show More Services"}
               <ChevronDown className={`h-4 w-4 transition-transform ${showAll ? "rotate-180" : ""}`} />
             </button>
+          </div>
+        ) : null}
+
+        {showAll ? (
+          <div className="mt-8 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+            {hiddenItems.map((item) => <ServiceCard key={item.title} item={item} />)}
+            {data?.cta_card ? <ServiceCtaCard card={data.cta_card} /> : null}
           </div>
         ) : null}
       </div>
@@ -789,16 +802,16 @@ function ProseSection({ data }: { data?: RichTextData }) {
   const titleParts = getHighlightParts(data?.title, data?.highlight_text || undefined);
 
   return (
-    <section className="bg-white py-20 md:py-24">
-      <div className="mx-auto max-w-[960px] px-6">
-        <div className="mx-auto max-w-4xl">
+    <section className="border-b border-[#1e2b43]/6 bg-white py-20 md:py-24">
+      <div className="mx-auto max-w-[1240px] px-6">
+        <div className="mx-auto max-w-[820px]">
           <div className="text-center">
             {data?.eyebrow ? (
               <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#bc9155]">
                 {data.eyebrow}
               </p>
             ) : null}
-            <h2 className="text-[2.2rem] leading-tight font-bold text-[#151e30] md:text-[3.05rem]">
+            <h2 className="font-serif text-[clamp(32px,3.5vw,44px)] leading-tight font-bold tracking-[-0.02em] text-[#151e30]">
               {titleParts.before}
               {titleParts.accent ? <span className="text-[#bc9155]">{titleParts.accent}</span> : null}
               {titleParts.after}
@@ -807,7 +820,7 @@ function ProseSection({ data }: { data?: RichTextData }) {
 
           {data?.content ? (
             <div
-              className="mt-8 text-[1rem] leading-8 text-[#4f5f72] [&_p]:mb-6"
+              className="mt-8 text-[16px] leading-[1.85] text-[#5c677d] [&_p]:mb-5 [&_p:last-child]:mb-0"
               dangerouslySetInnerHTML={{ __html: data.content }}
             />
           ) : null}
@@ -825,27 +838,25 @@ function TrustLinkStrip({ data }: { data?: TrustBarData }) {
   }
 
   return (
-    <section className="relative overflow-hidden bg-[#151e30] py-7 text-white">
+    <section className="relative overflow-hidden bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] px-5 py-14 text-white md:px-10">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url(/portfolio/builtwell-job-site-aerial-ct.jpg)" }}
       />
-      <div className="absolute inset-0 bg-[#151e30]/84" />
+      <div className="absolute inset-0 bg-[#151e30]/88" />
 
-      <div className="relative mx-auto max-w-[1240px] px-6">
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5 xl:gap-0">
+      <div className="relative mx-auto max-w-[1200px]">
+        <div className="flex flex-wrap items-center justify-center">
           {items.map((item, index) => (
-            <div
-              key={`${item.label}-${index}`}
-              className={`flex items-center justify-center ${index < items.length - 1 ? "xl:border-r xl:border-white/10" : ""}`}
-            >
+            <div key={`${item.label}-${index}`} className="contents">
               <ExternalOrInternalLink
                 href={item.url || "#"}
-                className="inline-flex items-center gap-3 px-4 py-3 text-center text-sm font-medium text-white/88 transition-colors hover:text-[#bc9155]"
+                className="flex min-w-[180px] flex-1 flex-col items-center gap-3 px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90 transition-all hover:-translate-y-0.5 hover:text-[#bc9155]"
               >
                 <span className="text-[#bc9155]">{getTrustIcon(item.icon)}</span>
                 <span>{item.label}</span>
               </ExternalOrInternalLink>
+              {index < items.length - 1 ? <div className="hidden h-10 w-px bg-white/10 lg:block" /> : null}
             </div>
           ))}
         </div>
@@ -1116,14 +1127,14 @@ function FinancingStrip({ data }: { data?: RichTextData }) {
   }
 
   return (
-    <section className="border-y border-[#ece3d5] bg-white py-5">
-      <div className="mx-auto flex max-w-[1240px] flex-col gap-4 px-6 md:flex-row md:items-center md:justify-between">
-        <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-4">
-          <div className="text-lg font-semibold">
+    <section className="border-t border-[#1e2b43]/8 bg-white px-5 py-14 md:px-10">
+      <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-6 text-center">
+        <div className="flex flex-col items-center gap-4 md:flex-row md:text-left">
+          <div className="text-[24px] font-semibold">
             <span className="text-[#62b33d]">Green</span>
-            <span className="text-[#1f2937]">Sky</span>
+            <span className="text-[#1e2b43]">Sky</span>
           </div>
-          <p className="text-sm leading-6 text-[#4f5f72]">
+          <p className="max-w-[760px] text-[16px] leading-[1.6] text-[#5c677d]">
             <strong className="text-[#151e30]">{data.title}</strong>{" "}
             {(data.content || "").replace(/<[^>]+>/g, "")}
           </p>
@@ -1132,7 +1143,7 @@ function FinancingStrip({ data }: { data?: RichTextData }) {
         {data.cta?.label && data.cta?.url ? (
           <ExternalOrInternalLink
             href={data.cta.url}
-            className="inline-flex items-center gap-2 rounded-md bg-[#bc9155] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#a57d48]"
+            className="inline-flex min-h-[52px] min-w-[280px] items-center justify-center gap-2 rounded-[8px] bg-[#bc9155] px-8 py-3 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48]"
           >
             {data.cta.label}
             <ArrowRight className="h-4 w-4" />
@@ -1259,9 +1270,9 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
   return (
     <div className="bg-white text-[#151e30]">
       <main>
-        <AreasHero data={hero} />
+        <AreasHero data={hero} phones={phones} />
         <StatsBar data={statsBar} />
-        <AreasSection data={areas} />
+        <AreasSection data={areas} phones={phones} />
         <ServicesSection data={services} />
         <ProseSection data={prose} />
         <TrustLinkStrip data={linkStrip} />
