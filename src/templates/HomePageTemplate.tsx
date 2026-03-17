@@ -1,22 +1,28 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowRight,
   Brush,
+  CalendarDays,
+  Check,
   DraftingCompass,
   HeartHandshake,
   Home,
   LayoutGrid,
   PaintBucket,
+  Upload,
   ShieldCheck,
   SquareStack,
   Star,
   TimerReset,
   Trees,
   Wrench,
+  ChevronDown,
 } from 'lucide-react';
 import type { CMSPage, CMSSection } from '@/types/cms';
 import HomeHero from '@/src/components/sections/HomeHero';
-import LeadForm from '@/src/components/sections/LeadForm';
 
 type PhoneItem = {
   label: string;
@@ -180,6 +186,8 @@ type LeadFormData = {
   consent_text?: string;
   form_placeholder?: boolean;
 };
+
+type LeadField = NonNullable<LeadFormData['fields']>[number];
 
 type LegacyBlock = {
   heading: string;
@@ -425,6 +433,42 @@ function extractLicenseNumber(text: string) {
   return match?.[0] || '#0668405';
 }
 
+function highlightTitleHtml(title?: string | null) {
+  if (!title) {
+    return '';
+  }
+
+  const normalized = normalizeTitle(title);
+  const mappings = [
+    { key: 'why homeowners choose builtwell ct', target: 'BuiltWell CT' },
+    { key: 'home remodeling services', target: 'Services' },
+    { key: 'our remodeling process', target: 'Process' },
+    { key: 'connecticut areas we serve', target: 'We Serve' },
+    { key: 'recent remodeling projects', target: 'Projects' },
+    { key: 'licensed and insured in connecticut', target: 'Insured' },
+    { key: 'tell us about your project', target: 'Project' },
+  ];
+
+  const mapping = mappings.find((item) => normalized === item.key);
+  if (!mapping || !title.includes(mapping.target)) {
+    return title;
+  }
+
+  return title.replace(mapping.target, `<span style="color:#BC9155">${mapping.target}</span>`);
+}
+
+function fieldByNames(fields: LeadFormData['fields'], names: string[], fallback: LeadField) {
+  const normalizedNames = names.map((name) => name.toLowerCase());
+  const matched = (fields ?? []).find((field) => normalizedNames.includes(field.name.toLowerCase()));
+  return matched || fallback;
+}
+
+function normalizeFieldOptions(options: LeadField['options']) {
+  return (options ?? []).map((option) => (
+    typeof option === 'string' ? { label: option, value: option } : option
+  ));
+}
+
 /* ════════════════════════════════════════════════════════════════════════
    SUB-COMPONENTS
    ════════════════════════════════════════════════════════════════════════ */
@@ -444,20 +488,25 @@ function HomeSectionHeader({
     return null;
   }
 
+  const isWhyChooseTitle = normalizeTitle(title) === 'why homeowners choose builtwell ct';
+
   return (
-    <div className="mx-auto mb-16 max-w-3xl text-center">
+    <div className={joinClasses('mx-auto mb-9 text-center md:mb-12 lg:mb-16', isWhyChooseTitle ? 'max-w-5xl' : 'max-w-3xl')}>
       {label ? (
-        <span className="relative mb-4 inline-block pl-5 text-xs font-bold uppercase tracking-[0.18em] text-[#9A7340] before:absolute before:left-0 before:top-1/2 before:h-0.5 before:w-2.5 before:-translate-y-1/2 before:bg-[#BC9155]">
+        <span className="relative mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1px] text-[#9A7340] before:absolute before:left-0 before:top-1/2 before:h-0.5 before:w-2.5 before:-translate-y-1/2 before:bg-[#BC9155] md:text-[13px] md:tracking-[1.5px]">
           {label}
         </span>
       ) : null}
       {title ? (
-        <h2 className={joinClasses('text-[clamp(2rem,3.5vw,3rem)] font-bold tracking-[-0.5px]', dark ? 'text-white' : 'text-[#1E2B43]')}>
-          {title}
-        </h2>
+        <h2
+          className={joinClasses('text-[clamp(1.75rem,6vw,3rem)] font-bold tracking-[-0.5px]', isWhyChooseTitle && 'md:whitespace-nowrap', dark ? 'text-white' : 'text-[#1E2B43]')}
+          dangerouslySetInnerHTML={{
+            __html: highlightTitleHtml(title),
+          }}
+        />
       ) : null}
       {description ? (
-        <p className={joinClasses('mx-auto mt-5 max-w-[700px] text-[17px] leading-[1.75]', dark ? 'text-white/60' : 'text-[#5C677D]')}>
+        <p className={joinClasses('mx-auto mt-5 max-w-[700px] text-[15px] leading-[1.7] md:text-[17px] md:leading-[1.75]', dark ? 'text-white/60' : 'text-[#5C677D]')}>
           {description}
         </p>
       ) : null}
@@ -474,24 +523,26 @@ function HomeTrustBar({ data }: { data: TrustBarData | null }) {
   if (isStats) {
     return (
       <section className="border-y border-[#BC9155]/20 bg-[#1E2B43]">
-        <div className="mx-auto grid max-w-[1280px] grid-cols-1 text-center sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-[1280px] grid-cols-2 text-center lg:grid-cols-4">
           {items.map((item, index) => (
             <div
               key={`trust-${index}`}
               className={joinClasses(
-                'px-5 py-9 transition-all hover:-translate-y-0.5 hover:bg-[#BC9155]/8',
-                index < items.length - 1 && 'border-b border-[#BC9155]/12 sm:border-b-0 lg:border-r'
+                'cursor-default px-4 py-6 transition-all duration-300 md:px-5 md:py-9 lg:hover:-translate-y-[3px] lg:hover:bg-[#BC9155]/8',
+                index % 2 === 0 && 'border-r border-[#BC9155]/12 lg:border-r',
+                index < 2 && 'border-b border-[#BC9155]/12 lg:border-b-0',
+                index < items.length - 1 ? 'lg:border-r lg:border-[#BC9155]/12' : 'lg:border-r-0'
               )}
             >
-              <div className="font-serif text-[42px] font-bold leading-none text-[#BC9155]">
+              <div className="font-serif text-[32px] font-bold leading-none text-[#BC9155] transition-all duration-300 md:text-[42px] lg:hover:text-[#d4a95a] lg:hover:[text-shadow:0_0_20px_rgba(188,145,85,0.3)]">
                 {item.value}
                 {item.icon === 'star' ? (
-                  <span className="ml-1 inline-block text-2xl opacity-70">
-                    <Star className="inline h-6 w-6 fill-[#BC9155] text-[#BC9155]" />
+                  <span className="ml-1 inline-block text-base opacity-70 md:text-2xl">
+                    <Star className="inline h-4 w-4 fill-[#BC9155] text-[#BC9155] md:h-6 md:w-6" />
                   </span>
                 ) : null}
               </div>
-              <div className="mt-2 text-[13px] font-medium uppercase tracking-[1px] text-white/60">
+              <div className="mt-1.5 text-[11px] font-medium uppercase tracking-[0.8px] text-white/85 md:mt-2 md:text-[13px] md:tracking-[1px] lg:text-white/60">
                 {item.label}
               </div>
             </div>
@@ -541,7 +592,7 @@ function HomeWhySection({
   }
 
   return (
-    <section id="why-choose" className="scroll-mt-28 bg-white px-6 py-24 lg:px-10">
+    <section id="why-choose" className="scroll-mt-28 bg-white px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
       <div className="mx-auto max-w-[1280px]">
         <HomeSectionHeader
           label={eyebrow || 'Our Commitment'}
@@ -549,19 +600,19 @@ function HomeWhySection({
           description={description}
         />
 
-        <div className="grid gap-10 lg:grid-cols-3">
+        <div className="grid gap-4 md:gap-6 lg:grid-cols-3 lg:gap-10">
           {blocks.map((block, index) => (
             <article
               key={`${block.heading}-${index}`}
-              className="relative overflow-hidden rounded-lg border border-[#1E2B43]/4 bg-[#F5F1E9] px-9 py-10"
+              className="relative overflow-hidden rounded-lg border border-[#1E2B43]/4 bg-[#F5F1E9] px-6 py-8 md:px-9 md:py-11"
             >
               <div className="absolute inset-x-0 top-0 h-[3px] bg-[#BC9155]" />
-              <div className="font-serif text-[48px] font-bold leading-none text-[#BC9155]/15">
+              <div className="mb-3.5 font-serif text-[40px] font-bold leading-none text-[#BC9155]/15 md:mb-5 md:text-[48px]">
                 {String(index + 1).padStart(2, '0')}
               </div>
-              <h3 className="mt-5 text-2xl font-bold text-[#1E2B43]">{block.heading}</h3>
+              <h3 className="mb-3 text-[20px] font-bold text-[#1E2B43] md:mb-4 md:text-2xl">{block.heading}</h3>
               {paragraphList(block.content).map((p, i) => (
-                <p key={i} className="mt-3 text-[15px] leading-[1.75] text-[#5C677D]">{p}</p>
+                <p key={i} className="mb-3 text-[14px] leading-[1.7] text-[#5C677D] last:mb-0 md:text-[15px] md:leading-[1.75]">{p}</p>
               ))}
             </article>
           ))}
@@ -589,20 +640,20 @@ function HomeServicesSection({
   }
 
   return (
-    <section id="services" className="scroll-mt-28 bg-[#F5F1E9] px-6 py-24 lg:px-10">
+    <section id="services" className="scroll-mt-28 bg-[#F5F1E9] px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
       <div className="mx-auto max-w-[1280px]">
         <HomeSectionHeader label={primaryLabel || 'Our Services'} title={title} description={description} />
 
         {/* Primary services - cards with images */}
         {primaryServices.length > 0 ? (
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 md:mb-6 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
             {primaryServices.map((service) => (
               <Link
                 key={service.title}
                 href={service.url}
-                className="group overflow-hidden rounded-lg border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[#BC9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
+                className="group overflow-hidden rounded-lg border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 md:hover:-translate-y-[6px] md:hover:border-[#BC9155] md:hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
               >
-                <div className="h-[200px] overflow-hidden">
+                <div className="relative h-[180px] overflow-hidden md:h-[200px]">
                   {service.image ? (
                     <img
                       src={service.image}
@@ -611,13 +662,14 @@ function HomeServicesSection({
                       loading="lazy"
                     />
                   ) : null}
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_40%,rgba(188,145,85,0.12)_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 </div>
-                <div className="px-[22px] py-6">
-                  <h3 className="text-lg font-semibold text-[#1E2B43]">{service.title}</h3>
-                  <p className="mt-2.5 line-clamp-3 text-sm leading-[1.65] text-[#5C677D]">{service.description}</p>
-                  <span className="mt-3.5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#BC9155] transition-all group-hover:gap-2.5">
+                <div className="px-[18px] py-5 md:px-[22px] md:py-6">
+                  <h3 className="font-sans text-[17px] font-semibold text-[#1E2B43] md:text-lg">{service.title}</h3>
+                  <p className="mt-2.5 line-clamp-3 text-[13px] leading-[1.65] text-[#5C677D] md:text-sm">{service.description}</p>
+                  <span className="mt-3.5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#BC9155] transition-all duration-300 group-hover:gap-2.5 group-hover:text-[#9A7340]">
                     {service.ctaLabel}
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-[3px]" />
                   </span>
                 </div>
               </Link>
@@ -627,7 +679,7 @@ function HomeServicesSection({
 
         {/* Secondary services - cards with images */}
         {secondaryServices.length > 0 ? (
-          <div className="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-4 grid gap-4 md:mt-6 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
             {secondaryServices.map((service) => {
               const Icon = serviceIcon(service.title);
 
@@ -635,9 +687,9 @@ function HomeServicesSection({
                 <Link
                   key={service.title}
                   href={service.url}
-                  className="group overflow-hidden rounded-lg border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[#BC9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
+                  className="group overflow-hidden rounded-lg border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 md:hover:-translate-y-[6px] md:hover:border-[#BC9155] md:hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
                 >
-                  <div className="h-[200px] overflow-hidden">
+                  <div className="relative h-[180px] overflow-hidden md:h-[200px]">
                     {service.image ? (
                       <img
                         src={service.image}
@@ -650,13 +702,14 @@ function HomeServicesSection({
                         <Icon className="h-12 w-12 text-[#BC9155]/40" />
                       </div>
                     )}
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_40%,rgba(188,145,85,0.12)_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                   </div>
-                  <div className="px-[22px] py-6">
-                    <h3 className="text-lg font-semibold text-[#1E2B43]">{service.title}</h3>
-                    <p className="mt-2.5 line-clamp-3 text-sm leading-[1.65] text-[#5C677D]">{service.description}</p>
-                    <span className="mt-3.5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#BC9155] transition-all group-hover:gap-2.5">
+                  <div className="px-[18px] py-5 md:px-[22px] md:py-6">
+                    <h3 className="font-sans text-[17px] font-semibold text-[#1E2B43] md:text-lg">{service.title}</h3>
+                    <p className="mt-2.5 line-clamp-3 text-[13px] leading-[1.65] text-[#5C677D] md:text-sm">{service.description}</p>
+                    <span className="mt-3.5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#BC9155] transition-all duration-300 group-hover:gap-2.5 group-hover:text-[#9A7340]">
                       {service.ctaLabel}
-                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-[3px]" />
                     </span>
                   </div>
                 </Link>
@@ -665,10 +718,10 @@ function HomeServicesSection({
           </div>
         ) : null}
 
-        <div className="mt-12 text-center">
+        <div className="mt-8 text-center md:mt-12">
           <Link
             href="/services/"
-            className="inline-flex items-center gap-2 rounded border-2 border-[#1E2B43] px-8 py-3.5 text-sm font-semibold text-[#1E2B43] transition-colors hover:bg-[#1E2B43] hover:text-white"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded border-2 border-[#1E2B43] px-8 py-3.5 text-sm font-semibold tracking-[0.3px] text-[#1E2B43] transition-colors hover:bg-[#1E2B43] hover:text-white md:min-h-0 md:w-auto"
           >
             View All Services
             <ArrowRight className="h-4 w-4" />
@@ -681,14 +734,21 @@ function HomeServicesSection({
 
 function HomeProcessSection({ data }: { data: ProcessStepsData | null }) {
   const steps = data?.steps ?? [];
+  const [activeStep, setActiveStep] = useState<number | null>(null);
 
   if (steps.length === 0) {
     return null;
   }
 
   return (
-    <section id="process" className="scroll-mt-28 overflow-hidden bg-[#1E2B43] px-6 py-24 text-white lg:px-10">
-      <div className="mx-auto max-w-[1280px]">
+    <section id="process" className="scroll-mt-28 relative overflow-hidden px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: "url('/portfolio/builtwell-team-contractors-ct-04.png')" }}
+        aria-hidden="true"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(10,18,34,0.90)_0%,rgba(30,43,67,0.85)_100%)]" />
+      <div className="relative z-10 mx-auto max-w-[1280px]">
         <HomeSectionHeader
           label={data?.eyebrow || 'Our Process'}
           title={data?.title}
@@ -696,20 +756,39 @@ function HomeProcessSection({ data }: { data: ProcessStepsData | null }) {
           dark
         />
 
-        <div className="relative grid gap-10 lg:grid-cols-5 lg:gap-0">
-          <div className="absolute left-[10%] right-[10%] top-[34px] hidden h-0.5 bg-[#BC9155]/25 lg:block" />
+        <div className="relative mx-auto grid max-w-full gap-0 lg:max-w-none lg:grid-cols-5">
+          <div className="absolute bottom-[34px] left-[25px] top-[28px] w-0.5 bg-[#BC9155]/25 md:left-[33px] md:top-[34px] lg:bottom-auto lg:left-[10%] lg:right-[10%] lg:top-[34px] lg:h-0.5 lg:w-auto" />
           {steps.map((step, index) => (
-            <div key={`${step.title}-${index}`} className="relative px-4 text-center">
-              <div className="relative z-10 mx-auto mb-5 flex h-[68px] w-[68px] items-center justify-center rounded-full border-[2.5px] border-[#BC9155] bg-[#BC9155]/42 font-serif text-2xl font-bold text-[#f5e0c0] shadow-[0_0_0_4px_rgba(188,145,85,0.12)]">
+            <button
+              type="button"
+              key={`${step.title}-${index}`}
+              onClick={() => setActiveStep((current) => (current === index ? null : index))}
+              className={joinClasses(
+                'relative flex w-full cursor-pointer items-start gap-4 rounded-lg border-0 bg-transparent px-0 py-3 text-left transition-colors md:gap-5 md:py-4 lg:block lg:px-4 lg:pb-5 lg:pt-4 lg:text-center',
+                activeStep === index && 'bg-[#BC9155]/14'
+              )}
+              aria-expanded={activeStep === index}
+            >
+              <div className="relative z-10 flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-full border-[2.5px] border-[#BC9155] bg-[#BC9155]/42 font-serif text-[18px] font-bold text-[#f5e0c0] shadow-[0_0_0_4px_rgba(188,145,85,0.12)] md:h-[68px] md:w-[68px] md:text-2xl lg:-mt-2 lg:mx-auto lg:mb-5">
                 {index + 1}
               </div>
-              <h3 className="text-lg font-semibold text-white">{step.title || step.short}</h3>
-              {step.description ? (
-                <p className="mt-3 text-sm leading-[1.65] text-white/70">{step.description}</p>
-              ) : null}
-            </div>
+              <div>
+                <h3 className="mb-1.5 text-left text-base font-semibold text-white md:mb-3 md:text-lg lg:text-center">{step.title || step.short}</h3>
+                {step.description ? (
+                  <p
+                    className={joinClasses(
+                      'text-left text-[14px] leading-[1.6] text-white/70 transition-all duration-300 lg:text-center lg:leading-[1.65]',
+                      activeStep === index ? 'max-h-[200px] opacity-100' : 'max-h-none opacity-100 lg:max-h-0 lg:overflow-hidden lg:opacity-0'
+                    )}
+                  >
+                    {step.description}
+                  </p>
+                ) : null}
+              </div>
+            </button>
           ))}
         </div>
+        <p className="mt-7 hidden text-center text-[13px] text-white/40 lg:block">Click any step to learn more</p>
       </div>
     </section>
   );
@@ -726,76 +805,111 @@ function HomeAreasSection({
   counties: County[];
   eyebrow?: string | null;
 }) {
+  const [expandedCounties, setExpandedCounties] = useState<Record<string, boolean>>({});
+
   if (counties.length === 0) {
     return null;
   }
 
   return (
-    <section id="areas" className="scroll-mt-28 bg-[#F5F1E9] px-6 py-24 lg:px-10">
+    <section id="areas" className="scroll-mt-28 bg-[#F5F1E9] px-5 pb-[52px] pt-[52px] md:px-8 md:pb-20 md:pt-[72px] lg:px-10 lg:pb-[100px]">
       <div className="mx-auto max-w-[1280px]">
         <HomeSectionHeader label={eyebrow || 'Service Areas'} title={title} description={description} />
 
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-4 md:gap-8 lg:grid-cols-2">
           {counties.map((county) => {
             const countyName = county.name || county.county_name || county.title || '';
             const towns = county.towns || county.cities || [];
             const townLinks = county.town_links || [];
+            const townItems = townLinks.length > 0 ? townLinks : towns.map((town) => ({ name: town, url: '' }));
+            const visibleTowns = townItems.slice(0, 8);
+            const hiddenTowns = townItems.slice(8);
+            const isExpanded = expandedCounties[countyName] ?? false;
 
             return (
               <article
                 key={countyName}
-                className="overflow-hidden rounded-lg border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-[#BC9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
+                className="group overflow-hidden rounded-lg border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 md:hover:-translate-y-1 md:hover:border-[#BC9155] md:hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
               >
                 {county.image ? (
-                  <div className="h-[200px] overflow-hidden">
+                  <div className="relative h-[180px] overflow-hidden md:h-[200px]">
                     <img
                       src={county.image}
                       alt={`${countyName}, Connecticut home remodeling service area`}
-                      className="h-full w-full object-cover"
+                      className={joinClasses(
+                        'h-full w-full object-cover transition-transform duration-500 md:group-hover:scale-105',
+                        normalizeTitle(countyName) === 'new haven county' && 'object-[center_15%]'
+                      )}
                       loading="lazy"
                     />
+                    <div className="absolute inset-x-0 bottom-0 h-[60px] bg-[linear-gradient(to_top,#ffffff,transparent)]" />
                   </div>
                 ) : null}
-                <div className="flex flex-1 flex-col p-7">
-                  <h3 className="font-serif text-2xl font-bold text-[#1E2B43]">{countyName}</h3>
+                <div className="flex flex-1 flex-col px-5 pb-6 pt-5 md:px-7 md:pb-8 md:pt-7">
+                  <h3 className="font-serif text-[22px] font-bold text-[#1E2B43] md:text-2xl">{countyName}</h3>
                   {county.phone ? (
-                    <div className="mt-1.5 text-[15px] text-[#5C677D]">
+                    <div className="mb-3.5 mt-1.5 text-[15px] text-[#5C677D]">
                       Call: <a href={`tel:${county.phone.replace(/\D/g, '')}`} className="font-semibold text-[#BC9155] hover:underline">{county.phone}</a>
                     </div>
                   ) : null}
                   {county.description ? (
-                    <p className="mt-3.5 border-b border-[#1E2B43]/6 pb-4.5 text-sm leading-[1.7] text-[#5C677D]">
+                    <p className="mb-[18px] border-b border-[#1E2B43]/6 pb-[18px] text-[14px] leading-[1.7] text-[#5C677D]">
                       {county.description}
                     </p>
                   ) : null}
 
-                  {/* Town pills */}
-                  <div className="mt-4 grid grid-cols-4 gap-2">
-                    {(townLinks.length > 0 ? townLinks : towns.map((t) => ({ name: t, url: '' }))).map((town) =>
-                      typeof town === 'string' ? (
-                        <span key={town} className="rounded-full bg-[#F5F1E9] px-2.5 py-[7px] text-center text-[11px] font-semibold text-[#1E2B43] transition-colors hover:bg-[#BC9155]/10 hover:text-[#9A7340]">
-                          {town}
-                        </span>
-                      ) : town.url ? (
+                  <div className="mb-4 grid grid-cols-3 gap-2 md:grid-cols-4">
+                    {visibleTowns.map((town) =>
+                      town.url ? (
                         <Link
                           key={town.name}
                           href={town.url}
-                          className="rounded-full bg-[#F5F1E9] px-2.5 py-[7px] text-center text-[11px] font-semibold text-[#1E2B43] transition-colors hover:bg-[#BC9155] hover:text-white"
+                          className="rounded-full bg-[#F5F1E9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1E2B43] transition-all hover:bg-[#BC9155] hover:text-white md:px-2.5"
                         >
                           {town.name}
                         </Link>
                       ) : (
-                        <span key={town.name} className="rounded-full bg-[#F5F1E9] px-2.5 py-[7px] text-center text-[11px] font-semibold text-[#1E2B43]">
+                        <span key={town.name} className="rounded-full bg-[#F5F1E9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1E2B43] transition-colors hover:bg-[#BC9155]/10 hover:text-[#9A7340]">
                           {town.name}
                         </span>
                       )
                     )}
+                    {isExpanded ? hiddenTowns.map((town) => (
+                      town.url ? (
+                        <Link
+                          key={town.name}
+                          href={town.url}
+                          className="rounded-full bg-[#F5F1E9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1E2B43] transition-all hover:bg-[#BC9155] hover:text-white"
+                        >
+                          {town.name}
+                        </Link>
+                      ) : (
+                        <span key={town.name} className="rounded-full bg-[#F5F1E9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1E2B43] transition-colors hover:bg-[#BC9155]/10 hover:text-[#9A7340]">
+                          {town.name}
+                        </span>
+                      )
+                    )) : null}
+                    {hiddenTowns.length > 0 ? (
+                      <button
+                        type="button"
+                        className="col-span-full mt-1 bg-transparent px-0 py-1 text-center text-[13px] font-semibold text-[#BC9155] transition-colors hover:text-[#9A7340]"
+                        onClick={() =>
+                          setExpandedCounties((current) => ({
+                            ...current,
+                            [countyName]: !current[countyName],
+                          }))
+                        }
+                        aria-expanded={isExpanded}
+                      >
+                        {isExpanded ? 'Show Less -' : 'See All Towns +'}
+                      </button>
+                    ) : null}
                   </div>
 
                   {county.url ? (
                     <Link
                       href={county.url}
-                      className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#BC9155] transition-all hover:gap-2.5"
+                      className="mt-auto inline-flex items-center gap-1.5 text-sm font-semibold text-[#BC9155] transition-all hover:gap-2.5"
                     >
                       Learn more about {countyName}
                       <ArrowRight className="h-3.5 w-3.5" />
@@ -813,26 +927,40 @@ function HomeAreasSection({
 
 function HomeTrustStrip() {
   const trustItems = [
-    { label: 'Google Rating 4.9', icon: 'star' },
-    { label: 'BBB A+ Accredited', icon: 'shield' },
-    { label: 'Trusted on Houzz', icon: 'check' },
-    { label: 'CT HIC License #0668405', icon: 'license' },
-    { label: 'Verified on Angi & Thumbtack', icon: 'check' },
+    { label: 'Google Rating 4.9', icon: 'star', href: '#google-reviews' },
+    { label: 'BBB A+ Accredited', icon: 'shield', href: 'https://www.bbb.org/search?find_country=USA&find_text=builtwell+ct&find_loc=Orange%2C+CT', external: true },
+    { label: 'Trusted on Houzz', icon: 'check', href: '#houzz' },
+    { label: 'CT HIC License #0668405', icon: 'license', href: 'https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx', external: true },
+    { label: 'Verified on Angi & Thumbtack', icon: 'check', href: '#angi' },
   ];
 
   return (
-    <div className="border-y border-[#1E2B43]/8 bg-white py-5">
-      <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-center gap-8 px-6">
+    <div className="border-t border-[#1E2B43]/8 bg-white px-5 py-8 md:px-6 md:py-10 lg:px-10 lg:py-14">
+      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-center gap-0">
         {trustItems.map((item, index) => (
-          <div key={index} className="flex items-center gap-2 text-sm font-medium text-[#5C677D]">
-            {item.icon === 'star' ? (
-              <Star className="h-5 w-5 fill-[#BC9155] text-[#BC9155]" />
-            ) : item.icon === 'shield' ? (
-              <ShieldCheck className="h-5 w-5 text-[#BC9155]" />
-            ) : (
-              <svg className="h-5 w-5 text-[#BC9155]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M9 12l2 2 4-4" /></svg>
-            )}
-            {item.label}
+          <div key={item.label} className="contents">
+            <a
+              href={item.href}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noopener noreferrer' : undefined}
+              className="flex min-w-[50%] flex-1 flex-col items-center gap-2.5 px-4 py-3 text-center text-[11px] font-semibold tracking-[0.4px] whitespace-nowrap text-[#1E2B43] transition-all hover:-translate-y-0.5 hover:text-[#BC9155] md:min-w-[140px] md:px-5 md:py-4 md:text-[12px] lg:min-w-[180px] lg:px-8 lg:py-5 lg:text-[13px]"
+            >
+              {item.icon === 'star' ? (
+                <Star className="h-[18px] w-[18px] fill-[#BC9155] text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]" />
+              ) : item.icon === 'shield' ? (
+                <ShieldCheck className="h-[18px] w-[18px] text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]" />
+              ) : item.icon === 'license' ? (
+                <CalendarDays className="h-[18px] w-[18px] text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]" />
+              ) : (
+                <div className="flex h-[18px] w-[18px] items-center justify-center rounded-full border-2 border-current text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]">
+                  <Check className="h-3 w-3 md:h-3.5 md:w-3.5" />
+                </div>
+              )}
+              {item.label}
+            </a>
+            {index < trustItems.length - 1 ? (
+              <div className="hidden h-10 w-px shrink-0 bg-[#1E2B43]/10 lg:block" />
+            ) : null}
           </div>
         ))}
       </div>
@@ -842,17 +970,22 @@ function HomeTrustStrip() {
 
 function HomeMidCta() {
   return (
-    <section className="relative overflow-hidden bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] px-10 py-[72px] text-center">
+    <section className="relative overflow-hidden bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] px-5 py-[52px] text-center md:px-10 md:py-[72px]">
+      <div
+        className="absolute inset-0 bg-cover bg-center opacity-10"
+        style={{ backgroundImage: "url('/portfolio/builtwell-contractor-handshake-arrival-ct-optimized.jpg')" }}
+        aria-hidden="true"
+      />
       <div className="relative z-10">
-        <h2 className="font-serif text-[clamp(28px,3vw,40px)] font-bold tracking-[-0.3px] text-white">
+        <h2 className="font-serif text-[clamp(28px,3vw,40px)] font-bold tracking-[-0.3px] !text-white">
           Ready to <span className="text-[#BC9155]">Begin</span>?
         </h2>
-        <p className="mx-auto mb-7 mt-3.5 max-w-[480px] text-[17px] text-white/65">
+        <p className="mx-auto mb-6 mt-3.5 max-w-[480px] text-[16px] text-white/65 md:mb-7 md:text-[17px]">
           Great remodeling starts with the right team.
         </p>
         <Link
           href="/free-consultation/"
-          className="inline-flex min-w-[min(340px,100%)] items-center justify-center rounded-md bg-[#BC9155] px-11 py-[18px] text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48]"
+          className="inline-flex min-h-[52px] w-full items-center justify-center rounded-lg bg-[#BC9155] px-6 py-4 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48] md:min-h-0 md:min-w-[min(340px,100%)] md:w-auto md:rounded-md md:px-11 md:py-[18px]"
         >
           Schedule a Free Consultation
           <ArrowRight className="ml-2 h-4 w-4" />
@@ -879,7 +1012,7 @@ function HomeProjectsSection({
   }
 
   return (
-    <section id="projects" className="scroll-mt-28 bg-white px-6 py-24 lg:px-10">
+    <section id="projects" className="scroll-mt-28 bg-white px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
       <div className="mx-auto max-w-[1280px]">
         <HomeSectionHeader
           label="Case Studies"
@@ -887,29 +1020,29 @@ function HomeProjectsSection({
           description={description}
         />
 
-        <div className="grid gap-7 lg:grid-cols-3">
+        <div className="grid gap-4 md:gap-7 lg:grid-cols-3">
           {projects.map((project) => (
             <article
               key={project.title}
-              className="flex flex-col overflow-hidden rounded-lg border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-[#BC9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
+              className="group flex flex-col overflow-hidden rounded-lg border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 md:hover:-translate-y-1 md:hover:border-[#BC9155] md:hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
             >
-              <div className="h-[260px] overflow-hidden">
+              <div className="h-[200px] overflow-hidden md:h-[260px]">
                 {project.image ? (
                   <img
                     src={project.image}
                     alt={project.title || ''}
-                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-[1.04]"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                     loading="lazy"
                   />
                 ) : null}
               </div>
-              <div className="flex flex-1 flex-col p-6">
-                <h3 className="text-xl font-bold text-[#1E2B43]">{project.title}</h3>
-                <p className="mt-3 text-sm leading-[1.7] text-[#5C677D]">{project.description}</p>
+              <div className="flex flex-1 flex-col px-5 py-[22px] md:px-6 md:py-7">
+                <h3 className="text-[18px] font-bold text-[#1E2B43] md:text-xl">{project.title}</h3>
+                <p className="mt-3 text-[13px] leading-[1.7] text-[#5C677D] md:text-sm">{project.description}</p>
 
                 {project.quote ? (
-                  <div className="mt-auto mb-5 mt-5 rounded-r-md border-l-[3px] border-[#BC9155] bg-[#F5F1E9] px-5 py-[18px]">
-                    <p className="text-sm italic leading-snug text-[#1E2B43]">{project.quote}</p>
+                  <div className="mb-5 mt-auto mt-5 min-h-0 rounded-r-md border-l-[3px] border-[#BC9155] bg-[#F5F1E9] px-4 py-[14px] md:min-h-[80px] md:px-5 md:py-[18px]">
+                    <p className="text-[13px] italic leading-[1.5] text-[#1E2B43] md:text-sm">{project.quote}</p>
                     {project.tag ? (
                       <span className="mt-1.5 block text-xs font-semibold text-[#5C677D]">&mdash; {project.tag}</span>
                     ) : null}
@@ -919,7 +1052,7 @@ function HomeProjectsSection({
                 {project.url ? (
                   <Link
                     href={project.url}
-                    className="mt-auto flex w-full items-center justify-center gap-2 rounded bg-[#BC9155] px-5 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-[#a57d48]"
+                    className="mt-auto flex min-h-12 w-full items-center justify-center gap-2 rounded bg-[#BC9155] px-5 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-[#a57d48]"
                   >
                     Read case study
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -930,10 +1063,10 @@ function HomeProjectsSection({
           ))}
         </div>
 
-        <div className="mt-12 text-center">
+        <div className="mt-8 text-center md:mt-12">
           <Link
             href="/case-studies/"
-            className="inline-flex items-center gap-2 rounded border-2 border-[#1E2B43] px-8 py-3.5 text-sm font-semibold text-[#1E2B43] transition-colors hover:bg-[#1E2B43] hover:text-white"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded border-2 border-[#1E2B43] px-8 py-3.5 text-sm font-semibold tracking-[0.3px] text-[#1E2B43] transition-colors hover:bg-[#1E2B43] hover:text-white md:min-h-0 md:w-auto"
           >
             See All Case Studies
             <ArrowRight className="h-4 w-4" />
@@ -981,43 +1114,409 @@ function HomeLicensedSection({
   ];
 
   return (
-    <section className="overflow-hidden bg-[linear-gradient(135deg,#2D3E33_0%,#1A2D22_100%)] px-6 py-24 text-white lg:px-10">
-      <div className="mx-auto grid max-w-[1280px] gap-12 lg:grid-cols-2 lg:items-center lg:gap-20">
+    <section className="relative overflow-hidden px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
+      <div
+        className="absolute inset-0 bg-cover bg-center opacity-[0.15]"
+        style={{ backgroundImage: "url('/portfolio/builtwell-job-site-aerial-ct.jpg')" }}
+        aria-hidden="true"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,#2D3E33_0%,#1A2D22_100%)]" />
+      <div className="relative z-10 mx-auto grid max-w-[1280px] gap-8 md:gap-10 lg:grid-cols-2 lg:items-center lg:gap-20">
         <div>
           {title ? (
             <>
-              <span className="relative mb-4 inline-block pl-5 text-xs font-bold uppercase tracking-[0.18em] text-[#BC9155] before:absolute before:left-0 before:top-1/2 before:h-0.5 before:w-2.5 before:-translate-y-1/2 before:bg-[#BC9155]">
+              <span className="relative mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1px] text-[#BC9155] before:absolute before:left-0 before:top-1/2 before:h-0.5 before:w-2.5 before:-translate-y-1/2 before:bg-[#BC9155] md:text-[13px] md:tracking-[1.5px]">
                 Licensed in Connecticut
               </span>
-              <h2 className="text-[clamp(2rem,3.5vw,2.75rem)] font-bold tracking-[-0.5px] text-white">
-                {title}
-              </h2>
+              <h2
+                className="text-[clamp(1.75rem,6vw,2.75rem)] font-bold tracking-[-0.5px] text-white"
+                dangerouslySetInnerHTML={{
+                  __html: highlightTitleHtml(title),
+                }}
+              />
             </>
           ) : null}
-          <div className="mt-6 space-y-5 text-base leading-8 text-white/70">
+          <div className="mt-6 space-y-5 text-[15px] leading-[1.7] text-white/70 md:text-base md:leading-8">
             {paragraphs.map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
             ))}
           </div>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-3 md:grid-cols-2 md:gap-5">
           {features.map((feature) => {
             const Icon = feature.icon;
 
             return (
               <article
                 key={feature.title}
-                className="rounded-lg border border-white/15 bg-white/8 p-7 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-b-2 hover:border-b-[#BC9155] hover:bg-white/12 hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)]"
+                className="rounded-lg border border-white/15 bg-white/8 p-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-[3px] hover:border-b-2 hover:border-b-[#BC9155] hover:bg-white/12 hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] md:p-7"
               >
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#BC9155]/28 text-[#BC9155]">
                   <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="text-[15px] font-semibold text-white">{feature.title}</h3>
-                <p className="mt-1.5 text-[13px] leading-[1.55] text-white/65">{feature.copy}</p>
+                <h3 className="font-sans text-[14px] font-semibold text-white md:text-[15px]">{feature.title}</h3>
+                <p className="mt-1.5 text-[12px] leading-[1.55] text-white/65 md:text-[13px]">{feature.copy}</p>
               </article>
             );
           })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HomeLeadFormSection({ data }: { data: LeadFormData }) {
+  const [formData, setFormData] = useState<Record<string, string>>({});
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
+  const [submitted, setSubmitted] = useState(false);
+
+  const fields = data.fields || [];
+  const title = data.title || data.headline || 'Tell Us About Your Project';
+  const subtitle =
+    data.subtitle ||
+    data.subheadline ||
+    "Fill out the form and we'll get back to you within one business day with next steps. No obligation, no pressure.";
+  const formNote = data.privacy_note || data.consent_text || 'We respond within 24 hours. No spam, no obligation.';
+
+  const nameField = fieldByNames(fields, ['name', 'full_name'], {
+    name: 'name',
+    label: 'Name',
+    type: 'text',
+    required: true,
+    placeholder: 'Your full name',
+  });
+  const phoneField = fieldByNames(fields, ['phone', 'phone_number'], {
+    name: 'phone',
+    label: 'Phone',
+    type: 'tel',
+    required: true,
+    placeholder: '(203) 000-0000',
+  });
+  const emailField = fieldByNames(fields, ['email'], {
+    name: 'email',
+    label: 'Email',
+    type: 'email',
+    required: true,
+    placeholder: 'you@email.com',
+  });
+  const zipField = fieldByNames(fields, ['zip', 'zip_code', 'zipcode'], {
+    name: 'zip',
+    label: 'Zip Code',
+    type: 'text',
+    required: true,
+    placeholder: '06477',
+  });
+  const servicesField = fieldByNames(fields, ['services', 'services_needed', 'service'], {
+    name: 'services',
+    label: 'Services Needed',
+    type: 'select',
+    required: true,
+    options: [
+      'Kitchen Remodeling',
+      'Bathroom Remodeling',
+      'Basement Finishing',
+      'Flooring Installation',
+      'Home Additions',
+      'Interior Painting',
+      'Interior Carpentry',
+      'Attic Conversions',
+      'Decks & Porches',
+      'Design & Planning',
+      'Comfort & Accessibility',
+      'Other',
+    ],
+  });
+  const bestTimeField = fieldByNames(fields, ['best_time', 'bestTime', 'time'], {
+    name: 'best_time',
+    label: 'Best Time to Contact',
+    type: 'select',
+    required: true,
+    options: [
+      'Morning (8am - 12pm)',
+      'Afternoon (12pm - 4pm)',
+      'Evening (4pm - 6pm)',
+      'Anytime',
+    ],
+  });
+  const contactMethodField = fieldByNames(fields, ['contact_method', 'preferred_contact_method'], {
+    name: 'contact_method',
+    label: 'Preferred Contact Method',
+    type: 'radio',
+    required: true,
+    options: ['Call', 'Text', 'Email'],
+  });
+  const messageField = fieldByNames(fields, ['message', 'project_details', 'details'], {
+    name: 'message',
+    label: 'Tell Us About Your Project',
+    type: 'textarea',
+    placeholder: 'Describe your project, any specific needs, or questions you have...',
+  });
+  const fileField = fieldByNames(fields, ['files', 'photos', 'attachments'], {
+    name: 'files',
+    label: 'Upload Photos',
+    type: 'file',
+  });
+
+  const servicesOptions = normalizeFieldOptions(servicesField.options);
+  const contactOptions = normalizeFieldOptions(contactMethodField.options).length > 0
+    ? normalizeFieldOptions(contactMethodField.options)
+    : normalizeFieldOptions(['Call', 'Text', 'Email']);
+  const bestTimeOptions = normalizeFieldOptions(bestTimeField.options);
+
+  const handleChange = (name: string, value: string) => {
+    setFormData((current) => ({
+      ...current,
+      [name]: value,
+    }));
+  };
+
+  const toggleService = (value: string) => {
+    setSelectedServices((current) =>
+      current.includes(value)
+        ? current.filter((item) => item !== value)
+        : [...current, value]
+    );
+  };
+
+  const servicesLabel = selectedServices.length === 0
+    ? 'Select services'
+    : selectedServices.length <= 2
+      ? selectedServices.join(', ')
+      : `${selectedServices.length} services selected`;
+
+  if (submitted) {
+    return (
+      <section id="contact" className="scroll-mt-28 bg-[#F5F1E9] px-5 py-[52px] md:px-8 md:py-16 lg:px-10 lg:py-[72px]">
+        <div className="mx-auto max-w-[1200px] rounded-[10px] border border-[#1E2B43]/8 bg-white px-6 py-16 text-center shadow-[0_16px_48px_rgba(30,43,67,0.1),0_4px_12px_rgba(30,43,67,0.04)]">
+          <h2 className="font-serif text-[clamp(1.875rem,4vw,2.625rem)] font-bold text-[#1E2B43]">Thank You</h2>
+          <p className="mx-auto mt-4 max-w-[560px] text-[15px] leading-[1.7] text-[#5C677D]">
+            {data.success_message || "We received your request and we'll get back to you within one business day."}
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section id="contact" className="scroll-mt-28 bg-[#F5F1E9] px-5 py-[48px] md:px-8 md:py-[64px] lg:px-10 lg:pb-[72px]">
+      <div className="mx-auto max-w-[1200px]">
+        <div className="mb-8 text-center">
+          <span className="relative mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1px] text-[#9A7340] before:absolute before:left-0 before:top-1/2 before:h-0.5 before:w-2.5 before:-translate-y-1/2 before:bg-[#BC9155] md:text-[13px] md:tracking-[1.5px]">
+            Get in touch
+          </span>
+          <h2
+            className="text-[clamp(1.875rem,5vw,2.625rem)] font-bold tracking-[-0.5px] text-[#1E2B43]"
+            dangerouslySetInnerHTML={{ __html: highlightTitleHtml(title) }}
+          />
+          <p className="mx-auto mt-2 max-w-[600px] text-[15px] leading-[1.7] text-[#5C677D] md:text-[16px]">
+            {subtitle}
+          </p>
+        </div>
+
+        <div className="grid items-stretch gap-6 lg:grid-cols-[1fr_1.15fr] lg:gap-8">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
+              <div className="relative h-[240px] overflow-hidden rounded-lg md:h-[300px]">
+                <img
+                  src={data.background_image || '/portfolio/builtwell-team-client-arrival-ct.jpeg'}
+                  alt="BuiltWell consultation arrival"
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+                <div className="pointer-events-none absolute bottom-0 right-0 h-[60px] w-[60px] rounded-br-lg bg-[linear-gradient(135deg,transparent_30%,rgba(30,43,67,0.5)_100%)]" />
+              </div>
+              <div className="relative h-[240px] overflow-hidden rounded-lg md:h-[300px]">
+                <img
+                  src="/portfolio/builtwell-contractor-client-consultation-ct.jpeg"
+                  alt="BuiltWell client consultation"
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+                <div className="pointer-events-none absolute bottom-0 right-0 h-[60px] w-[60px] rounded-br-lg bg-[linear-gradient(135deg,transparent_30%,rgba(30,43,67,0.5)_100%)]" />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col rounded-[12px] border border-[#1E2B43]/8 bg-[#f3f4f6] px-[18px] py-6 shadow-[0_14px_40px_rgba(30,43,67,0.12),0_4px_12px_rgba(30,43,67,0.05)] md:px-9 md:py-8">
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                setSubmitted(true);
+              }}
+              className="flex flex-1 flex-col"
+              aria-label="Request a free consultation"
+            >
+              <div className="grid gap-4 md:grid-cols-2">
+                {[nameField, phoneField, emailField, zipField].map((field) => (
+                  <div key={field.name} className="mb-0">
+                    <label htmlFor={field.name} className="mb-1.5 block text-[12px] font-semibold uppercase tracking-[0.5px] text-[#1E2B43] md:text-[13px]">
+                      {field.label}
+                      {field.required ? ' *' : ''}
+                    </label>
+                    <input
+                      id={field.name}
+                      name={field.name}
+                      type={field.type}
+                      required={field.required}
+                      value={formData[field.name] || ''}
+                      onChange={(event) => handleChange(field.name, event.target.value)}
+                      placeholder={field.placeholder}
+                      className="w-full rounded-md border border-[#1E2B43]/15 bg-white px-[14px] py-3.5 text-[15px] text-[#1E2B43] outline-none transition-colors focus:border-[#BC9155]"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4 grid gap-4 md:grid-cols-2">
+                <div>
+                  <label className="mb-1.5 block text-[12px] font-semibold uppercase tracking-[0.5px] text-[#1E2B43] md:text-[13px]">
+                    {servicesField.label}
+                    {servicesField.required ? ' *' : ''}
+                  </label>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      className="flex w-full items-center justify-between rounded border border-[#1E2B43]/15 bg-white px-[14px] py-[14px] text-left text-[15px] text-[#1E2B43]"
+                      aria-expanded={isServicesOpen}
+                      onClick={() => setIsServicesOpen((current) => !current)}
+                    >
+                      <span className={joinClasses('truncate', selectedServices.length === 0 ? 'text-[#5C677D]' : 'font-medium text-[#1E2B43]')}>
+                        {servicesLabel}
+                      </span>
+                      <ChevronDown className={joinClasses('h-4 w-4 text-[#5C677D] transition-transform', isServicesOpen && 'rotate-180')} />
+                    </button>
+                    {isServicesOpen ? (
+                      <div className="absolute left-0 right-0 top-[calc(100%+4px)] z-20 max-h-60 overflow-y-auto rounded-md border border-[#1E2B43]/15 bg-white py-1.5 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+                        {servicesOptions.map((option) => (
+                          <label
+                            key={option.value}
+                            className="flex cursor-pointer items-center gap-2.5 px-[14px] py-2 text-sm text-[#1E2B43] transition-colors hover:bg-[#BC9155]/6"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedServices.includes(option.value)}
+                              onChange={() => toggleService(option.value)}
+                              className="h-[18px] w-[18px] cursor-pointer rounded-[3px] border-2 border-[#1E2B43]/25 accent-[#BC9155]"
+                            />
+                            {option.label}
+                          </label>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor={bestTimeField.name} className="mb-1.5 block text-[12px] font-semibold uppercase tracking-[0.5px] text-[#1E2B43] md:text-[13px]">
+                    {bestTimeField.label}
+                    {bestTimeField.required ? ' *' : ''}
+                  </label>
+                  <select
+                    id={bestTimeField.name}
+                    name={bestTimeField.name}
+                    required={bestTimeField.required}
+                    value={formData[bestTimeField.name] || ''}
+                    onChange={(event) => handleChange(bestTimeField.name, event.target.value)}
+                    className="w-full appearance-none rounded-md border border-[#1E2B43]/15 bg-white bg-[right_16px_center] bg-no-repeat px-[14px] py-3.5 pr-10 text-[15px] text-[#1E2B43] outline-none transition-colors focus:border-[#BC9155]"
+                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235C677D' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")` }}
+                  >
+                    <option value="">Select a time</option>
+                    {bestTimeOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+              </div>
+
+              <fieldset className="mt-4 m-0 border-0 p-0">
+                <legend className="mb-1.5 block text-[12px] font-semibold uppercase tracking-[0.5px] text-[#1E2B43] md:text-[13px]">
+                  {contactMethodField.label}
+                  {contactMethodField.required ? ' *' : ''}
+                </legend>
+                <div className="flex flex-wrap gap-2.5">
+                  {contactOptions.map((option) => {
+                    const checked = (formData[contactMethodField.name] || contactOptions[0]?.value || 'Call') === option.value;
+
+                    return (
+                      <label
+                        key={option.value}
+                        className={joinClasses(
+                          'inline-flex min-w-[84px] cursor-pointer items-center justify-center rounded-md border px-5 py-3 text-[13px] font-medium transition-colors',
+                          checked ? 'border-[#BC9155] text-[#BC9155]' : 'border-[#1E2B43]/18 bg-white text-[#1E2B43] hover:border-[#BC9155]'
+                        )}
+                      >
+                        <input
+                          type="radio"
+                          name={contactMethodField.name}
+                          value={option.value}
+                          checked={checked}
+                          onChange={(event) => handleChange(contactMethodField.name, event.target.value)}
+                          className="sr-only"
+                        />
+                        <span>{option.label}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </fieldset>
+
+              <div className="mt-4">
+                <label htmlFor={messageField.name} className="mb-1.5 block text-[12px] font-semibold uppercase tracking-[0.5px] text-[#1E2B43] md:text-[13px]">
+                  {messageField.label}
+                </label>
+                <textarea
+                  id={messageField.name}
+                  name={messageField.name}
+                  rows={4}
+                  value={formData[messageField.name] || ''}
+                  onChange={(event) => handleChange(messageField.name, event.target.value)}
+                  placeholder={messageField.placeholder}
+                  className="min-h-[220px] w-full resize-y rounded-md border border-[#1E2B43]/15 bg-white px-[14px] py-3 text-[15px] leading-[1.6] text-[#1E2B43] outline-none transition-colors focus:border-[#BC9155] md:min-h-[290px]"
+                />
+              </div>
+
+              <div className="mt-6 grid gap-4 md:grid-cols-2">
+                <div>
+                  <input
+                    id={fileField.name}
+                    name={fileField.name}
+                    type="file"
+                    multiple
+                    accept="image/jpeg,image/png,image/heic,.heic"
+                    className="hidden"
+                    onChange={(event) => {
+                      const files = Array.from(event.target.files || []).map((file) => file.name);
+                      setSelectedFiles(files);
+                    }}
+                  />
+                  <label
+                    htmlFor={fileField.name}
+                    className="flex min-h-[52px] w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-[#1E2B43]/15 bg-white px-5 py-3.5 text-[15px] font-semibold tracking-[0.3px] text-[#1E2B43] transition-colors hover:border-[#BC9155]"
+                  >
+                    <Upload className="h-4 w-4" />
+                    Upload Photos
+                  </label>
+                  {selectedFiles.length > 0 ? (
+                    <p className="mt-1.5 text-xs text-[#5C677D]">{selectedFiles.join(', ')}</p>
+                  ) : null}
+                </div>
+                <button
+                  type="submit"
+                  className="min-h-[52px] rounded-lg bg-[#BC9155] px-5 py-3.5 text-[15px] font-semibold tracking-[0.3px] text-white transition-all hover:-translate-y-px hover:bg-[#a57d48] hover:shadow-[0_4px_12px_rgba(188,145,85,0.3)]"
+                >
+                  {data.submit_label || 'Send Request'}
+                </button>
+              </div>
+
+              <p className="mt-4 text-center text-[13px] italic text-[#5C677D]">{formNote}</p>
+            </form>
+          </div>
         </div>
       </div>
     </section>
@@ -1038,23 +1537,27 @@ function HomeCtaSection({
   }
 
   return (
-    <section id="contact" className="scroll-mt-28 bg-[#F5F1E9] px-6 py-24 text-center">
+    <section id="contact" className="scroll-mt-28 bg-[#F5F1E9] px-5 pb-[52px] pt-12 text-center md:px-8 md:pb-[72px] md:pt-16">
       <div className="mx-auto max-w-5xl">
+        <span className="relative mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1px] text-[#9A7340] before:absolute before:left-0 before:top-1/2 before:h-0.5 before:w-2.5 before:-translate-y-1/2 before:bg-[#BC9155] md:text-[13px] md:tracking-[1.5px]">
+          Get in touch
+        </span>
         {data?.title ? (
-          <h2 className="text-[clamp(2rem,4vw,3rem)] font-bold tracking-[-0.03em] text-[#1E2B43]">
-            {data.title}
-          </h2>
+          <h2
+            className="text-[clamp(1.875rem,5vw,3rem)] font-bold tracking-[-0.03em] text-[#1E2B43]"
+            dangerouslySetInnerHTML={{ __html: highlightTitleHtml(data.title) }}
+          />
         ) : null}
         {data?.subtext || data?.subtitle ? (
-          <p className="mx-auto mt-5 max-w-3xl text-[1.02rem] leading-8 text-[#5C677D]">
+          <p className="mx-auto mt-4 max-w-[600px] text-[15px] leading-[1.7] text-[#5C677D] md:mt-5 md:text-[16px]">
             {data.subtext || data.subtitle}
           </p>
         ) : null}
         {button ? (
-          <div className="mt-9">
+          <div className="mt-8 md:mt-9">
             <Link
               href={button.url}
-              className="inline-flex items-center gap-2 rounded-sm bg-[#BC9155] px-8 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#a57d48]"
+              className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#BC9155] px-8 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#a57d48] md:min-h-0 md:w-auto md:rounded-sm"
             >
               {button.label}
               <ArrowRight className="h-4 w-4" />
@@ -1093,7 +1596,7 @@ export function HomePageTemplate({ page }: { page: CMSPage }) {
   const phones = homePage.phones?.items?.filter((phone) => phone.label && phone.number) ?? [];
 
   // ── Extract section data ──
-  const hero = asData<HeroSliderData>(firstSection(page, 'hero'));
+  const hero = asData<HeroSliderData>(firstSection(page, 'hero') ?? firstSection(page, 'hero_slider'));
   const trust = asData<TrustBarData>(firstSection(page, 'trust_bar'));
 
   // Why Choose
@@ -1198,7 +1701,7 @@ export function HomePageTemplate({ page }: { page: CMSPage }) {
 
       {/* 11. Lead Form (if available) or CTA fallback */}
       {leadForm ? (
-        <LeadForm data={leadForm} />
+        <HomeLeadFormSection data={leadForm} />
       ) : (
         <HomeCtaSection data={cta} phones={phones} />
       )}

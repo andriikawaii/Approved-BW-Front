@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f5f3ef;
-  --foreground: #1e2f4a;
-  --bw-navy: #1e2f4a;
-  --bw-gold: #c89b5b;
-  --bw-light: #f5f3ef;
+  --background: #F5F1E9;
+  --foreground: #1E2B43;
+  --bw-navy: #1E2B43;
+  --bw-gold: #A57D48;
+  --bw-light: #F5F1E9;
   --bw-card: #ffffff;
   --bw-muted: #6b7280;
 }
@@ -22,10 +22,27 @@
   --font-serif: var(--font-playfair), "Playfair Display", Georgia, serif;
 }
 
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), "Inter", system-ui, sans-serif;
+  line-height: 1.7;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+@keyframes servicesLogoMarquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 h1,
@@ -35,7 +52,13 @@ h4,
 h5,
 h6 {
   font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
-  color: var(--bw-navy);
+  color: inherit;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+h1 {
+  line-height: 1.08;
 }
 
 ::selection {

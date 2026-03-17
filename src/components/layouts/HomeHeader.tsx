@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 import ConsultationModal from './ConsultationModal';
 
@@ -44,8 +45,15 @@ export default function HomeHeader({ phones }: HomeHeaderProps) {
         } backdrop-blur-xl`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <Link href="/" className="font-serif text-[1.65rem] font-bold tracking-[-0.03em] text-white">
-            Built<span className="text-[#BC9155]">Well</span> CT
+          <Link href="/" className="flex items-center" aria-label="BuiltWell home">
+            <Image
+              src="/logos/builtwell-logo-footer.png"
+              alt="BuiltWell"
+              width={170}
+              height={50}
+              className="h-auto w-[132px] md:w-[150px]"
+              priority
+            />
           </Link>
 
           <nav className="hidden items-center gap-8 lg:flex">
@@ -98,10 +106,17 @@ export default function HomeHeader({ phones }: HomeHeaderProps) {
             <div className="flex items-center justify-between">
               <Link
                 href="/"
-                className="font-serif text-[1.8rem] font-bold tracking-[-0.03em] text-white"
+                className="inline-flex items-center"
                 onClick={() => setMobileOpen(false)}
+                aria-label="BuiltWell home"
               >
-                Built<span className="text-[#BC9155]">Well</span> CT
+                <Image
+                  src="/logos/builtwell-logo-footer.png"
+                  alt="BuiltWell"
+                  width={170}
+                  height={50}
+                  className="h-auto w-[132px]"
+                />
               </Link>
               <button
                 type="button"

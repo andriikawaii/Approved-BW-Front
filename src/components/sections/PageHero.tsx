@@ -38,6 +38,9 @@ function renderHeadingWithGold(heading: string) {
 
 export default function PageHero({ data }: Props) {
   const isAboutHero = /about/i.test(data.eyebrow || '') || /about/i.test(data.title || '');
+  const isServicesHero =
+    /services/i.test(data.title || '') &&
+    /connecticut/i.test(data.title || '');
   const heading = isAboutHero
     ? sanitizeAboutHeading((data.title || data.eyebrow || 'About BuiltWell').trim())
     : (data.title || '').trim();
@@ -53,15 +56,22 @@ export default function PageHero({ data }: Props) {
   return (
     <section className="relative isolate overflow-hidden bg-[#1E2F4A]">
       <img src={heroImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
-      <div className="absolute inset-0 bg-[#15263f]" style={{ opacity: data.overlay_opacity ?? 0.62 }} />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#15263f]/40 via-[#15263f]/55 to-[#15263f]/75" />
+      <div className="absolute inset-0 bg-[#15263f]" style={{ opacity: isServicesHero ? 0.66 : data.overlay_opacity ?? 0.62 }} />
+      <div className={`absolute inset-0 ${isServicesHero ? 'bg-gradient-to-b from-[#15263f]/25 via-[#15263f]/48 to-[#15263f]/82' : 'bg-gradient-to-b from-[#15263f]/40 via-[#15263f]/55 to-[#15263f]/75'}`} />
 
-      <div className={`relative z-10 mx-auto max-w-5xl px-6 ${alignClass} ${isAboutHero ? 'py-20 md:py-24' : 'py-16 md:py-20'}`}>
-        <h1 className={`${isAboutHero ? 'text-[52px] leading-[1.04] md:text-[66px]' : 'text-[42px] leading-[1.06] md:text-[52px]'} font-semibold !text-white`}>
+      <div className={`relative z-10 mx-auto px-6 ${isServicesHero ? 'max-w-[980px] py-28 md:py-32' : 'max-w-5xl'} ${alignClass} ${isAboutHero ? 'py-20 md:py-24' : !isServicesHero ? 'py-16 md:py-20' : ''}`}>
+        {isServicesHero ? (
+          <div className="mb-6 flex items-center justify-center gap-2 text-[12px] font-semibold text-white/90">
+            <span>Home</span>
+            <span className="text-[#C89B5B]">›</span>
+            <span>Services</span>
+          </div>
+        ) : null}
+        <h1 className={`${isAboutHero ? 'text-[52px] leading-[1.04] md:text-[66px]' : isServicesHero ? 'text-[44px] leading-[1.06] tracking-[-0.03em] md:text-[66px]' : 'text-[42px] leading-[1.06] md:text-[52px]'} font-semibold !text-white`}>
           {renderHeadingWithGold(heading)}
         </h1>
         {data.subtitle ? (
-          <p className={`${isAboutHero ? 'mx-auto mt-6 max-w-3xl text-base leading-[1.6] md:text-[18px]' : 'mx-auto mt-4 max-w-2xl text-base md:text-lg'} text-white/87`}>
+          <p className={`${isAboutHero ? 'mx-auto mt-6 max-w-3xl text-base leading-[1.6] md:text-[18px]' : isServicesHero ? 'mx-auto mt-4 max-w-[720px] text-[17px] leading-[1.65]' : 'mx-auto mt-4 max-w-2xl text-base md:text-lg'} text-white/87`}>
             {data.subtitle}
           </p>
         ) : null}

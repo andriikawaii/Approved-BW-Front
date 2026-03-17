@@ -5,6 +5,7 @@ import { PageDataProvider } from '@/src/context/PageDataContext';
 import { renderTemplate } from '@/src/templates';
 import { resolveFooterVariant } from '@/lib/footer';
 import { resolvePhones } from '@/lib/phones';
+import TextUsWidget from '@/src/components/layouts/TextUsWidget';
 
 export const metadata: Metadata = {
   robots: 'noindex, nofollow',
@@ -32,6 +33,7 @@ export default async function PreviewPage({ searchParams }: Props) {
         PREVIEW MODE — This page is not published
       </div>
       {renderTemplate(page)}
+      <TextUsWidget />
     </PageDataProvider>
   );
 }

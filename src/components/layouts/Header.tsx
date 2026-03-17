@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import Image from 'next/image';
 import ConsultationModal from './ConsultationModal';
 
 const NAV_LINKS = [
@@ -17,95 +17,108 @@ export default function Header() {
   const [consultationOpen, setConsultationOpen] = useState(false);
 
   return (
-    <header className="border-b border-gray-200 bg-white">
-      <div className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between px-6">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <svg className="h-8 w-8 text-[#C68E4D]" viewBox="0 0 32 32" fill="currentColor">
-            <path d="M16 2L4 14h4v14h16V14h4L16 2zm-4 24V15h8v11h-8z" />
-          </svg>
-          <span className="font-serif text-2xl font-bold tracking-tight text-[#1A2B45]">
-            Built<span className="text-[#C68E4D]">Well</span>
-          </span>
-        </Link>
-
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-8 lg:flex">
-          {NAV_LINKS.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-sm font-semibold uppercase tracking-wide text-[#1A2B45] transition-colors hover:text-[#C68E4D]"
-            >
-              {item.label}
-            </Link>
-          ))}
-
-          <button
-            type="button"
-            onClick={() => setConsultationOpen(true)}
-            className="rounded bg-[#C68E4D] px-6 py-2.5 text-sm font-bold uppercase tracking-wide text-white transition-colors hover:bg-[#B07C3C]"
+    <>
+      <header className="fixed left-0 right-0 top-0 z-[1000] border-b border-[rgba(30,43,67,0.08)] bg-[rgba(255,255,255,0.98)] shadow-[0_1px_8px_rgba(30,43,67,0.06)] backdrop-blur-[12px]">
+        <div className="relative mx-auto flex h-16 max-w-[1240px] items-center justify-between px-8">
+          <Link
+            href="/"
+            className="flex shrink-0 items-center"
+            aria-label="BuiltWell home"
           >
-            Free Consultation
-          </button>
-        </nav>
+            <Image
+              src="/logos/builtwell-logo-colored.png"
+              alt="BuiltWell CT home remodeling contractor logo"
+              width={158}
+              height={40}
+              className="block h-auto w-[150px]"
+              priority
+            />
+          </Link>
 
-        {/* Mobile hamburger */}
-        <button
-          onClick={() => setMobileOpen(true)}
-          className="p-2 text-[#1A2B45] lg:hidden"
-          aria-label="Open menu"
-        >
-          <Menu className="h-7 w-7" />
-        </button>
-      </div>
-
-      {/* Mobile menu */}
-      {mobileOpen ? (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setMobileOpen(false)} />
-          <div className="relative ml-auto h-full w-[88%] max-w-sm overflow-y-auto bg-white px-6 py-6 shadow-2xl">
-            <div className="flex items-center justify-between">
-              <Link
-                href="/"
-                className="font-serif text-2xl font-bold tracking-tight text-[#1A2B45]"
-                onClick={() => setMobileOpen(false)}
-              >
-                Built<span className="text-[#C68E4D]">Well</span>
-              </Link>
-              <button onClick={() => setMobileOpen(false)} aria-label="Close menu">
-                <X className="h-6 w-6 text-[#1A2B45]" />
-              </button>
-            </div>
-
-            <nav className="mt-8 space-y-1">
+          <div className="absolute left-1/2 hidden -translate-x-1/2 items-center lg:flex">
+            <nav className="flex items-center gap-9" aria-label="Main navigation">
               {NAV_LINKS.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="block border-b border-gray-100 py-3 text-lg font-semibold uppercase tracking-wide text-[#1A2B45] transition-colors hover:text-[#C68E4D]"
+                  className="whitespace-nowrap text-[13px] font-semibold uppercase tracking-[0.8px] text-[#1A2B45] transition-colors duration-200 hover:text-[#C68E4D]"
                 >
                   {item.label}
                 </Link>
               ))}
-
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileOpen(false);
-                  setConsultationOpen(true);
-                }}
-                className="mt-6 inline-flex w-full items-center justify-center rounded bg-[#C68E4D] px-4 py-4 text-base font-bold uppercase tracking-wide text-white transition-colors hover:bg-[#B07C3C]"
-              >
-                Free Consultation
-              </button>
             </nav>
           </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setConsultationOpen(true)}
+              className="hidden whitespace-nowrap rounded-[6px] bg-[#C68E4D] px-[22px] py-[10px] text-[12px] font-semibold uppercase tracking-[0.5px] text-white transition-all duration-200 hover:-translate-y-px hover:bg-[#a57d48] lg:inline-flex"
+            >
+              Free Consultation
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setMobileOpen(true)}
+              aria-label="Toggle menu"
+              aria-expanded={mobileOpen}
+              className="flex h-8 w-8 flex-col items-center justify-center gap-[5px] border-0 bg-transparent p-1 lg:hidden"
+            >
+              <span className="block h-[2px] w-6 rounded-[2px] bg-[#1A2B45]" />
+              <span className="block h-[2px] w-6 rounded-[2px] bg-[#1A2B45]" />
+              <span className="block h-[2px] w-6 rounded-[2px] bg-[#1A2B45]" />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {mobileOpen ? (
+        <div className="fixed inset-0 z-[1050] lg:hidden">
+          <div
+            className="absolute inset-0 bg-[rgba(30,43,67,0.98)]"
+            onClick={() => setMobileOpen(false)}
+          />
+          <div className="relative flex h-full flex-col items-center justify-center gap-7 px-6 text-center">
+            {NAV_LINKS.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                className="text-[20px] font-medium uppercase tracking-[2px] text-[rgba(255,255,255,0.85)] transition-colors duration-200 hover:text-[#C68E4D]"
+              >
+                {item.label}
+              </Link>
+            ))}
+
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false);
+                setConsultationOpen(true);
+              }}
+              className="mt-4 inline-flex items-center gap-2 rounded-[4px] bg-[#C68E4D] px-8 py-4 text-[15px] font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-[#a57d48]"
+            >
+              Free Consultation
+            </button>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setMobileOpen(false)}
+            aria-label="Close menu"
+            className="absolute right-5 top-5 flex h-10 w-10 items-center justify-center"
+          >
+            <span className="absolute block h-[2px] w-6 rotate-45 rounded-[2px] bg-white" />
+            <span className="absolute block h-[2px] w-6 -rotate-45 rounded-[2px] bg-white" />
+          </button>
         </div>
       ) : null}
 
-      <ConsultationModal open={consultationOpen} onClose={() => setConsultationOpen(false)} />
-    </header>
+      <ConsultationModal
+        open={consultationOpen}
+        onClose={() => setConsultationOpen(false)}
+      />
+    </>
   );
 }

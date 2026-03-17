@@ -17,6 +17,7 @@ import { PricingPageTemplate } from './PricingPageTemplate';
 import { PrivacyPolicyPageTemplate } from './PrivacyPolicyPageTemplate';
 import { ProcessPageTemplate } from './ProcessPageTemplate';
 import { ServicePageTemplate } from './ServicePageTemplate';
+import { ServicesOverviewPageTemplate } from './ServicesOverviewPageTemplate';
 import { TermsPageTemplate } from './TermsPageTemplate';
 import { TownPageTemplate } from './TownPageTemplate';
 import { CountyHubPageTemplate } from './CountyHubPageTemplate';
@@ -125,6 +126,10 @@ export function renderTemplate(page: CMSPage) {
 
   if (normalizePageSlug(page.slug) === 'pricing') {
     return createElement(PricingPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'services') {
+    return createElement(ServicesOverviewPageTemplate, { page });
   }
 
   if (normalizePageSlug(page.slug) === 'process') {
