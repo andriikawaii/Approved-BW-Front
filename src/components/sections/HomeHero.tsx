@@ -65,13 +65,11 @@ export default function HomeHero({ data }: HomeHeroProps) {
           muted
           loop
           playsInline
+          src={data.background_video}
           poster={data.background_poster || undefined}
           className="absolute inset-0 h-[110%] w-full object-cover object-[center_top] opacity-65"
           aria-label="BuiltWell CT team and vehicles at a Connecticut home remodeling project"
-        >
-          <source src={`${data.background_video}.webm`} type="video/webm" />
-          <source src={`${data.background_video}.mp4`} type="video/mp4" />
-        </video>
+        />
       ) : (
         /* Fallback: slide background images */
         data.slides?.filter((s) => s.image).map((slide, index) => (

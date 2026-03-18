@@ -553,13 +553,13 @@ function AreasSection({ data, phones }: { data?: AreasServedData; phones: PhoneI
             return (
               <article
                 key={countyName}
-                className="overflow-hidden rounded-xl border border-[#e6ddcc] bg-white shadow-[0_18px_40px_rgba(21,30,48,0.08)]"
+                className="overflow-hidden rounded-xl border border-[#e6ddcc] bg-white shadow-[0_18px_40px_rgba(21,30,48,0.08)] transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_24px_56px_rgba(21,30,48,0.14)]"
               >
                 <div className="h-[220px] overflow-hidden">
                   <img
                     src={imageSrc}
                     alt={countyName}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                   />
                 </div>
 
@@ -568,7 +568,7 @@ function AreasSection({ data, phones }: { data?: AreasServedData; phones: PhoneI
                   {displayPhone ? (
                     <p className="mt-1 text-sm text-[#5c677d]">
                       Call:{" "}
-                      <a href={toTelHref(displayPhone)} className="font-semibold text-[#151e30] transition-colors hover:text-[#bc9155]">
+                      <a href={toTelHref(displayPhone)} className="font-semibold text-[#bc9155] transition-colors hover:text-[#a57d48]">
                         {displayPhone}
                       </a>
                     </p>
@@ -620,25 +620,27 @@ function AreasSection({ data, phones }: { data?: AreasServedData; phones: PhoneI
                   </div>
 
                   {extraTowns.length > 0 ? (
-                    <button
-                      type="button"
-                      className="mt-4 inline-flex items-center text-sm font-medium text-[#bc9155]"
-                      onClick={() =>
-                        setExpanded((current) => ({
-                          ...current,
-                          [countyName]: !current[countyName],
-                        }))
-                      }
-                    >
-                      {isExpanded ? "Show Less −" : "See All Towns +"}
-                    </button>
+                    <div className="mt-4 text-center">
+                      <button
+                        type="button"
+                        className="inline-flex items-center text-sm font-medium text-[#bc9155] transition-colors hover:text-[#a57d48]"
+                        onClick={() =>
+                          setExpanded((current) => ({
+                            ...current,
+                            [countyName]: !current[countyName],
+                          }))
+                        }
+                      >
+                        {isExpanded ? "Show Less −" : "See All Towns +"}
+                      </button>
+                    </div>
                   ) : null}
 
                   {county.url ? (
-                    <div className="mt-5">
+                    <div className="mt-5 border-t border-[#e6ddcc] pt-5">
                       <Link
                         href={county.url}
-                        className="inline-flex items-center gap-2 text-sm font-semibold text-[#151e30] transition-colors hover:text-[#bc9155]"
+                        className="inline-flex items-center gap-2 text-sm font-semibold text-[#bc9155] transition-all hover:gap-3 hover:text-[#a57d48]"
                       >
                         {county.cta_label || `Learn more about ${countyName}`}
                         <ArrowRight className="h-4 w-4" />

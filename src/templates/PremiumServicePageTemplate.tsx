@@ -339,6 +339,7 @@ export function PremiumServicePageTemplate({ page }: { page: CMSPage }) {
   const contactField = fields.find((field: any) => field.type === "radio_group");
   const messageField = fields.find((field: any) => field.type === "textarea");
   const counties = areas?.counties || [];
+  const townHref = (town: string) => `/${slug}/${town.toLowerCase().replace(/\s+/g, "-")}-ct/`;
 
   return (
     <div className="bg-[#f5f1e9] text-[#1e2b43]">
@@ -363,13 +364,14 @@ export function PremiumServicePageTemplate({ page }: { page: CMSPage }) {
               <span className="text-white">{heroParts.after}</span>
             </h1>
             {hero?.subtitle ? <p className="mx-auto mt-6 max-w-[690px] text-[16px] leading-[1.72] text-white/90 [text-shadow:0_2px_12px_rgba(0,0,0,0.28)] md:text-[17px]">{hero.subtitle}</p> : null}
-            <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
+            <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:justify-center">
               {counties.slice(0, 2).map((county: any, index: number) => (
-                <div key={`${county.name || county.phone || "county"}-${index}`}>
-                  {linkNode(`tel:${(county.phone || "").replace(/\D/g, "")}`, <span className="flex flex-col items-start text-left"><span className="text-[11px] uppercase tracking-[0.18em] text-white/75">{county.name}</span><span className="text-[15px] font-semibold text-white">{county.phone}</span></span>, "min-w-[156px] rounded-[8px] border border-white/18 bg-[rgba(255,255,255,0.12)] px-5 py-3.5 shadow-[0_12px_28px_rgba(8,12,20,0.18)] backdrop-blur-md transition-colors hover:border-[#bc9155] hover:bg-[rgba(255,255,255,0.16)]")}
-                </div>
+                <a key={`${county.name || county.phone || "county"}-${index}`} href={`tel:${(county.phone || "").replace(/\D/g, "")}`} className="min-w-[180px] rounded-[8px] border border-white/20 border-b-2 border-b-[#bc9155] bg-[rgba(10,18,35,0.42)] px-7 py-4 text-center backdrop-blur-[12px] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
+                  <span className="mb-1 block text-[11px] uppercase tracking-[1.2px] text-white/70">{county.name}</span>
+                  <span className="font-serif text-[18px] font-semibold text-white">{county.phone}</span>
+                </a>
               ))}
-              {hero?.primary_cta?.url ? linkNode(hero.primary_cta.url, <span className="flex min-h-[54px] items-center justify-center text-[14px] font-semibold text-white">{hero.primary_cta.label || "Schedule a Free Consultation"}</span>, "min-w-[228px] rounded-[8px] bg-[#bc9155] px-7 shadow-[0_18px_32px_rgba(17,24,39,0.24)] transition-all hover:-translate-y-0.5 hover:bg-[#a57d48]") : null}
+              {hero?.primary_cta?.url ? <a href={hero.primary_cta.url} className="min-w-[180px] rounded-[8px] border border-[#bc9155] border-b-2 border-b-[#a57d48] bg-[#bc9155] px-7 py-4 text-center transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#d4a95a] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"><span className="mb-1 block text-[11px] uppercase tracking-[1.2px] text-white/90">{hero.primary_cta.label || "Free Estimate"}</span><span className="font-serif text-[18px] font-semibold text-white">Schedule Now</span></a> : null}
             </div>
           </div>
         </div>
@@ -563,7 +565,7 @@ export function PremiumServicePageTemplate({ page }: { page: CMSPage }) {
             {counties.map((county: any, index: number) => {
               const expanded = !!countyOpen[index];
               const towns = expanded ? [...(county.towns || []), ...(county.extra_towns || [])] : county.towns || [];
-              const links = county.town_links || {};
+
               return (
                 <article key={`${county.name}-${index}`} className="overflow-hidden rounded-[12px] border border-[#e6ddcd] bg-[#fdfcfa] shadow-[0_14px_32px_rgba(30,43,67,0.07)]">
                   <div className="relative h-[230px] overflow-hidden">
@@ -577,7 +579,7 @@ export function PremiumServicePageTemplate({ page }: { page: CMSPage }) {
                     <div className="mt-5 flex flex-wrap gap-2">
                       {towns.map((town: string, townIndex: number) => (
                         <div key={`${county.name}-${town}-${townIndex}`}>
-                          {linkNode(links[town] || county.url || "#", town, "rounded-full bg-[#f5f1e9] px-3.5 py-2 text-center text-[11px] font-semibold text-[#1e2b43] transition-colors hover:bg-[#bc9155] hover:text-white")}
+                          {linkNode(townHref(town), town, "rounded-full bg-[#f5f1e9] px-3.5 py-2 text-center text-[11px] font-semibold text-[#1e2b43] transition-colors hover:bg-[#bc9155] hover:text-white")}
                         </div>
                       ))}
                     </div>

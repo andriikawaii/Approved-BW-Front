@@ -213,8 +213,8 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
     <div className="bg-[#f5f1e9] text-[#1e2b43]">
       <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pb-0 pt-[84px] text-white md:px-10">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${media(hero?.background_image, slug === "fairfield-county" ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")})` }} />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.06),transparent_38%),linear-gradient(180deg,rgba(21,30,48,0.28)_0%,rgba(21,30,48,0.16)_24%,rgba(21,30,48,0.54)_70%,rgba(21,30,48,0.92)_100%)]" />
-        <div className="relative z-10 mx-auto flex min-h-[460px] max-w-[1240px] flex-col items-center justify-center pb-12 text-center">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.06),transparent_38%),linear-gradient(180deg,rgba(21,30,48,0.45)_0%,rgba(21,30,48,0.35)_24%,rgba(21,30,48,0.68)_70%,rgba(21,30,48,0.95)_100%)]" />
+        <div className="relative z-10 mx-auto flex min-h-[580px] max-w-[1240px] flex-col items-center justify-center pb-12 text-center">
           <ol className="mb-4 flex list-none items-center text-[12px] font-semibold text-white/92">
             <li>{linkNode("/", "Home", "transition-colors hover:text-[#bc9155]")}</li>
             <li className="before:px-2.5 before:text-[#bc9155] before:content-['›']">{linkNode("/areas-we-serve/", "Areas We Serve", "transition-colors hover:text-[#bc9155]")}</li>
@@ -248,9 +248,9 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
       <div className="bg-[#1e2b43]">
         <div className="mx-auto grid max-w-[1440px] grid-cols-2 border-y border-[#bc91551f] md:grid-cols-4">
           {(heroTrust?.items || []).map((item: any, index: number) => (
-            <div key={`${item.label || "trust"}-${index}`} className="flex min-h-[76px] flex-col items-center justify-center border-r border-[#bc91551f] px-4 py-3 text-center last:border-r-0 md:min-h-[78px]">
-              {index < 3 && item.value ? <div className="font-serif text-[26px] font-bold leading-none text-[#bc9155] md:text-[28px]">{item.value}</div> : <div className="text-[#bc9155]">{trustIcon(item.icon)}</div>}
-              <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/78 md:text-[11px]">{item.label}</div>
+            <div key={`${item.label || "trust"}-${index}`} className="flex min-h-[124px] flex-col items-center justify-center border-r border-[#bc91551f] px-4 py-9 text-center last:border-r-0 transition-all hover:-translate-y-0.5 hover:bg-[#bc9155]/8">
+              {index < 3 && item.value ? <div className="font-serif text-[32px] font-bold leading-none text-[#bc9155] md:text-[36px]">{item.value}</div> : <div className="text-[#bc9155] text-[28px]">{trustIcon(item.icon)}</div>}
+              <div className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/78 md:text-[12px]">{item.label}</div>
             </div>
           ))}
         </div>
@@ -327,7 +327,8 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      <section className="bg-[#f5f1e9] px-5 py-20 md:px-10">
+      {/* TOWNS WE SERVE */}
+      <section className="bg-[#f5f1e9] px-5 pt-10 pb-20 md:px-10">
         <div className="mx-auto max-w-[1240px]">
           <div className="mb-12 text-center">
             {label("Where We Work")}
@@ -338,20 +339,20 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
             </h2>
             <p className="mx-auto mt-3 max-w-[720px] text-[14px] leading-[1.8] text-[#5c677d] md:text-[15px]">{countyCopy.townsSubtitle}</p>
           </div>
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
             {(towns?.tier1 || []).map((town: any, index: number) => {
               const override = townOverrides[town.label] || { style: "", description: town.description || "" };
               const content = (
-                <div className={cls("h-full rounded-[10px] border border-[#e6dccd] bg-white p-6 shadow-[0_14px_28px_rgba(30,43,67,0.05)] transition-all", override.linked && "hover:-translate-y-0.5 hover:border-[#bc9155]")}>
-                  <h3 className="text-[19px] font-bold">{town.label}</h3>
-                  {override.style ? <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#bc9155]">{override.style}</p> : null}
-                  <p className="mt-3 text-[13px] leading-[1.72] text-[#5c677d]">{override.description}</p>
-                  {override.linked ? <span className="mt-4 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#bc9155]">View Town <ArrowRight className="h-3.5 w-3.5" /></span> : null}
+                <div className="flex h-full flex-col rounded-[12px] border-b-2 border-b-transparent bg-white p-7 shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
+                  <h3 className="text-[20px] font-bold text-[#1e2b43]">{town.label}</h3>
+                  {override.style ? <p className="mt-2 text-[13px] font-semibold uppercase tracking-[0.5px] text-[#9a7340]">{override.style}</p> : null}
+                  <p className="mt-3 flex-1 text-[14px] leading-[1.65] text-[#5c677d]">{override.description}</p>
+                  {override.linked ? <span className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#bc9155] transition-all hover:gap-2.5">view {town.label} <ArrowRight className="h-3.5 w-3.5" /></span> : null}
                 </div>
               );
 
               return override.linked && town.url ? (
-                <Link key={`${town.label || "town"}-${index}`} href={town.url}>
+                <Link key={`${town.label || "town"}-${index}`} href={town.url} className="no-underline">
                   {content}
                 </Link>
               ) : (
@@ -362,7 +363,8 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      <section className="bg-[#f5f1e9] px-5 py-20 md:px-10">
+      {/* FEATURED PROJECTS */}
+      <section className="border-t border-[#1e2b43]/8 bg-[#f5f1e9] px-5 py-20 md:px-10">
         <div className="mx-auto max-w-[1240px]">
           <div className="mb-12 text-center">
             {label("Recent Work")}
@@ -373,16 +375,16 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
             </h2>
             <p className="mx-auto mt-3 max-w-[760px] text-[14px] leading-[1.8] text-[#5c677d] md:text-[15px]">{countyCopy.featuredSubtitle}</p>
           </div>
-          <div className="grid gap-7 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {featuredOverrides.map((item, index) => (
-              <article key={`${item.title}-${index}`} className="rounded-[10px] border border-[#e6dccd] bg-white shadow-[0_16px_36px_rgba(30,43,67,0.06)]">
-                <div className="p-6">
-                  <h3 className="text-[20px] font-bold leading-[1.22]">{item.title}</h3>
-                  <p className="mt-3 text-[13px] leading-[1.72] text-[#5c677d]">{item.body}</p>
+              <article key={`${item.title}-${index}`} className="flex flex-col rounded-[12px] border-b-2 border-b-transparent bg-white p-7 shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
+                <div className="flex-1">
+                  <h3 className="mb-3 text-[20px] font-bold">{item.title}</h3>
+                  <p className="text-[14px] leading-[1.75] text-[#5c677d]">{item.body}</p>
                 </div>
-                <div className="border-t border-[#efe6d8] px-6 py-5">
-                  <p className="text-[13px] italic leading-[1.72] text-[#5c677d]">{item.quote}</p>
-                  <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#bc9155]">{item.cite}</p>
+                <div className="mt-4 border-l-[3px] border-l-[#bc9155] pl-4">
+                  <p className="min-h-[72px] text-[14px] italic leading-[1.65] text-[#1e2b43]">{item.quote}</p>
+                  <cite className="mt-2 block text-[12px] font-semibold not-italic text-[#5c677d]">{item.cite}</cite>
                 </div>
               </article>
             ))}

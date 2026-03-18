@@ -2,13 +2,15 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { MessageSquare } from 'lucide-react';
+import { MessageSquare, Phone } from 'lucide-react';
 import { usePageData } from '@/src/context/PageDataContext';
 
 export default function TextUsWidget() {
   const { phones } = usePageData();
   const [open, setOpen] = useState(false);
+  const [phoneOpen, setPhoneOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const phoneRef = useRef<HTMLDivElement | null>(null);
 
   const fairfieldPhone = phones.find((item) => item.label.toLowerCase().includes('fairfield'));
   const newHavenPhone = phones.find((item) => item.label.toLowerCase().includes('new haven'));
@@ -18,11 +20,15 @@ export default function TextUsWidget() {
       if (!rootRef.current?.contains(event.target as Node)) {
         setOpen(false);
       }
+      if (!phoneRef.current?.contains(event.target as Node)) {
+        setPhoneOpen(false);
+      }
     }
 
     function handleEscape(event: KeyboardEvent) {
       if (event.key === 'Escape') {
         setOpen(false);
+        setPhoneOpen(false);
       }
     }
 
@@ -40,6 +46,7 @@ export default function TextUsWidget() {
   }
 
   return (
+    <>
     <div ref={rootRef} className="fixed bottom-4 left-4 z-[70] md:bottom-6 md:left-5">
       <div
         className={`mb-3 w-[320px] max-w-[calc(100vw-32px)] overflow-hidden rounded-[14px] border border-[#dfe3ea] bg-white shadow-[0_18px_48px_rgba(15,25,45,0.24)] transition-all duration-200 ${open ? 'pointer-events-auto translate-y-0 opacity-100' : 'pointer-events-none translate-y-2 opacity-0'}`}
@@ -106,5 +113,50 @@ export default function TextUsWidget() {
         <MessageSquare className="h-[24px] w-[24px]" strokeWidth={1.9} />
       </button>
     </div>
+
+    {/* Mobile-only Call button */}
+    <div ref={phoneRef} className="fixed bottom-4 right-4 z-[70] md:hidden">
+      <div
+        className={`mb-3 w-[280px] max-w-[calc(100vw-32px)] overflow-hidden rounded-[14px] border border-[#2a3957] bg-[#1E2B43] shadow-[0_18px_48px_rgba(15,25,45,0.4)] transition-all duration-200 ${phoneOpen ? 'pointer-events-auto translate-y-0 opacity-100' : 'pointer-events-none translate-y-2 opacity-0'}`}
+        aria-hidden={!phoneOpen}
+      >
+        <div className="px-5 py-4">
+          <div className="space-y-3">
+            {fairfieldPhone ? (
+              <a
+                href={`tel:${fairfieldPhone.number.replace(/\D/g, '')}`}
+                className="block rounded-[8px] border border-white/10 bg-white/5 px-5 py-4 transition-colors hover:bg-white/10"
+              >
+                <div className="text-[12px] font-bold uppercase tracking-[1px] text-white/60">
+                  Fairfield: {fairfieldPhone.number}
+                </div>
+              </a>
+            ) : null}
+
+            {newHavenPhone ? (
+              <a
+                href={`tel:${newHavenPhone.number.replace(/\D/g, '')}`}
+                className="block rounded-[8px] border border-white/10 bg-white/5 px-5 py-4 transition-colors hover:bg-white/10"
+              >
+                <div className="text-[12px] font-bold uppercase tracking-[1px] text-white/60">
+                  New Haven: {newHavenPhone.number}
+                </div>
+              </a>
+            ) : null}
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setPhoneOpen((current) => !current)}
+        aria-label="Call us"
+        aria-expanded={phoneOpen}
+        className="ml-auto flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#b88439] text-white shadow-[0_10px_24px_rgba(20,30,50,0.28)] transition-all hover:bg-[#a97731]"
+      >
+        <Phone className="h-[24px] w-[24px]" strokeWidth={1.9} />
+      </button>
+    </div>
+    </>
   );
 }

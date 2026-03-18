@@ -110,33 +110,13 @@ type AreasData = {
 };
 type TrustBarData = { items?: any[] };
 
-const CITY_PAGE_CONFIG: Record<string, {
-  cityLabel: string;
-  cityShort: string;
-  countyLabel: string;
-  defaultPhone: string;
-  heroAccent: string;
-  overviewEyebrow: string;
-}> = {
-  "kitchen-remodeling/stamford-ct": {
-    cityLabel: "Stamford, CT",
-    cityShort: "Stamford",
-    countyLabel: "Fairfield County",
-    defaultPhone: "(203) 919-9616",
-    heroAccent: "Stamford, CT",
-    overviewEyebrow: "Stamford's Kitchen Remodeling Contractor",
-  },
-  "kitchen-remodeling/new-haven-ct": {
-    cityLabel: "New Haven, CT",
-    cityShort: "New Haven",
-    countyLabel: "New Haven County",
-    defaultPhone: "(203) 466-9148",
-    heroAccent: "New Haven, CT",
-    overviewEyebrow: "New Haven's Kitchen Remodeling Contractor",
-  },
-};
+const FAIRFIELD_TOWNS = new Set([
+  "greenwich", "westport", "darien", "new-canaan", "stamford", "norwalk", "fairfield", "ridgefield",
+  "bethel", "bridgeport", "brookfield", "danbury", "easton", "monroe", "new-fairfield", "newtown",
+  "redding", "shelton", "sherman", "stratford", "trumbull", "weston", "wilton",
+]);
 
-const INCLUDED_COPY: Record<string, string> = {
+const KITCHEN_INCLUDED_COPY: Record<string, string> = {
   Cabinetry: "Soft-close hardware and adjustable shelving as standard. Custom, semi-custom, or stock options available.",
   "Countertops & Tile": "Countertop fabrication and installation, backsplash tile work, and underlayment preparation.",
   Electrical: "New circuits for appliances, under-cabinet lighting, and updated outlet and switch locations.",
@@ -146,6 +126,111 @@ const INCLUDED_COPY: Record<string, string> = {
   "Demolition & Prep": "Removal of existing cabinets, countertops, and flooring. Wall assessment and structural repair as needed.",
   "Painting & Finish": "Interior painting, drywall patching, daily cleanup, dust barriers, and final walkthrough.",
 };
+
+const FLOORING_INCLUDED_COPY: Record<string, string> = {
+  "Hardwood Installation": "Solid and engineered hardwood installation with precision fitting and finishing.",
+  "Hardwood Refinishing": "Sanding, staining, and multi-coat polyurethane finish to restore existing floors.",
+  "Luxury Vinyl Plank (LVP)": "Waterproof, commercial-grade luxury vinyl plank with click-lock installation.",
+  "Tile Flooring": "Porcelain, ceramic, and natural stone tile with proper underlayment and grouting.",
+  "Subfloor Repair": "Leveling, sistering, and moisture remediation to ensure a solid foundation.",
+  "Moisture Barriers": "Vapor barriers and moisture testing to protect against damage and warping.",
+  "Transitions & Trim": "Seamless transitions between rooms and professional trim and molding installation.",
+  "Furniture Moving & Protection": "Careful furniture relocation and surface protection throughout the project.",
+};
+
+const BASEMENT_INCLUDED_COPY: Record<string, string> = {
+  "Framing & Insulation": "Steel or wood stud framing with rigid foam or fiberglass insulation for comfort and code compliance.",
+  "Drywall & Paint": "Moisture-resistant drywall throughout, taped, mudded, sanded, and finished with premium interior paint.",
+  Electrical: "New circuits, recessed lighting, outlet and switch placement, and panel upgrades as needed.",
+  Plumbing: "Bathroom rough-in, wet bar connections, sump pump assessment, and drain line coordination.",
+  Flooring: "LVP, tile, or engineered hardwood rated for below-grade installation over concrete or subfloor systems.",
+  "Egress Windows": "Code-required egress windows for bedrooms, including window well excavation and installation.",
+  "HVAC Extension": "Ductwork extension, mini-split installation, or supplemental heating and cooling for the finished space.",
+  "Trim & Finish": "Baseboards, door casings, interior doors, closet systems, and final detail work.",
+};
+
+const BATHROOM_INCLUDED_COPY: Record<string, string> = {
+  "Tile & Stone": "Shower tile, floor tile, and accent walls — porcelain, ceramic, marble, and natural stone options.",
+  "Vanity & Countertops": "Custom, semi-custom, or stock vanities with stone or solid-surface countertops and undermount sinks.",
+  "Shower & Tub": "Walk-in showers, tub-to-shower conversions, freestanding tubs, and glass enclosures.",
+  Plumbing: "New supply lines, drain relocation, fixture connections, and water heater assessment.",
+  Electrical: "GFCI outlets, exhaust fan upgrades, vanity lighting, recessed lighting, and heated floors.",
+  "Waterproofing": "Kerdi membrane, cement board, and moisture barriers behind all wet-area surfaces.",
+  "Demolition & Prep": "Removal of existing fixtures, tile, and vanities. Subfloor and wall assessment.",
+  "Painting & Finish": "Interior painting, trim work, hardware installation, and final cleanup.",
+};
+
+type ServiceMeta = {
+  serviceLabel: string;
+  servicePath: string;
+  defaultHeroImage: string;
+  scopeLabel: string;
+  includedCopy: Record<string, string>;
+  relatedFooter: string;
+};
+
+const SERVICE_META: Record<string, ServiceMeta> = {
+  "kitchen-remodeling": {
+    serviceLabel: "Kitchen Remodeling",
+    servicePath: "/kitchen-remodeling/",
+    defaultHeroImage: "/images/headers/kitchen-remodeling-header.jpg",
+    scopeLabel: "Scope of Work",
+    includedCopy: KITCHEN_INCLUDED_COPY,
+    relatedFooter: "Many kitchen remodeling projects include or lead to these related services.",
+  },
+  flooring: {
+    serviceLabel: "Flooring",
+    servicePath: "/flooring/",
+    defaultHeroImage: "/images/headers/flooring-header.jpg",
+    scopeLabel: "Scope of Work",
+    includedCopy: FLOORING_INCLUDED_COPY,
+    relatedFooter: "Many flooring projects include or lead to these related services.",
+  },
+  "bathroom-remodeling": {
+    serviceLabel: "Bathroom Remodeling",
+    servicePath: "/bathroom-remodeling/",
+    defaultHeroImage: "/images/headers/bathroom-remodeling-header.jpg",
+    scopeLabel: "Scope of Work",
+    includedCopy: BATHROOM_INCLUDED_COPY,
+    relatedFooter: "Many bathroom remodeling projects include or lead to these related services.",
+  },
+  "basement-finishing": {
+    serviceLabel: "Basement Finishing",
+    servicePath: "/basement-finishing/",
+    defaultHeroImage: "/images/headers/basement-finishing-header.jpg",
+    scopeLabel: "Scope of Work",
+    includedCopy: BASEMENT_INCLUDED_COPY,
+    relatedFooter: "Many basement finishing projects include or lead to these related services.",
+  },
+};
+
+function deriveServiceSlug(slug: string): string {
+  const match = slug.match(/^([a-z-]+)\/[a-z-]+-ct$/);
+  return match ? match[1] : "kitchen-remodeling";
+}
+
+function deriveCityConfig(slug: string) {
+  const serviceSlug = deriveServiceSlug(slug);
+  const match = slug.match(/[a-z-]+\/([a-z-]+)-ct$/);
+  const townSlug = match ? match[1] : "stamford";
+  const cityShort = townSlug.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+  const isFairfield = FAIRFIELD_TOWNS.has(townSlug);
+  const meta = SERVICE_META[serviceSlug] || SERVICE_META["kitchen-remodeling"];
+  return {
+    cityLabel: `${cityShort}, CT`,
+    cityShort,
+    countyLabel: isFairfield ? "Fairfield County" : "New Haven County",
+    defaultPhone: isFairfield ? "(203) 919-9616" : "(203) 466-9148",
+    heroAccent: `${cityShort}, CT`,
+    overviewEyebrow: `${cityShort}'s ${meta.serviceLabel} Contractor`,
+    serviceLabel: meta.serviceLabel,
+    servicePath: meta.servicePath,
+    defaultHeroImage: meta.defaultHeroImage,
+    scopeLabel: meta.scopeLabel,
+    includedCopy: meta.includedCopy,
+    relatedFooter: meta.relatedFooter,
+  };
+}
 
 const markdownComponents: Components = {
   h3: ({ children }) => <h3 className="mt-8 text-[22px] font-bold leading-[1.3] text-[#1e2b43]">{children}</h3>,
@@ -219,7 +304,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
   const lead = section<LeadFormData>(page, "lead_form");
   const related = section<ProjectHighlightsData>(page, "project_highlights");
   const slug = normalizeSlug(page.slug);
-  const config = CITY_PAGE_CONFIG[slug] || CITY_PAGE_CONFIG["kitchen-remodeling/stamford-ct"];
+  const config = deriveCityConfig(slug);
   const phones = ((page as CMSPage & { phones?: { items?: PhoneItem[] } }).phones?.items) || [];
   const primaryPhone = resolveCountyPhone(phones, config.countyLabel, config.defaultPhone);
   const repeatedBrands = useMemo(() => ([...(brands?.items || []), ...(brands?.items || [])]), [brands?.items]);
@@ -233,7 +318,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
     <div className="bg-white text-[#1e2b43]">
       <main id="main">
         <section className="kitchen-city-hero relative isolate overflow-hidden bg-[#151e30] px-5 pb-12 pt-[120px] text-white md:px-10">
-          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${media(hero?.background_image, "/images/headers/kitchen-remodeling-header.jpg")})` }} />
+          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${media(hero?.background_image, config.defaultHeroImage)})` }} />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_97%_97%,rgba(21,30,48,1)_0%,rgba(21,30,48,0.9)_8%,transparent_30%),radial-gradient(ellipse_at_3%_97%,rgba(21,30,48,0.9)_0%,transparent_25%),linear-gradient(180deg,rgba(21,30,48,0.35)_0%,rgba(21,30,48,0.2)_30%,rgba(21,30,48,0.45)_65%,rgba(21,30,48,0.92)_100%)]" />
           <div className="relative mx-auto flex min-h-[430px] max-w-[1240px] flex-col items-center justify-center text-center">
             <ol className="mb-5 flex list-none items-center text-[13px] font-medium text-white/90">
@@ -241,12 +326,12 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
               <li className="mx-[10px] text-[#bc9155]">{">"}</li>
               <li>{linkNode("/services/", "Services", "text-white/85 hover:text-[#bc9155]")}</li>
               <li className="mx-[10px] text-[#bc9155]">{">"}</li>
-              <li>{linkNode("/kitchen-remodeling/", "Kitchen Remodeling", "text-white/85 hover:text-[#bc9155]")}</li>
+              <li>{linkNode(config.servicePath, config.serviceLabel, "text-white/85 hover:text-[#bc9155]")}</li>
               <li className="mx-[10px] text-[#bc9155]">{">"}</li>
               <li><span className="font-semibold text-white">{config.cityLabel}</span></li>
             </ol>
             <h1 className="max-w-[920px] font-serif text-[clamp(40px,4.7vw,58px)] font-bold leading-[1.08] tracking-[-0.03em] text-white">
-              <AccentTitle text={hero?.headline || `Kitchen Remodeling in ${config.cityLabel}`} accent={config.heroAccent} />
+              <AccentTitle text={hero?.headline || `${config.serviceLabel} in ${config.cityLabel}`} accent={config.heroAccent} />
             </h1>
             {hero?.subheadline ? <p className="mt-4 max-w-[720px] text-[17px] leading-[1.72] text-white/84">{hero.subheadline}</p> : null}
             <div className="mt-8 flex flex-wrap justify-center gap-4">
@@ -262,7 +347,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
           <div className="mx-auto max-w-[860px] text-center">
             {label(overview?.eyebrow || config.overviewEyebrow)}
             <h2 className="text-[clamp(32px,3.8vw,46px)] font-bold leading-[1.2] tracking-[-0.02em]">
-              <AccentTitle text={overview?.title || `Kitchen Remodeling in ${config.cityLabel}`} accent={overview?.highlight_text || config.cityLabel} />
+              <AccentTitle text={overview?.title || `${config.serviceLabel} in ${config.cityLabel}`} accent={overview?.highlight_text || config.cityLabel} />
             </h2>
             {paragraphize(overview?.content).map((paragraph) => (
               <p key={paragraph.slice(0, 30)} className="mt-5 text-[16px] leading-[1.85] text-[#5c677d]">{paragraph}</p>
@@ -275,7 +360,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
             <div className="mb-12 text-center">
               {label("Scope of Work")}
               <h2 className="text-[clamp(32px,3.8vw,46px)] font-bold leading-[1.2] tracking-[-0.02em]">
-                <AccentTitle text={intro?.title || `What Is Included in a Kitchen Remodel in ${config.cityShort}`} accent={config.cityShort} />
+                <AccentTitle text={intro?.title || `What Is Included in a ${config.serviceLabel} Project in ${config.cityShort}`} accent={config.cityShort} />
               </h2>
             </div>
             <div className="grid gap-12 lg:grid-cols-2">
@@ -302,7 +387,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
                     <IncludedIcon />
                   </div>
                   <h3 className="mb-[10px] text-[18px] font-semibold">{item.text}</h3>
-                  <p className="text-[14px] leading-[1.68] text-[#5c677d]">{INCLUDED_COPY[item.text || ""] || "Included as part of a full-scope kitchen remodeling project."}</p>
+                  <p className="text-[14px] leading-[1.68] text-[#5c677d]">{config.includedCopy[item.text || ""] || `Included as part of a full-scope ${config.serviceLabel.toLowerCase()} project.`}</p>
                 </article>
               ))}
             </div>
@@ -314,7 +399,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
             <div className="text-center">
               {label(localizedBlock?.eyebrow || "Local Expertise")}
               <h2 className="text-[clamp(32px,3.8vw,46px)] font-bold leading-[1.2] tracking-[-0.02em]">
-                <AccentTitle text={localizedBlock?.title || `What Makes Kitchen Remodeling in ${config.cityShort} Different`} accent={localizedBlock?.highlight_text || config.cityShort} />
+                <AccentTitle text={localizedBlock?.title || `What Makes ${config.serviceLabel} in ${config.cityShort} Different`} accent={localizedBlock?.highlight_text || config.cityShort} />
               </h2>
             </div>
             <div className="mx-auto mt-6 max-w-[800px]">
@@ -342,7 +427,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
             <div className="mb-12 text-center">
               {label("Recent Work")}
               <h2 className="text-[clamp(32px,3.8vw,46px)] font-bold leading-[1.2] tracking-[-0.02em]">
-                <AccentTitle text={recentProjects?.title || "Recent Kitchen Remodeling Projects"} accent="Remodeling Projects" />
+                <AccentTitle text={recentProjects?.title || `Recent ${config.serviceLabel} Projects`} accent="Projects" />
               </h2>
               {recentProjects?.subtitle ? <p className="mx-auto mt-3 max-w-[720px] text-[17px] leading-[1.75] text-[#5c677d]">{recentProjects.subtitle}</p> : null}
             </div>
@@ -379,7 +464,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
             <div className="mb-10 text-center">
               {label("Investment")}
               <h2 className="text-[clamp(32px,3.8vw,46px)] font-bold leading-[1.2] tracking-[-0.02em]">
-                <AccentTitle text={pricing?.title || `Kitchen Remodeling Cost in ${config.cityLabel}`} accent={config.cityLabel} />
+                <AccentTitle text={pricing?.title || `${config.serviceLabel} Cost in ${config.cityLabel}`} accent={config.cityLabel} />
               </h2>
               {pricing?.subtitle ? <p className="mx-auto mt-3 max-w-[760px] text-[17px] leading-[1.75] text-[#5c677d]">{pricing.subtitle}</p> : null}
             </div>
@@ -401,7 +486,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
                 </tbody>
               </table>
               <p className="mt-5 text-center text-[14px] italic text-[#5c677d]">All prices include labor and materials. Final cost depends on scope, selections, and site conditions.</p>
-              {slug === "kitchen-remodeling/stamford-ct" ? <p className="mt-4 text-[15px] leading-[1.75] text-[#5c677d]">Stamford pricing reflects the local cost of labor, permitting fees through the Stamford Building Department, and the premium material selections common in Fairfield County. Condo projects in downtown Stamford may include additional costs for building coordination, elevator reservations, and after-hours delivery requirements.</p> : null}
+              {pricing?.subtitle ? null : <p className="mt-4 text-[15px] leading-[1.75] text-[#5c677d]">{config.cityShort} pricing reflects the local cost of labor, permitting fees, and the material selections common in {config.countyLabel}.</p>}
             </div>
           </div>
         </section>
@@ -411,7 +496,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
             <div className="text-center">
               {label(localExpertise?.eyebrow || "Local Knowledge")}
               <h2 className="text-[clamp(32px,3.8vw,46px)] font-bold leading-[1.2] tracking-[-0.02em]">
-                <AccentTitle text={localExpertise?.title || `Why Kitchen Remodeling in ${config.cityShort} Requires Local Expertise`} accent={localExpertise?.highlight_text || "Local Expertise"} />
+                <AccentTitle text={localExpertise?.title || `Why ${config.serviceLabel} in ${config.cityShort} Requires Local Expertise`} accent={localExpertise?.highlight_text || "Local Expertise"} />
               </h2>
               {localExpertiseIntro ? <p className="mx-auto mt-3 max-w-[720px] text-[17px] leading-[1.75] text-[#5c677d]">{localExpertiseIntro}</p> : null}
             </div>
@@ -427,7 +512,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
             <div className="mb-10 text-center">
               {label("Our Process", true)}
               <h2 className="text-[clamp(32px,3.8vw,46px)] font-bold leading-[1.2] tracking-[-0.02em] text-white">
-                <AccentTitle text={process?.title || "Our Kitchen Remodeling Process"} accent="Remodeling Process" />
+                <AccentTitle text={process?.title || `Our ${config.serviceLabel} Process`} accent="Process" />
               </h2>
               {process?.subtitle ? <p className="mx-auto mt-3 max-w-[820px] text-[17px] leading-[1.75] text-white/75">{process.subtitle}</p> : null}
             </div>
@@ -485,7 +570,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
             <div className="mb-10 text-center">
               {label(areas?.eyebrow || "Where We Work")}
               <h2 className="text-[clamp(32px,3.8vw,46px)] font-bold leading-[1.2] tracking-[-0.02em]">
-                <AccentTitle text={areas?.title || "Kitchen Remodeling Across Two Counties"} accent={areas?.highlight_text || "Two Counties"} />
+                <AccentTitle text={areas?.title || `${config.serviceLabel} Across Two Counties`} accent={areas?.highlight_text || "Two Counties"} />
               </h2>
               {areas?.subtitle ? <p className="mx-auto mt-3 max-w-[760px] text-[17px] leading-[1.75] text-[#5c677d]">{areas.subtitle}</p> : null}
             </div>
@@ -525,7 +610,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
             <div className="mb-10 text-center">
               {label("FAQ")}
               <h2 className="text-[clamp(32px,3.8vw,46px)] font-bold leading-[1.2] tracking-[-0.02em]">
-                <AccentTitle text={faq?.title || `Kitchen Remodeling in ${config.cityShort} - Questions`} accent="Questions" />
+                <AccentTitle text={faq?.title || `${config.serviceLabel} in ${config.cityShort} - Questions`} accent="Questions" />
               </h2>
             </div>
             <div className="space-y-3">
@@ -574,7 +659,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
               <h2 className="text-[clamp(32px,3.8vw,46px)] font-bold leading-[1.2] tracking-[-0.02em]">
                 <AccentTitle text={related?.title || "You May Also Need"} accent="Need" />
               </h2>
-              <p className="mx-auto mt-3 max-w-[760px] text-[17px] leading-[1.75] text-[#5c677d]">Many kitchen remodeling projects include or lead to these related services.</p>
+              <p className="mx-auto mt-3 max-w-[760px] text-[17px] leading-[1.75] text-[#5c677d]">{config.relatedFooter}</p>
             </div>
             <div className="grid gap-8 lg:grid-cols-3">
               {(related?.items || []).map((item, index) => (

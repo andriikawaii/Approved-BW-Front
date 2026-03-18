@@ -1,5 +1,6 @@
 'use client';
 
+import { useId } from 'react';
 import {
   Accordion,
   AccordionItem,
@@ -33,6 +34,7 @@ export default function FAQ({ data }: Props) {
   const items = (data.items || data.faqs || []).filter(
     (x) => (x?.question || x?.q) && (x?.answer || x?.a)
   );
+  const baseId = useId();
 
   return (
     <section id="faq" className="bg-[#f8f5ee] py-16 md:py-20">
@@ -50,24 +52,26 @@ export default function FAQ({ data }: Props) {
           ) : null}
         </div>
 
-        <Accordion type="single" collapsible className="w-full rounded-2xl border border-[#e6ddcc] bg-white p-2 shadow-[0_10px_26px_rgba(30,47,74,0.07)]">
-          {items.map((item, i) => (
-            <AccordionItem key={i} value={`faq-${i}`} className="border-b border-[#eee4d3] px-2 last:border-b-0">
-              <AccordionTrigger
-                className="bg-transparent py-5 text-left text-base font-semibold text-[#1E2F4A] hover:bg-transparent hover:no-underline md:text-lg"
-              >
-                {item.question || item.q}
-              </AccordionTrigger>
-              <AccordionContent className="pb-5 text-sm leading-relaxed text-[#5e6f86] md:text-base">
-                <div className="prose prose-sm max-w-none prose-p:my-2 prose-strong:text-[#1E2F4A] prose-a:text-[#C89B5B] prose-a:no-underline hover:prose-a:underline">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {(item.answer || item.a || '').trim()}
-                  </ReactMarkdown>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+        <div suppressHydrationWarning>
+          <Accordion type="single" collapsible className="w-full rounded-2xl border border-[#e6ddcc] bg-white p-2 shadow-[0_10px_26px_rgba(30,47,74,0.07)]">
+            {items.map((item, i) => (
+              <AccordionItem key={`${baseId}-${i}`} value={`faq-${i}`} className="border-b border-[#eee4d3] px-2 last:border-b-0">
+                <AccordionTrigger
+                  className="bg-transparent py-5 text-left text-base font-semibold text-[#1E2F4A] hover:bg-transparent hover:no-underline md:text-lg"
+                >
+                  {item.question || item.q}
+                </AccordionTrigger>
+                <AccordionContent className="pb-5 text-sm leading-relaxed text-[#5e6f86] md:text-base">
+                  <div className="prose prose-sm max-w-none prose-p:my-2 prose-strong:text-[#1E2F4A] prose-a:text-[#C89B5B] prose-a:no-underline hover:prose-a:underline">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {(item.answer || item.a || '').trim()}
+                    </ReactMarkdown>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
       </div>
     </section>
   );

@@ -40,6 +40,7 @@ const TEMPLATE_COMPONENTS: Record<string, TemplateComponent> = {
   town: TownPageTemplate,
   town_page: TownPageTemplate,
   service_town: TownPageTemplate,
+  office: DefaultPageTemplate,
 };
 
 function normalizeTemplateKey(template: string): string {
@@ -104,7 +105,19 @@ export function renderTemplate(page: CMSPage) {
     return createElement(KitchenRemodelingPageTemplate, { page });
   }
 
-  if (['kitchen-remodeling/stamford-ct', 'kitchen-remodeling/new-haven-ct'].includes(normalizePageSlug(page.slug))) {
+  if (/^kitchen-remodeling\/[a-z-]+-ct$/.test(normalizePageSlug(page.slug))) {
+    return createElement(KitchenRemodelingCityPageTemplate, { page });
+  }
+
+  if (/^flooring\/[a-z-]+-ct$/.test(normalizePageSlug(page.slug))) {
+    return createElement(KitchenRemodelingCityPageTemplate, { page });
+  }
+
+  if (/^bathroom-remodeling\/[a-z-]+-ct$/.test(normalizePageSlug(page.slug))) {
+    return createElement(KitchenRemodelingCityPageTemplate, { page });
+  }
+
+  if (/^basement-finishing\/[a-z-]+-ct$/.test(normalizePageSlug(page.slug))) {
     return createElement(KitchenRemodelingCityPageTemplate, { page });
   }
 
