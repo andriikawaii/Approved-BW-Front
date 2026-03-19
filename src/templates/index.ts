@@ -4,6 +4,7 @@ import { AboutPageTemplate } from './AboutPageTemplate';
 import { AreasWeServeTemplate } from './AreasWeServeTemplate';
 import { BathroomRemodelingPageTemplate } from './BathroomRemodelingPageTemplate';
 import { CaseStudiesPageTemplate } from './CaseStudiesPageTemplate';
+import { CaseStudyDetailPageTemplate } from './CaseStudyDetailPageTemplate';
 import { ContactPageTemplate } from './ContactPageTemplate';
 import { CountyPageTemplate } from './CountyPageTemplate';
 import { DefaultPageTemplate } from './DefaultPageTemplate';
@@ -127,6 +128,10 @@ export function renderTemplate(page: CMSPage) {
 
   if (normalizePageSlug(page.slug) === 'case-studies') {
     return createElement(CaseStudiesPageTemplate, { page });
+  }
+
+  if (/^case-studies\/[a-z-]+$/.test(normalizePageSlug(page.slug))) {
+    return createElement(CaseStudyDetailPageTemplate, { page });
   }
 
   if (['fairfield-county', 'new-haven-county'].includes(normalizePageSlug(page.slug))) {

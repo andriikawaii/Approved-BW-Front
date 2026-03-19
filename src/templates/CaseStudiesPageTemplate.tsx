@@ -90,6 +90,14 @@ const CARD_IMAGE_MAP: Record<string, string> = {
   "Kitchen + Flooring — Milford": "/portfolio/builtwell-team-completed-interior-ct.png",
 };
 
+const CARD_LINK_MAP: Record<string, string> = {
+  "Whole-Home Restoration — Hamden": "/case-studies/whole-home-restoration-hamden",
+  "Basement Finishing — Darien": "/case-studies/basement-finishing-darien",
+  "Bathroom Remodeling — Westport": "/case-studies/bathroom-remodeling-westport",
+  "Kitchen Remodeling — New Canaan": "/case-studies/kitchen-remodeling-new-canaan",
+  "Kitchen + Flooring — Milford": "/case-studies/kitchen-remodeling-milford",
+};
+
 function toTelHref(number?: string) {
   return `tel:${(number || "").replace(/\D/g, "")}`;
 }
@@ -234,7 +242,7 @@ function CaseStudyGrid({ cards }: { cards: CaseStudyCard[] }) {
                     <p className="min-h-[72px] text-[14px] leading-[1.65] text-[#1E2B43]">&quot;{card.quote}&quot;</p>
                     <cite className="mt-2 block text-[12px] font-semibold not-italic text-[#5C677D]">- {card.attribution}</cite>
                   </div>
-                  {linkNode(card.link, <><span>View Case Study</span><ArrowRight className="h-[14px] w-[14px]" /></>, "mt-auto inline-flex items-center gap-[6px] pt-4 text-[14px] font-semibold text-[#BC9155] transition-all hover:gap-[10px]")}
+                  {linkNode(CARD_LINK_MAP[card.title] || card.link, <><span>View Case Study</span><ArrowRight className="h-[14px] w-[14px]" /></>, "mt-auto inline-flex items-center gap-[6px] pt-4 text-[14px] font-semibold text-[#BC9155] transition-all hover:gap-[10px]")}
                 </div>
               </article>
             );
