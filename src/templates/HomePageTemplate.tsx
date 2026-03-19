@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowRight,
@@ -14,6 +14,7 @@ import {
   PaintBucket,
   Upload,
   ShieldCheck,
+  Shield,
   SquareStack,
   Star,
   TimerReset,
@@ -491,7 +492,7 @@ function HomeSectionHeader({
   const isWhyChooseTitle = normalizeTitle(title) === 'why homeowners choose builtwell ct';
 
   return (
-    <div className={joinClasses('mx-auto mb-9 text-center md:mb-12 lg:mb-16', isWhyChooseTitle ? 'max-w-5xl' : 'max-w-3xl')}>
+    <div className={joinClasses('home-fade-up mx-auto mb-9 text-center md:mb-12 lg:mb-16', isWhyChooseTitle ? 'max-w-5xl' : 'max-w-3xl')}>
       {label ? (
         <span className="relative mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1px] text-[#9A7340] before:absolute before:left-0 before:top-1/2 before:h-0.5 before:w-2.5 before:-translate-y-1/2 before:bg-[#BC9155] md:text-[13px] md:tracking-[1.5px]">
           {label}
@@ -528,13 +529,13 @@ function HomeTrustBar({ data }: { data: TrustBarData | null }) {
             <div
               key={`trust-${index}`}
               className={joinClasses(
-                'cursor-default px-4 py-6 transition-all duration-300 md:px-5 md:py-9 lg:hover:-translate-y-[3px] lg:hover:bg-[#BC9155]/8',
+                'group cursor-default bg-[#BC9155]/[0.08] px-4 py-6 transition-all duration-300 md:bg-transparent md:px-5 md:py-9 md:hover:-translate-y-[3px] md:hover:bg-[#BC9155]/8',
                 index % 2 === 0 && 'border-r border-[#BC9155]/12 lg:border-r',
                 index < 2 && 'border-b border-[#BC9155]/12 lg:border-b-0',
                 index < items.length - 1 ? 'lg:border-r lg:border-[#BC9155]/12' : 'lg:border-r-0'
               )}
             >
-              <div className="font-serif text-[32px] font-bold leading-none text-[#BC9155] transition-all duration-300 md:text-[42px] lg:hover:text-[#d4a95a] lg:hover:[text-shadow:0_0_20px_rgba(188,145,85,0.3)]">
+              <div className="font-serif text-[32px] font-bold leading-none text-[#BC9155] transition-all duration-300 md:text-[42px] md:group-hover:text-[#d4a95a] md:group-hover:[text-shadow:0_0_20px_rgba(188,145,85,0.3)]">
                 {item.value}
                 {item.icon === 'star' ? (
                   <span className="ml-1 inline-block text-base opacity-70 md:text-2xl">
@@ -542,7 +543,7 @@ function HomeTrustBar({ data }: { data: TrustBarData | null }) {
                   </span>
                 ) : null}
               </div>
-              <div className="mt-1.5 text-[11px] font-medium uppercase tracking-[0.8px] text-white/85 md:mt-2 md:text-[13px] md:tracking-[1px] lg:text-white/60">
+              <div className="mt-1.5 text-[11px] font-medium uppercase tracking-[0.8px] text-white/85 transition-colors duration-300 md:mt-2 md:text-[13px] md:tracking-[1px] md:text-white/60 md:group-hover:text-white/85">
                 {item.label}
               </div>
             </div>
@@ -600,7 +601,7 @@ function HomeWhySection({
           description={description}
         />
 
-        <div className="grid gap-4 md:gap-6 lg:grid-cols-3 lg:gap-10">
+        <div className="home-fade-up grid gap-4 md:gap-6 lg:grid-cols-3 lg:gap-10">
           {blocks.map((block, index) => (
             <article
               key={`${block.heading}-${index}`}
@@ -646,7 +647,7 @@ function HomeServicesSection({
 
         {/* Primary services - cards with images */}
         {primaryServices.length > 0 ? (
-          <div className="grid gap-4 md:mb-6 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
+          <div className="home-fade-up grid gap-4 md:mb-6 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
             {primaryServices.map((service) => (
               <Link
                 key={service.title}
@@ -679,7 +680,7 @@ function HomeServicesSection({
 
         {/* Secondary services - cards with images */}
         {secondaryServices.length > 0 ? (
-          <div className="mt-4 grid gap-4 md:mt-6 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
+          <div className="home-fade-up mt-4 grid gap-4 md:mt-6 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
             {secondaryServices.map((service) => {
               const Icon = serviceIcon(service.title);
 
@@ -718,7 +719,7 @@ function HomeServicesSection({
           </div>
         ) : null}
 
-        <div className="mt-8 text-center md:mt-12">
+        <div className="home-fade-up mt-8 text-center md:mt-12">
           <Link
             href="/services/"
             className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded border-2 border-[#1E2B43] px-8 py-3.5 text-sm font-semibold tracking-[0.3px] text-[#1E2B43] transition-colors hover:bg-[#1E2B43] hover:text-white md:min-h-0 md:w-auto"
@@ -756,17 +757,17 @@ function HomeProcessSection({ data }: { data: ProcessStepsData | null }) {
           dark
         />
 
-        <div className="relative mx-auto grid max-w-full gap-0 lg:max-w-none lg:grid-cols-5">
+        <div className="home-fade-up relative mx-auto grid max-w-full gap-0 lg:max-w-none lg:grid-cols-5">
           <div className="absolute bottom-[34px] left-[25px] top-[28px] w-0.5 bg-[#BC9155]/25 md:left-[33px] md:top-[34px] lg:bottom-auto lg:left-[10%] lg:right-[10%] lg:top-[34px] lg:h-0.5 lg:w-auto" />
           {steps.map((step, index) => (
             <button
               type="button"
               key={`${step.title}-${index}`}
               onClick={() => setActiveStep((current) => (current === index ? null : index))}
-              className={joinClasses(
-                'relative flex w-full cursor-pointer items-start gap-4 rounded-lg border-0 bg-transparent px-0 py-3 text-left transition-colors md:gap-5 md:py-4 lg:block lg:px-4 lg:pb-5 lg:pt-4 lg:text-center',
-                activeStep === index && 'bg-[#BC9155]/14'
-              )}
+                className={joinClasses(
+                  'relative flex w-full cursor-pointer items-start gap-4 rounded-lg border-0 bg-transparent px-0 py-3 text-left transition-colors duration-300 hover:bg-[#BC9155]/8 md:gap-5 md:py-4 lg:block lg:px-4 lg:pb-5 lg:pt-4 lg:text-center',
+                  activeStep === index && 'bg-[#BC9155]/14'
+                )}
               aria-expanded={activeStep === index}
             >
               <div className="relative z-10 flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-full border-[2.5px] border-[#BC9155] bg-[#BC9155]/42 font-serif text-[18px] font-bold text-[#f5e0c0] shadow-[0_0_0_4px_rgba(188,145,85,0.12)] md:h-[68px] md:w-[68px] md:text-2xl lg:-mt-2 lg:mx-auto lg:mb-5">
@@ -816,7 +817,7 @@ function HomeAreasSection({
       <div className="mx-auto max-w-[1280px]">
         <HomeSectionHeader label={eyebrow || 'Service Areas'} title={title} description={description} />
 
-        <div className="grid gap-4 md:gap-8 lg:grid-cols-2">
+        <div className="home-fade-up grid gap-4 md:gap-8 lg:grid-cols-2">
           {counties.map((county) => {
             const countyName = county.name || county.county_name || county.title || '';
             const towns = county.towns || county.cities || [];
@@ -936,7 +937,7 @@ function HomeTrustStrip() {
 
   return (
     <div className="border-t border-[#1E2B43]/8 bg-white px-5 py-8 md:px-6 md:py-10 lg:px-10 lg:py-14">
-      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-center gap-0">
+      <div className="home-fade-up mx-auto flex max-w-[1200px] flex-wrap items-center justify-center gap-0">
         {trustItems.map((item, index) => (
           <div key={item.label} className="contents">
             <a
@@ -948,7 +949,7 @@ function HomeTrustStrip() {
               {item.icon === 'star' ? (
                 <Star className="h-[18px] w-[18px] fill-[#BC9155] text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]" />
               ) : item.icon === 'shield' ? (
-                <ShieldCheck className="h-[18px] w-[18px] text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]" />
+                <Shield className="h-[18px] w-[18px] text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]" />
               ) : item.icon === 'license' ? (
                 <CalendarDays className="h-[18px] w-[18px] text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]" />
               ) : (
@@ -976,7 +977,7 @@ function HomeMidCta() {
         style={{ backgroundImage: "url('/portfolio/builtwell-contractor-handshake-arrival-ct-optimized.jpg')" }}
         aria-hidden="true"
       />
-      <div className="relative z-10">
+      <div className="home-fade-up relative z-10">
         <h2 className="font-serif text-[clamp(28px,3vw,40px)] font-bold tracking-[-0.3px] !text-white">
           Ready to <span className="text-[#BC9155]">Begin</span>?
         </h2>
@@ -1020,7 +1021,7 @@ function HomeProjectsSection({
           description={description}
         />
 
-        <div className="grid gap-4 md:gap-7 lg:grid-cols-3">
+        <div className="home-fade-up grid gap-4 md:gap-7 lg:grid-cols-3">
           {projects.map((project) => (
             <article
               key={project.title}
@@ -1063,7 +1064,7 @@ function HomeProjectsSection({
           ))}
         </div>
 
-        <div className="mt-8 text-center md:mt-12">
+        <div className="home-fade-up mt-8 text-center md:mt-12">
           <Link
             href="/case-studies/"
             className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded border-2 border-[#1E2B43] px-8 py-3.5 text-sm font-semibold tracking-[0.3px] text-[#1E2B43] transition-colors hover:bg-[#1E2B43] hover:text-white md:min-h-0 md:w-auto"
@@ -1121,7 +1122,7 @@ function HomeLicensedSection({
         aria-hidden="true"
       />
       <div className="absolute inset-0 bg-[linear-gradient(135deg,#2D3E33_0%,#1A2D22_100%)]" />
-      <div className="relative z-10 mx-auto grid max-w-[1280px] gap-8 md:gap-10 lg:grid-cols-2 lg:items-center lg:gap-20">
+      <div className="home-fade-up relative z-10 mx-auto grid max-w-[1280px] gap-8 md:gap-10 lg:grid-cols-2 lg:items-center lg:gap-20">
         <div>
           {title ? (
             <>
@@ -1303,7 +1304,7 @@ function HomeLeadFormSection({ data }: { data: LeadFormData }) {
   return (
     <section id="contact" className="scroll-mt-28 bg-[#F5F1E9] px-5 py-[48px] md:px-8 md:py-[64px] lg:px-10 lg:pb-[72px]">
       <div className="mx-auto max-w-[1200px]">
-        <div className="mb-8 text-center">
+        <div className="home-fade-up mb-8 text-center">
           <span className="relative mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1px] text-[#9A7340] before:absolute before:left-0 before:top-1/2 before:h-0.5 before:w-2.5 before:-translate-y-1/2 before:bg-[#BC9155] md:text-[13px] md:tracking-[1.5px]">
             Get in touch
           </span>
@@ -1317,7 +1318,7 @@ function HomeLeadFormSection({ data }: { data: LeadFormData }) {
         </div>
 
         <div className="grid items-stretch gap-6 lg:grid-cols-[1fr_1.15fr] lg:gap-8">
-          <div className="flex flex-col gap-4">
+          <div className="home-fade-up flex flex-col gap-4">
             <div className="flex flex-col gap-3">
               <div className="relative h-[240px] overflow-hidden rounded-lg md:h-[300px]">
                 <img
@@ -1340,7 +1341,7 @@ function HomeLeadFormSection({ data }: { data: LeadFormData }) {
             </div>
           </div>
 
-          <div className="flex flex-col rounded-[12px] border border-[#1E2B43]/8 bg-[#f3f4f6] px-[18px] py-6 shadow-[0_14px_40px_rgba(30,43,67,0.12),0_4px_12px_rgba(30,43,67,0.05)] md:px-9 md:py-8">
+          <div className="home-fade-up flex flex-col rounded-[10px] border border-[#1E2B43]/8 bg-white px-4 py-6 shadow-[0_16px_48px_rgba(30,43,67,0.1),0_4px_12px_rgba(30,43,67,0.04)] md:px-9 md:py-8">
             <form
               onSubmit={(event) => {
                 event.preventDefault();
@@ -1364,7 +1365,7 @@ function HomeLeadFormSection({ data }: { data: LeadFormData }) {
                       value={formData[field.name] || ''}
                       onChange={(event) => handleChange(field.name, event.target.value)}
                       placeholder={field.placeholder}
-                      className="w-full rounded-md border border-[#1E2B43]/15 bg-white px-[14px] py-3.5 text-[15px] text-[#1E2B43] outline-none transition-colors focus:border-[#BC9155]"
+                      className="w-full rounded-[6px] border border-[#1E2B43]/15 bg-white px-[14px] py-3 text-[15px] text-[#1E2B43] outline-none transition-colors focus:border-[#BC9155]"
                     />
                   </div>
                 ))}
@@ -1379,7 +1380,7 @@ function HomeLeadFormSection({ data }: { data: LeadFormData }) {
                   <div className="relative">
                     <button
                       type="button"
-                      className="flex w-full items-center justify-between rounded border border-[#1E2B43]/15 bg-white px-[14px] py-[14px] text-left text-[15px] text-[#1E2B43]"
+                      className="flex w-full items-center justify-between rounded-[4px] border border-[#1E2B43]/15 bg-white px-[14px] py-[13px] text-left text-[15px] text-[#1E2B43]"
                       aria-expanded={isServicesOpen}
                       onClick={() => setIsServicesOpen((current) => !current)}
                     >
@@ -1399,7 +1400,7 @@ function HomeLeadFormSection({ data }: { data: LeadFormData }) {
                               type="checkbox"
                               checked={selectedServices.includes(option.value)}
                               onChange={() => toggleService(option.value)}
-                              className="h-[18px] w-[18px] cursor-pointer rounded-[3px] border-2 border-[#1E2B43]/25 accent-[#BC9155]"
+                              className="home-multi-checkbox h-[18px] w-[18px] cursor-pointer rounded-[3px] border-2 border-[#1E2B43]/25 bg-white"
                             />
                             {option.label}
                           </label>
@@ -1420,7 +1421,7 @@ function HomeLeadFormSection({ data }: { data: LeadFormData }) {
                     required={bestTimeField.required}
                     value={formData[bestTimeField.name] || ''}
                     onChange={(event) => handleChange(bestTimeField.name, event.target.value)}
-                    className="w-full appearance-none rounded-md border border-[#1E2B43]/15 bg-white bg-[right_16px_center] bg-no-repeat px-[14px] py-3.5 pr-10 text-[15px] text-[#1E2B43] outline-none transition-colors focus:border-[#BC9155]"
+                    className="w-full appearance-none rounded-[6px] border border-[#1E2B43]/15 bg-white bg-[right_16px_center] bg-no-repeat px-[14px] py-3 pr-10 text-[15px] text-[#1E2B43] outline-none transition-colors focus:border-[#BC9155]"
                     style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235C677D' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")` }}
                   >
                     <option value="">Select a time</option>
@@ -1448,7 +1449,7 @@ function HomeLeadFormSection({ data }: { data: LeadFormData }) {
                         key={option.value}
                         className={joinClasses(
                           'inline-flex min-w-[84px] cursor-pointer items-center justify-center rounded-md border px-5 py-3 text-[13px] font-medium transition-colors',
-                          checked ? 'border-[#BC9155] text-[#BC9155]' : 'border-[#1E2B43]/18 bg-white text-[#1E2B43] hover:border-[#BC9155]'
+                          checked ? 'border-[#BC9155] bg-[#BC9155]/[0.06] text-[#BC9155]' : 'border-[#1E2B43]/18 bg-white text-[#1E2B43] hover:border-[#BC9155]'
                         )}
                       >
                         <input
@@ -1477,7 +1478,7 @@ function HomeLeadFormSection({ data }: { data: LeadFormData }) {
                   value={formData[messageField.name] || ''}
                   onChange={(event) => handleChange(messageField.name, event.target.value)}
                   placeholder={messageField.placeholder}
-                  className="min-h-[220px] w-full resize-y rounded-md border border-[#1E2B43]/15 bg-white px-[14px] py-3 text-[15px] leading-[1.6] text-[#1E2B43] outline-none transition-colors focus:border-[#BC9155] md:min-h-[290px]"
+                  className="min-h-[240px] w-full resize-y rounded-[6px] border border-[#1E2B43]/15 bg-white px-[14px] py-3 text-[15px] leading-[1.6] text-[#1E2B43] outline-none transition-colors focus:border-[#BC9155] md:min-h-[290px]"
                 />
               </div>
 
@@ -1497,7 +1498,7 @@ function HomeLeadFormSection({ data }: { data: LeadFormData }) {
                   />
                   <label
                     htmlFor={fileField.name}
-                    className="flex min-h-[52px] w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-[#1E2B43]/15 bg-white px-5 py-3.5 text-[15px] font-semibold tracking-[0.3px] text-[#1E2B43] transition-colors hover:border-[#BC9155]"
+                    className="flex min-h-[52px] w-full cursor-pointer items-center justify-center gap-2 rounded-[8px] border border-[#1E2B43]/15 bg-white px-5 py-3.5 text-[15px] font-semibold tracking-[0.3px] text-[#1E2B43] transition-colors hover:border-[#BC9155]"
                   >
                     <Upload className="h-4 w-4" />
                     Upload Photos
@@ -1644,6 +1645,30 @@ export function HomePageTemplate({ page }: { page: CMSPage }) {
   const servicesDescription = primaryServicesGrid?.subtitle || parsedServicesCopy.intro[0] || null;
   const whyDescription = parsedWhyCopy.intro[0] || null;
 
+  useEffect(() => {
+    const nodes = Array.from(document.querySelectorAll<HTMLElement>('.home-fade-up'));
+    if (!nodes.length) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      nodes.forEach((node) => node.classList.add('is-visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    nodes.forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="bg-white text-[#1E2B43]">
       {/* 1. Hero */}
@@ -1705,7 +1730,49 @@ export function HomePageTemplate({ page }: { page: CMSPage }) {
       ) : (
         <HomeCtaSection data={cta} phones={phones} />
       )}
-
+      <style jsx global>{`
+        .home-fade-up {
+          opacity: 0;
+          transform: translateY(30px);
+          transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .home-fade-up.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .home-multi-checkbox {
+          -webkit-appearance: none;
+          appearance: none;
+          margin: 0;
+          min-width: 18px;
+          min-height: 18px;
+          padding: 0;
+          position: relative;
+          flex-shrink: 0;
+        }
+        .home-multi-checkbox:checked {
+          background: #bc9155;
+          border-color: #bc9155;
+        }
+        .home-multi-checkbox:checked::after {
+          content: '';
+          position: absolute;
+          left: 5px;
+          top: 2px;
+          width: 5px;
+          height: 9px;
+          border: solid #fff;
+          border-width: 0 2px 2px 0;
+          transform: rotate(45deg);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .home-fade-up {
+            opacity: 1;
+            transform: none;
+            transition: none;
+          }
+        }
+      `}</style>
     </div>
   );
 }

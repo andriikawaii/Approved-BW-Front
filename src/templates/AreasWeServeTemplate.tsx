@@ -12,7 +12,6 @@ import {
   Facebook,
   Instagram,
   Linkedin,
-  MapPin,
   Menu,
   MessageSquareMore,
   ShieldCheck,
@@ -282,24 +281,71 @@ function ExternalOrInternalLink({
   );
 }
 
-function getTrustIcon(icon?: string) {
-  const iconClass = "h-5 w-5";
+function getStatsTrustIcon(icon?: string) {
+  const iconClass = "h-7 w-7";
 
   switch ((icon || "").toLowerCase()) {
-    case "clock":
-      return <Clock3 className={iconClass} />;
-    case "star":
-      return <Star className={iconClass} />;
     case "shield":
     case "shield-check":
-      return <ShieldCheck className={iconClass} />;
+      return (
+        <svg viewBox="0 0 24 24" className={iconClass} fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
+      );
+    case "star":
+      return <Star className={iconClass} />;
     case "calendar":
       return <CalendarDays className={iconClass} />;
     case "check":
-      return <CheckCircle2 className={iconClass} />;
+      return (
+        <svg viewBox="0 0 24 24" className={iconClass} fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+          <path d="M20 6L9 17l-5-5" />
+        </svg>
+      );
+    case "clock":
+      return <Clock3 className={iconClass} />;
     default:
-      return <CheckCircle2 className={iconClass} />;
+      return <ShieldCheck className={iconClass} />;
   }
+}
+
+function getTrustStripIcon(icon?: string) {
+  const iconName = (icon || "").toLowerCase();
+
+  if (iconName === "star") {
+    return (
+      <svg viewBox="0 0 24 24" className="h-[22px] w-[22px]" fill="currentColor" stroke="none" aria-hidden="true">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+      </svg>
+    );
+  }
+
+  if (iconName === "shield" || iconName === "shield-check") {
+    return (
+      <svg viewBox="0 0 24 24" className="h-[22px] w-[22px]" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      </svg>
+    );
+  }
+
+  if (iconName === "check") {
+    return (
+      <svg viewBox="0 0 24 24" className="h-[22px] w-[22px]" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M9 12l2 2 4-4" />
+      </svg>
+    );
+  }
+
+  if (iconName === "calendar") {
+    return <CalendarDays className="h-[22px] w-[22px]" />;
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" className="h-[22px] w-[22px]" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M20 6L9 17l-5-5" />
+    </svg>
+  );
 }
 
 function AreasHeader({ phones }: { phones: PhoneItem[] }) {
@@ -421,63 +467,63 @@ function AreasHeader({ phones }: { phones: PhoneItem[] }) {
 
 function AreasHero({ data, phones }: { data?: HeroData; phones: PhoneItem[] }) {
   const parts = getHighlightParts(data?.headline, "Connecticut");
-  const backgroundImage = normalizeMediaPath(data?.background_image) || "/portfolio/builtwell-job-site-aerial-ct.jpg";
+  const backgroundImage = normalizeMediaPath(data?.background_image) || "/hero/builtwell-job-site-aerial-hero-ct.jpg";
   const fairfieldPhone = resolveCountyPhone(phones, "Fairfield County", "(203) 919-9616");
   const newHavenPhone = resolveCountyPhone(phones, "New Haven County", "(203) 466-9148");
 
   return (
-    <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pb-12 pt-[120px] text-white md:px-10 md:pb-14">
+    <section className="page-hero areas-hero-section">
       <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${backgroundImage})`, backgroundPosition: "center 32%" }}
+        className="areas-hero-image"
+        style={{ backgroundImage: `url(${backgroundImage})` }}
       />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_97%_97%,rgba(21,30,48,1)_0%,rgba(21,30,48,0.9)_8%,transparent_30%),radial-gradient(ellipse_at_3%_97%,rgba(21,30,48,0.9)_0%,transparent_25%),linear-gradient(180deg,rgba(21,30,48,0.35)_0%,rgba(21,30,48,0.2)_30%,rgba(21,30,48,0.45)_65%,rgba(21,30,48,0.92)_100%)]" />
+      <div className="areas-hero-overlay" />
 
-      <div className="relative mx-auto flex min-h-[360px] max-w-[1240px] flex-col items-center justify-center text-center md:min-h-[440px]">
-        <ol className="mb-5 flex list-none items-center text-[13px] font-medium text-white/92 [text-shadow:0_1px_6px_rgba(0,0,0,0.7)]">
+      <div className="page-hero-inner">
+        <ol className="hero-breadcrumb areas-hero-breadcrumb">
           <li>
-            <ExternalOrInternalLink href="/" className="text-white/85 transition-colors hover:text-[#bc9155]">
+            <ExternalOrInternalLink href="/" className="areas-hero-breadcrumb-link">
               Home
             </ExternalOrInternalLink>
           </li>
-          <li className="before:px-2.5 before:text-[#bc9155] before:content-['›']">
-            <span className="font-semibold text-white">Areas We Serve</span>
+          <li>
+            <span className="current">Areas We Serve</span>
           </li>
         </ol>
 
-        <h1 className="max-w-[900px] font-serif text-[clamp(40px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.03em] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]">
+        <h1 className="areas-hero-title">
           {parts.before}
-          {parts.accent ? <span className="text-[#bc9155]">{parts.accent}</span> : null}
+          {parts.accent ? <span className="gold">{parts.accent}</span> : null}
           {parts.after}
         </h1>
 
         {data?.subheadline ? (
-          <p className="mt-4 max-w-[560px] text-[17px] leading-[1.7] text-white/82">
+          <p className="hero-subtitle areas-hero-subtitle">
             {data.subheadline}
           </p>
         ) : null}
 
-        <div className="mt-8 flex flex-wrap justify-center gap-4">
+        <div className="hero-ctas areas-hero-ctas">
           <ExternalOrInternalLink
             href={toTelHref(fairfieldPhone)}
-            className="flex min-w-[180px] flex-col items-center rounded-[8px] border border-white/18 border-b-2 border-b-[#bc9155] bg-[rgba(10,18,35,0.42)] px-7 py-4 text-center text-white backdrop-blur-[12px] transition-all hover:-translate-y-0.5 hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
+            className="hero-cta-btn areas-hero-cta-btn"
           >
-            <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/70">Fairfield County</span>
-            <span className="mt-1 font-serif text-[18px] font-semibold">{fairfieldPhone}</span>
+            <span className="hero-cta-label">Fairfield County</span>
+            <span className="hero-cta-phone">{fairfieldPhone}</span>
           </ExternalOrInternalLink>
           <ExternalOrInternalLink
             href={toTelHref(newHavenPhone)}
-            className="flex min-w-[180px] flex-col items-center rounded-[8px] border border-white/18 border-b-2 border-b-[#bc9155] bg-[rgba(10,18,35,0.42)] px-7 py-4 text-center text-white backdrop-blur-[12px] transition-all hover:-translate-y-0.5 hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
+            className="hero-cta-btn areas-hero-cta-btn"
           >
-            <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/70">New Haven County</span>
-            <span className="mt-1 font-serif text-[18px] font-semibold">{newHavenPhone}</span>
+            <span className="hero-cta-label">New Haven County</span>
+            <span className="hero-cta-phone">{newHavenPhone}</span>
           </ExternalOrInternalLink>
           <ExternalOrInternalLink
             href="#contact"
-            className="flex min-w-[180px] flex-col items-center rounded-[8px] border border-[#bc9155] border-b-2 border-b-[#a57d48] bg-[#bc9155] px-7 py-4 text-center text-white transition-all hover:-translate-y-0.5 hover:bg-[#d4a95a] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
+            className="hero-cta-btn hero-cta-primary areas-hero-cta-btn areas-hero-cta-btn-primary"
           >
-            <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/90">Free Estimate</span>
-            <span className="mt-1 font-serif text-[18px] font-semibold">Schedule Now</span>
+            <span className="hero-cta-label">Free Estimate</span>
+            <span className="hero-cta-phone">Schedule Now</span>
           </ExternalOrInternalLink>
         </div>
       </div>
@@ -489,28 +535,26 @@ function StatsBar({ data }: { data?: TrustBarData }) {
   const items = data?.items || [];
 
   return (
-    <section className="border-y border-[#bc9155]/20 bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] text-white">
-      <div className="mx-auto max-w-[1280px]">
-        <div className="grid grid-cols-2 md:grid-cols-4">
+    <section className="trust-bar areas-trust-bar">
+        <div className="trust-bar-inner areas-trust-bar-inner">
           {items.map((item, index) => (
             <div
               key={`${item.label}-${index}`}
-              className={`flex min-h-[124px] flex-col items-center justify-center border-[#bc9155]/12 px-5 py-9 text-center transition-all hover:-translate-y-0.5 hover:bg-[#bc9155]/8 ${index < items.length - 1 ? "border-r" : ""}`}
+              className={`trust-item areas-trust-item ${index < items.length - 1 ? "areas-trust-item-with-divider" : ""} ${!item.value ? "areas-trust-item-icon" : ""}`}
             >
-              <div className="flex items-center gap-2 text-[#bc9155]">
+              <div className="trust-number areas-trust-number">
                 {item.value ? (
-                  <span className="font-serif text-[42px] leading-none font-bold">{item.value}</span>
+                  <span>{item.value}</span>
                 ) : (
-                  getTrustIcon(item.icon)
+                  getStatsTrustIcon(item.icon)
                 )}
               </div>
-              <p className="mt-2 text-[13px] font-medium uppercase tracking-[0.08em] text-white/60">
+              <p className="trust-label areas-trust-label">
                 {item.label}
               </p>
             </div>
           ))}
         </div>
-      </div>
     </section>
   );
 }
@@ -521,109 +565,79 @@ function AreasSection({ data, phones }: { data?: AreasServedData; phones: PhoneI
   const counties = data?.counties || [];
 
   return (
-    <section className="bg-[#f5f1e9] py-20 md:py-24">
-      <div className="mx-auto max-w-[1240px] px-6">
-        <div className="mx-auto max-w-3xl text-center">
-          {data?.eyebrow ? (
-            <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#bc9155]">
-              {data.eyebrow}
-            </p>
-          ) : null}
-          <h2 className="text-[2.35rem] leading-tight font-bold text-[#151e30] md:text-[3.3rem]">
+    <section className="section where-we-work areas-where-we-work">
+      <div className="section-inner areas-section-inner">
+        <div className="section-header areas-section-header">
+          {data?.eyebrow ? <span className="section-label">{data.eyebrow}</span> : null}
+          <h2>
             {titleParts.before}
-            {titleParts.accent ? <span className="text-[#bc9155]">{titleParts.accent}</span> : null}
+            {titleParts.accent ? <span className="gold">{titleParts.accent}</span> : null}
             {titleParts.after}
           </h2>
-          {data?.subtitle ? (
-            <p className="mt-5 text-[1.05rem] leading-8 text-[#5c677d]">
-              {data.subtitle}
-            </p>
-          ) : null}
+          {data?.subtitle ? <p>{data.subtitle}</p> : null}
         </div>
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-2">
+        <div className="areas-grid">
           {counties.map((county) => {
             const countyName = county.name || "";
             const isExpanded = Boolean(expanded[countyName]);
-            const imageSrc = normalizeMediaPath(county.image) || "/images/fairfield-landmark.jpg";
+            const imageSrc = normalizeMediaPath(county.image) || "/images/areas/fairfield-county.jpg";
             const featuredTowns = county.towns || [];
             const extraTowns = county.extra_towns || [];
             const displayPhone = resolveCountyPhone(phones, countyName, county.phone);
 
             return (
-              <article
-                key={countyName}
-                className="overflow-hidden rounded-xl border border-[#e6ddcc] bg-white shadow-[0_18px_40px_rgba(21,30,48,0.08)] transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_24px_56px_rgba(21,30,48,0.14)]"
-              >
-                <div className="h-[220px] overflow-hidden">
+              <article key={countyName} className="area-card">
+                <div className="area-card-img">
                   <img
                     src={imageSrc}
                     alt={countyName}
-                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                    className={countyName.toLowerCase().includes("new haven") ? "show-top" : undefined}
                   />
                 </div>
 
-                <div className="p-6 md:p-7">
-                  <h3 className="text-[1.9rem] font-bold text-[#151e30]">{countyName}</h3>
+                <div className="area-card-body">
+                  <h3>{countyName}</h3>
                   {displayPhone ? (
-                    <p className="mt-1 text-sm text-[#5c677d]">
-                      Call:{" "}
-                      <a href={toTelHref(displayPhone)} className="font-semibold text-[#bc9155] transition-colors hover:text-[#a57d48]">
-                        {displayPhone}
-                      </a>
-                    </p>
-                  ) : null}
-                  {county.description ? (
-                    <p className="mt-4 text-[0.98rem] leading-7 text-[#5c677d]">
-                      {county.description}
-                    </p>
+                    <div className="area-card-phone">
+                      Call: <a href={toTelHref(displayPhone)}>{displayPhone}</a>
+                    </div>
                   ) : null}
 
-                  <div className="mt-5 flex flex-wrap gap-2">
+                  {county.description ? <p className="area-card-desc">{county.description}</p> : null}
+
+                  <div className="area-towns">
                     {featuredTowns.map((town) => {
                       const href = county.town_links?.[town];
-                      const content = (
-                        <>
-                          <MapPin className="h-3.5 w-3.5" />
-                          <span>{town}</span>
-                        </>
-                      );
 
-                      return href ? (
-                        <Link
-                          key={`${countyName}-${town}`}
-                          href={href}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-[#e9dfd0] bg-[#fbf8f2] px-3 py-1.5 text-xs font-medium text-[#4d5a6b] transition-colors hover:border-[#bc9155] hover:text-[#151e30]"
-                        >
-                          {content}
-                        </Link>
-                      ) : (
-                        <span
-                          key={`${countyName}-${town}`}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-[#e9dfd0] bg-[#fbf8f2] px-3 py-1.5 text-xs font-medium text-[#4d5a6b]"
-                        >
-                          {content}
+                      if (href) {
+                        return (
+                          <Link key={`${countyName}-${town}`} href={href} className="area-town">
+                            {town}
+                          </Link>
+                        );
+                      }
+
+                      return (
+                        <span key={`${countyName}-${town}`} className="area-town area-town-static">
+                          {town}
                         </span>
                       );
                     })}
 
-                    {isExpanded
-                      ? extraTowns.map((town) => (
-                          <span
-                            key={`${countyName}-${town}`}
-                            className="inline-flex items-center rounded-full border border-[#efe6d8] bg-white px-3 py-1.5 text-xs font-medium text-[#6d7684]"
-                          >
-                            {town}
-                          </span>
-                        ))
-                      : null}
-                  </div>
+                    <div className={`area-towns-more${isExpanded ? " show" : ""}`}>
+                      {extraTowns.map((town) => (
+                        <span key={`${countyName}-${town}`} className="area-town area-town-static">
+                          {town}
+                        </span>
+                      ))}
+                    </div>
 
-                  {extraTowns.length > 0 ? (
-                    <div className="mt-4 text-center">
+                    {extraTowns.length > 0 ? (
                       <button
                         type="button"
-                        className="inline-flex items-center text-sm font-medium text-[#bc9155] transition-colors hover:text-[#a57d48]"
+                        className="area-towns-toggle"
+                        aria-expanded={isExpanded}
                         onClick={() =>
                           setExpanded((current) => ({
                             ...current,
@@ -631,21 +645,16 @@ function AreasSection({ data, phones }: { data?: AreasServedData; phones: PhoneI
                           }))
                         }
                       >
-                        {isExpanded ? "Show Less −" : "See All Towns +"}
+                        {isExpanded ? "Show Less -" : "See All Towns +"}
                       </button>
-                    </div>
-                  ) : null}
+                    ) : null}
+                  </div>
 
                   {county.url ? (
-                    <div className="mt-5 border-t border-[#e6ddcc] pt-5">
-                      <Link
-                        href={county.url}
-                        className="inline-flex items-center gap-2 text-sm font-semibold text-[#bc9155] transition-all hover:gap-3 hover:text-[#a57d48]"
-                      >
-                        {county.cta_label || `Learn more about ${countyName}`}
-                        <ArrowRight className="h-4 w-4" />
-                      </Link>
-                    </div>
+                    <Link href={county.url} className="area-link">
+                      {county.cta_label || `Learn more about ${countyName}`}
+                      <ArrowRight className="h-[14px] w-[14px]" />
+                    </Link>
                   ) : null}
                 </div>
               </article>
@@ -656,7 +665,6 @@ function AreasSection({ data, phones }: { data?: AreasServedData; phones: PhoneI
     </section>
   );
 }
-
 function ServicesSection({ data }: { data?: ServicesGridData }) {
   const [showAll, setShowAll] = useState(false);
   const titleParts = getHighlightParts(data?.title, data?.highlight_text || undefined);
@@ -666,48 +674,44 @@ function ServicesSection({ data }: { data?: ServicesGridData }) {
   const hiddenItems = items.slice(initialVisible);
 
   return (
-    <section className="bg-[#f5f1e9] py-8 pb-20 md:pb-24">
-      <div className="mx-auto max-w-[1240px] px-6">
-        <div className="mx-auto max-w-3xl text-center">
-          {data?.eyebrow ? (
-            <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#bc9155]">
-              {data.eyebrow}
-            </p>
-          ) : null}
-          <h2 className="text-[2.2rem] leading-tight font-bold text-[#151e30] md:text-[3.15rem]">
+    <section className="section areas-services-section">
+      <div className="section-inner areas-section-inner">
+        <div className="section-header areas-section-header">
+          {data?.eyebrow ? <span className="section-label">{data.eyebrow}</span> : null}
+          <h2>
             {titleParts.before}
-            {titleParts.accent ? <span className="text-[#bc9155]">{titleParts.accent}</span> : null}
+            {titleParts.accent ? <span className="gold">{titleParts.accent}</span> : null}
             {titleParts.after}
           </h2>
-          {data?.subtitle ? (
-            <p className="mt-5 text-[1.05rem] leading-8 text-[#5c677d]">
-              {data.subtitle}
-            </p>
-          ) : null}
+          {data?.subtitle ? <p>{data.subtitle}</p> : null}
         </div>
 
-        <div className="mt-14 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+        <div className="services-grid areas-services-grid">
           {visibleItems.map((item) => (
             <ServiceCard key={item.title} item={item} />
           ))}
         </div>
 
-        {(hiddenItems.length > 0 || data?.cta_card) ? (
-          <div className="mt-10 text-center">
+        {hiddenItems.length > 0 || data?.cta_card ? (
+          <div className="services-toggle-wrap">
             <button
               type="button"
-              className="inline-flex items-center gap-2 rounded-md border border-[#bc9155] bg-white px-5 py-3 text-sm font-semibold text-[#bc9155] transition-colors hover:bg-[#bc9155] hover:text-white"
+              className={`services-toggle-btn${showAll ? " open" : ""}`}
               onClick={() => setShowAll((current) => !current)}
             >
-              {showAll ? data?.toggle_less_label || "Show Fewer Services" : data?.toggle_label || "Show More Services"}
-              <ChevronDown className={`h-4 w-4 transition-transform ${showAll ? "rotate-180" : ""}`} />
+              {showAll
+                ? data?.toggle_less_label || "Show Fewer Services"
+                : data?.toggle_label || "Show More Services"}
+              <ChevronDown className="h-[14px] w-[14px]" />
             </button>
           </div>
         ) : null}
 
         {showAll ? (
-          <div className="mt-8 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-            {hiddenItems.map((item) => <ServiceCard key={item.title} item={item} />)}
+          <div className="services-more show">
+            {hiddenItems.map((item) => (
+              <ServiceCard key={item.title} item={item} />
+            ))}
             {data?.cta_card ? <ServiceCtaCard card={data.cta_card} /> : null}
           </div>
         ) : null}
@@ -715,114 +719,87 @@ function ServicesSection({ data }: { data?: ServicesGridData }) {
     </section>
   );
 }
-
 function ServiceCard({ item }: { item: ServiceItem }) {
-  const imageSrc = normalizeMediaPath(item.image) || "/images/hero/hero-carousel-final.png";
+  const imageSrc = normalizeMediaPath(item.image) || "/services/kitchen-remodeling-ct.jpg";
 
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded-xl border border-[#e6ddcc] bg-white shadow-[0_16px_35px_rgba(21,30,48,0.08)]">
-      <div className="h-[210px] overflow-hidden">
-        <img
-          src={imageSrc}
-          alt={item.title || "Service"}
-          className="h-full w-full object-cover transition-transform duration-500 hover:scale-[1.03]"
-        />
+    <article className="service-card">
+      <div className="service-card-img">
+        <img src={imageSrc} alt={item.title || "Service"} />
       </div>
 
-      <div className="flex flex-1 flex-col p-6">
-        <h3 className="text-[1.45rem] font-bold text-[#151e30]">
-          <Link href={item.url || "#"} className="transition-colors hover:text-[#bc9155]">
-            {item.title}
-          </Link>
+      <div className="service-card-body">
+        <h3>
+          <Link href={item.url || "#"}>{item.title}</Link>
         </h3>
 
-        {item.summary ? (
-          <p className="mt-3 flex-1 text-[0.97rem] leading-7 text-[#5c677d]">
-            {item.summary}
-          </p>
-        ) : null}
+        {item.summary ? <p>{item.summary}</p> : null}
 
-        {(item.price || item.timeline) ? (
-          <div className="mt-5 flex flex-wrap gap-2">
+        {item.price || item.timeline ? (
+          <div className="service-meta">
             {item.price ? (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#eadfce] bg-[#fbf8f2] px-3 py-1.5 text-xs font-medium text-[#6b5d49]">
-                <DollarSign className="h-3.5 w-3.5 text-[#bc9155]" />
+              <span className="service-badge">
+                <DollarSign className="h-[14px] w-[14px]" />
                 {item.price}
               </span>
             ) : null}
             {item.timeline ? (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#eadfce] bg-[#fbf8f2] px-3 py-1.5 text-xs font-medium text-[#6b5d49]">
-                <Clock3 className="h-3.5 w-3.5 text-[#bc9155]" />
+              <span className="service-badge">
+                <Clock3 className="h-[14px] w-[14px]" />
                 {item.timeline}
               </span>
             ) : null}
           </div>
         ) : null}
 
-        <div className="mt-5">
-          <Link
-            href={item.url || "#"}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[#151e30] transition-colors hover:text-[#bc9155]"
-          >
-            {item.cta_label || "Learn More"}
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
+        <Link href={item.url || "#"} className="service-link">
+          {item.cta_label || "Learn More"}
+          <ArrowRight className="h-[14px] w-[14px]" />
+        </Link>
       </div>
     </article>
   );
 }
-
 function ServiceCtaCard({
   card,
 }: {
   card: NonNullable<ServicesGridData["cta_card"]>;
 }) {
   return (
-    <article className="flex h-full flex-col items-center justify-center rounded-xl bg-[#151e30] px-8 py-10 text-center text-white shadow-[0_18px_38px_rgba(21,30,48,0.18)]">
-      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#bc9155]/14 text-[#bc9155]">
-        <MessageSquareMore className="h-7 w-7" />
+    <article className="service-card service-card-cta">
+      <div className="service-card-cta-inner">
+        <div className="cta-card-icon">
+          <MessageSquareMore className="h-10 w-10" />
+        </div>
+        <h3>{card.title}</h3>
+        {card.body ? <p>{card.body}</p> : null}
+        <Link href={card.url || "#contact"} className="cta-card-btn">
+          {card.label || "Schedule a Free Consultation"}
+        </Link>
+        {card.subtext ? <span className="cta-card-sub">{card.subtext}</span> : null}
       </div>
-      <h3 className="mt-5 text-[1.7rem] font-bold text-white">{card.title}</h3>
-      {card.body ? (
-        <p className="mt-4 max-w-sm text-[0.98rem] leading-7 text-white/75">
-          {card.body}
-        </p>
-      ) : null}
-      <Link
-        href={card.url || "#contact"}
-        className="mt-6 inline-flex items-center justify-center rounded-md bg-[#bc9155] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#a57d48]"
-      >
-        {card.label || "Schedule a Free Consultation"}
-      </Link>
-      {card.subtext ? <p className="mt-3 text-xs tracking-[0.1em] text-white/55">{card.subtext}</p> : null}
     </article>
   );
 }
-
 function ProseSection({ data }: { data?: RichTextData }) {
   const titleParts = getHighlightParts(data?.title, data?.highlight_text || undefined);
 
   return (
-    <section className="border-b border-[#1e2b43]/6 bg-white py-20 md:py-24">
-      <div className="mx-auto max-w-[1240px] px-6">
-        <div className="mx-auto max-w-[820px]">
-          <div className="text-center">
-            {data?.eyebrow ? (
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#bc9155]">
-                {data.eyebrow}
-              </p>
-            ) : null}
-            <h2 className="font-serif text-[clamp(32px,3.5vw,44px)] leading-tight font-bold tracking-[-0.02em] text-[#151e30]">
+    <section className="section service-overview areas-service-overview">
+      <div className="section-inner areas-section-inner">
+        <div className="service-overview-content">
+          <div className="section-header areas-section-header areas-prose-header">
+            {data?.eyebrow ? <span className="section-label">{data.eyebrow}</span> : null}
+            <h2>
               {titleParts.before}
-              {titleParts.accent ? <span className="text-[#bc9155]">{titleParts.accent}</span> : null}
+              {titleParts.accent ? <span className="gold">{titleParts.accent}</span> : null}
               {titleParts.after}
             </h2>
           </div>
 
           {data?.content ? (
             <div
-              className="mt-8 text-[16px] leading-[1.85] text-[#5c677d] [&_p]:mb-5 [&_p:last-child]:mb-0"
+              className="areas-prose-content"
               dangerouslySetInnerHTML={{ __html: data.content }}
             />
           ) : null}
@@ -831,7 +808,6 @@ function ProseSection({ data }: { data?: RichTextData }) {
     </section>
   );
 }
-
 function TrustLinkStrip({ data }: { data?: TrustBarData }) {
   const items = data?.items || [];
 
@@ -840,33 +816,33 @@ function TrustLinkStrip({ data }: { data?: TrustBarData }) {
   }
 
   return (
-    <section className="relative overflow-hidden bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] px-5 py-14 text-white md:px-10">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url(/portfolio/builtwell-job-site-aerial-ct.jpg)" }}
-      />
-      <div className="absolute inset-0 bg-[#151e30]/88" />
+    <div className="trust-strip" role="region" aria-label="Trust indicators">
+      <div className="trust-strip-inner">
+        {items.map((item, index) => {
+          const content = (
+            <>
+              {getTrustStripIcon(item.icon)}
+              <span>{item.label}</span>
+            </>
+          );
 
-      <div className="relative mx-auto max-w-[1200px]">
-        <div className="flex flex-wrap items-center justify-center">
-          {items.map((item, index) => (
-            <div key={`${item.label}-${index}`} className="contents">
-              <ExternalOrInternalLink
-                href={item.url || "#"}
-                className="flex min-w-[180px] flex-1 flex-col items-center gap-3 px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90 transition-all hover:-translate-y-0.5 hover:text-[#bc9155]"
-              >
-                <span className="text-[#bc9155]">{getTrustIcon(item.icon)}</span>
-                <span>{item.label}</span>
-              </ExternalOrInternalLink>
-              {index < items.length - 1 ? <div className="hidden h-10 w-px bg-white/10 lg:block" /> : null}
+          return (
+            <div key={`${item.label}-${index}`} className="trust-strip-item-wrap">
+              {item.url ? (
+                <ExternalOrInternalLink href={item.url} className="trust-strip-item">
+                  {content}
+                </ExternalOrInternalLink>
+              ) : (
+                <div className="trust-strip-item">{content}</div>
+              )}
+              {index < items.length - 1 ? <div className="trust-strip-divider" /> : null}
             </div>
-          ))}
-        </div>
+          );
+        })}
       </div>
-    </section>
+    </div>
   );
 }
-
 function ContactSection({ data }: { data?: LeadFormData }) {
   const [submitted, setSubmitted] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
@@ -904,94 +880,87 @@ function ContactSection({ data }: { data?: LeadFormData }) {
       : `${selectedServices.length} service${selectedServices.length === 1 ? "" : "s"} selected`;
 
   return (
-    <section id="contact" className="bg-[#f5f1e9] py-20 md:py-24">
-      <div className="mx-auto max-w-[1240px] px-6">
-        <div className="mx-auto max-w-3xl text-center">
-          {data?.eyebrow ? (
-            <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#bc9155]">
-              {data.eyebrow}
-            </p>
-          ) : null}
-          <h2 className="text-[2.2rem] leading-tight font-bold text-[#151e30] md:text-[3.1rem]">
+    <section className="cta-section" id="contact">
+      <div className="cta-section-inner">
+        <div className="cta-header">
+          {data?.eyebrow ? <span className="section-label">{data.eyebrow}</span> : null}
+          <h2>
             {titleParts.before}
-            {titleParts.accent ? <span className="text-[#bc9155]">{titleParts.accent}</span> : null}
+            {titleParts.accent ? <span className="gold">{titleParts.accent}</span> : null}
             {titleParts.after}
           </h2>
-          {data?.subtitle ? (
-            <p className="mt-4 text-[1.02rem] leading-8 text-[#5c677d]">
-              {data.subtitle}
-            </p>
-          ) : null}
+          {data?.subtitle ? <p className="sub">{data.subtitle}</p> : null}
         </div>
 
-        <div className="mt-12 grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="grid gap-5">
-            {images.map((image, index) => (
-              <div key={`${image.src}-${index}`} className="overflow-hidden rounded-xl shadow-[0_16px_35px_rgba(21,30,48,0.08)]">
-                <img src={image.src} alt={image.alt} className="h-full w-full object-cover" />
-              </div>
-            ))}
+        <div className="cta-body">
+          <div className="cta-left">
+            <div className="cta-images">
+              {images.map((image, index) => (
+                <div key={`${image.src}-${index}`} className="cta-img-wrap">
+                  <img src={image.src} alt={image.alt} />
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="rounded-xl border border-[#e6ddcc] bg-white p-6 shadow-[0_18px_42px_rgba(21,30,48,0.10)] md:p-8">
+          <div className="contact-form-wrap">
             {submitted ? (
-              <div className="flex min-h-[420px] flex-col items-center justify-center text-center">
+              <div className="areas-form-success">
                 <CheckCircle2 className="h-12 w-12 text-[#bc9155]" />
-                <h3 className="mt-4 text-[2rem] font-bold text-[#151e30]">Thank You</h3>
-                <p className="mt-3 max-w-md text-[1rem] leading-7 text-[#5c677d]">
-                  We received your request and will reach out within one business day.
-                </p>
+                <h3>Thank You</h3>
+                <p>We received your request and will reach out within one business day.</p>
               </div>
             ) : (
               <form
-                className="space-y-5"
                 onSubmit={(event) => {
                   event.preventDefault();
                   setSubmitted(true);
                 }}
               >
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="form-row form-row-4">
                   {basicFields.map((field) => (
-                    <div key={field.name}>
-                      <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.16em] text-[#151e30]">
+                    <div key={field.name} className="form-group">
+                      <label htmlFor={`contact-${field.name}`}>
                         {field.label}
                         {field.required ? " *" : ""}
                       </label>
                       <input
+                        id={`contact-${field.name}`}
                         type={field.type}
                         name={field.name}
                         required={field.required}
                         placeholder={field.placeholder}
-                        className="h-12 w-full rounded-md border border-[#e6ddcc] px-3 text-sm text-[#151e30] outline-none transition-colors focus:border-[#bc9155]"
                       />
                     </div>
                   ))}
                 </div>
 
-                {servicesField ? (
-                  <div className="relative">
-                    <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.16em] text-[#151e30]">
-                      {servicesField.label}
-                      {servicesField.required ? " *" : ""}
-                    </label>
-                    <button
-                      type="button"
-                      className="flex h-12 w-full items-center justify-between rounded-md border border-[#e6ddcc] px-3 text-left text-sm text-[#5c677d] transition-colors hover:border-[#bc9155]"
-                      onClick={() => setServicesOpen((current) => !current)}
-                    >
-                      <span>{selectedServicesLabel}</span>
-                      <ChevronDown className={`h-4 w-4 transition-transform ${servicesOpen ? "rotate-180" : ""}`} />
-                    </button>
-                    {servicesOpen ? (
-                      <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-20 rounded-md border border-[#e6ddcc] bg-white p-3 shadow-[0_18px_35px_rgba(21,30,48,0.12)]">
-                        <div className="grid max-h-60 gap-2 overflow-y-auto pr-1">
+                <div className="form-row form-row-3">
+                  {servicesField ? (
+                    <div className="form-group">
+                      <label>
+                        {servicesField.label}
+                        {servicesField.required ? " *" : ""}
+                      </label>
+                      <div className="multi-select-wrap">
+                        <button
+                          type="button"
+                          className="multi-select-toggle"
+                          aria-expanded={servicesOpen}
+                          onClick={() => setServicesOpen((current) => !current)}
+                        >
+                          <span className={`multi-select-text${selectedServices.length > 0 ? " has-selection" : ""}`}>
+                            {selectedServicesLabel}
+                          </span>
+                          <ChevronDown className="h-[12px] w-[12px]" />
+                        </button>
+
+                        <div className={`multi-select-dropdown${servicesOpen ? " open" : ""}`}>
                           {serviceOptions.map((option) => {
                             const checked = selectedServices.includes(option.value);
+
                             return (
-                              <label
-                                key={option.value}
-                                className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-[#4f5f72] hover:bg-[#f7f3ec]"
-                              >
+                              <label key={option.value}>
                                 <input
                                   type="checkbox"
                                   checked={checked}
@@ -1009,23 +978,16 @@ function ContactSection({ data }: { data?: LeadFormData }) {
                           })}
                         </div>
                       </div>
-                    ) : null}
-                  </div>
-                ) : null}
+                    </div>
+                  ) : null}
 
-                <div className="grid gap-4 md:grid-cols-[1fr_auto]">
                   {bestTimeField ? (
-                    <div>
-                      <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.16em] text-[#151e30]">
+                    <div className="form-group">
+                      <label htmlFor="contact-time">
                         {bestTimeField.label}
                         {bestTimeField.required ? " *" : ""}
                       </label>
-                      <select
-                        name={bestTimeField.name}
-                        required={bestTimeField.required}
-                        className="h-12 w-full rounded-md border border-[#e6ddcc] px-3 text-sm text-[#151e30] outline-none transition-colors focus:border-[#bc9155]"
-                        defaultValue=""
-                      >
+                      <select id="contact-time" name={bestTimeField.name} required={bestTimeField.required} defaultValue="">
                         <option value="" disabled>
                           {bestTimeField.placeholder || "Select a time"}
                         </option>
@@ -1039,29 +1001,19 @@ function ContactSection({ data }: { data?: LeadFormData }) {
                   ) : null}
 
                   {methodOptions.length > 0 ? (
-                    <fieldset className="min-w-0">
-                      <legend className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.16em] text-[#151e30]">
-                        Preferred Contact Method
-                      </legend>
-                      <div className="flex flex-wrap gap-2">
+                    <fieldset className="form-group">
+                      <legend>Preferred Contact Method *</legend>
+                      <div className="form-radio-group">
                         {methodOptions.map((option) => (
-                          <label
-                            key={option.value}
-                            className={`inline-flex cursor-pointer items-center justify-center rounded-md border px-4 py-3 text-sm font-medium transition-colors ${
-                              contactMethod === option.value
-                                ? "border-[#bc9155] bg-[#bc9155] text-white"
-                                : "border-[#e6ddcc] bg-white text-[#4f5f72]"
-                            }`}
-                          >
+                          <label key={option.value}>
                             <input
                               type="radio"
                               name={contactMethodField?.name || "contact_method"}
                               value={option.value}
                               checked={contactMethod === option.value}
                               onChange={() => setContactMethod(option.value)}
-                              className="sr-only"
                             />
-                            {option.label}
+                            <span>{option.label}</span>
                           </label>
                         ))}
                       </div>
@@ -1070,23 +1022,21 @@ function ContactSection({ data }: { data?: LeadFormData }) {
                 </div>
 
                 {messageField ? (
-                  <div>
-                    <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.16em] text-[#151e30]">
-                      {messageField.label}
-                    </label>
+                  <div className="form-group">
+                    <label htmlFor="contact-message">{messageField.label}</label>
                     <textarea
+                      id="contact-message"
                       name={messageField.name}
-                      rows={5}
+                      rows={4}
                       placeholder={messageField.placeholder}
-                      className="w-full rounded-md border border-[#e6ddcc] px-3 py-3 text-sm text-[#151e30] outline-none transition-colors focus:border-[#bc9155]"
                     />
                   </div>
                 ) : null}
 
-                <div className="flex flex-col gap-4 border-t border-[#efe6d8] pt-5 md:flex-row md:items-center md:justify-between">
-                  <div>
-                    <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-[#e6ddcc] px-4 py-3 text-sm font-medium text-[#4f5f72] transition-colors hover:border-[#bc9155]">
-                      <Upload className="h-4 w-4 text-[#bc9155]" />
+                <div className="form-bottom-row">
+                  <div className="form-bottom-upload">
+                    <button type="button" aria-label="Upload project photos">
+                      <Upload className="h-4 w-4" />
                       Upload Photos
                       <input
                         type="file"
@@ -1097,23 +1047,18 @@ function ContactSection({ data }: { data?: LeadFormData }) {
                           setFileNames(Array.from(event.target.files || []).map((file) => file.name))
                         }
                       />
-                    </label>
+                    </button>
                     {fileNames.length > 0 ? (
-                      <p className="mt-2 text-xs text-[#5c677d]">{fileNames.join(", ")}</p>
+                      <p>{fileNames.join(", ")}</p>
                     ) : null}
                   </div>
 
-                  <button
-                    type="submit"
-                    className="inline-flex items-center justify-center rounded-md bg-[#bc9155] px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#a57d48]"
-                  >
+                  <button type="submit" className="form-submit" aria-label="Send consultation request">
                     {data?.submit_label || "Send Request"}
                   </button>
                 </div>
 
-                {data?.consent_text ? (
-                  <p className="text-xs text-[#6f7988]">{data.consent_text}</p>
-                ) : null}
+                <p className="form-note">{data?.consent_text || "We respond within 24 hours. No spam, no obligation."}</p>
               </form>
             )}
           </div>
@@ -1122,40 +1067,34 @@ function ContactSection({ data }: { data?: LeadFormData }) {
     </section>
   );
 }
-
 function FinancingStrip({ data }: { data?: RichTextData }) {
   if (!data) {
     return null;
   }
 
   return (
-    <section className="border-t border-[#1e2b43]/8 bg-white px-5 py-14 md:px-10">
-      <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-6 text-center">
-        <div className="flex flex-col items-center gap-4 md:flex-row md:text-left">
-          <div className="text-[24px] font-semibold">
-            <span className="text-[#62b33d]">Green</span>
-            <span className="text-[#1e2b43]">Sky</span>
-          </div>
-          <p className="max-w-[760px] text-[16px] leading-[1.6] text-[#5c677d]">
-            <strong className="text-[#151e30]">{data.title}</strong>{" "}
-            {(data.content || "").replace(/<[^>]+>/g, "")}
+    <div className="financing-strip" role="region" aria-label="Financing options">
+      <div className="financing-strip-inner">
+        <div className="financing-strip-left">
+          <span className="greensky-logo">
+            <span className="gs-green">Green</span>
+            <span className="gs-dark">Sky</span>
+          </span>
+          <p className="financing-strip-text">
+            <strong>{data.title}</strong> {(data.content || "").replace(/<[^>]+>/g, "")}
           </p>
         </div>
 
         {data.cta?.label && data.cta?.url ? (
-          <ExternalOrInternalLink
-            href={data.cta.url}
-            className="inline-flex min-h-[52px] min-w-[280px] items-center justify-center gap-2 rounded-[8px] bg-[#bc9155] px-8 py-3 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48]"
-          >
+          <ExternalOrInternalLink href={data.cta.url} className="financing-strip-cta">
             {data.cta.label}
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-[14px] w-[14px]" />
           </ExternalOrInternalLink>
         ) : null}
       </div>
-    </section>
+    </div>
   );
 }
-
 function AreasFooter({ phones }: { phones: PhoneItem[] }) {
   const fairfieldPhone = phones.find((phone) => phone.label.toLowerCase().includes("fairfield"));
   const newHavenPhone = phones.find((phone) => phone.label.toLowerCase().includes("new haven"));
@@ -1270,7 +1209,7 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
   const financing = richTextSections.find((item) => item.style_variant === "financing_strip");
 
   return (
-    <div className="bg-white text-[#151e30]">
+    <div className="areas-page bg-white text-[#151e30]">
       <main>
         <AreasHero data={hero} phones={phones} />
         <StatsBar data={statsBar} />
@@ -1281,8 +1220,237 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
         <ContactSection data={leadForm} />
         <FinancingStrip data={financing} />
       </main>
+      <style jsx global>{`
+        .areas-page { --oxford-blue:#1e2b43; --gold:#bc9155; --gold-dark:#9a7340; --slate:#5c677d; --cream:#f5f1e9; --gold-light:rgba(188,145,85,.1); }
+        .areas-page .gold { color:var(--gold); }
+        .areas-page .section { padding:100px 40px; }
+        .areas-page .section-inner { max-width:1240px; margin:0 auto; }
+        .areas-page .section-header { text-align:center; margin-bottom:64px; }
+        .areas-page .section-header h2 { max-width:780px; margin:0 auto 20px; font:700 clamp(28px,3.5vw,44px)/1.2 "Playfair Display",serif; letter-spacing:-.5px; color:var(--oxford-blue); }
+        .areas-page .section-header p { max-width:700px; margin:0 auto; font-size:17px; line-height:1.75; color:var(--slate); }
+        .areas-page .section-label { display:inline-block; margin-bottom:16px; padding-left:20px; position:relative; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--gold-dark); }
+        .areas-page .section-label:before { content:""; position:absolute; left:0; top:50%; width:10px; height:2px; transform:translateY(-50%); background:var(--gold); }
+
+        .areas-page .page-hero { position:relative; overflow:hidden; isolation:isolate; min-height:50vh; padding:120px 40px 48px; display:flex; align-items:stretch; color:#fff; background:#151e30; }
+        .areas-page .areas-hero-image { position:absolute; inset:0; background-size:cover; background-position:center 30%; background-repeat:no-repeat; opacity:.72; z-index:0; }
+        .areas-page .areas-hero-overlay { position:absolute; inset:0; z-index:1; background:radial-gradient(ellipse at 97% 97%,rgba(21,30,48,1) 0%,rgba(21,30,48,.9) 8%,transparent 30%),radial-gradient(ellipse at 3% 97%,rgba(21,30,48,.9) 0%,transparent 25%),linear-gradient(180deg,rgba(21,30,48,.35) 0%,rgba(21,30,48,.2) 30%,rgba(21,30,48,.45) 65%,rgba(21,30,48,.92) 100%); }
+        .areas-page .page-hero-inner { position:relative; z-index:2; width:100%; max-width:1240px; margin:0 auto; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
+        .areas-page .hero-breadcrumb { display:flex; list-style:none; margin:0 0 20px; padding:0; font-size:13px; font-weight:500; color:rgba(255,255,255,.92); text-shadow:0 1px 6px rgba(0,0,0,.7); }
+        .areas-page .hero-breadcrumb li { display:flex; align-items:center; }
+        .areas-page .hero-breadcrumb li + li:before { content:"›"; margin:0 10px; color:var(--gold); font-size:12px; }
+        .areas-page .areas-hero-breadcrumb-link { color:rgba(255,255,255,.85); transition:color .2s; }
+        .areas-page .areas-hero-breadcrumb-link:hover { color:var(--gold); }
+        .areas-page .hero-breadcrumb .current { color:#fff; font-weight:600; }
+        .areas-page .areas-hero-title { max-width:900px; margin-bottom:12px; font:700 clamp(40px,4.5vw,56px)/1.08 "Playfair Display",serif; letter-spacing:-.5px; text-shadow:0 2px 20px rgba(0,0,0,.5); }
+        .areas-page .hero-subtitle { max-width:560px; margin:16px auto 0; color:rgba(255,255,255,.82); font-size:17px; line-height:1.7; }
+        .areas-page .hero-ctas { display:flex; flex-wrap:wrap; gap:16px; justify-content:center; margin-top:32px; }
+        .areas-page .hero-cta-btn { min-width:180px; padding:16px 28px; border-radius:8px; text-align:center; display:flex; flex-direction:column; align-items:center; text-decoration:none; color:#fff; background:rgba(10,18,35,.42); border:1px solid rgba(255,255,255,.18); border-bottom:2px solid var(--gold); backdrop-filter:blur(12px); transition:.3s; }
+        .areas-page .hero-cta-btn:hover { background:rgba(10,18,35,.62); border-color:rgba(255,255,255,.28); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.3),0 0 0 1px rgba(188,145,85,.2); }
+        .areas-page .hero-cta-btn.hero-cta-primary { background:var(--gold); border:1px solid var(--gold); border-bottom:2px solid #a57d48; backdrop-filter:none; }
+        .areas-page .hero-cta-btn.hero-cta-primary:hover { background:#d4a95a; border-color:#d4a95a; box-shadow:0 8px 24px rgba(188,145,85,.4); }
+        .areas-page .hero-cta-label { margin-bottom:4px; font-size:11px; letter-spacing:1.2px; text-transform:uppercase; opacity:.75; }
+        .areas-page .hero-cta-phone { font:600 18px/1.2 "Playfair Display",serif; }
+
+        .areas-page .trust-bar { background:linear-gradient(135deg,#1e2b43 0%,#151e30 100%); border-top:1px solid rgba(188,145,85,.2); border-bottom:1px solid rgba(188,145,85,.2); }
+        .areas-page .trust-bar-inner { max-width:1280px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); text-align:center; }
+        .areas-page .trust-item { padding:36px 20px; border-right:1px solid rgba(188,145,85,.12); transition:background .3s,transform .3s; }
+        .areas-page .trust-item:last-child { border-right:none; }
+        .areas-page .trust-item:hover { background:rgba(188,145,85,.08); transform:translateY(-3px); }
+        .areas-page .trust-number { display:flex; justify-content:center; align-items:center; color:var(--gold); font:700 42px/1 "Playfair Display",serif; transition:color .3s,text-shadow .3s; }
+        .areas-page .trust-number { min-height:42px; }
+        .areas-page .trust-item:hover .trust-number { color:#d4a95a; text-shadow:0 0 20px rgba(188,145,85,.3); }
+        .areas-page .trust-number svg { width:28px; height:28px; }
+        .areas-page .trust-label { margin-top:8px; font-size:13px; text-transform:uppercase; letter-spacing:1px; font-weight:500; color:rgba(255,255,255,.6); transition:color .3s; }
+        .areas-page .trust-item:hover .trust-label { color:rgba(255,255,255,.85); }
+        .areas-page .areas-trust-item-icon .trust-number svg { width:30px; height:30px; }
+
+        .areas-page .where-we-work, .areas-page .areas-services-section { background:var(--cream); }
+        .areas-page .areas-services-section { padding-top:60px; padding-bottom:60px; }
+        .areas-page .areas-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; }
+        .areas-page .area-card { background:#fff; border-radius:12px; overflow:hidden; border-bottom:3px solid transparent; box-shadow:0 2px 12px rgba(30,43,67,.06),0 1px 3px rgba(30,43,67,.04); transition:.35s cubic-bezier(.4,0,.2,1); }
+        .areas-page .area-card:hover { transform:translateY(-6px); border-bottom-color:var(--gold); box-shadow:0 16px 40px rgba(30,43,67,.1),0 32px 64px rgba(30,43,67,.08); }
+        .areas-page .area-card-img { height:220px; position:relative; overflow:hidden; }
+        .areas-page .area-card-img:after { content:""; position:absolute; left:0; right:0; bottom:0; height:80px; background:linear-gradient(to top,rgba(30,43,67,.4),transparent); }
+        .areas-page .area-card-img img { width:100%; height:100%; object-fit:cover; transition:transform .5s; }
+        .areas-page .area-card:hover .area-card-img img { transform:scale(1.05); }
+        .areas-page .area-card-img img.show-top { object-position:top; }
+        .areas-page .area-card-body { padding:28px 28px 32px; }
+        .areas-page .area-card-body h3 { margin-bottom:6px; font:700 24px/1.2 "Playfair Display",serif; color:var(--oxford-blue); }
+        .areas-page .area-card-phone { margin-bottom:14px; font-size:15px; color:var(--slate); }
+        .areas-page .area-card-phone a { color:var(--gold); font-weight:600; }
+        .areas-page .area-card-desc { margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid rgba(30,43,67,.06); font-size:14px; line-height:1.7; color:var(--slate); }
+        .areas-page .area-towns { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
+        .areas-page .area-town { background:var(--cream); border-radius:50px; padding:7px 10px; text-align:center; font-size:11px; font-weight:600; letter-spacing:.2px; color:var(--oxford-blue); text-decoration:none; white-space:nowrap; transition:.2s; }
+        .areas-page .area-town:hover { background:var(--gold-light); color:var(--gold-dark); }
+        .areas-page a.area-town:hover { background:var(--gold); color:#fff; }
+        .areas-page .area-town-static:hover { background:var(--cream); color:var(--gold-dark); }
+        .areas-page .area-towns-more { display:none; grid-template-columns:repeat(4,1fr); gap:8px; grid-column:1 / -1; }
+        .areas-page .area-towns-more.show { display:grid; }
+        .areas-page .area-towns-toggle { grid-column:1 / -1; margin-top:4px; background:none; border:none; color:var(--gold); font-size:13px; font-weight:600; cursor:pointer; }
+        .areas-page .area-towns-toggle:hover { color:var(--gold-dark); }
+        .areas-page .area-link { display:inline-flex; align-items:center; gap:6px; margin-top:4px; color:var(--gold); font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; }
+        .areas-page .area-link:hover { gap:10px; }
+
+        .areas-page .services-grid, .areas-page .services-more { display:flex; flex-wrap:wrap; justify-content:center; gap:32px; }
+        .areas-page .services-grid .service-card, .areas-page .services-more .service-card { flex:0 0 calc(33.333% - 22px); max-width:calc(33.333% - 22px); }
+        .areas-page .services-more { display:none; width:100%; margin-top:8px; }
+        .areas-page .services-more.show { display:flex; }
+        .areas-page .services-toggle-wrap { width:100%; display:flex; justify-content:center; margin:40px 0 8px; }
+        .areas-page .services-toggle-btn { display:inline-flex; align-items:center; gap:8px; border:2px solid var(--gold); color:var(--gold); background:none; border-radius:6px; padding:12px 32px; font-size:14px; font-weight:600; cursor:pointer; transition:.3s; }
+        .areas-page .services-toggle-btn:hover { background:var(--gold); color:#fff; }
+        .areas-page .services-toggle-btn svg { transition:transform .3s; }
+        .areas-page .services-toggle-btn.open svg { transform:rotate(180deg); }
+        .areas-page .service-card { background:#fff; border-radius:8px; overflow:hidden; border-bottom:2px solid transparent; box-shadow:0 2px 12px rgba(30,43,67,.06),0 1px 3px rgba(30,43,67,.04); transition:.35s cubic-bezier(.4,0,.2,1); display:flex; flex-direction:column; }
+        .areas-page .service-card:hover { transform:translateY(-4px); border-bottom-color:var(--gold); box-shadow:0 12px 28px rgba(30,43,67,.1),0 28px 56px rgba(30,43,67,.12); }
+        .areas-page .service-card-img { height:280px; overflow:hidden; }
+        .areas-page .service-card-img img { width:100%; height:100%; object-fit:cover; transition:transform .5s; }
+        .areas-page .service-card:hover .service-card-img img { transform:scale(1.05); }
+        .areas-page .service-card-body { padding:28px 28px 32px; display:flex; flex-direction:column; flex:1; }
+        .areas-page .service-card-body h3 { margin-bottom:12px; font:700 22px/1.2 "Playfair Display",serif; }
+        .areas-page .service-card-body h3 a { color:inherit; transition:color .2s; }
+        .areas-page .service-card-body h3 a:hover { color:var(--gold); }
+        .areas-page .service-card-body p { flex:1; margin-bottom:20px; font-size:15px; line-height:1.7; color:var(--slate); }
+        .areas-page .service-meta { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:20px; }
+        .areas-page .service-badge { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:6px 14px; background:var(--gold-light); color:var(--gold-dark); font-size:12px; font-weight:600; }
+        .areas-page .service-badge svg { color:var(--gold); }
+        .areas-page .service-link { display:inline-flex; align-items:center; gap:6px; color:var(--gold); font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; }
+        .areas-page .service-link:hover { gap:10px; }
+        .areas-page .service-card-cta { background:var(--oxford-blue); border-bottom-color:var(--gold); align-items:center; justify-content:center; }
+        .areas-page .service-card-cta:hover { background:#151e30; }
+        .areas-page .service-card-cta-inner { height:100%; padding:40px 32px; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+        .areas-page .cta-card-icon { width:80px; height:80px; margin-bottom:24px; border-radius:50%; border:2px solid var(--gold); background:rgba(188,145,85,.12); display:flex; align-items:center; justify-content:center; color:var(--gold); }
+        .areas-page .service-card-cta h3 { margin-bottom:12px; color:#fff; font:700 22px/1.2 "Playfair Display",serif; }
+        .areas-page .service-card-cta p { max-width:280px; margin-bottom:24px; color:rgba(255,255,255,.7); font-size:15px; line-height:1.7; }
+        .areas-page .cta-card-btn { display:inline-block; padding:14px 28px; border-radius:4px; background:var(--gold); color:#fff; font-size:14px; font-weight:600; text-decoration:none; transition:.2s; }
+        .areas-page .cta-card-btn:hover { background:var(--gold-dark); transform:translateY(-1px); }
+        .areas-page .cta-card-sub { margin-top:12px; color:rgba(255,255,255,.5); font-size:12px; }
+
+        .areas-page .service-overview { background:#fff; border-bottom:1px solid rgba(30,43,67,.06); padding-top:80px; padding-bottom:80px; }
+        .areas-page .service-overview-content { max-width:820px; margin:0 auto; }
+        .areas-page .areas-prose-header { margin-bottom:28px; }
+        .areas-page .areas-prose-content p { margin-bottom:20px; color:var(--slate); font-size:16px; line-height:1.85; }
+        .areas-page .areas-prose-content p:last-child { margin-bottom:0; }
+
+        .areas-page .trust-strip { position:relative; overflow:hidden; padding:56px 40px; background:linear-gradient(135deg,var(--oxford-blue) 0%,#151e30 100%); }
+        .areas-page .trust-strip:before { content:""; position:absolute; inset:0; background:url("/hero/builtwell-job-site-aerial-hero-ct.jpg") center/cover no-repeat; opacity:.12; }
+        .areas-page .trust-strip-inner { position:relative; z-index:1; max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:0; }
+        .areas-page .trust-strip-item-wrap { display:flex; align-items:center; flex:1; min-width:180px; }
+        .areas-page .trust-strip-item { flex:1; text-align:center; padding:20px 32px; display:flex; flex-direction:column; align-items:center; gap:10px; color:rgba(255,255,255,.9); font-size:13px; font-weight:600; letter-spacing:.4px; white-space:nowrap; text-decoration:none; transition:.3s; }
+        .areas-page .trust-strip-item:hover { color:var(--gold); transform:translateY(-2px); }
+        .areas-page .trust-strip-item svg { width:22px; height:22px; color:var(--gold); filter:drop-shadow(0 2px 4px rgba(188,145,85,.3)); }
+        .areas-page .trust-strip-divider { width:1px; height:40px; background:rgba(255,255,255,.1); flex-shrink:0; }
+
+        .areas-page .cta-section { background:var(--cream); border-top:1px solid rgba(30,43,67,.08); padding:64px 40px 72px; }
+        .areas-page .cta-section-inner { max-width:1200px; margin:0 auto; }
+        .areas-page .cta-header { text-align:center; margin-bottom:32px; }
+        .areas-page .cta-header h2 { margin-bottom:8px; font:700 clamp(30px,3vw,42px)/1.2 "Playfair Display",serif; }
+        .areas-page .cta-header .sub { max-width:600px; margin:0 auto; font-size:16px; line-height:1.7; color:var(--slate); }
+        .areas-page .cta-body { display:grid; grid-template-columns:1fr 1.15fr; gap:32px; align-items:stretch; }
+        .areas-page .cta-left,.areas-page .cta-images { display:flex; flex-direction:column; gap:12px; }
+        .areas-page .cta-images { flex:1; }
+        .areas-page .cta-img-wrap { flex:1; min-height:0; overflow:hidden; border-radius:8px; }
+        .areas-page .cta-img-wrap img { width:100%; height:100%; object-fit:cover; }
+        .areas-page .contact-form-wrap { background:#fff; border-radius:10px; padding:32px 36px; border:1px solid rgba(30,43,67,.08); box-shadow:0 16px 48px rgba(30,43,67,.1),0 4px 12px rgba(30,43,67,.04); }
+        .areas-page .areas-form-success { min-height:420px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+        .areas-page .areas-form-success h3 { margin-top:16px; font:700 32px/1.2 "Playfair Display",serif; color:var(--oxford-blue); }
+        .areas-page .areas-form-success p { margin-top:12px; max-width:420px; line-height:1.7; color:var(--slate); }
+        .areas-page .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+        .areas-page .form-group { margin-bottom:16px; border:none; padding:0; min-width:0; }
+        .areas-page .form-group label,.areas-page .form-group legend { display:block; margin-bottom:6px; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:.5px; color:var(--oxford-blue); }
+        .areas-page .form-group input:not([type="radio"]):not([type="checkbox"]),.areas-page .form-group select,.areas-page .form-group textarea,.areas-page .multi-select-toggle { width:100%; border:1px solid rgba(30,43,67,.15); border-radius:6px; padding:12px 14px; font-size:15px; color:var(--oxford-blue); background:#fff; transition:border-color .2s; }
+        .areas-page .form-group textarea { min-height:120px; line-height:1.6; resize:vertical; }
+        .areas-page .form-group input:not([type="radio"]):not([type="checkbox"]):focus,.areas-page .form-group select:focus,.areas-page .form-group textarea:focus,.areas-page .multi-select-toggle:focus { outline:none; border-color:var(--gold); }
+        .areas-page .form-group select { appearance:none; -webkit-appearance:none; padding-right:40px; background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235C677D' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E\"); background-repeat:no-repeat; background-position:right 16px center; }
+        .areas-page .multi-select-wrap { position:relative; }
+        .areas-page .multi-select-toggle { display:flex; align-items:center; justify-content:space-between; border-radius:4px; cursor:pointer; text-align:left; }
+        .areas-page .multi-select-toggle svg { transition:transform .2s; }
+        .areas-page .multi-select-toggle[aria-expanded="true"] svg { transform:rotate(180deg); }
+        .areas-page .multi-select-text { color:var(--slate); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .areas-page .multi-select-text.has-selection { color:var(--oxford-blue); font-weight:500; }
+        .areas-page .multi-select-dropdown { display:none; position:absolute; top:calc(100% + 4px); left:0; right:0; max-height:240px; overflow-y:auto; z-index:20; background:#fff; border:1px solid rgba(30,43,67,.15); border-radius:6px; box-shadow:0 8px 24px rgba(0,0,0,.12); padding:6px 0; }
+        .areas-page .multi-select-dropdown.open { display:block; }
+        .areas-page .multi-select-dropdown label { display:flex; align-items:center; gap:10px; margin:0; padding:8px 14px; font-size:14px; font-weight:400; letter-spacing:0; text-transform:none; cursor:pointer; }
+        .areas-page .multi-select-dropdown label:hover { background:rgba(188,145,85,.06); }
+        .areas-page .multi-select-dropdown input[type="checkbox"] { appearance:none; -webkit-appearance:none; width:18px; height:18px; border:2px solid rgba(30,43,67,.25); border-radius:3px; position:relative; cursor:pointer; margin:0; }
+        .areas-page .multi-select-dropdown input[type="checkbox"]:checked { background:var(--gold); border-color:var(--gold); }
+        .areas-page .multi-select-dropdown input[type="checkbox"]:checked:after { content:""; position:absolute; left:5px; top:2px; width:5px; height:9px; border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg); }
+        .areas-page .form-radio-group { display:flex; gap:10px; }
+        .areas-page .form-radio-group label { flex:1; margin:0; padding:12px 14px; border:2px solid rgba(30,43,67,.12); border-radius:6px; display:flex; justify-content:center; align-items:center; text-transform:none; letter-spacing:0; font-size:13px; font-weight:500; cursor:pointer; transition:.2s; }
+        .areas-page .form-radio-group label:hover { border-color:var(--gold); }
+        .areas-page .form-radio-group input { display:none!important; opacity:0!important; width:0!important; height:0!important; margin:0!important; padding:0!important; border:0!important; position:absolute!important; pointer-events:none!important; appearance:none!important; -webkit-appearance:none!important; }
+        .areas-page .form-radio-group input:checked + span { color:var(--gold); font-weight:600; }
+        .areas-page .form-radio-group label:has(input:checked) { border-color:var(--gold); background:rgba(188,145,85,.06); }
+        .areas-page .form-bottom-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:8px; }
+        .areas-page .form-bottom-upload button { width:100%; min-height:52px; border:1px solid rgba(30,43,67,.15); border-radius:8px; background:#fff; display:inline-flex; justify-content:center; align-items:center; gap:8px; padding:14px 20px; font-size:15px; font-weight:600; color:var(--oxford-blue); cursor:pointer; transition:border-color .2s; }
+        .areas-page .form-bottom-upload button:hover { border-color:var(--gold); }
+        .areas-page .form-bottom-upload p { margin-top:6px; font-size:12px; color:var(--slate); }
+        .areas-page .form-submit { width:100%; min-height:52px; border:none; border-radius:8px; background:var(--gold); color:#fff; font-size:15px; font-weight:600; cursor:pointer; transition:.2s; }
+        .areas-page .form-submit:hover { background:#a57d48; transform:translateY(-1px); box-shadow:0 4px 12px rgba(188,145,85,.3); }
+        .areas-page .form-note { margin-top:16px; text-align:center; font-size:13px; font-style:italic; color:var(--slate); }
+
+        .areas-page .financing-strip { background:#fff; border-top:1px solid rgba(30,43,67,.08); padding:56px 40px; }
+        .areas-page .financing-strip-inner { max-width:1200px; margin:0 auto; display:flex; flex-direction:column; align-items:center; gap:24px; text-align:center; }
+        .areas-page .financing-strip-left { display:flex; align-items:center; gap:24px; }
+        .areas-page .greensky-logo { font-size:24px; font-weight:700; letter-spacing:-.3px; }
+        .areas-page .gs-green { color:#6bbf4e; }
+        .areas-page .gs-dark { color:var(--oxford-blue); }
+        .areas-page .financing-strip-text { font-size:16px; line-height:1.6; color:var(--slate); }
+        .areas-page .financing-strip-text strong { color:var(--oxford-blue); font-weight:700; }
+        .areas-page .financing-strip-cta { min-width:280px; min-height:52px; padding:14px 32px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; background:var(--gold); color:#fff; font-size:15px; font-weight:600; transition:.2s; }
+        .areas-page .financing-strip-cta:hover { background:#a57d48; transform:translateY(-1px); box-shadow:0 4px 12px rgba(188,145,85,.3); }
+
+        @media (max-width:1024px) {
+          .areas-page .section { padding:80px 32px; }
+          .areas-page .areas-grid { grid-template-columns:1fr; max-width:640px; margin:0 auto; }
+          .areas-page .services-grid .service-card,.areas-page .services-more .service-card { flex:0 0 calc(50% - 16px); max-width:calc(50% - 16px); }
+          .areas-page .trust-strip-divider { display:none; }
+          .areas-page .trust-strip-item-wrap { min-width:140px; }
+          .areas-page .financing-strip { padding:36px 32px; }
+          .areas-page .financing-strip-inner,.areas-page .financing-strip-left { flex-direction:column; text-align:center; gap:16px; }
+        }
+
+        @media (max-width:768px) {
+          .areas-page .section { padding:52px 20px; }
+          .areas-page .section-header { margin-bottom:36px; }
+          .areas-page .section-header h2 { font-size:24px; margin-bottom:14px; }
+          .areas-page .section-header p { font-size:15px; line-height:1.7; }
+          .areas-page .page-hero { padding:52px 20px 36px; min-height:40vh; }
+          .areas-page .areas-hero-title { font-size:clamp(30px,7vw,42px); }
+          .areas-page .hero-subtitle { font-size:15px; }
+          .areas-page .hero-ctas { flex-direction:column; align-items:stretch; }
+          .areas-page .trust-bar-inner { grid-template-columns:repeat(2,1fr); }
+          .areas-page .trust-item { padding:24px 16px; background:rgba(188,145,85,.08); }
+          .areas-page .trust-item:hover { transform:none; }
+          .areas-page .services-grid,.areas-page .services-more { gap:24px; }
+          .areas-page .services-grid .service-card,.areas-page .services-more .service-card { flex:0 0 calc(50% - 16px); max-width:calc(50% - 16px); }
+          .areas-page .service-card-img { height:240px; }
+          .areas-page .trust-strip { padding:32px 20px; }
+          .areas-page .trust-strip-item-wrap { min-width:50%; }
+          .areas-page .trust-strip-item { padding:12px 16px; font-size:11px; }
+          .areas-page .trust-strip-item svg { width:18px; height:18px; }
+          .areas-page .cta-section { padding:48px 20px; }
+          .areas-page .cta-body { grid-template-columns:1fr; }
+          .areas-page .cta-left { display:none; }
+          .areas-page .contact-form-wrap { padding:24px 18px; }
+          .areas-page .form-row,.areas-page .form-bottom-row { grid-template-columns:1fr; }
+          .areas-page .form-radio-group { flex-wrap:wrap; }
+          .areas-page .form-group input:not([type="radio"]):not([type="checkbox"]),.areas-page .form-group select,.areas-page .form-group textarea { font-size:16px; }
+          .areas-page .form-submit { font-size:16px; font-weight:700; }
+          .areas-page .financing-strip { padding:28px 20px; }
+          .areas-page .financing-strip-text { font-size:14px; }
+        }
+
+        @media (max-width:560px) {
+          .areas-page .services-grid .service-card,.areas-page .services-more .service-card { flex:0 0 100%; max-width:100%; }
+          .areas-page .service-card-img { height:200px; }
+          .areas-page .service-card-body { padding:20px 20px 24px; }
+          .areas-page .service-card-body h3 { font-size:19px; }
+          .areas-page .area-towns,.areas-page .area-towns-more { grid-template-columns:repeat(2,1fr); }
+        }
+      `}</style>
     </div>
   );
 }
 
 export default AreasWeServeTemplate;
+

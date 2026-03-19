@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ConsultationModal from './ConsultationModal';
@@ -15,10 +15,22 @@ const NAV_LINKS = [
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [consultationOpen, setConsultationOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <>
-      <header className="fixed left-0 right-0 top-0 z-[1000] border-b border-[rgba(30,43,67,0.08)] bg-[rgba(255,255,255,0.98)] shadow-[0_1px_8px_rgba(30,43,67,0.06)] backdrop-blur-[12px]">
+      <header
+        className={`fixed left-0 right-0 top-0 z-[1000] border-b border-[rgba(30,43,67,0.08)] bg-[rgba(255,255,255,0.98)] backdrop-blur-[12px] transition-[box-shadow] duration-300 ${
+          scrolled ? 'shadow-[0_2px_16px_rgba(30,43,67,0.1)]' : 'shadow-[0_1px_8px_rgba(30,43,67,0.06)]'
+        }`}
+      >
         <div className="relative mx-auto flex h-16 max-w-[1240px] items-center justify-between px-8">
           <Link
             href="/"

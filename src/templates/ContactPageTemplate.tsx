@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Check, ChevronDown, Home, Monitor, Shield, Star, Upload, X } from "lucide-react";
+import { ArrowRight, CalendarDays, Check, ChevronDown, Home, Monitor, Shield, Star, Upload } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
 
 type RichTextData = {
@@ -103,6 +103,14 @@ function trustIcon(icon?: string) {
   if (icon === "shield") return <Shield className="h-[22px] w-[22px]" />;
   if (icon === "check") return <Check className="h-[22px] w-[22px]" />;
   return <Star className="h-[22px] w-[22px] fill-current" />;
+}
+
+function trustText(item: { label?: string; value?: string }) {
+  const label = (item.label || "").trim();
+  const value = (item.value || "").trim();
+  if (!label) return value;
+  if (!value) return label;
+  return label.toLowerCase().includes(value.toLowerCase()) ? label : `${label} ${value}`;
 }
 
 export function ContactPageTemplate({ page }: { page: CMSPage }) {
@@ -284,13 +292,13 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
 
   return (
     <div ref={pageRef} data-contact-page className="bg-[#f5f1e9] text-[#1e2b43]">
-      <section className="relative isolate flex min-h-[50vh] items-stretch overflow-hidden bg-[#151e30] px-5 pb-12 pt-[60px] text-white md:px-10">
+      <section className="contact-page-hero relative isolate flex min-h-[50vh] items-stretch overflow-hidden bg-[#151e30] px-5 pb-12 pt-[60px] text-white md:px-10">
         <div className="absolute inset-0 bg-cover bg-center opacity-70" style={{ backgroundImage: `url(${media(hero?.background_image, "/images/hero/hero-carousel-2.jpg")})` }} />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_97%_97%,rgba(21,30,48,1)_0%,rgba(21,30,48,0.9)_8%,transparent_30%),radial-gradient(ellipse_at_3%_97%,rgba(21,30,48,0.9)_0%,transparent_25%),linear-gradient(180deg,rgba(21,30,48,0.35)_0%,rgba(21,30,48,0.2)_30%,rgba(21,30,48,0.45)_65%,rgba(21,30,48,0.92)_100%)]" />
         <div className="relative z-10 mx-auto flex w-full max-w-[1240px] flex-col items-center justify-center text-center">
           <ol className="mb-5 flex list-none items-center text-[13px] font-medium text-white/90">
             <li className="flex items-center">{linkNode("/", "Home", "transition-colors duration-200 hover:text-[#bc9155]")}</li>
-            <li className="flex items-center"><span className="px-2.5 text-[12px] text-[#bc9155]" aria-hidden>›</span><span className="font-semibold text-white">Contact</span></li>
+            <li className="flex items-center"><span className="px-2.5 text-[12px] text-[#bc9155]" aria-hidden>{"\u203A"}</span><span className="font-semibold text-white">Contact</span></li>
           </ol>
           <h1 className="max-w-[980px] text-[clamp(40px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.02em] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]">
             {heroParts.before}{heroParts.accent ? <span className="text-[#bc9155]">{heroParts.accent}</span> : null}{heroParts.after}
@@ -345,7 +353,19 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
             {(areas?.counties || []).map((county: any, index: number) => {
               const expanded = !!countyOpen[index];
               const links = county.town_links || {};
-              const towns = expanded ? [...(county.towns || []), ...(county.extra_towns || [])] : county.towns || [];
+              const topTowns = county.towns || [];
+              const visibleExtraTowns = expanded ? (county.extra_towns || []) : [];
+              const resolveTownUrl = (town: string) => {
+                if (Array.isArray(links)) return links.find((entry: any) => entry?.name === town)?.url;
+                return links[town];
+              };
+              const renderTown = (town: string, allowCountyFallback = false) => {
+                const townUrl = resolveTownUrl(town) || (allowCountyFallback ? county.url : undefined);
+                if (townUrl) {
+                  return linkNode(townUrl, town, "rounded-full bg-[#f5f1e9] px-[10px] py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] text-[#1e2b43] transition-colors duration-200 hover:bg-[#bc9155] hover:text-white");
+                }
+                return <span className="rounded-full bg-[#f5f1e9] px-[10px] py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] text-[#1e2b43] transition-colors duration-200 hover:bg-[#bc91551a] hover:text-[#9a7340]">{town}</span>;
+              };
 
               return (
                 <article key={`${county.name || "county"}-${index}`} className="group flex flex-col overflow-hidden rounded-[12px] border-b-[3px] border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1.5 hover:border-b-[#bc9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]">
@@ -358,25 +378,26 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
                     {county.phone ? <p className="mt-1 text-[15px] text-[#5c677d]">Call: <a href={`tel:${county.phone.replace(/\D/g, "")}`} className="font-semibold text-[#bc9155] hover:underline">{county.phone}</a></p> : null}
                     {county.description ? <p className="mt-4 border-b border-[#1e2b430f] pb-5 text-[14px] leading-[1.7] text-[#5c677d]">{county.description}</p> : null}
                     <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                      {towns.map((town: string) => <span key={`${county.name || "county"}-${town}`} className="contents">{linkNode(Array.isArray(links) ? (links.find((entry: any) => entry?.name === town)?.url || county.url || "#") : (links[town] || county.url || "#"), town, "rounded-full bg-[#f5f1e9] px-3 py-2 text-center text-[11px] font-semibold text-[#1e2b43] transition-colors hover:bg-[#bc9155] hover:text-white")}</span>)}
+                      {topTowns.map((town: string) => <span key={`${county.name || "county"}-top-${town}`} className="contents">{renderTown(town, true)}</span>)}
+                      {visibleExtraTowns.map((town: string) => <span key={`${county.name || "county"}-more-${town}`} className="contents">{renderTown(town)}</span>)}
                     </div>
                     {county.extra_towns?.length ? <button type="button" onClick={() => setCountyOpen((current) => ({ ...current, [index]: !current[index] }))} className="mt-3 text-center text-[13px] font-semibold text-[#bc9155] transition-colors hover:text-[#a57d48]">{expanded ? "Show Fewer Towns -" : "See All Towns +"}</button> : null}
-                    {county.url ? linkNode(county.url, <><span>{county.cta_label || `Learn more about ${county.name}`}</span><ArrowRight className="h-4 w-4" /></>, "mt-5 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-2.5") : null}
+                    {county.url ? linkNode(county.url, <><span>{county.cta_label || `Learn more about ${county.name}`}</span><ArrowRight className="h-4 w-4" /></>, "mt-1 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-2.5") : null}
                   </div>
                 </article>
               );
             })}
           </div>
-          <p className="contact-fade-up mt-8 text-center text-[14px] text-[#5c677d]">Not sure if we cover your area? {linkNode("/contact/", "Contact our Connecticut remodeling team", "font-semibold text-[#bc9155] transition-colors duration-200 hover:text-[#a57d48]")} and we&apos;ll let you know.</p>
+          <p className="contact-fade-up mt-8 text-center text-[14px] text-[#5c677d]">Not sure if we cover your area? {linkNode("/contact/", "Contact our Connecticut remodeling team", "font-semibold text-[#bc9155] underline transition-colors duration-200 hover:text-[#a57d48]")} and we&apos;ll let you know.</p>
         </div>
       </section>
 
-      <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1e2b43_0%,#151e30_100%)] px-5 py-14 md:px-10">
-        <div className="absolute inset-0 bg-cover bg-center opacity-[0.06]" style={{ backgroundImage: "url('/portfolio/builtwell-job-site-aerial-ct.jpg')" }} />
+      <div className="relative overflow-hidden px-5 py-14 md:px-10" style={{ background: "linear-gradient(135deg, #1e2b43 0%, #151e30 100%)" }}>
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/hero/builtwell-job-site-aerial-hero-ct.jpg')", opacity: 0.06 }} />
         <div className="relative z-10 mx-auto flex max-w-[1200px] flex-wrap items-center justify-center">
           {(trust?.items || []).map((item: any, index: number) => (
             <div key={`${item.label || "trust"}-${index}`} className="contents">
-              {item.url ? linkNode(item.url, <div className="flex min-w-[180px] flex-1 flex-col items-center gap-2.5 px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:text-[#bc9155]"><span className="text-[#bc9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))]">{trustIcon(item.icon)}</span><span>{[item.label, item.value].filter(Boolean).join(" ")}</span></div>, "flex flex-1 justify-center") : <div className="flex flex-1 justify-center"><div className="flex min-w-[180px] flex-1 flex-col items-center gap-2.5 px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90"><span className="text-[#bc9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))]">{trustIcon(item.icon)}</span><span>{[item.label, item.value].filter(Boolean).join(" ")}</span></div></div>}
+              {item.url ? linkNode(item.url, <div className="flex min-w-[180px] flex-1 flex-col items-center gap-2.5 px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:text-[#bc9155]"><span className="text-[#bc9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))]">{trustIcon(item.icon)}</span><span className="whitespace-nowrap">{trustText(item)}</span></div>, "flex flex-1 justify-center") : <div className="flex flex-1 justify-center"><div className="flex min-w-[180px] flex-1 flex-col items-center gap-2.5 px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:text-[#bc9155]"><span className="text-[#bc9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))]">{trustIcon(item.icon)}</span><span className="whitespace-nowrap">{trustText(item)}</span></div></div>}
               {index < (trust?.items || []).length - 1 ? <div className="hidden h-10 w-px bg-white/10 lg:block" /> : null}
             </div>
           ))}
@@ -411,13 +432,13 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
 
       {financing ? <div className="border-t border-[#1e2b4314] bg-white px-5 py-12 md:px-10 md:py-14"><div className="mx-auto flex max-w-[1200px] flex-col items-center gap-6 text-center"><div className="flex flex-col items-center gap-4"><div className="text-[24px] font-bold tracking-[-0.02em]"><span className="text-[#6bbf4e]">Green</span><span className="text-[#1e2b43]">Sky</span></div><p className="max-w-[760px] text-[16px] leading-[1.6] text-[#5c677d]"><strong className="text-[#1e2b43]">{financing.title}.</strong> {(financing.content || financing.body || "").replace(/^\s*Get approved/i, "Get approved")}</p></div>{financing.cta?.url ? linkNode(financing.cta.url, <><span>{financing.cta.label || "Check Financing Options"}</span><ArrowRight className="h-4 w-4" /></>, "inline-flex min-h-[52px] min-w-[280px] items-center justify-center gap-2 rounded-[8px] bg-[#bc9155] px-8 py-3 text-[15px] font-semibold text-white transition-all duration-200 hover:-translate-y-[2px] hover:bg-[#a57d48] hover:shadow-[0_6px_24px_rgba(188,145,85,0.4)]") : null}</div></div> : null}
 
-      {scheduleOpen ? <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#151e30]/70 backdrop-blur-sm" onMouseDown={(event) => { if (event.target === event.currentTarget) setScheduleOpen(false); }}><div className="max-h-[90vh] w-[92%] max-w-[640px] overflow-y-auto rounded-[12px] bg-white shadow-[0_24px_80px_rgba(0,0,0,0.3)] md:w-full"><div className="relative rounded-t-[12px] bg-[#1e2b43] px-7 py-7 text-center text-white"><h3 className="text-[24px] font-bold">Schedule a <span className="text-[#bc9155]">Free Consultation</span></h3><p className="mt-1 text-[14px] text-white/65">No charge, no obligation. Pick a time that works for you.</p><button type="button" onClick={() => setScheduleOpen(false)} className="absolute right-4 top-4 rounded-full p-2 text-white/60 transition-colors duration-200 hover:text-white" aria-label="Close schedule modal"><X className="h-5 w-5" /></button></div><div className="p-7"><div className="mb-7 grid gap-3 sm:grid-cols-2"><button type="button" onClick={() => { if (!isSaturday) { setScheduleMode("in-person"); setSelectedSlot(""); } }} className={cls("rounded-[8px] border-2 p-4 text-center transition-all duration-200", scheduleMode === "in-person" ? "border-[#bc9155] bg-[#bc91550f]" : "border-[#1e2b431a] bg-white hover:border-[#bc9155]", isSaturday && "cursor-not-allowed opacity-40")}><Home className="mx-auto mb-2 h-7 w-7 text-[#bc9155]" /><h4 className="text-[15px] font-semibold text-[#1e2b43]">In-Person Visit</h4><p className="mt-1 text-[12px] text-[#5c677d]">We come to your home<br />Mon-Fri, 8am - 4pm<br />2-hour windows</p></button><button type="button" onClick={() => { setScheduleMode("remote"); setScheduleCounty(null); setSelectedSlot(""); }} className={cls("rounded-[8px] border-2 p-4 text-center transition-all duration-200", scheduleMode === "remote" ? "border-[#bc9155] bg-[#bc91550f]" : "border-[#1e2b431a] bg-white hover:border-[#bc9155]")}><Monitor className="mx-auto mb-2 h-7 w-7 text-[#bc9155]" /><h4 className="text-[15px] font-semibold text-[#1e2b43]">Google Meet</h4><p className="mt-1 text-[12px] text-[#5c677d]">Video call from anywhere<br />Mon-Fri 8am-6pm, Sat 9am-3pm<br />1-hour windows</p></button></div>
+            {scheduleOpen ? <div className="contact-schedule-overlay fixed inset-0 z-50 flex items-center justify-center bg-[#151e30]/70 backdrop-blur-sm" onMouseDown={(event) => { if (event.target === event.currentTarget) setScheduleOpen(false); }}><div className="contact-schedule-modal max-h-[90vh] w-[92%] max-w-[640px] overflow-y-auto rounded-[12px] bg-white shadow-[0_24px_80px_rgba(0,0,0,0.3)]"><div className="contact-schedule-header relative rounded-t-[12px] bg-[#1e2b43] px-8 py-7 text-center text-white"><h3 className="contact-schedule-title text-[24px] font-bold">Schedule a <span className="text-[#bc9155]">Free Consultation</span></h3><p className="mt-1 text-[14px] text-white/65">No charge, no obligation. Pick a time that works for you.</p><button type="button" onClick={() => setScheduleOpen(false)} className="contact-schedule-close absolute right-5 top-5 bg-transparent p-1 text-[24px] leading-none text-white/60 transition-colors duration-200 hover:text-white" aria-label="Close schedule modal">&times;</button></div><div className="contact-schedule-body p-8"><div className="contact-schedule-tabs mb-7 grid gap-3 sm:grid-cols-2"><button type="button" onClick={() => { if (!isSaturday) { setScheduleMode("in-person"); setSelectedSlot(""); } }} className={cls("contact-schedule-tab rounded-[8px] border-2 p-4 text-center transition-all duration-200", scheduleMode === "in-person" ? "border-[#bc9155] bg-[#bc91550f]" : "border-[#1e2b431a] bg-white hover:border-[#bc9155]", isSaturday && "cursor-not-allowed opacity-40")}><Home className="mx-auto mb-2 h-7 w-7 text-[#bc9155]" /><h4 className="text-[15px] font-semibold text-[#1e2b43]">In-Person Visit</h4><p className="mt-1 text-[12px] text-[#5c677d]">We come to your home<br />Mon-Fri, 8am - 4pm<br />2-hour windows</p></button><button type="button" onClick={() => { setScheduleMode("remote"); setScheduleCounty(null); setSelectedSlot(""); }} className={cls("contact-schedule-tab rounded-[8px] border-2 p-4 text-center transition-all duration-200", scheduleMode === "remote" ? "border-[#bc9155] bg-[#bc91550f]" : "border-[#1e2b431a] bg-white hover:border-[#bc9155]")}><Monitor className="mx-auto mb-2 h-7 w-7 text-[#bc9155]" /><h4 className="text-[15px] font-semibold text-[#1e2b43]">Google Meet</h4><p className="mt-1 text-[12px] text-[#5c677d]">Video call from anywhere<br />Mon-Fri 8am-6pm, Sat 9am-3pm<br />1-hour windows</p></button></div>
 
-            {scheduleMode === "in-person" ? <div className="mb-6"><label className="mb-2.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">Which county?</label><div className="grid gap-3 sm:grid-cols-2"><button type="button" onClick={() => setScheduleCounty("fairfield")} className={cls("rounded-[6px] border px-3 py-3 text-[14px] font-medium transition-colors duration-200", scheduleCounty === "fairfield" ? "border-[#bc9155] bg-[#bc9155] text-white" : "border-[#1e2b431f] text-[#1e2b43] hover:border-[#bc9155]")}>Fairfield County</button><button type="button" onClick={() => setScheduleCounty("new-haven")} className={cls("rounded-[6px] border px-3 py-3 text-[14px] font-medium transition-colors duration-200", scheduleCounty === "new-haven" ? "border-[#bc9155] bg-[#bc9155] text-white" : "border-[#1e2b431f] text-[#1e2b43] hover:border-[#bc9155]")}>New Haven County</button></div></div> : null}
+            {scheduleMode === "in-person" ? <div className="mb-6"><label className="mb-2.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">Which county?</label><div className="contact-schedule-county grid gap-3 sm:grid-cols-2"><button type="button" onClick={() => setScheduleCounty("fairfield")} className={cls("rounded-[6px] border px-3 py-3 text-[14px] font-medium transition-colors duration-200", scheduleCounty === "fairfield" ? "border-[#bc9155] bg-[#bc9155] text-white" : "border-[#1e2b431f] text-[#1e2b43] hover:border-[#bc9155]")}>Fairfield County</button><button type="button" onClick={() => setScheduleCounty("new-haven")} className={cls("rounded-[6px] border px-3 py-3 text-[14px] font-medium transition-colors duration-200", scheduleCounty === "new-haven" ? "border-[#bc9155] bg-[#bc9155] text-white" : "border-[#1e2b431f] text-[#1e2b43] hover:border-[#bc9155]")}>New Haven County</button></div></div> : null}
 
             <div className="mb-6"><label htmlFor="schedule-date" className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">Select a Date</label><input id="schedule-date" type="date" min={tomorrow} value={scheduleDate} onChange={(event) => onScheduleDateChange(event.target.value)} className="w-full rounded-[4px] border border-[#1e2b4326] px-4 py-3 text-[15px] text-[#1e2b43] outline-none transition-colors duration-200 focus:border-[#bc9155]" /></div>
 
-            <div className="mb-6"><label className="mb-2.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">Available Times</label>{isSunday ? <p className="rounded-[6px] border border-[#1e2b431f] px-4 py-4 text-center text-[14px] text-[#5c677d]">We are closed on Sundays. Please choose a weekday or Saturday.</p> : (scheduleMode === "in-person" && isSaturday) ? <p className="rounded-[6px] border border-[#1e2b431f] px-4 py-4 text-center text-[14px] text-[#5c677d]">In-person visits are not available on Saturdays. Please select a weekday or choose Google Meet.</p> : <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">{availableSlots.map((slot) => <button key={slot} type="button" onClick={() => setSelectedSlot(slot)} className={cls("rounded-[6px] border px-3 py-3 text-center text-[14px] font-medium transition-all duration-200", selectedSlot === slot ? "border-[#bc9155] bg-[#bc9155] text-white" : "border-[#1e2b431f] text-[#1e2b43] hover:border-[#bc9155] hover:bg-[#bc91550f]")}>{slot}</button>)}</div>}</div>
+            <div className="mb-6"><label className="mb-2.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">Available Times</label>{isSunday ? <p className="rounded-[6px] border border-[#1e2b431f] px-4 py-4 text-center text-[14px] text-[#5c677d]">We are closed on Sundays. Please choose a weekday or Saturday.</p> : (scheduleMode === "in-person" && isSaturday) ? <p className="rounded-[6px] border border-[#1e2b431f] px-4 py-4 text-center text-[14px] text-[#5c677d]">In-person visits are not available on Saturdays. Please select a weekday or choose Google Meet.</p> : <div className="contact-schedule-slots grid grid-cols-2 gap-2">{availableSlots.map((slot) => <button key={slot} type="button" onClick={() => setSelectedSlot(slot)} className={cls("rounded-[6px] border px-3 py-3 text-center text-[14px] font-medium transition-all duration-200", selectedSlot === slot ? "border-[#bc9155] bg-[#bc9155] text-white" : "border-[#1e2b431f] text-[#1e2b43] hover:border-[#bc9155] hover:bg-[#bc91550f]")}>{slot}</button>)}</div>}</div>
 
             <div className="mb-3 grid gap-3 sm:grid-cols-2"><div><label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">Your Name</label><input type="text" value={scheduleValues.name} onChange={(event) => setScheduleValues((current) => ({ ...current, name: event.target.value }))} placeholder="Full name" className="w-full rounded-[6px] border border-[#1e2b4326] px-3.5 py-3 text-[15px] text-[#1e2b43] outline-none transition-colors duration-200 focus:border-[#bc9155]" /></div><div><label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">Phone Number</label><input type="tel" value={scheduleValues.phone} onChange={(event) => setScheduleValues((current) => ({ ...current, phone: event.target.value }))} placeholder="(203) 000-0000" className="w-full rounded-[6px] border border-[#1e2b4326] px-3.5 py-3 text-[15px] text-[#1e2b43] outline-none transition-colors duration-200 focus:border-[#bc9155]" /></div></div>
 
@@ -473,9 +494,134 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
           transform: rotate(45deg);
         }
 
+        [data-contact-page] .contact-page-hero > div:first-child {
+          opacity: 0.72;
+        }
+
+        [data-contact-page] .contact-schedule-title {
+          font-family: "Playfair Display", serif;
+          line-height: 1.15;
+        }
+
+        [data-contact-page] .contact-schedule-close {
+          width: 28px;
+          height: 28px;
+          border: none;
+          cursor: pointer;
+        }
+
         @media (max-width: 768px) {
           [data-contact-page] .contact-fade-up {
             transform: translateY(20px);
+          }
+
+          [data-contact-page] .contact-page-hero {
+            min-height: 40vh;
+            padding-top: 52px;
+            padding-bottom: 36px;
+          }
+
+          [data-contact-page] .contact-schedule-overlay {
+            align-items: stretch;
+          }
+
+          [data-contact-page] .contact-schedule-modal {
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            max-height: 100vh;
+            border-radius: 0;
+            display: flex;
+            flex-direction: column;
+          }
+
+          [data-contact-page] .contact-schedule-header {
+            padding: 20px;
+            border-radius: 0;
+            flex-shrink: 0;
+          }
+
+          [data-contact-page] .contact-schedule-title {
+            font-size: 20px;
+          }
+
+          [data-contact-page] .contact-schedule-close {
+            top: 14px;
+            right: 14px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+          }
+
+          [data-contact-page] .contact-schedule-body {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+          }
+
+          [data-contact-page] .contact-schedule-tabs {
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+          }
+
+          [data-contact-page] .contact-schedule-tab {
+            padding: 14px;
+          }
+
+          [data-contact-page] .contact-schedule-tab h4 {
+            font-size: 14px;
+          }
+
+          [data-contact-page] .contact-schedule-tab p {
+            font-size: 11px;
+          }
+
+          [data-contact-page] .contact-schedule-county {
+            grid-template-columns: 1fr;
+            gap: 10px;
+          }
+
+          [data-contact-page] .contact-schedule-slots {
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+          }
+
+          [data-contact-page] .contact-schedule-slots button {
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          [data-contact-page] .contact-page-hero {
+            min-height: 35vh;
+            padding-left: 16px;
+            padding-right: 16px;
+            padding-bottom: 32px;
+          }
+
+          [data-contact-page] .contact-schedule-header {
+            padding: 20px 16px;
+          }
+
+          [data-contact-page] .contact-schedule-title {
+            font-size: 18px;
+          }
+
+          [data-contact-page] .contact-schedule-body {
+            padding: 20px 16px;
+          }
+
+          [data-contact-page] .contact-schedule-slots {
+            grid-template-columns: 1fr;
           }
         }
 

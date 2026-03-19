@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
   CalendarDays,
@@ -13,12 +13,20 @@ import {
   House,
   MessageCircle,
   Shield,
-  ShieldCheck,
   Star,
   Upload,
 } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
-import { FinancingStrip, cls, label, linkNode, media, parts, section, sections } from "./template-utils";
+import {
+  FinancingStrip,
+  cls,
+  label,
+  linkNode,
+  media,
+  parts,
+  section,
+  sections,
+} from "./template-utils";
 
 type PhoneItem = {
   label?: string;
@@ -54,7 +62,7 @@ const DEFAULT_PHONES: PhoneItem[] = [
   { label: "New Haven County", number: "(203) 466-9148" },
 ];
 
-const SECTION_WIDTH = "mx-auto max-w-[1100px] px-6 sm:px-8 lg:px-10";
+const SECTION_WIDTH = "mx-auto max-w-[1240px] px-5 md:px-8 lg:px-10";
 
 function paragraphs(value?: string | null) {
   return (value || "")
@@ -65,7 +73,9 @@ function paragraphs(value?: string | null) {
 }
 
 function normalizeOptions(options?: LeadField["options"]) {
-  return (options || []).map((option) => (typeof option === "string" ? { label: option, value: option } : option));
+  return (options || []).map((option) =>
+    typeof option === "string" ? { label: option, value: option } : option,
+  );
 }
 
 function toTelHref(value?: string) {
@@ -83,7 +93,7 @@ function iconForValue(icon?: string | null) {
     case "shield":
       return <Shield className="h-6 w-6" />;
     case "shield-check":
-      return <ShieldCheck className="h-6 w-6" />;
+      return <Shield className="h-6 w-6" />;
     case "file-text":
       return <FileText className="h-6 w-6" />;
     case "house":
@@ -116,18 +126,26 @@ function HeroButtons({
         <a
           key={`${phone.label}-${phone.number}`}
           href={toTelHref(phone.number)}
-          className="flex min-w-[185px] flex-col items-center rounded-[10px] border border-white/15 bg-[#0b132333] px-6 py-4 text-center text-white backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-white/30 hover:bg-[#0b132355]"
+          className="flex min-w-[180px] flex-col items-center rounded-[8px] border border-white/20 border-b-2 border-b-[#bc9155] bg-[rgba(10,18,35,0.42)] px-7 py-4 text-center text-white backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/30 hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3),0_0_0_1px_rgba(188,145,85,0.2)]"
         >
-          <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">{phone.label}</span>
-          <span className="mt-1 font-serif text-[21px] font-bold">{phone.number}</span>
+          <span className="mb-1 block text-[11px] font-semibold uppercase tracking-[1.2px] text-white/70">
+            {phone.label}
+          </span>
+          <span className="font-serif text-[18px] font-semibold">
+            {phone.number}
+          </span>
         </a>
       ))}
       <a
         href={scheduleUrl || "#contact"}
-        className="flex min-w-[185px] flex-col items-center rounded-[10px] border border-[#bc9155] bg-[#bc9155] px-6 py-4 text-center text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48]"
+        className="flex min-w-[180px] flex-col items-center rounded-[8px] border border-[#bc9155] border-b-2 border-b-[#a57d48] bg-[#bc9155] px-7 py-4 text-center text-white transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#d4a95a] hover:bg-[#d4a95a] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
       >
-        <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/85">Free Estimate</span>
-        <span className="mt-1 font-serif text-[21px] font-bold">{scheduleLabel || "Schedule Now"}</span>
+        <span className="mb-1 block text-[11px] font-semibold uppercase tracking-[1.2px] text-white/90">
+          Free Estimate
+        </span>
+        <span className="font-serif text-[18px] font-semibold">
+          {scheduleLabel || "Schedule Now"}
+        </span>
       </a>
     </div>
   );
@@ -140,18 +158,40 @@ function TrustMetricBar({ data }: { data?: any }) {
 
   return (
     <section className="border-y border-[#bc915533] bg-[linear-gradient(135deg,#1e2b43_0%,#151e30_100%)]">
-      <div className="mx-auto grid max-w-[1280px] md:grid-cols-4">
+      <div className="mx-auto grid max-w-[1280px] grid-cols-2 text-center lg:grid-cols-4">
         {items.map((item: any, index: number) => (
           <div
             key={`${item.label}-${index}`}
-            className="flex min-h-[122px] flex-col items-center justify-center border-b border-white/8 px-5 py-6 text-center transition-colors hover:bg-[#bc91550f] md:border-b-0 md:border-r md:border-r-white/8 last:md:border-r-0"
-          >
-            {item.value ? (
-              <div className="font-serif text-[42px] font-bold leading-none text-[#bc9155]">{item.value}</div>
-            ) : (
-              <div className="text-[#bc9155]">{iconForValue(item.icon)}</div>
+            className={cls(
+              "group flex min-h-[122px] cursor-default flex-col items-center justify-center px-4 py-6 text-center transition-all duration-300 md:px-5 md:py-9 lg:hover:-translate-y-[3px] lg:hover:bg-[#bc91550f]",
+              index % 2 === 0 && "border-r border-[#bc915533]",
+              index < 2 && "border-b border-[#bc915533]",
+              "lg:border-b-0",
+              index < items.length - 1
+                ? "lg:border-r lg:border-[#bc915533]"
+                : "lg:border-r-0",
             )}
-            <div className="mt-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-white/65">{item.label}</div>
+          >
+            <div className="flex min-h-[42px] items-center justify-center font-serif text-[32px] font-bold leading-none text-[#bc9155] transition-all duration-300 md:text-[42px] lg:group-hover:text-[#d4a95a] lg:group-hover:[text-shadow:0_0_20px_rgba(188,145,85,0.3)]">
+              {item.value ? (
+                item.value
+              ) : (
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  aria-hidden="true"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+              )}
+            </div>
+            <div className="mt-1.5 text-[11px] font-medium uppercase tracking-[0.8px] text-white/85 transition-colors duration-300 md:mt-2 md:text-[13px] md:tracking-[1px] lg:text-white/60 lg:group-hover:text-white/85">
+              {item.label}
+            </div>
           </div>
         ))}
       </div>
@@ -174,34 +214,54 @@ function TwoColumnTextSection({
   const imageItems = images?.items || [];
 
   return (
-    <section className={cls("py-20 sm:py-24", surface === "cream" ? "bg-[#f5f1e9]" : "bg-white")}>
+    <section
+      className={cls(
+        "py-20 sm:py-24",
+        surface === "cream" ? "bg-[#f5f1e9]" : "bg-white",
+      )}
+    >
       <div className={SECTION_WIDTH}>
-        <div className="mb-12 text-center">
+        <div className="mb-12 text-center kitchen-fade-up">
           {label(copy.eyebrow || "Overview")}
           <h2 className="text-[clamp(32px,4vw,46px)] font-bold tracking-[-0.02em] text-[#1e2b43]">
             {titleParts.before}
-            {titleParts.accent ? <span className="text-[#bc9155]">{titleParts.accent}</span> : null}
+            {titleParts.accent ? (
+              <span className="text-[#bc9155]">{titleParts.accent}</span>
+            ) : null}
             {titleParts.after}
           </h2>
         </div>
         <div className="grid gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-stretch">
           <div className="space-y-5">
             {paragraphs(copy.content).map((paragraph, index) => (
-              <p key={index} className="text-[15px] leading-[1.9] text-[#5c677d] md:text-[16px]">
+              <p
+                key={index}
+                className="text-[15px] leading-[1.9] text-[#5c677d] md:text-[16px]"
+              >
                 {paragraph}
               </p>
             ))}
           </div>
           <div className="grid gap-4">
-            {(imageItems.length ? imageItems : [{ image: "" }, { image: "" }]).slice(0, 2).map((item: any, index: number) => (
-              <div key={`${item.alt || "overview"}-${index}`} className="overflow-hidden rounded-[12px] shadow-[0_18px_45px_rgba(30,43,67,0.08)]">
-                <img
-                  src={media(item.image, index === 0 ? "/portfolio/builtwell-contractor-handshake-arrival-ct-optimized.jpg" : "/portfolio/builtwell-team-completed-interior-ct.png")}
-                  alt={item.alt || "BuiltWell insurance reconstruction"}
-                  className="h-[260px] w-full object-cover md:h-[300px]"
-                />
-              </div>
-            ))}
+            {(imageItems.length ? imageItems : [{ image: "" }, { image: "" }])
+              .slice(0, 2)
+              .map((item: any, index: number) => (
+                <div
+                  key={`${item.alt || "overview"}-${index}`}
+                  className="overflow-hidden rounded-[12px] shadow-[0_18px_45px_rgba(30,43,67,0.08)]"
+                >
+                  <img
+                    src={media(
+                      item.image,
+                      index === 0
+                        ? "/portfolio/builtwell-contractor-handshake-arrival-ct-optimized.jpg"
+                        : "/portfolio/builtwell-team-completed-interior-ct.png",
+                    )}
+                    alt={item.alt || "BuiltWell insurance reconstruction"}
+                    className="h-[260px] w-full object-cover md:h-[300px]"
+                  />
+                </div>
+              ))}
           </div>
         </div>
       </div>
@@ -209,7 +269,13 @@ function TwoColumnTextSection({
   );
 }
 
-function RightsSection({ copy, bullets }: { copy?: RichTextData; bullets?: any }) {
+function RightsSection({
+  copy,
+  bullets,
+}: {
+  copy?: RichTextData;
+  bullets?: any;
+}) {
   if (!copy || !bullets) return null;
 
   const titleParts = parts(copy.title, copy.highlight_text);
@@ -217,18 +283,23 @@ function RightsSection({ copy, bullets }: { copy?: RichTextData; bullets?: any }
   return (
     <section className="bg-[#f5f1e9] py-20 sm:py-24">
       <div className={SECTION_WIDTH}>
-        <div className="mb-12 text-center">
+        <div className="mb-12 text-center kitchen-fade-up">
           {label(copy.eyebrow || "Know Your Rights")}
           <h2 className="text-[clamp(32px,4vw,46px)] font-bold tracking-[-0.02em] text-[#1e2b43]">
             {titleParts.before}
-            {titleParts.accent ? <span className="text-[#bc9155]">{titleParts.accent}</span> : null}
+            {titleParts.accent ? (
+              <span className="text-[#bc9155]">{titleParts.accent}</span>
+            ) : null}
             {titleParts.after}
           </h2>
         </div>
         <div className="grid gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-stretch">
           <div className="space-y-5">
             {paragraphs(copy.content).map((paragraph, index) => (
-              <p key={index} className="text-[15px] leading-[1.9] text-[#5c677d] md:text-[16px]">
+              <p
+                key={index}
+                className="text-[15px] leading-[1.9] text-[#5c677d] md:text-[16px]"
+              >
                 {paragraph}
               </p>
             ))}
@@ -238,11 +309,18 @@ function RightsSection({ copy, bullets }: { copy?: RichTextData; bullets?: any }
               <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-[#bc915526] text-[#bc9155]">
                 <Shield className="h-7 w-7" />
               </div>
-              <h3 className="font-serif text-[28px] font-bold text-white">{bullets.title}</h3>
+              <h3 className="font-serif text-[28px] font-bold text-white">
+                {bullets.title}
+              </h3>
               <div className="mt-7 space-y-4 text-left">
                 {(bullets.items || []).map((item: string, index: number) => (
-                  <div key={`${item}-${index}`} className="flex gap-3 text-[14px] leading-[1.8] text-white/82">
-                    <span className="mt-1.5 text-[#bc9155]"><Check className="h-4 w-4" /></span>
+                  <div
+                    key={`${item}-${index}`}
+                    className="flex gap-3 text-[14px] leading-[1.8] text-white/82"
+                  >
+                    <span className="mt-1.5 text-[#bc9155]">
+                      <Check className="h-4 w-4" />
+                    </span>
                     <span>{item}</span>
                   </div>
                 ))}
@@ -263,19 +341,28 @@ function RebuildGrid({ data }: { data?: any }) {
   return (
     <section className="bg-white py-20 sm:py-24">
       <div className={SECTION_WIDTH}>
-        <div className="mb-12 text-center">
+        <div className="mb-12 text-center kitchen-fade-up">
           {label("Reconstruction Services")}
           <h2 className="text-[clamp(32px,4vw,46px)] font-bold tracking-[-0.02em] text-[#1e2b43]">
             {titleParts.before}
-            {titleParts.accent ? <span className="text-[#bc9155]">{titleParts.accent}</span> : null}
+            {titleParts.accent ? (
+              <span className="text-[#bc9155]">{titleParts.accent}</span>
+            ) : null}
             {titleParts.after}
           </h2>
         </div>
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {(data.items || []).map((item: any, index: number) => (
-            <article key={`${item.title}-${index}`} className="rounded-[14px] border border-[#1e2b4310] bg-white p-8 shadow-[0_12px_30px_rgba(30,43,67,0.06)] transition-transform hover:-translate-y-1">
-              <h3 className="text-[22px] font-bold text-[#1e2b43]">{item.title}</h3>
-              <p className="mt-4 text-[14px] leading-[1.82] text-[#5c677d]">{item.description}</p>
+            <article
+              key={`${item.title}-${index}`}
+              className="rounded-[14px] border border-[#1e2b4310] bg-white p-8 shadow-[0_12px_30px_rgba(30,43,67,0.06)] transition-transform hover:-translate-y-1"
+            >
+              <h3 className="text-[22px] font-bold text-[#1e2b43]">
+                {item.title}
+              </h3>
+              <p className="mt-4 text-[14px] leading-[1.82] text-[#5c677d]">
+                {item.description}
+              </p>
             </article>
           ))}
         </div>
@@ -292,11 +379,13 @@ function WhyChooseSection({ data }: { data?: any }) {
   return (
     <section className="bg-[#f5f1e9] py-20 sm:py-24">
       <div className={SECTION_WIDTH}>
-        <div className="mb-12 text-center">
+        <div className="mb-12 text-center kitchen-fade-up">
           {label("The Difference")}
           <h2 className="text-[clamp(32px,4vw,46px)] font-bold tracking-[-0.02em] text-[#1e2b43]">
             {titleParts.before}
-            {titleParts.accent ? <span className="text-[#bc9155]">{titleParts.accent}</span> : null}
+            {titleParts.accent ? (
+              <span className="text-[#bc9155]">{titleParts.accent}</span>
+            ) : null}
             {titleParts.after}
           </h2>
         </div>
@@ -309,12 +398,18 @@ function WhyChooseSection({ data }: { data?: any }) {
               <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#bc915512] text-[#bc9155]">
                 {iconForValue(item.icon)}
               </div>
-              <h3 className="text-[21px] font-bold text-[#1e2b43]">{item.title}</h3>
-              <p className="mt-4 text-[14px] leading-[1.78] text-[#5c677d]">{item.description}</p>
+              <h3 className="text-[21px] font-bold text-[#1e2b43]">
+                {item.title}
+              </h3>
+              <p className="mt-4 text-[14px] leading-[1.78] text-[#5c677d]">
+                {item.description}
+              </p>
             </article>
           ))}
         </div>
-        <p className="mt-7 text-center text-[13px] text-[#5c677d]/70">Hover over any item to learn more</p>
+        <p className="mt-7 text-center text-[13px] text-[#5c677d]/70">
+          Hover over any item to learn more
+        </p>
       </div>
     </section>
   );
@@ -332,10 +427,16 @@ function CarriersSection({ data }: { data?: any }) {
           {label("Trusted Partners")}
           <h2 className="text-[clamp(32px,4vw,46px)] font-bold tracking-[-0.02em] text-[#1e2b43]">
             {titleParts.before}
-            {titleParts.accent ? <span className="text-[#bc9155]">{titleParts.accent}</span> : null}
+            {titleParts.accent ? (
+              <span className="text-[#bc9155]">{titleParts.accent}</span>
+            ) : null}
             {titleParts.after}
           </h2>
-          {data.subtitle ? <p className="mx-auto mt-5 max-w-[760px] text-[15px] leading-[1.85] text-[#5c677d]">{data.subtitle}</p> : null}
+          {data.subtitle ? (
+            <p className="mx-auto mt-5 max-w-[760px] text-[15px] leading-[1.85] text-[#5c677d]">
+              {data.subtitle}
+            </p>
+          ) : null}
         </div>
         <div className="mx-auto grid max-w-[760px] gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {(data.items || []).map((item: any, index: number) => (
@@ -372,14 +473,20 @@ function AdvantageSection({
   return (
     <section className="bg-[#f5f1e9] py-20 sm:py-24">
       <div className={SECTION_WIDTH}>
-        <div className="mb-12 text-center">
+        <div className="mb-12 text-center kitchen-fade-up">
           {label(intro.eyebrow || "The Advantage")}
           <h2 className="text-[clamp(32px,4vw,46px)] font-bold tracking-[-0.02em] text-[#1e2b43]">
             {titleParts.before}
-            {titleParts.accent ? <span className="text-[#bc9155]">{titleParts.accent}</span> : null}
+            {titleParts.accent ? (
+              <span className="text-[#bc9155]">{titleParts.accent}</span>
+            ) : null}
             {titleParts.after}
           </h2>
-          {introParagraphs[0] ? <p className="mx-auto mt-5 max-w-[760px] text-[15px] leading-[1.85] text-[#5c677d]">{introParagraphs[0]}</p> : null}
+          {introParagraphs[0] ? (
+            <p className="mx-auto mt-5 max-w-[760px] text-[15px] leading-[1.85] text-[#5c677d]">
+              {introParagraphs[0]}
+            </p>
+          ) : null}
         </div>
         <div className="overflow-hidden rounded-[14px] border border-[#1e2b4314] md:grid md:grid-cols-2">
           {[contractor, insurance].map((block: any, index: number) => (
@@ -387,14 +494,22 @@ function AdvantageSection({
               key={`${block.title}-${index}`}
               className={cls(
                 "bg-[#1e2b43] px-8 py-9",
-                index === 1 && "border-t border-[#bc915533] md:border-l md:border-t-0",
+                index === 1 &&
+                  "border-t border-[#bc915533] md:border-l md:border-t-0",
               )}
             >
-              <h3 className="font-serif text-[28px] font-bold text-[#bc9155]">{block.title}</h3>
+              <h3 className="font-serif text-[28px] font-bold text-[#bc9155]">
+                {block.title}
+              </h3>
               <div className="mt-6 space-y-4">
                 {(block.items || []).map((item: string, itemIndex: number) => (
-                  <div key={`${item}-${itemIndex}`} className="flex gap-3 text-[14px] leading-[1.82] text-white/84">
-                    <span className="mt-1.5 text-[#bc9155]"><Check className="h-4 w-4" /></span>
+                  <div
+                    key={`${item}-${itemIndex}`}
+                    className="flex gap-3 text-[14px] leading-[1.82] text-white/84"
+                  >
+                    <span className="mt-1.5 text-[#bc9155]">
+                      <Check className="h-4 w-4" />
+                    </span>
                     <span>{item}</span>
                   </div>
                 ))}
@@ -402,7 +517,11 @@ function AdvantageSection({
             </div>
           ))}
         </div>
-        {introParagraphs[1] ? <p className="mx-auto mt-6 max-w-[760px] text-center text-[14px] leading-[1.85] text-[#5c677d]">{introParagraphs[1]}</p> : null}
+        {introParagraphs[1] ? (
+          <p className="mx-auto mt-6 max-w-[760px] text-center text-[14px] leading-[1.85] text-[#5c677d]">
+            {introParagraphs[1]}
+          </p>
+        ) : null}
       </div>
     </section>
   );
@@ -414,17 +533,21 @@ function ProcessSection({ data }: { data?: any }) {
   const titleParts = parts(data.title, "Process");
 
   return (
-    <section className="relative overflow-hidden bg-[linear-gradient(135deg,#1e2b43_0%,#151e30_100%)] py-20 sm:py-24">
+    <section className="relative overflow-hidden bg-[linear-gradient(135deg,#1e2b43_0%,#151e30_100%)] px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
       <div
         className="absolute inset-0 bg-cover bg-center opacity-[0.12]"
-        style={{ backgroundImage: `url(${media("/portfolio/builtwell-job-site-aerial-ct.jpg")})` }}
+        style={{
+          backgroundImage: `url(${media("/portfolio/builtwell-job-site-aerial-ct.jpg")})`,
+        }}
       />
       <div className={cls(SECTION_WIDTH, "relative")}>
-        <div className="mb-12 text-center">
+        <div className="mb-10 text-center kitchen-fade-up">
           {label("How It Works", true)}
           <h2 className="text-[clamp(32px,4vw,46px)] font-bold tracking-[-0.02em] text-white">
             {titleParts.before}
-            {titleParts.accent ? <span className="text-[#bc9155]">{titleParts.accent}</span> : null}
+            {titleParts.accent ? (
+              <span className="text-[#bc9155]">{titleParts.accent}</span>
+            ) : null}
             {titleParts.after}
           </h2>
         </div>
@@ -432,17 +555,21 @@ function ProcessSection({ data }: { data?: any }) {
           {(data.steps || []).map((step: any, index: number) => (
             <article
               key={`${step.title}-${index}`}
-              className="rounded-[14px] border border-white/10 bg-white/5 px-6 py-7 text-white shadow-[0_12px_30px_rgba(0,0,0,0.12)] backdrop-blur-sm transition-all hover:-translate-y-1 hover:border-[#bc915566] hover:bg-white/8"
+              className="kitchen-fade-up rounded-[12px] border-b-2 border-b-transparent bg-white/5 px-6 py-7 text-white shadow-[0_12px_30px_rgba(0,0,0,0.12)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-b-[#BC9155] hover:bg-white/10 hover:shadow-[0_20px_40px_rgba(0,0,0,0.16)]"
             >
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#bc9155] text-[18px] font-bold text-white">
                 {step.step_number || index + 1}
               </div>
               <h3 className="text-[22px] font-bold">{step.title}</h3>
-              <p className="mt-4 text-[14px] leading-[1.82] text-white/75">{step.description}</p>
+              <p className="mt-4 text-[14px] leading-[1.82] text-white/75">
+                {step.description}
+              </p>
             </article>
           ))}
         </div>
-        <p className="mt-6 text-center text-[13px] text-white/45">Hover over any step to learn more</p>
+        <p className="mt-6 text-center text-[13px] text-white/45">
+          Hover over any step to learn more
+        </p>
       </div>
     </section>
   );
@@ -456,22 +583,34 @@ function FaqSection({ data }: { data?: any }) {
   return (
     <section className="bg-white py-20 sm:py-24">
       <div className={SECTION_WIDTH}>
-        <div className="mb-12 text-center">
+        <div className="mb-12 text-center kitchen-fade-up">
           {label("Common Questions")}
           <h2 className="text-[clamp(32px,4vw,46px)] font-bold tracking-[-0.02em] text-[#1e2b43]">
             {titleParts.before}
-            {titleParts.accent ? <span className="text-[#bc9155]">{titleParts.accent}</span> : null}
+            {titleParts.accent ? (
+              <span className="text-[#bc9155]">{titleParts.accent}</span>
+            ) : null}
             {titleParts.after}
           </h2>
         </div>
-        <div className="mx-auto flex max-w-[820px] flex-col gap-3">
+        <div className="mx-auto flex max-w-[820px] flex-col gap-3 kitchen-fade-up">
           {(data.items || []).map((item: any, index: number) => (
-            <details key={`${item.question}-${index}`} className="group overflow-hidden rounded-[10px] border border-[#1e2b4310] bg-[#f5f1e9]">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-left text-[15px] font-semibold text-[#1e2b43] marker:hidden">
+            <details
+              key={`${item.question}-${index}`}
+              className="group overflow-hidden rounded-[8px] border border-[#1E2B43]/10 transition-colors duration-200 open:border-[#BC9155]"
+            >
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-left text-[16px] font-semibold text-[#1E2B43] marker:hidden hover:bg-[#BC9155]/[0.04]">
                 <span>{item.question}</span>
-                <ChevronDown className="h-4 w-4 shrink-0 transition-transform group-open:rotate-180" />
+                <span className="text-[22px] font-light text-[#BC9155] group-open:hidden">
+                  +
+                </span>
+                <span className="hidden text-[22px] font-light text-[#BC9155] group-open:inline">
+                  -
+                </span>
               </summary>
-              <div className="px-6 pb-6 text-[14px] leading-[1.82] text-[#5c677d]">{item.answer}</div>
+              <div className="px-6 pb-5 text-[15px] leading-[1.75] text-[#5C677D]">
+                {item.answer}
+              </div>
             </details>
           ))}
         </div>
@@ -480,7 +619,13 @@ function FaqSection({ data }: { data?: any }) {
   );
 }
 
-function CallToActionBand({ data, phones }: { data?: any; phones: PhoneItem[] }) {
+function CallToActionBand({
+  data,
+  phones,
+}: {
+  data?: any;
+  phones: PhoneItem[];
+}) {
   if (!data) return null;
 
   const titleParts = parts(data.title, "Rebuilt");
@@ -489,17 +634,29 @@ function CallToActionBand({ data, phones }: { data?: any; phones: PhoneItem[] })
     <section className="relative overflow-hidden bg-[linear-gradient(135deg,#1e2b43_0%,#151e30_100%)] py-20 text-center">
       <div
         className="absolute inset-0 bg-cover bg-center opacity-10"
-        style={{ backgroundImage: `url(${media("/portfolio/builtwell-team-client-arrival-ct.jpeg")})` }}
+        style={{
+          backgroundImage: `url(${media("/portfolio/builtwell-team-client-arrival-ct.jpeg")})`,
+        }}
       />
       <div className={cls(SECTION_WIDTH, "relative max-w-[760px]")}>
         {label(data.eyebrow || "Get Started", true)}
         <h2 className="text-[clamp(32px,4vw,46px)] font-bold tracking-[-0.02em] text-white">
           {titleParts.before}
-          {titleParts.accent ? <span className="text-[#bc9155]">{titleParts.accent}</span> : null}
+          {titleParts.accent ? (
+            <span className="text-[#bc9155]">{titleParts.accent}</span>
+          ) : null}
           {titleParts.after}
         </h2>
-        {data.subtitle ? <p className="mx-auto mt-5 max-w-[680px] text-[15px] leading-[1.85] text-white/72">{data.subtitle}</p> : null}
-        <HeroButtons phones={phones} scheduleLabel={data.button?.label} scheduleUrl={data.button?.url} />
+        {data.subtitle ? (
+          <p className="mx-auto mt-5 max-w-[680px] text-[15px] leading-[1.85] text-white/72">
+            {data.subtitle}
+          </p>
+        ) : null}
+        <HeroButtons
+          phones={phones}
+          scheduleLabel={data.button?.label}
+          scheduleUrl={data.button?.url}
+        />
       </div>
     </section>
   );
@@ -515,45 +672,76 @@ function AreasSection({ data }: { data?: any }) {
   return (
     <section className="bg-white py-20 sm:py-24">
       <div className={SECTION_WIDTH}>
-        <div className="mb-12 text-center">
+        <div className="mb-12 text-center kitchen-fade-up">
           {label(data.eyebrow || "Where We Work")}
           <h2 className="text-[clamp(32px,4vw,46px)] font-bold tracking-[-0.02em] text-[#1e2b43]">
             {titleParts.before}
-            {titleParts.accent ? <span className="text-[#bc9155]">{titleParts.accent}</span> : null}
+            {titleParts.accent ? (
+              <span className="text-[#bc9155]">{titleParts.accent}</span>
+            ) : null}
             {titleParts.after}
           </h2>
-          {data.subtitle ? <p className="mx-auto mt-5 max-w-[760px] text-[15px] leading-[1.85] text-[#5c677d]">{data.subtitle}</p> : null}
+          {data.subtitle ? (
+            <p className="mx-auto mt-5 max-w-[760px] text-[15px] leading-[1.85] text-[#5c677d]">
+              {data.subtitle}
+            </p>
+          ) : null}
         </div>
         <div className="grid gap-8 lg:grid-cols-2">
           {(data.counties || []).map((county: any, index: number) => {
             const expanded = !!countyOpen[index];
-            const towns = expanded ? [...(county.towns || []), ...(county.extra_towns || [])] : county.towns || [];
+            const towns = expanded
+              ? [...(county.towns || []), ...(county.extra_towns || [])]
+              : county.towns || [];
             const links = county.town_links || {};
 
             return (
-              <article key={`${county.name}-${index}`} className="overflow-hidden rounded-[14px] border border-[#1e2b4310] bg-white shadow-[0_18px_40px_rgba(30,43,67,0.08)]">
-                <div className="h-[230px] overflow-hidden">
+              <article
+                key={`${county.name}-${index}`}
+                className="kitchen-fade-up group overflow-hidden rounded-[12px] border-b-[3px] border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-[6px] hover:border-b-[#BC9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]"
+              >
+                <div className="relative h-[220px] overflow-hidden">
                   <img
-                    src={media(county.image, index === 0 ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")}
+                    src={media(
+                      county.image,
+                      index === 0
+                        ? "/images/areas/fairfield-county.jpg"
+                        : "/images/areas/new-haven-county.jpg",
+                    )}
                     alt={county.name || "BuiltWell service area"}
-                    className={cls("h-full w-full object-cover", index === 1 && "object-top")}
+                    className={cls(
+                      "absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105",
+                      index === 1 && "object-top",
+                    )}
                   />
+                  <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#1E2B43]/40 to-transparent" />
                 </div>
-                <div className="p-7">
-                  <h3 className="text-[30px] font-bold text-[#1e2b43]">{county.name}</h3>
+                <div className="px-7 py-8">
+                  <h3 className="mb-[6px] text-[24px] font-bold text-[#1E2B43]">
+                    {county.name}
+                  </h3>
                   {county.phone ? (
-                    <p className="mt-1 text-[15px] text-[#5c677d]">
-                      Call: {linkNode(toTelHref(county.phone), county.phone, "font-semibold text-[#bc9155] hover:underline")}
+                    <p className="mb-[14px] text-[15px] text-[#5C677D]">
+                      Call:{" "}
+                      {linkNode(
+                        toTelHref(county.phone),
+                        county.phone,
+                        "font-semibold text-[#BC9155] hover:underline",
+                      )}
                     </p>
                   ) : null}
-                  {county.description ? <p className="mt-4 text-[14px] leading-[1.8] text-[#5c677d]">{county.description}</p> : null}
-                  <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  {county.description ? (
+                    <p className="mb-[18px] border-b border-b-[#1E2B43]/6 pb-[18px] text-[14px] leading-[1.7] text-[#5C677D]">
+                      {county.description}
+                    </p>
+                  ) : null}
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                     {towns.map((town: string, townIndex: number) => (
                       <div key={`${county.name}-${town}-${townIndex}`}>
                         {linkNode(
                           links[town] || county.url || "#",
                           town,
-                          "block rounded-full bg-[#f5f1e9] px-3 py-2 text-center text-[11px] font-semibold text-[#1e2b43] transition-colors hover:bg-[#bc9155] hover:text-white",
+                          "flex min-h-[32px] w-full items-center justify-center rounded-full bg-[#DFDBD5] px-[10px] py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] text-[#1E2B43] transition-colors duration-200 hover:bg-[#BC9155] hover:text-white",
                         )}
                       </div>
                     ))}
@@ -561,8 +749,13 @@ function AreasSection({ data }: { data?: any }) {
                   {county.extra_towns?.length ? (
                     <button
                       type="button"
-                      onClick={() => setCountyOpen((current) => ({ ...current, [index]: !current[index] }))}
-                      className="mt-4 text-[13px] font-semibold text-[#bc9155] transition-colors hover:text-[#a57d48]"
+                      onClick={() =>
+                        setCountyOpen((current) => ({
+                          ...current,
+                          [index]: !current[index],
+                        }))
+                      }
+                      className="col-span-full mt-1 bg-transparent px-0 py-1 text-center text-[13px] font-semibold text-[#BC9155]"
                     >
                       {expanded ? "Show Less -" : "See All Towns +"}
                     </button>
@@ -572,7 +765,10 @@ function AreasSection({ data }: { data?: any }) {
                       {linkNode(
                         county.url,
                         <>
-                          <span>{county.cta_label || `Learn more about ${county.name}`}</span>
+                          <span>
+                            {county.cta_label ||
+                              `Learn more about ${county.name}`}
+                          </span>
                           <ArrowRight className="h-4 w-4" />
                         </>,
                         "inline-flex items-center gap-2 text-[14px] font-semibold text-[#bc9155] transition-all hover:gap-3",
@@ -586,8 +782,12 @@ function AreasSection({ data }: { data?: any }) {
         </div>
         <p className="mt-7 text-center text-[14px] text-[#5c677d]">
           Not sure if we cover your area?{" "}
-          {linkNode("/contact/", "Contact our Connecticut reconstruction team", "font-semibold text-[#bc9155]")}
-          {" "}and we&apos;ll let you know.
+          {linkNode(
+            "/contact/",
+            "Contact our Connecticut reconstruction team",
+            "font-semibold text-[#bc9155]",
+          )}{" "}
+          and we&apos;ll let you know.
         </p>
       </div>
     </section>
@@ -600,20 +800,25 @@ function TrustStrip({ data }: { data?: any }) {
   if (!items.length) return null;
 
   return (
-    <div className="bg-[linear-gradient(135deg,#1a2438_0%,#1e2b43_50%,#151e30_100%)] px-6 py-4 sm:px-8">
-      <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-center gap-y-2">
+    <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] px-5 py-14 md:px-10 md:py-[56px]">
+      <div className="absolute inset-0 bg-[url('/portfolio/builtwell-job-site-aerial-ct.jpg')] bg-cover bg-center opacity-[0.12]" />
+      <div className="relative mx-auto flex max-w-[1240px] flex-wrap items-center justify-center gap-y-2">
         {items.map((item: any, index: number) => (
           <div key={`${item.label}-${index}`} className="contents">
             <a
               href={item.url || "#"}
               target={item.url ? "_blank" : undefined}
               rel={item.url ? "noreferrer" : undefined}
-              className="flex min-w-[210px] flex-1 items-center justify-center gap-3 px-6 py-4 text-center text-[13px] font-semibold text-white/90 transition-colors hover:text-[#bc9155]"
+              className="kitchen-fade-up flex min-w-[50%] flex-1 flex-col items-center gap-[10px] px-4 py-3 text-center text-[11px] font-semibold tracking-[0.4px] text-white/90 transition-all duration-300 hover:-translate-y-[2px] hover:text-[#BC9155] md:min-w-[180px] md:px-8 md:py-5 md:text-[13px]"
             >
-              <span className="text-[#bc9155]">{iconForValue(item.icon)}</span>
+              <span className="text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))]">
+                {iconForValue(item.icon)}
+              </span>
               <span>{[item.label, item.value].filter(Boolean).join(" ")}</span>
             </a>
-            {index < items.length - 1 ? <div className="hidden h-10 w-px bg-white/10 lg:block" /> : null}
+            {index < items.length - 1 ? (
+              <div className="hidden h-10 w-px bg-white/10 lg:block" />
+            ) : null}
           </div>
         ))}
       </div>
@@ -626,13 +831,17 @@ function ContactSection({ page, data }: { page: CMSPage; data?: any }) {
   const [serviceOpen, setServiceOpen] = useState(false);
   const [fileNames, setFileNames] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
-  const [formValues, setFormValues] = useState<Record<string, string>>({ contact_method: "call" });
+  const [formValues, setFormValues] = useState<Record<string, string>>({
+    contact_method: "call",
+  });
 
   if (!data) return null;
 
   const titleParts = parts(data.title, data.title_highlight);
   const fields = (data.fields || []) as LeadField[];
-  const topFields = fields.filter((field) => ["name", "phone", "email", "zip"].includes(field.name));
+  const topFields = fields.filter((field) =>
+    ["name", "phone", "email", "zip"].includes(field.name),
+  );
   const servicesField = fields.find((field) => field.type === "checkbox_group");
   const timeField = fields.find((field) => field.name === "best_time");
   const contactField = fields.find((field) => field.type === "radio_group");
@@ -642,35 +851,57 @@ function ContactSection({ page, data }: { page: CMSPage; data?: any }) {
   const contactOptions = normalizeOptions(contactField?.options);
 
   return (
-    <section className="bg-white py-20 sm:py-24" id="contact">
+    <section
+      className="bg-[#F5F1E9] px-5 py-12 md:px-8 md:py-[72px] lg:px-10"
+      id="contact"
+    >
       <div className={cls(SECTION_WIDTH, "max-w-[1200px]")}>
-        <div className="mb-10 text-center">
+        <div className="mb-8 text-center kitchen-fade-up">
           {label(data.eyebrow || "Get In Touch")}
           <h2 className="text-[clamp(32px,4vw,46px)] font-bold tracking-[-0.02em] text-[#1e2b43]">
             {titleParts.before}
-            {titleParts.accent ? <span className="text-[#bc9155]">{titleParts.accent}</span> : null}
+            {titleParts.accent ? (
+              <span className="text-[#bc9155]">{titleParts.accent}</span>
+            ) : null}
             {titleParts.after}
           </h2>
-          {data.subtitle ? <p className="mx-auto mt-5 max-w-[720px] text-[15px] leading-[1.85] text-[#5c677d]">{data.subtitle}</p> : null}
+          {data.subtitle ? (
+            <p className="mx-auto mt-3 max-w-[620px] text-[16px] leading-[1.7] text-[#5c677d]">
+              {data.subtitle}
+            </p>
+          ) : null}
         </div>
-        <div className="grid gap-8 lg:grid-cols-[0.94fr_1.06fr]">
-          <div className="grid gap-4">
-            {(data.images || []).slice(0, 2).map((image: any, index: number) => (
-              <div key={`${image.alt || "contact"}-${index}`} className="overflow-hidden rounded-[12px] shadow-[0_18px_42px_rgba(30,43,67,0.1)]">
-                <img
-                  src={media(image.image, index === 0 ? "/portfolio/builtwell-contractor-handshake-arrival-ct-optimized.jpg" : "/images/headers/kitchen-remodeling-header.jpg")}
-                  alt={image.alt || "BuiltWell reconstruction project"}
-                  className="h-[270px] w-full object-cover"
-                />
-              </div>
-            ))}
+        <div className="grid items-stretch gap-8 md:grid-cols-[1fr_1.15fr]">
+          <div className="hidden gap-3 kitchen-fade-up md:grid">
+            {(data.images || [])
+              .slice(0, 2)
+              .map((image: any, index: number) => (
+                <div
+                  key={`${image.alt || "contact"}-${index}`}
+                  className="overflow-hidden rounded-[12px] shadow-[0_18px_42px_rgba(30,43,67,0.1)]"
+                >
+                  <img
+                    src={media(
+                      image.image,
+                      index === 0
+                        ? "/portfolio/builtwell-contractor-handshake-arrival-ct-optimized.jpg"
+                        : "/images/headers/kitchen-remodeling-header.jpg",
+                    )}
+                    alt={image.alt || "BuiltWell reconstruction project"}
+                    className="h-full min-h-[260px] w-full object-cover"
+                  />
+                </div>
+              ))}
           </div>
-          <div className="rounded-[14px] border border-[#e4dac9] bg-white px-6 py-8 shadow-[0_22px_48px_rgba(30,43,67,0.1)] md:px-8">
+          <div className="kitchen-fade-up rounded-[10px] border border-[#1E2B43]/8 bg-white px-5 py-8 shadow-[0_16px_48px_rgba(30,43,67,0.1),0_4px_12px_rgba(30,43,67,0.04)] md:px-9">
             {submitted ? (
               <div className="flex min-h-[430px] flex-col items-center justify-center text-center">
-                <h3 className="text-[34px] font-bold text-[#1e2b43]">Thank You</h3>
+                <h3 className="text-[34px] font-bold text-[#1e2b43]">
+                  Thank You
+                </h3>
                 <p className="mt-3 max-w-[430px] text-[15px] leading-7 text-[#5c677d]">
-                  We received your request and will get back to you within one business day.
+                  We received your request and will get back to you within one
+                  business day.
                 </p>
               </div>
             ) : (
@@ -681,7 +912,7 @@ function ContactSection({ page, data }: { page: CMSPage; data?: any }) {
                 }}
                 className="flex flex-col"
               >
-                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <div className="grid gap-4 md:grid-cols-2">
                   {topFields.map((field) => (
                     <div key={field.name}>
                       <label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.05em] text-[#1e2b43]">
@@ -693,14 +924,19 @@ function ContactSection({ page, data }: { page: CMSPage; data?: any }) {
                         required={field.required}
                         value={formValues[field.name] || ""}
                         placeholder={field.placeholder || ""}
-                        onChange={(event) => setFormValues((current) => ({ ...current, [field.name]: event.target.value }))}
+                        onChange={(event) =>
+                          setFormValues((current) => ({
+                            ...current,
+                            [field.name]: event.target.value,
+                          }))
+                        }
                         className="w-full rounded-[6px] border border-[#1e2b4326] px-3.5 py-3 text-[15px] text-[#1e2b43] outline-none transition-colors focus:border-[#bc9155]"
                       />
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-4 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+                <div className="mt-4 grid gap-4 md:grid-cols-2">
                   {servicesField ? (
                     <div>
                       <label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.05em] text-[#1e2b43]">
@@ -713,24 +949,45 @@ function ContactSection({ page, data }: { page: CMSPage; data?: any }) {
                           onClick={() => setServiceOpen((current) => !current)}
                           className="flex w-full items-center justify-between rounded-[6px] border border-[#1e2b4326] px-3.5 py-3 text-left text-[15px] text-[#1e2b43]"
                         >
-                          <span className={cls("truncate", pickedServices.length ? "font-medium text-[#1e2b43]" : "text-[#5c677d]")}>
-                            {pickedServices.length ? pickedServices.join(", ") : "Select services"}
+                          <span
+                            className={cls(
+                              "truncate",
+                              pickedServices.length
+                                ? "font-medium text-[#1e2b43]"
+                                : "text-[#5c677d]",
+                            )}
+                          >
+                            {pickedServices.length
+                              ? pickedServices.join(", ")
+                              : "Select services"}
                           </span>
-                          <ChevronDown className={cls("h-4 w-4 transition-transform", serviceOpen && "rotate-180")} />
+                          <ChevronDown
+                            className={cls(
+                              "h-4 w-4 transition-transform",
+                              serviceOpen && "rotate-180",
+                            )}
+                          />
                         </button>
-                        <div className={cls(
-                          "absolute left-0 right-0 top-[calc(100%+4px)] z-20 max-h-60 overflow-y-auto rounded-[6px] border border-[#1e2b4326] bg-white py-1 shadow-[0_8px_24px_rgba(0,0,0,0.12)]",
-                          serviceOpen ? "block" : "hidden",
-                        )}>
+                        <div
+                          className={cls(
+                            "absolute left-0 right-0 top-[calc(100%+4px)] z-20 max-h-60 overflow-y-auto rounded-[6px] border border-[#1e2b4326] bg-white py-1 shadow-[0_8px_24px_rgba(0,0,0,0.12)]",
+                            serviceOpen ? "block" : "hidden",
+                          )}
+                        >
                           {serviceOptions.map((option) => (
-                            <label key={option.value} className="flex cursor-pointer items-center gap-2.5 px-3.5 py-2 text-[14px] text-[#1e2b43] transition-colors hover:bg-[#bc91550f]">
+                            <label
+                              key={option.value}
+                              className="flex cursor-pointer items-center gap-2.5 px-3.5 py-2 text-[14px] text-[#1e2b43] transition-colors hover:bg-[#bc91550f]"
+                            >
                               <input
                                 type="checkbox"
                                 checked={pickedServices.includes(option.value)}
                                 onChange={() =>
                                   setPickedServices((current) =>
                                     current.includes(option.value)
-                                      ? current.filter((value) => value !== option.value)
+                                      ? current.filter(
+                                          (value) => value !== option.value,
+                                        )
                                       : [...current, option.value],
                                   )
                                 }
@@ -753,12 +1010,19 @@ function ContactSection({ page, data }: { page: CMSPage; data?: any }) {
                       <select
                         required={timeField.required}
                         value={formValues[timeField.name] || ""}
-                        onChange={(event) => setFormValues((current) => ({ ...current, [timeField.name]: event.target.value }))}
+                        onChange={(event) =>
+                          setFormValues((current) => ({
+                            ...current,
+                            [timeField.name]: event.target.value,
+                          }))
+                        }
                         className="w-full rounded-[6px] border border-[#1e2b4326] bg-white px-3.5 py-3 text-[15px] text-[#1e2b43] outline-none transition-colors focus:border-[#bc9155]"
                       >
                         <option value="">Select a time</option>
                         {timeOptions.map((option) => (
-                          <option key={option.value} value={option.value}>{option.label}</option>
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -773,20 +1037,29 @@ function ContactSection({ page, data }: { page: CMSPage; data?: any }) {
                     </legend>
                     <div className="flex flex-wrap gap-2.5 md:flex-nowrap">
                       {contactOptions.map((option) => {
-                        const checked = (formValues[contactField.name] || "call") === option.value;
+                        const checked =
+                          (formValues[contactField.name] || "call") ===
+                          option.value;
                         return (
                           <label
                             key={option.value}
                             className={cls(
                               "flex flex-1 cursor-pointer items-center justify-center rounded-[6px] border-2 px-4 py-3 text-[13px] font-medium transition-colors",
-                              checked ? "border-[#bc9155] bg-[#bc91550f] text-[#bc9155]" : "border-[#1e2b431f] bg-white text-[#1e2b43]",
+                              checked
+                                ? "border-[#bc9155] bg-[#bc91550f] text-[#bc9155]"
+                                : "border-[#1e2b431f] bg-white text-[#1e2b43]",
                             )}
                           >
                             <input
                               type="radio"
                               name={contactField.name}
                               checked={checked}
-                              onChange={() => setFormValues((current) => ({ ...current, [contactField.name]: option.value }))}
+                              onChange={() =>
+                                setFormValues((current) => ({
+                                  ...current,
+                                  [contactField.name]: option.value,
+                                }))
+                              }
                               className="hidden"
                             />
                             <span>{option.label}</span>
@@ -806,8 +1079,13 @@ function ContactSection({ page, data }: { page: CMSPage; data?: any }) {
                       rows={5}
                       value={formValues[messageField.name] || ""}
                       placeholder={messageField.placeholder || ""}
-                      onChange={(event) => setFormValues((current) => ({ ...current, [messageField.name]: event.target.value }))}
-                      className="min-h-[180px] w-full rounded-[6px] border border-[#1e2b4326] px-3.5 py-3 text-[15px] leading-[1.65] text-[#1e2b43] outline-none transition-colors focus:border-[#bc9155]"
+                      onChange={(event) =>
+                        setFormValues((current) => ({
+                          ...current,
+                          [messageField.name]: event.target.value,
+                        }))
+                      }
+                      className="min-h-[120px] w-full rounded-[6px] border border-[#1e2b4326] px-3.5 py-3 text-[15px] leading-[1.65] text-[#1e2b43] outline-none transition-colors focus:border-[#bc9155]"
                     />
                   </div>
                 ) : null}
@@ -827,15 +1105,30 @@ function ContactSection({ page, data }: { page: CMSPage; data?: any }) {
                       multiple
                       accept="image/jpeg,image/png,image/heic,.heic"
                       className="hidden"
-                      onChange={(event) => setFileNames(Array.from(event.target.files || []).map((file) => file.name))}
+                      onChange={(event) =>
+                        setFileNames(
+                          Array.from(event.target.files || []).map(
+                            (file) => file.name,
+                          ),
+                        )
+                      }
                     />
-                    {fileNames.length ? <p className="mt-2 text-[12px] text-[#5c677d]">{fileNames.join(", ")}</p> : null}
+                    {fileNames.length ? (
+                      <p className="mt-2 text-[12px] text-[#5c677d]">
+                        {fileNames.join(", ")}
+                      </p>
+                    ) : null}
                   </div>
-                  <button type="submit" className="min-h-[52px] rounded-[8px] bg-[#bc9155] px-5 py-3 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48]">
+                  <button
+                    type="submit"
+                    className="min-h-[52px] rounded-[8px] bg-[#bc9155] px-5 py-3 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48]"
+                  >
                     {data.submit_label || "Send Request"}
                   </button>
                 </div>
-                <p className="mt-4 text-center text-[13px] text-[#5c677d]">{data.consent_text}</p>
+                <p className="mt-4 text-center text-[13px] text-[#5c677d]">
+                  {data.consent_text}
+                </p>
               </form>
             )}
           </div>
@@ -847,22 +1140,42 @@ function ContactSection({ page, data }: { page: CMSPage; data?: any }) {
 
 export function InsuranceRestorationPageTemplate({ page }: { page: CMSPage }) {
   const insurancePage = page as InsurancePage;
-  const phones = insurancePage.phones?.items?.length ? insurancePage.phones.items : DEFAULT_PHONES;
+  const phones = insurancePage.phones?.items?.length
+    ? insurancePage.phones.items
+    : DEFAULT_PHONES;
   const hero = section<any>(page, "service_hero");
   const trustBars = sections<any>(page, "trust_bar");
   const richTexts = sections<RichTextData>(page, "rich_text");
   const includeSections = sections<any>(page, "service_includes");
   const featureGrids = sections<any>(page, "feature_grid");
-  const overview = richTexts.find((item) => item.title?.includes("Rebuilding Homes After"));
-  const rights = richTexts.find((item) => item.title?.includes("You Choose Your"));
-  const advantage = richTexts.find((item) => item.title?.includes("A General Contractor Built"));
-  const financing = richTexts.find((item) => item.style_variant === "financing_strip");
+  const overview = richTexts.find((item) =>
+    item.title?.includes("Rebuilding Homes After"),
+  );
+  const rights = richTexts.find((item) =>
+    item.title?.includes("You Choose Your"),
+  );
+  const advantage = richTexts.find((item) =>
+    item.title?.includes("A General Contractor Built"),
+  );
+  const financing = richTexts.find(
+    (item) => item.style_variant === "financing_strip",
+  );
   const gallery = section<any>(page, "image_gallery");
-  const rebuild = featureGrids.find((item) => item.title?.includes("What We Rebuild"));
-  const whyChoose = featureGrids.find((item) => item.title?.includes("Why Homeowners Choose"));
-  const rightsBullets = includeSections.find((item) => item.title?.includes("What This Means"));
-  const contractorBullets = includeSections.find((item) => item.title?.includes("Licensed General Contractor"));
-  const insuranceBullets = includeSections.find((item) => item.title?.includes("Insurance Claims Expertise"));
+  const rebuild = featureGrids.find((item) =>
+    item.title?.includes("What We Rebuild"),
+  );
+  const whyChoose = featureGrids.find((item) =>
+    item.title?.includes("Why Homeowners Choose"),
+  );
+  const rightsBullets = includeSections.find((item) =>
+    item.title?.includes("What This Means"),
+  );
+  const contractorBullets = includeSections.find((item) =>
+    item.title?.includes("Licensed General Contractor"),
+  );
+  const insuranceBullets = includeSections.find((item) =>
+    item.title?.includes("Insurance Claims Expertise"),
+  );
   const carriers = section<any>(page, "logo_strip");
   const process = section<any>(page, "service_process");
   const faq = section<any>(page, "faq_list");
@@ -871,29 +1184,79 @@ export function InsuranceRestorationPageTemplate({ page }: { page: CMSPage }) {
   const lead = section<any>(page, "lead_form");
   const heroTitleParts = parts(hero?.title, "Reconstruction");
 
+  useEffect(() => {
+    const nodes = Array.from(
+      document.querySelectorAll<HTMLElement>(".kitchen-fade-up"),
+    );
+    if (!nodes.length) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      nodes.forEach((node) => node.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
+    );
+
+    nodes.forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div data-template={page.template} data-page-slug={page.slug}>
-      <section className="relative isolate overflow-hidden bg-[#151e30] px-6 pb-14 pt-[108px] text-white sm:px-8 lg:px-10">
+      <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pb-8 pt-[80px] text-white sm:pb-9 sm:pt-[92px] md:px-10 md:pb-12 md:pt-[120px]">
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-70"
-          style={{ backgroundImage: `url(${media(hero?.background_image, "/portfolio/builtwell-team-client-arrival-ct.jpeg")})` }}
+          className="absolute inset-0 bg-cover bg-[position:center_30%] opacity-[0.72]"
+          style={{
+            backgroundImage: `url(${media(hero?.background_image, "/portfolio/builtwell-team-client-arrival-ct.jpeg")})`,
+          }}
         />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(21,30,48,1)_0%,rgba(21,30,48,0.92)_10%,transparent_34%),radial-gradient(ellipse_at_bottom_left,rgba(21,30,48,0.95)_0%,transparent_28%),linear-gradient(180deg,rgba(21,30,48,0.3)_0%,rgba(21,30,48,0.22)_28%,rgba(21,30,48,0.48)_64%,rgba(21,30,48,0.94)_100%)]" />
-        <div className="relative mx-auto flex min-h-[470px] max-w-[1240px] flex-col items-center justify-center text-center">
-          <ol className="mb-6 flex flex-wrap items-center justify-center gap-1 text-[13px] font-medium text-white/86">
-            <li>{linkNode("/", "Home", "transition-colors hover:text-[#bc9155]")}</li>
-            <li className="px-2.5 text-[#bc9155]">›</li>
-            <li>{linkNode("/services/", "Services", "transition-colors hover:text-[#bc9155]")}</li>
-            <li className="px-2.5 text-[#bc9155]">›</li>
+        <div className="relative mx-auto flex min-h-[35vh] max-w-[1240px] flex-col items-center justify-center text-center sm:min-h-[40vh] lg:min-h-[50vh]">
+          <ol className="mb-5 flex list-none items-center text-[13px] font-medium text-white/90 [text-shadow:0_1px_6px_rgba(0,0,0,0.7)]">
+            <li>
+              {linkNode("/", "Home", "text-white/85 hover:text-[#bc9155]")}
+            </li>
+            <li className="mx-[10px] text-[#bc9155]" aria-hidden="true">
+              &#8250;
+            </li>
+            <li>
+              {linkNode(
+                "/services/",
+                "Services",
+                "text-white/85 hover:text-[#bc9155]",
+              )}
+            </li>
+            <li className="mx-[10px] text-[#bc9155]" aria-hidden="true">
+              &#8250;
+            </li>
             <li className="font-semibold text-white">Insurance Restoration</li>
           </ol>
-          <h1 className="max-w-[820px] text-[clamp(40px,5vw,58px)] font-bold leading-[1.06] tracking-[-0.03em] text-white">
+          <h1 className="max-w-[900px] font-serif text-[clamp(40px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.5px] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]">
             {heroTitleParts.before}
-            {heroTitleParts.accent ? <span className="text-[#bc9155]">{heroTitleParts.accent}</span> : null}
+            {heroTitleParts.accent ? (
+              <span className="text-[#bc9155]">{heroTitleParts.accent}</span>
+            ) : null}
             {heroTitleParts.after}
           </h1>
-          {hero?.subtitle ? <p className="mt-5 max-w-[700px] text-[16px] leading-[1.82] text-white/82 md:text-[17px]">{hero.subtitle}</p> : null}
-          <HeroButtons phones={phones} scheduleLabel={hero?.primary_cta?.label} scheduleUrl={hero?.primary_cta?.url} />
+          {hero?.subtitle ? (
+            <p className="mt-4 max-w-[560px] text-[17px] leading-[1.7] text-white/80">
+              {hero.subtitle}
+            </p>
+          ) : null}
+          <HeroButtons
+            phones={phones}
+            scheduleLabel={hero?.primary_cta?.label}
+            scheduleUrl={hero?.primary_cta?.url}
+          />
         </div>
       </section>
 
@@ -903,7 +1266,11 @@ export function InsuranceRestorationPageTemplate({ page }: { page: CMSPage }) {
       <RebuildGrid data={rebuild} />
       <WhyChooseSection data={whyChoose} />
       <CarriersSection data={carriers} />
-      <AdvantageSection intro={advantage} contractor={contractorBullets} insurance={insuranceBullets} />
+      <AdvantageSection
+        intro={advantage}
+        contractor={contractorBullets}
+        insurance={insuranceBullets}
+      />
       <ProcessSection data={process} />
       <FaqSection data={faq} />
       <CallToActionBand data={cta} phones={phones} />
@@ -911,6 +1278,26 @@ export function InsuranceRestorationPageTemplate({ page }: { page: CMSPage }) {
       <TrustStrip data={trustBars[1]} />
       <ContactSection page={page} data={lead} />
       <FinancingStrip data={financing} />
+      <style jsx global>{`
+        .kitchen-fade-up {
+          opacity: 0;
+          transform: translateY(30px);
+          transition:
+            opacity 0.7s ease,
+            transform 0.7s ease;
+        }
+        .kitchen-fade-up.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .kitchen-fade-up {
+            opacity: 1;
+            transform: none;
+            transition: none;
+          }
+        }
+      `}</style>
     </div>
   );
 }
