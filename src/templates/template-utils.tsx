@@ -29,8 +29,8 @@ export function parts(text?: string | null, mark?: string | null) {
 
 export function label(text: React.ReactNode, dark = false) {
   return (
-    <span className={cls("mb-4 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]", dark ? "text-[#c89b5b]" : "text-[#bc9155]")}>
-      <span className={cls("h-px w-7", dark ? "bg-[#c89b5b]" : "bg-[#bc9155]")} />
+    <span className={cls("mb-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em]", dark ? "text-[#c89b5b]" : "text-[#9a7340]")}>
+      <span className={cls("h-0.5 w-[10px]", dark ? "bg-[#c89b5b]" : "bg-[#bc9155]")} />
       {text}
     </span>
   );
@@ -55,27 +55,42 @@ export function trustIcon(icon?: string | null) {
 }
 
 export function HeroTrustBar({ items }: { items?: any[] }) {
+  const list = items || [];
   return (
-    <div className="bg-[#1e2b43]">
-      <div className="mx-auto grid max-w-[1440px] grid-cols-2 border-y border-white/10 md:grid-cols-4">
-        {(items || []).map((item: any, index: number) => (
-          <div key={`${item.label || "trust"}-${index}`} className="flex min-h-[84px] flex-col items-center justify-center border-r border-white/10 px-4 py-3 text-center last:border-r-0">
-            {index < 3 && item.value ? <div className="font-serif text-[26px] font-bold text-[#bc9155]">{item.value}</div> : <div className="text-[#bc9155]">{trustIcon(item.icon)}</div>}
-            <div className="mt-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/78">{item.label}</div>
+    <section className="border-y border-y-[#BC9155]/20 bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)]">
+      <div className="mx-auto grid max-w-[1280px] grid-cols-2 text-center lg:grid-cols-4">
+        {list.map((item: any, index: number) => (
+          <div
+            key={`${item.label || "trust"}-${index}`}
+            className={cls(
+              "group cursor-default bg-[#BC9155]/[0.08] px-4 py-6 transition-all duration-300 md:bg-transparent md:px-5 md:py-9 md:hover:-translate-y-[3px] md:hover:bg-[#BC9155]/8",
+              index % 2 === 0 ? "border-r border-[#BC9155]/12" : "",
+              index < 2 ? "border-b border-[#BC9155]/12" : "",
+              "lg:border-b-0",
+              index < list.length - 1 ? "lg:border-r lg:border-[#BC9155]/12" : "lg:border-r-0",
+            )}
+          >
+            <div className="flex min-h-[42px] items-center justify-center font-serif text-[32px] font-bold leading-none text-[#BC9155] transition-all duration-300 md:text-[42px] md:group-hover:text-[#D4A95A] md:group-hover:[text-shadow:0_0_20px_rgba(188,145,85,0.3)]">
+              {item.value ? item.value : <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>}
+            </div>
+            <div className="mt-1.5 text-[11px] font-medium uppercase tracking-[0.8px] text-white/85 transition-colors duration-300 md:mt-2 md:text-[13px] md:tracking-[1px] md:text-white/60 md:group-hover:text-white/85">
+              {item.label}
+            </div>
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 
 export function DarkTrustStrip({ items }: { items?: any[] }) {
   return (
-    <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1a2438_0%,#1e2b43_50%,#151e30_100%)] px-5 py-12 md:px-10 md:py-14">
-      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-center">
+    <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1e2b43_0%,#151E30_100%)] px-5 py-14 md:px-10">
+      <div className="absolute inset-0 bg-[url('/hero/builtwell-job-site-aerial-hero-ct.jpg')] bg-cover bg-center opacity-[0.12]" />
+      <div className="relative z-[1] mx-auto flex max-w-[1200px] flex-wrap items-center justify-center">
         {(items || []).map((item: any, index: number) => (
           <div key={`${item.label || "strip"}-${index}`} className="contents">
-            {item.url ? linkNode(item.url, <div className="flex min-w-[180px] flex-1 flex-col items-center gap-3 px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90 transition-all hover:text-[#bc9155]"><span className="text-[#bc9155]">{trustIcon(item.icon)}</span><span>{[item.label, item.value].filter(Boolean).join(" ")}</span></div>, "flex flex-1 justify-center") : <div className="flex flex-1 justify-center"><div className="flex min-w-[180px] flex-1 flex-col items-center gap-3 px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90"><span className="text-[#bc9155]">{trustIcon(item.icon)}</span><span>{[item.label, item.value].filter(Boolean).join(" ")}</span></div></div>}
+            {item.url ? linkNode(item.url, <div className="flex min-w-[180px] flex-1 flex-col items-center gap-[10px] px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:text-[#bc9155]"><span className="text-[#bc9155] drop-shadow-[0_2px_4px_rgba(188,145,85,0.3)]">{trustIcon(item.icon)}</span><span>{[item.label, item.value].filter(Boolean).join(" ")}</span></div>, "flex flex-1 justify-center") : <div className="flex flex-1 justify-center"><div className="flex min-w-[180px] flex-1 flex-col items-center gap-[10px] px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:text-[#bc9155]"><span className="text-[#bc9155] drop-shadow-[0_2px_4px_rgba(188,145,85,0.3)]">{trustIcon(item.icon)}</span><span>{[item.label, item.value].filter(Boolean).join(" ")}</span></div></div>}
             {index < (items || []).length - 1 ? <div className="hidden h-10 w-px bg-white/10 lg:block" /> : null}
           </div>
         ))}

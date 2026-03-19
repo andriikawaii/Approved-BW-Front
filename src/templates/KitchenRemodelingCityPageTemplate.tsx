@@ -253,8 +253,10 @@ function HeroCta({ label, value, href, primary = false }: { label: string; value
   return linkNode(
     href,
     <span className={[
-      "flex min-w-[188px] flex-col items-center rounded-[8px] border px-7 py-4 text-center shadow-[0_12px_32px_rgba(0,0,0,0.16)] transition-all duration-300 hover:-translate-y-0.5",
-      primary ? "border-[#bc9155] bg-[#bc9155] text-white hover:bg-[#d4a95a]" : "border-white/20 bg-[rgba(10,18,35,0.42)] text-white backdrop-blur-[12px] hover:bg-[rgba(10,18,35,0.62)]",
+      "flex min-w-[180px] flex-col items-center rounded-[8px] px-7 py-4 text-center transition-all duration-300 hover:-translate-y-0.5",
+      primary
+        ? "border border-[#bc9155] border-b-2 border-b-[#a57d48] bg-[#bc9155] text-white hover:bg-[#d4a95a] hover:border-[#d4a95a] hover:border-b-[#a57d48] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
+        : "border border-white/[0.18] border-b-2 border-b-[#bc9155] bg-[rgba(10,18,35,0.42)] text-white backdrop-blur-[12px] hover:bg-[rgba(10,18,35,0.62)] hover:border-white/[0.28] hover:border-b-[#bc9155] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3),0_0_0_1px_rgba(188,145,85,0.2)]",
     ].join(" ")}>
       <span className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${primary ? "text-white/90" : "text-white/70"}`}>{label}</span>
       <span className="mt-1 font-serif text-[18px] font-semibold">{value}</span>
@@ -317,8 +319,8 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
   return (
     <div className="bg-white text-[#1e2b43]">
       <main id="main">
-        <section className="kitchen-city-hero relative isolate overflow-hidden bg-[#151e30] px-5 pb-12 pt-[120px] text-white md:px-10">
-          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${media(hero?.background_image, config.defaultHeroImage)})` }} />
+        <section className="kitchen-city-hero relative isolate overflow-hidden bg-[#151e30] px-5 pb-12 pt-[120px] text-white md:min-h-[50vh] md:px-10">
+          <div className="absolute inset-0 bg-cover bg-[center_30%] opacity-[0.72]" style={{ backgroundImage: `url(${media(hero?.background_image, config.defaultHeroImage)})` }} />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_97%_97%,rgba(21,30,48,1)_0%,rgba(21,30,48,0.9)_8%,transparent_30%),radial-gradient(ellipse_at_3%_97%,rgba(21,30,48,0.9)_0%,transparent_25%),linear-gradient(180deg,rgba(21,30,48,0.35)_0%,rgba(21,30,48,0.2)_30%,rgba(21,30,48,0.45)_65%,rgba(21,30,48,0.92)_100%)]" />
           <div className="relative mx-auto flex min-h-[430px] max-w-[1240px] flex-col items-center justify-center text-center">
             <ol className="mb-5 flex list-none items-center text-[13px] font-medium text-white/90">
@@ -382,7 +384,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
             </div>
             <div className="mt-12 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
               {(intro?.bullet_points || []).map((item, index) => (
-                <article key={`${item.text}-${index}`} className="rounded-[12px] bg-white px-6 py-8 text-center shadow-[0_2px_12px_rgba(30,43,67,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_34px_rgba(30,43,67,0.1)]">
+                <article key={`${item.text}-${index}`} className="rounded-[12px] border-b-2 border-transparent bg-white px-6 py-8 text-center shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
                   <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#bc9155]/10">
                     <IncludedIcon />
                   </div>
@@ -422,7 +424,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
           </div>
         </section>
 
-        <section className="bg-white px-5 py-20 md:px-10">
+        <section className="border-t border-[#1e2b430d] bg-[#f5f1e9] px-5 py-20 md:px-10">
           <div className="mx-auto max-w-[1240px]">
             <div className="mb-12 text-center">
               {label("Recent Work")}
@@ -433,7 +435,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
             </div>
             <div className="grid gap-6 lg:grid-cols-3">
               {(recentProjects?.items || []).map((item, index) => (
-                <article key={`${item.title}-${index}`} className="overflow-hidden rounded-[12px] bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_34px_rgba(30,43,67,0.1)]">
+                <article key={`${item.title}-${index}`} className="overflow-hidden rounded-[12px] border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
                   <div className="relative h-[280px] overflow-hidden">
                     <div className="grid h-full grid-cols-2">
                       <img src={media(item.before_image, "/images/before-after/kitchen-before-after-1.jpg")} alt={`${item.title || "Kitchen project"} before`} className="h-full w-full object-cover" />
@@ -449,8 +451,10 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
                   </div>
                   {item.quote?.text ? (
                     <div className="border-t border-[#1e2b430f] px-7 py-6">
-                      <p className="text-[14px] italic leading-[1.7] text-[#1e2b43]">&quot;{item.quote.text}&quot;</p>
-                      <cite className="mt-3 block text-[12px] font-semibold not-italic text-[#5c677d]">{[item.quote.author, item.quote.location].filter(Boolean).join(", ")}</cite>
+                      <div className="border-l-[3px] border-[#bc9155] pl-4">
+                        <p className="min-h-[72px] text-[14px] italic leading-[1.65] text-[#1e2b43]">&quot;{item.quote.text}&quot;</p>
+                        <cite className="mt-2 block text-[12px] font-semibold not-italic text-[#5c677d]">{[item.quote.author, item.quote.location].filter(Boolean).join(", ")}</cite>
+                      </div>
                     </div>
                   ) : null}
                 </article>
@@ -472,12 +476,12 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
               <table className="w-full overflow-hidden rounded-[12px] bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06)]">
                 <thead>
                   <tr>
-                    {(pricing?.columns || []).map((column) => <th key={column} className="bg-[#1e2b43] px-6 py-4 text-left text-[12px] uppercase tracking-[0.05em] text-white">{column}</th>)}
+                    {(pricing?.columns || []).map((column) => <th key={column} className="bg-[#1e2b43] px-6 py-4 text-left text-[13px] font-semibold uppercase tracking-[0.04em] text-white">{column}</th>)}
                   </tr>
                 </thead>
                 <tbody>
                   {(pricing?.rows || []).map((row, index) => (
-                    <tr key={`${row.label}-${index}`} className="even:bg-[#1e2b43]/[0.02]">
+                    <tr key={`${row.label}-${index}`} className="transition-colors even:bg-[#1e2b43]/[0.02] hover:bg-[rgba(188,145,85,0.06)]">
                       <td className="border-b border-[#1e2b430d] px-6 py-4 text-[15px]">{row.label}</td>
                       <td className="border-b border-[#1e2b430d] px-6 py-4 font-serif text-[16px] font-bold text-[#bc9155]">{row.price}</td>
                       <td className="border-b border-[#1e2b430d] px-6 py-4 text-[15px]">{row.notes}</td>
@@ -506,37 +510,37 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
           </div>
         </section>
 
-        <section className="kitchen-city-process relative overflow-hidden bg-[linear-gradient(135deg,#1e2b43_0%,#151e30_100%)] px-5 py-20 text-white md:px-10">
-          <div className="absolute inset-0 bg-[url('/portfolio/builtwell-job-site-aerial-ct.jpg')] bg-cover bg-center opacity-[0.12]" />
-          <div className="relative mx-auto max-w-[1240px]">
-            <div className="mb-10 text-center">
+        <section className="kitchen-city-process relative overflow-hidden px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
+          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/portfolio/builtwell-team-contractors-ct-04.png')" }} aria-hidden="true" />
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(10,18,34,0.90)_0%,rgba(30,43,67,0.85)_100%)]" />
+          <div className="relative z-10 mx-auto max-w-[1280px]">
+            <div className="mb-16 text-center">
               {label("Our Process", true)}
               <h2 className="text-[clamp(32px,3.8vw,46px)] font-bold leading-[1.2] tracking-[-0.02em] text-white">
                 <AccentTitle text={process?.title || `Our ${config.serviceLabel} Process`} accent="Process" />
               </h2>
-              {process?.subtitle ? <p className="mx-auto mt-3 max-w-[820px] text-[17px] leading-[1.75] text-white/75">{process.subtitle}</p> : null}
+              {process?.subtitle ? <p className="mx-auto mt-3 max-w-[820px] text-[17px] leading-[1.75] text-white/60">{process.subtitle}</p> : null}
             </div>
-            <div className="grid gap-5 lg:grid-cols-6">
+            <div className="relative mx-auto grid max-w-full gap-0 lg:max-w-none lg:grid-cols-5">
+              <div className="absolute bottom-[34px] left-[25px] top-[28px] w-0.5 bg-[#BC9155]/25 md:left-[33px] md:top-[34px] lg:bottom-auto lg:left-[10%] lg:right-[10%] lg:top-[34px] lg:h-0.5 lg:w-auto" />
               {(process?.steps || []).map((item, index) => {
                 const isActive = activeStep === index;
                 return (
-                  <button key={`${item.title}-${index}`} type="button" onClick={() => setActiveStep((current) => current === index ? null : index)} aria-expanded={isActive} className={`rounded-[12px] border border-white/10 bg-white/[0.04] p-6 text-left transition-all ${isActive ? "translate-y-[-2px] border-[#bc9155] bg-white/[0.08]" : "hover:border-white/20 hover:bg-white/[0.06]"}`}>
-                    <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#bc9155] font-serif text-[22px] font-bold text-[#bc9155]">{index + 1}</div>
-                    <h3 className="text-[20px] font-bold text-white">{item.title}</h3>
-                    <p className="mt-3 text-[14px] leading-[1.7] text-white/75">{isActive ? item.description : item.short}</p>
+                  <button key={`${item.title}-${index}`} type="button" onClick={() => setActiveStep((current) => current === index ? null : index)} aria-expanded={isActive} className={`relative flex w-full cursor-pointer items-start gap-4 rounded-lg border-0 bg-transparent px-0 py-3 text-left transition-colors duration-300 hover:bg-[rgba(188,145,85,0.08)] md:gap-5 md:py-4 lg:block lg:px-4 lg:pb-5 lg:pt-4 lg:text-center ${isActive ? "bg-[rgba(188,145,85,0.14)]" : ""}`}>
+                    <div className="relative z-10 flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-full border-[2.5px] border-[#BC9155] bg-[rgba(188,145,85,0.42)] font-serif text-[18px] font-bold text-[#f5e0c0] shadow-[0_0_0_4px_rgba(188,145,85,0.12)] md:h-[68px] md:w-[68px] md:text-2xl lg:-mt-2 lg:mx-auto lg:mb-5">
+                      {index + 1}
+                    </div>
+                    <div>
+                      <h3 className="mb-1.5 text-left text-base font-semibold text-white md:mb-3 md:text-lg lg:text-center">{item.title}</h3>
+                      <p className={`text-left text-[14px] leading-[1.6] text-white/70 transition-all duration-300 lg:text-center lg:leading-[1.65] ${isActive ? "max-h-[200px] opacity-100" : "max-h-none opacity-100 lg:max-h-0 lg:overflow-hidden lg:opacity-0"}`}>
+                        {isActive ? item.description : item.short || item.description}
+                      </p>
+                    </div>
                   </button>
                 );
               })}
-              <div className="rounded-[12px] border border-[#bc9155] bg-white/[0.05] p-6 text-left">
-                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#bc9155] text-white">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
-                </div>
-                <h3 className="text-[20px] font-bold text-white">Get Started</h3>
-                <p className="mt-3 text-[14px] leading-[1.7] text-white/75">Ready to begin? Schedule your free consultation today.</p>
-                {linkNode("#contact", <span className="mt-4 inline-flex rounded-[6px] bg-[#bc9155] px-5 py-3 text-[13px] font-semibold text-white">Free Consultation</span>)}
-              </div>
             </div>
-            <p className="mt-6 text-center text-[14px] text-white/62">Click any step to learn more</p>
+            <p className="mt-7 hidden text-center text-[13px] text-white/40 lg:block">Click any step to learn more</p>
           </div>
         </section>
 
@@ -552,7 +556,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
                 const [duration, ...rest] = (item.description || "").split(". ");
                 const copy = rest.join(". ");
                 return (
-                  <article key={`${item.title}-${index}`} className="rounded-[10px] border border-[#1e2b430d] border-t-[3px] border-t-[#bc9155] bg-white px-6 py-8 shadow-[0_2px_8px_rgba(30,43,67,0.04)]">
+                  <article key={`${item.title}-${index}`} className="rounded-[10px] border border-[#1e2b430d] border-t-[3px] border-t-[#bc9155] bg-white px-6 py-8 shadow-[0_2px_8px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
                     <div className="mb-3 inline-block rounded-[4px] bg-[#bc9155] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-white">Phase {index + 1}</div>
                     <h3 className="text-[18px] font-bold">{item.title}</h3>
                     <div className="mt-3 font-serif text-[24px] font-bold text-[#bc9155]">{duration}</div>
@@ -580,9 +584,10 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
                 const links = county.town_links || {};
                 const displayPhone = resolveAreaPhone(phones, county.name, county.phone);
                 return (
-                  <article key={`${county.name}-${index}`} className="overflow-hidden rounded-[12px] bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(30,43,67,0.1)]">
+                  <article key={`${county.name}-${index}`} className="group overflow-hidden rounded-[12px] border-b-[3px] border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-[6px] hover:border-b-[#bc9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]">
                     <div className="relative h-[220px] overflow-hidden">
-                      <img src={media(county.image, index === 0 ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")} alt={county.name || "County"} className={`h-full w-full object-cover ${index === 1 ? "object-top" : ""}`} />
+                      <img src={media(county.image, index === 0 ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")} alt={county.name || "County"} className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${index === 1 ? "object-top" : ""}`} />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-[linear-gradient(to_top,rgba(30,43,67,0.4),transparent)]" />
                     </div>
                     <div className="px-7 py-8">
                       <h3 className="text-[24px] font-bold text-[#1e2b43]">{county.name}</h3>
@@ -592,7 +597,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
                         {(county.towns || []).map((town) => (
                           <div key={`${county.name}-${town}`}>{linkNode(links[town] || county.url || "#", town, "block rounded-full bg-[#f5f1e9] px-[10px] py-[7px] text-center text-[11px] font-semibold text-[#1e2b43] transition-colors hover:bg-[#bc9155] hover:text-white")}</div>
                         ))}
-                        {expanded ? (county.extra_towns || []).map((town) => <span key={`${county.name}-${town}`} className="rounded-full bg-[#f5f1e9] px-[10px] py-[7px] text-center text-[11px] font-semibold text-[#1e2b43]">{town}</span>) : null}
+                        {expanded ? (county.extra_towns || []).map((town) => <span key={`${county.name}-${town}`} className="rounded-full bg-[#f5f1e9] px-[10px] py-[7px] text-center text-[11px] font-semibold text-[#1e2b43] transition-colors hover:text-[#9a7340]">{town}</span>) : null}
                         {county.extra_towns?.length ? <button type="button" className="col-span-full mt-1 text-center text-[13px] font-semibold text-[#bc9155]" aria-expanded={expanded} onClick={() => setCountyOpen((current) => ({ ...current, [index]: !current[index] }))}>{expanded ? "Show Less -" : "See All Towns +"}</button> : null}
                       </div>
                       {county.url ? linkNode(county.url, <span className="mt-4 inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#bc9155]">{county.cta_label || `Learn more about ${county.name}`}<span aria-hidden="true">-&gt;</span></span>) : null}
@@ -663,14 +668,14 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
             </div>
             <div className="grid gap-8 lg:grid-cols-3">
               {(related?.items || []).map((item, index) => (
-                <article key={`${item.title}-${index}`} className="overflow-hidden rounded-[8px] bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_34px_rgba(30,43,67,0.1)]">
+                <article key={`${item.title}-${index}`} className="group flex flex-col overflow-hidden rounded-[8px] border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
                   <div className="h-[220px] overflow-hidden">
-                    <img src={media(item.image, "/services/bathroom-remodeling-ct.jpg")} alt={item.title || "Related service"} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
+                    <img src={media(item.image, "/services/bathroom-remodeling-ct.jpg")} alt={item.title || "Related service"} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   </div>
-                  <div className="px-7 py-8">
-                    <h3 className="text-[22px] font-bold text-[#1e2b43]">{item.url ? linkNode(item.url, item.title, "text-[#1e2b43] hover:text-[#bc9155]") : item.title}</h3>
-                    <p className="mt-3 text-[14px] leading-[1.75] text-[#5c677d]">{item.description}</p>
-                    {item.url ? linkNode(item.url, <span className="mt-5 inline-flex items-center gap-2 text-[14px] font-semibold text-[#bc9155]">Learn More<span aria-hidden="true">-&gt;</span></span>) : null}
+                  <div className="flex flex-1 flex-col px-7 pb-8 pt-7">
+                    <h3 className="mb-3 text-[22px] font-bold text-[#1e2b43]">{item.url ? linkNode(item.url, item.title, "text-[#1e2b43] hover:text-[#bc9155]") : item.title}</h3>
+                    <p className="mb-5 flex-1 text-[15px] leading-[1.7] text-[#5c677d]">{item.description}</p>
+                    {item.url ? linkNode(item.url, <span className="inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#bc9155] transition-[gap] duration-300 hover:gap-[10px]">Learn More<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></span>) : null}
                   </div>
                 </article>
               ))}
