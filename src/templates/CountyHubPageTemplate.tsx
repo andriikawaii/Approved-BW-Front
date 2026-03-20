@@ -1,9 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Check, ChevronDown, Shield, Star, Upload } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
+
+function FadeUp({ delay = 0, children, className = "" }: { delay?: number; children: React.ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setVisible(true); return; }
+    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } }, { threshold: 0.15 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  return (
+    <div ref={ref} className={className} style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(24px)", transition: `opacity 0.7s cubic-bezier(0.4,0,0.2,1) ${delay}ms, transform 0.7s cubic-bezier(0.4,0,0.2,1) ${delay}ms` }}>
+      {children}
+    </div>
+  );
+}
 
 const cls = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ");
 const section = <T,>(page: CMSPage, type: string) => page.sections.find((entry) => entry.is_active && entry.type === type)?.data as T | undefined;
@@ -211,16 +229,17 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
 
   return (
     <div className="bg-[#f5f1e9] text-[#1e2b43]">
-      <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pb-0 pt-[84px] text-white md:px-10">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${media(hero?.background_image, slug === "fairfield-county" ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")})` }} />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.06),transparent_38%),linear-gradient(180deg,rgba(21,30,48,0.45)_0%,rgba(21,30,48,0.35)_24%,rgba(21,30,48,0.68)_70%,rgba(21,30,48,0.95)_100%)]" />
-        <div className="relative z-10 mx-auto flex min-h-[580px] max-w-[1240px] flex-col items-center justify-center pb-12 text-center">
+      <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pb-0 pt-[130px] text-white md:px-10">
+        <div className="absolute inset-0 bg-cover bg-center opacity-[0.72]" style={{ backgroundImage: `url(${media(hero?.background_image, slug === "fairfield-county" ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")})` }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(21,30,48,0.45) 0%, rgba(21,30,48,0.35) 24%, rgba(21,30,48,0.68) 70%, rgba(21,30,48,0.95) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(188,145,85,0.06) 0%, transparent 50%)" }} />
+        <div className="relative z-10 mx-auto flex min-h-[380px] max-w-[1240px] flex-col items-center justify-center pb-14 text-center md:min-h-[440px]">
           <ol className="mb-4 flex list-none items-center text-[12px] font-semibold text-white/92">
             <li>{linkNode("/", "Home", "transition-colors hover:text-[#bc9155]")}</li>
             <li className="before:px-2.5 before:text-[#bc9155] before:content-['›']">{linkNode("/areas-we-serve/", "Areas We Serve", "transition-colors hover:text-[#bc9155]")}</li>
             <li className="before:px-2.5 before:text-[#bc9155] before:content-['›']"><span>{countyName}</span></li>
           </ol>
-          <h1 className="max-w-[860px] text-[clamp(40px,4.6vw,60px)] font-bold leading-[1.04] tracking-[-0.03em] text-white">
+          <h1 className="max-w-[860px] font-serif text-[clamp(40px,4.6vw,60px)] font-bold leading-[1.04] tracking-[-0.03em] text-white">
             {heroParts.before}
             {heroParts.accent ? <span className="text-[#bc9155]">{heroParts.accent}</span> : null}
             {heroParts.after}
@@ -233,9 +252,16 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
                 <div key={`${badge.label || "badge"}-${index}`}>
                   {linkNode(
                     badge.url || "#",
-                    <div className={cls("min-w-[184px] rounded-[6px] border px-6 py-4 text-left shadow-[0_12px_32px_rgba(0,0,0,0.16)] transition-all hover:-translate-y-0.5", isPrimary ? "border-[#bc9155] bg-[#bc9155] text-white" : "border-white/10 bg-[rgba(39,49,72,0.82)] text-white")}>
-                      <div className={cls("text-[11px] font-semibold uppercase tracking-[0.16em]", isPrimary ? "text-white/84" : "text-white/68")}>{badge.label}</div>
-                      {badge.value ? <div className="mt-1.5 text-[17px] font-bold">{badge.value}</div> : null}
+                    <div
+                      className={cls(
+                        "flex min-w-[180px] flex-col items-center rounded-[8px] border px-7 py-4 text-center transition-all duration-300 hover:-translate-y-[2px]",
+                        isPrimary
+                          ? "border-[#bc9155] border-b-2 border-b-[#a57d48] bg-[#bc9155] text-white hover:bg-[#d4a95a] hover:border-[#d4a95a] hover:border-b-[#a57d48] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
+                          : "border-white/[0.18] border-b-2 border-b-[#bc9155] bg-[rgba(10,18,35,0.42)] text-white backdrop-blur-[12px] hover:bg-[rgba(10,18,35,0.62)] hover:border-white/[0.28] hover:border-b-[#bc9155] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3),0_0_0_1px_rgba(188,145,85,0.2)]",
+                      )}
+                    >
+                      <div className={cls("text-[11px] uppercase tracking-[1.2px]", isPrimary ? "opacity-90" : "opacity-70")}>{badge.label}</div>
+                      {badge.value ? <div className="mt-1 text-[18px] font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>{badge.value}</div> : null}
                     </div>,
                   )}
                 </div>
@@ -245,60 +271,80 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      <div className="bg-[#1e2b43]">
-        <div className="mx-auto grid max-w-[1440px] grid-cols-2 border-y border-[#bc91551f] md:grid-cols-4">
-          {(heroTrust?.items || []).map((item: any, index: number) => (
-            <div key={`${item.label || "trust"}-${index}`} className="flex min-h-[124px] flex-col items-center justify-center border-r border-[#bc91551f] px-4 py-9 text-center last:border-r-0 transition-all hover:-translate-y-0.5 hover:bg-[#bc9155]/8">
-              {index < 3 && item.value ? <div className="font-serif text-[32px] font-bold leading-none text-[#bc9155] md:text-[36px]">{item.value}</div> : <div className="text-[#bc9155] text-[28px]">{trustIcon(item.icon)}</div>}
-              <div className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/78 md:text-[12px]">{item.label}</div>
-            </div>
-          ))}
+      <section className="border-y border-[rgba(188,145,85,0.2)]" style={{ background: "linear-gradient(135deg, #1E2B43 0%, #151E30 100%)" }}>
+        <div className="mx-auto grid max-w-[1280px] grid-cols-2 text-center md:grid-cols-4">
+          {(heroTrust?.items || []).map((item: any, index: number, items: any[]) => {
+            const isShield = (item.icon || "").toLowerCase() === "shield" || /bonded|insured/i.test(item.label || "");
+            const showBorder = index < items.length - 1;
+            return (
+              <div key={`${item.label || "trust"}-${index}`} className={cls("group cursor-default px-5 py-9 transition-all duration-300 hover:-translate-y-[3px] hover:bg-[rgba(188,145,85,0.08)]", showBorder && "border-r border-[rgba(188,145,85,0.12)]")}>
+                <div className="flex h-[42px] items-end justify-center leading-none text-[#BC9155] transition-all duration-300 group-hover:text-[#d4a95a] group-hover:[text-shadow:0_0_20px_rgba(188,145,85,0.3)]" style={{ fontFamily: "'Playfair Display', serif", fontSize: 42, fontWeight: 700 }}>
+                  {isShield ? (
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                  ) : (
+                    item.value
+                  )}
+                </div>
+                <div className="mt-2 text-[13px] font-medium uppercase tracking-[1px] text-white/60 transition-colors duration-300 group-hover:text-white/85">
+                  {item.label}
+                </div>
+              </div>
+            );
+          })}
         </div>
-      </div>
+      </section>
 
-      <section className="bg-white px-5 py-20 md:px-10">
-        <div className="mx-auto max-w-[760px] text-center">
-          {label(countyCopy.overviewEyebrow)}
-          <h2 className="text-[clamp(36px,3.8vw,50px)] font-bold leading-[1.08] tracking-[-0.03em]">
-            {overviewParts.before}
-            {overviewParts.accent ? <span className="text-[#bc9155]">{overviewParts.accent}</span> : null}
-            {overviewParts.after}
-          </h2>
-          <div className="mx-auto mt-6 max-w-[690px] space-y-5 text-left text-[14px] leading-[1.75] text-[#5c677d] md:text-[15px]">
-            {countyCopy.overviewParagraphs.map((paragraph, index) => (
-              <p key={`overview-${index}`}>{paragraph}</p>
-            ))}
+      <section className="bg-white px-5 py-20 md:px-10 md:py-[100px]">
+        <FadeUp>
+          <div className="mx-auto max-w-[760px] text-center">
+            {label(countyCopy.overviewEyebrow)}
+            <h2 className="font-serif text-[clamp(32px,3.5vw,48px)] font-bold leading-[1.08] tracking-[-0.03em]">
+              {overviewParts.before}
+              {overviewParts.accent ? <span className="text-[#bc9155]">{overviewParts.accent}</span> : null}
+              {overviewParts.after}
+            </h2>
+            <div className="mx-auto mt-6 max-w-[690px] space-y-5 text-left text-[15px] leading-[1.75] text-[#5c677d]">
+              {countyCopy.overviewParagraphs.map((paragraph, index) => (
+                <p key={`overview-${index}`}>{paragraph}</p>
+              ))}
+            </div>
           </div>
-        </div>
+        </FadeUp>
       </section>
 
       <section className="bg-[#f5f1e9] px-5 py-20 md:px-10">
         <div className="mx-auto max-w-[1240px]">
-          <div className="mb-12 text-center">
-            {label("Our Services")}
-            <h2 className="text-[clamp(34px,3.8vw,48px)] font-bold leading-[1.08] tracking-[-0.03em]">
-              {servicesParts.before}
-              {servicesParts.accent ? <span className="text-[#bc9155]">{servicesParts.accent}</span> : null}
-              {servicesParts.after}
-            </h2>
-            <p className="mx-auto mt-3 max-w-[760px] text-[14px] leading-[1.8] text-[#5c677d] md:text-[15px]">{countyCopy.servicesSubtitle}</p>
-          </div>
+          <FadeUp>
+            <div className="mb-12 text-center">
+              {label("Our Services")}
+              <h2 className="font-serif text-[clamp(34px,3.8vw,48px)] font-bold leading-[1.08] tracking-[-0.03em]">
+                {servicesParts.before}
+                {servicesParts.accent ? <span className="text-[#bc9155]">{servicesParts.accent}</span> : null}
+                {servicesParts.after}
+              </h2>
+              <p className="mx-auto mt-3 max-w-[760px] text-[15px] leading-[1.8] text-[#5c677d]">{countyCopy.servicesSubtitle}</p>
+            </div>
+          </FadeUp>
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {visibleServices.map((item: any, index: number) => (
-              <article key={`${item.title || "service"}-${index}`} className="overflow-hidden rounded-[10px] border border-[#e6dccd] bg-white shadow-[0_16px_34px_rgba(30,43,67,0.06)]">
-                <div className="h-[228px] overflow-hidden">
-                  <img src={media(item.image, "/services/kitchen-remodeling-ct.jpg")} alt={item.title} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
-                </div>
-                <div className="p-5">
-                  <h3 className="text-[19px] font-bold leading-[1.22]">{item.title}</h3>
-                  <p className="mt-3 text-[13px] leading-[1.72] text-[#5c677d]">{item.summary}</p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {item.price ? <span className="rounded-full bg-[#bc915512] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#bc9155]">{item.price}</span> : null}
-                    {item.timeline ? <span className="rounded-full bg-[#f5f1e9] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#1e2b43]">{item.timeline}</span> : null}
+              <FadeUp key={`${item.title || "service"}-${index}`} delay={index % 3 * 100} className="h-full">
+                <article className="group/card flex h-full flex-col overflow-hidden rounded-[10px] border border-[#e6dccd] border-b-[3px] border-b-transparent bg-white shadow-[0_16px_34px_rgba(30,43,67,0.06)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
+                  <div className="h-[228px] overflow-hidden">
+                    <img src={media(item.image, "/services/kitchen-remodeling-ct.jpg")} alt={item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105" />
                   </div>
-                  {item.url ? linkNode(item.url, <><span>{item.cta_label || "Learn More"}</span><ArrowRight className="h-4 w-4" /></>, "mt-5 inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.12em] text-[#bc9155] transition-all hover:gap-3") : null}
-                </div>
-              </article>
+                  <div className="flex flex-1 flex-col p-5">
+                    <h3 className="font-serif text-[22px] font-bold leading-[1.22]">{item.title}</h3>
+                    <p className="mt-3 flex-1 text-[15px] leading-[1.72] text-[#5c677d]">{item.summary}</p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {item.price ? <span className="rounded-full bg-[#bc915512] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#bc9155]">{item.price}</span> : null}
+                      {item.timeline ? <span className="rounded-full bg-[#f5f1e9] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#1e2b43]">{item.timeline}</span> : null}
+                    </div>
+                    {item.url ? linkNode(item.url, <><span>{item.cta_label || "Learn More"}</span><ArrowRight className="h-4 w-4" /></>, "mt-5 inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.12em] text-[#bc9155] transition-all duration-300 hover:gap-3") : null}
+                  </div>
+                </article>
+              </FadeUp>
             ))}
             {showAllServices && services?.cta_card ? (
               <article className="flex flex-col justify-between rounded-[10px] border border-[#bc915544] bg-[#1e2b43] p-7 text-white shadow-[0_18px_40px_rgba(30,43,67,0.18)]">
@@ -330,15 +376,17 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
       {/* TOWNS WE SERVE */}
       <section className="bg-[#f5f1e9] px-5 pt-10 pb-20 md:px-10">
         <div className="mx-auto max-w-[1240px]">
-          <div className="mb-12 text-center">
-            {label("Where We Work")}
-            <h2 className="text-[clamp(34px,3.8vw,48px)] font-bold leading-[1.08] tracking-[-0.03em]">
-              {townsParts.before}
-              {townsParts.accent ? <span className="text-[#bc9155]">{townsParts.accent}</span> : null}
-              {townsParts.after}
-            </h2>
-            <p className="mx-auto mt-3 max-w-[720px] text-[14px] leading-[1.8] text-[#5c677d] md:text-[15px]">{countyCopy.townsSubtitle}</p>
-          </div>
+          <FadeUp>
+            <div className="mb-12 text-center">
+              {label("Where We Work")}
+              <h2 className="font-serif text-[clamp(34px,3.8vw,48px)] font-bold leading-[1.08] tracking-[-0.03em]">
+                {townsParts.before}
+                {townsParts.accent ? <span className="text-[#bc9155]">{townsParts.accent}</span> : null}
+                {townsParts.after}
+              </h2>
+              <p className="mx-auto mt-3 max-w-[720px] text-[15px] leading-[1.8] text-[#5c677d]">{countyCopy.townsSubtitle}</p>
+            </div>
+          </FadeUp>
           <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
             {(towns?.tier1 || []).map((town: any, index: number) => {
               const override = townOverrides[town.label] || { style: "", description: town.description || "" };
@@ -351,12 +399,16 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
                 </div>
               );
 
-              return override.linked && town.url ? (
-                <Link key={`${town.label || "town"}-${index}`} href={town.url} className="no-underline">
-                  {content}
-                </Link>
-              ) : (
-                <div key={`${town.label || "town"}-${index}`}>{content}</div>
+              return (
+                <FadeUp key={`${town.label || "town"}-${index}`} delay={index % 4 * 80} className="h-full">
+                  {override.linked && town.url ? (
+                    <Link href={town.url} className="block h-full no-underline">
+                      {content}
+                    </Link>
+                  ) : (
+                    <div className="h-full">{content}</div>
+                  )}
+                </FadeUp>
               );
             })}
           </div>
@@ -366,58 +418,77 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
       {/* FEATURED PROJECTS */}
       <section className="border-t border-[#1e2b43]/8 bg-[#f5f1e9] px-5 py-20 md:px-10">
         <div className="mx-auto max-w-[1240px]">
-          <div className="mb-12 text-center">
-            {label("Recent Work")}
-            <h2 className="text-[clamp(34px,3.8vw,48px)] font-bold leading-[1.08] tracking-[-0.03em]">
-              {featuredParts.before}
-              {featuredParts.accent ? <span className="text-[#bc9155]">{featuredParts.accent}</span> : null}
-              {featuredParts.after}
-            </h2>
-            <p className="mx-auto mt-3 max-w-[760px] text-[14px] leading-[1.8] text-[#5c677d] md:text-[15px]">{countyCopy.featuredSubtitle}</p>
-          </div>
+          <FadeUp>
+            <div className="mb-12 text-center">
+              {label("Recent Work")}
+              <h2 className="font-serif text-[clamp(34px,3.8vw,48px)] font-bold leading-[1.08] tracking-[-0.03em]">
+                {featuredParts.before}
+                {featuredParts.accent ? <span className="text-[#bc9155]">{featuredParts.accent}</span> : null}
+                {featuredParts.after}
+              </h2>
+              <p className="mx-auto mt-3 max-w-[760px] text-[15px] leading-[1.8] text-[#5c677d]">{countyCopy.featuredSubtitle}</p>
+            </div>
+          </FadeUp>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {featuredOverrides.map((item, index) => (
-              <article key={`${item.title}-${index}`} className="flex flex-col rounded-[12px] border-b-2 border-b-transparent bg-white p-7 shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
-                <div className="flex-1">
-                  <h3 className="mb-3 text-[20px] font-bold">{item.title}</h3>
-                  <p className="text-[14px] leading-[1.75] text-[#5c677d]">{item.body}</p>
-                </div>
-                <div className="mt-4 border-l-[3px] border-l-[#bc9155] pl-4">
-                  <p className="min-h-[72px] text-[14px] italic leading-[1.65] text-[#1e2b43]">{item.quote}</p>
-                  <cite className="mt-2 block text-[12px] font-semibold not-italic text-[#5c677d]">{item.cite}</cite>
-                </div>
-              </article>
+              <FadeUp key={`${item.title}-${index}`} delay={index * 100}>
+                <article className="flex h-full flex-col rounded-[12px] border-b-[3px] border-b-transparent bg-white p-7 shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
+                  <div className="flex-1">
+                    <h3 className="mb-3 font-serif text-[22px] font-bold">{item.title}</h3>
+                    <p className="text-[15px] leading-[1.75] text-[#5c677d]">{item.body}</p>
+                  </div>
+                  <div className="mt-4 border-l-[3px] border-l-[#bc9155] pl-4">
+                    <p className="min-h-[72px] text-[15px] italic leading-[1.65] text-[#1e2b43]">{item.quote}</p>
+                    <cite className="mt-2 block text-[12px] font-semibold not-italic text-[#5c677d]">{item.cite}</cite>
+                  </div>
+                </article>
+              </FadeUp>
             ))}
           </div>
         </div>
       </section>
 
-      <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1a2438_0%,#1e2b43_50%,#151e30_100%)] px-5 py-12 md:px-10 md:py-14">
-        <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-center">
-          {(stripTrust?.items || []).map((item: any, index: number) => (
-            <div key={`${item.label || "strip"}-${index}`} className="contents">
-              {item.url ? linkNode(item.url, <div className="flex min-w-[180px] flex-1 flex-col items-center gap-3 px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90 transition-all hover:text-[#bc9155]"><span className="text-[#bc9155]">{trustIcon(item.icon)}</span><span>{[item.label, item.value].filter(Boolean).join(" ")}</span></div>, "flex flex-1 justify-center") : <div className="flex flex-1 justify-center"><div className="flex min-w-[180px] flex-1 flex-col items-center gap-3 px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90"><span className="text-[#bc9155]">{trustIcon(item.icon)}</span><span>{[item.label, item.value].filter(Boolean).join(" ")}</span></div></div>}
-              {index < (stripTrust?.items || []).length - 1 ? <div className="hidden h-10 w-px bg-white/10 lg:block" /> : null}
-            </div>
-          ))}
+      <FadeUp>
+        <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1e2b43_0%,#151E30_100%)] px-5 py-14 md:px-10">
+          <div className="absolute inset-0 bg-[url('/hero/builtwell-job-site-aerial-hero-ct.jpg')] bg-cover bg-center opacity-[0.12]" />
+          <div className="relative z-[1] mx-auto flex max-w-[1200px] flex-wrap items-center justify-center">
+            {(stripTrust?.items || []).map((item: any, index: number) => {
+              const inner = (
+                <div className="flex min-w-[180px] flex-1 flex-col items-center gap-[10px] px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90 transition-all duration-300 hover:-translate-y-1 hover:text-[#bc9155]">
+                  <span className="text-[#bc9155] drop-shadow-[0_2px_4px_rgba(188,145,85,0.3)]">{trustIcon(item.icon)}</span>
+                  <span>{[item.label, item.value].filter(Boolean).join(" ")}</span>
+                </div>
+              );
+              return (
+                <div key={`${item.label || "strip"}-${index}`} className="contents">
+                  {item.url ? linkNode(item.url, inner, "flex flex-1 justify-center") : <div className="flex flex-1 justify-center">{inner}</div>}
+                  {index < (stripTrust?.items || []).length - 1 ? <div className="hidden h-10 w-px bg-white/10 lg:block" /> : null}
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      </FadeUp>
 
       <section className="bg-[#f5f1e9] px-5 py-20 md:px-10" id="contact">
         <div className="mx-auto max-w-[1200px]">
-          <div className="mb-8 text-center">
-            {label("Get In Touch")}
-            <h2 className="text-[clamp(34px,3.8vw,48px)] font-bold tracking-[-0.02em]">{leadParts.before}{leadParts.accent ? <span className="text-[#bc9155]">{leadParts.accent}</span> : null}{leadParts.after}</h2>
-            <p className="mx-auto mt-3 max-w-[620px] text-[15px] leading-[1.8] text-[#5c677d]">{countyCopy.leadSubtitle}</p>
-          </div>
-          <div className="grid gap-8 lg:grid-cols-[1fr_1.08fr]">
-            <div className="grid gap-3">
-              {(lead?.images || []).slice(0, 2).map((image: any, index: number) => (
-                <div key={`${image.alt || "lead"}-${index}`} className="overflow-hidden rounded-[10px] shadow-[0_16px_38px_rgba(30,43,67,0.1)]">
-                  <img src={media(image.image, index === 0 ? "/portfolio/builtwell-team-client-arrival-ct.jpeg" : "/portfolio/builtwell-contractor-sign-consultation-ct-01.jpg")} alt={image.alt || "BuiltWell CT consultation"} className="h-[270px] w-full object-cover" />
-                </div>
-              ))}
+          <FadeUp>
+            <div className="mb-8 text-center">
+              {label("Get In Touch")}
+              <h2 className="font-serif text-[clamp(34px,3.8vw,48px)] font-bold tracking-[-0.02em]">{leadParts.before}{leadParts.accent ? <span className="text-[#bc9155]">{leadParts.accent}</span> : null}{leadParts.after}</h2>
+              <p className="mx-auto mt-3 max-w-[620px] text-[15px] leading-[1.8] text-[#5c677d]">{countyCopy.leadSubtitle}</p>
             </div>
+          </FadeUp>
+          <div className="grid gap-8 lg:grid-cols-[1fr_1.08fr]">
+            <FadeUp delay={150}>
+              <div className="grid gap-3">
+                {(lead?.images || []).slice(0, 2).map((image: any, index: number) => (
+                  <div key={`${image.alt || "lead"}-${index}`} className="overflow-hidden rounded-[10px] shadow-[0_16px_38px_rgba(30,43,67,0.1)]">
+                    <img src={media(image.image, index === 0 ? "/portfolio/builtwell-team-client-arrival-ct.jpeg" : "/portfolio/builtwell-contractor-sign-consultation-ct-01.jpg")} alt={image.alt || "BuiltWell CT consultation"} className="h-[270px] w-full object-cover transition-transform duration-500 hover:scale-105" />
+                  </div>
+                ))}
+              </div>
+            </FadeUp>
             <div className="rounded-[12px] border border-[#e4dac9] bg-white px-6 py-8 shadow-[0_20px_46px_rgba(30,43,67,0.1)] md:px-8">
               {submitted ? (
                 <div className="flex min-h-[420px] flex-col items-center justify-center text-center">
@@ -452,7 +523,7 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      {financing ? <div className="border-t border-[#1e2b4314] bg-white px-5 py-12 md:px-10 md:py-14"><div className="mx-auto flex max-w-[1200px] flex-col items-center gap-6 text-center md:flex-row md:justify-between md:text-left"><div className="flex flex-col items-center gap-4 md:flex-row"><div className="text-[24px] font-bold tracking-[-0.02em]"><span className="text-[#6bbf4e]">Green</span><span className="text-[#1e2b43]">Sky</span></div><p className="max-w-[760px] text-[16px] leading-[1.6] text-[#5c677d]"><strong className="text-[#1e2b43]">{financing.title}.</strong> {financing.content}</p></div>{financing.cta?.url ? linkNode(financing.cta.url, <><span>{financing.cta.label || "Check Financing Options"}</span><ArrowRight className="h-4 w-4" /></>, "inline-flex min-h-[52px] min-w-[280px] items-center justify-center gap-2 rounded-[8px] bg-[#bc9155] px-8 py-3 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48]") : null}</div></div> : null}
+      {financing ? <FadeUp><div className="border-t border-[#1e2b4314] bg-white px-5 py-12 md:px-10 md:py-14"><div className="mx-auto flex max-w-[1200px] flex-col items-center gap-6 text-center md:flex-row md:justify-between md:text-left"><div className="flex flex-col items-center gap-4 md:flex-row"><div className="text-[24px] font-bold tracking-[-0.02em]"><span className="text-[#6bbf4e]">Green</span><span className="text-[#1e2b43]">Sky</span></div><p className="max-w-[760px] text-[16px] leading-[1.6] text-[#5c677d]"><strong className="text-[#1e2b43]">{financing.title}.</strong> {financing.content}</p></div>{financing.cta?.url ? linkNode(financing.cta.url, <><span>{financing.cta.label || "Check Financing Options"}</span><ArrowRight className="h-4 w-4" /></>, "inline-flex min-h-[52px] min-w-[280px] items-center justify-center gap-2 rounded-[8px] bg-[#bc9155] px-8 py-3 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48]") : null}</div></div></FadeUp> : null}
     </div>
   );
 }
