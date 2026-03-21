@@ -22,6 +22,8 @@ import { ServicesOverviewPageTemplate } from './ServicesOverviewPageTemplate';
 import { TermsPageTemplate } from './TermsPageTemplate';
 import { TownPageTemplate } from './TownPageTemplate';
 import { CountyHubPageTemplate } from './CountyHubPageTemplate';
+import { FreeConsultationPageTemplate } from './FreeConsultationPageTemplate';
+import { GreenwichCTPageTemplate } from './GreenwichCTPageTemplate';
 
 type TemplateComponent = (props: { page: CMSPage }) => React.JSX.Element;
 
@@ -80,6 +82,14 @@ function resolveTemplateComponent(template: string): TemplateComponent {
 }
 
 export function renderTemplate(page: CMSPage) {
+  if (normalizePageSlug(page.slug) === 'free-consultation') {
+    return createElement(FreeConsultationPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'fairfield-county/greenwich-ct') {
+    return createElement(GreenwichCTPageTemplate, { page });
+  }
+
   if (normalizePageSlug(page.slug) === 'insurance-restoration') {
     return createElement(InsuranceRestorationPageTemplate, { page });
   }

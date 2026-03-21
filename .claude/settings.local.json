@@ -17,7 +17,23 @@
       "Bash(ls c:/Users/georg/Downloads/builtwell-backend/database/seeders/sync_*)",
       "Bash(php artisan tinker --execute=\":*)",
       "Bash(php artisan:*)",
-      "Bash(curl -s http://localhost:8000/api/pages/services)"
+      "Bash(curl -s http://localhost:8000/api/pages/services)",
+      "Bash(find /c/Users/georg/OneDrive/Documents/GitHub/builtwell-frontend -type f -name *consultation* -o -name *free*)",
+      "Bash(find /c/Users/georg/OneDrive/Documents/GitHub/builtwell-backend/database/seeders -name *greenwich* -o -name *town_hub*)",
+      "Bash(find /c/Users/georg/Downloads/BuiltWell-Website-Complete-20260320T192527Z-1-001 -name *.html)",
+      "Bash(BASE=\"/c/Users/georg/Downloads/BuiltWell-Website-Complete-20260320T192527Z-1-001/BuiltWell-Website-Complete\")",
+      "Bash(DEST=\"/c/Users/georg/OneDrive/Documents/GitHub/builtwell-frontend/public/images/areas\")",
+      "Bash(__NEW_LINE_8da79771c7b57546__ cp:*)",
+      "Bash(cp \"$BASE/images/areas/greenwich-ct-skyline.jpg\" \"$DEST/\")",
+      "Bash(cp \"$BASE/images/areas/greenwich-ct-town-hall.jpg\" \"$DEST/\")",
+      "Bash(BASE=/c/Users/georg/Downloads/BuiltWell-Website-Complete-20260320T192527Z-1-001/BuiltWell-Website-Complete DEST=/c/Users/georg/OneDrive/Documents/GitHub/builtwell-frontend/public __NEW_LINE_0da35a716b48647c__ cp $BASE/team/builtwell-owner-handshake-client-ct-02.jpg $DEST/team/)",
+      "Bash(true __NEW_LINE_0da35a716b48647c__ ls $DEST/hero/)",
+      "Read(//c/Users/georg/OneDrive/Documents/GitHub/builtwell-frontend/$DEST/**)",
+      "Bash(DEST=\"/c/Users/georg/OneDrive/Documents/GitHub/builtwell-frontend/public\")",
+      "Bash(__NEW_LINE_6ce4bd817d6b8119__ mkdir:*)",
+      "Bash(cp \"$BASE/hero/builtwell-job-site-aerial-hero-ct.jpg\" \"$DEST/hero/\")",
+      "Bash(cp \"$BASE/hero/builtwell-team-van-consultation-hero-ct.jpg\" \"$DEST/hero/\")",
+      "Bash(cp \"$BASE/team/builtwell-owner-handshake-client-ct-02.jpg\" \"$DEST/team/\")"
     ]
   }
 }
