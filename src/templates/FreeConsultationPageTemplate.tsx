@@ -259,7 +259,7 @@ function SchedulingModal({ open, onClose }: { open: boolean; onClose: () => void
         <div style={{ background: '#1E2B43', padding: '28px 32px', color: '#fff', borderRadius: '12px 12px 0 0', textAlign: 'center', position: 'relative' }}>
           <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, marginBottom: 4 }}>Schedule a <span style={{ color: '#BC9155' }}>Free Consultation</span></h3>
           <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', margin: 0 }}>No charge, no obligation. Pick a time that works for you.</p>
-          <button onClick={onClose} style={{ position: 'absolute', top: 20, right: 20, background: 'none', border: 'none', color: 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: 24, lineHeight: 1 }}>×</button>
+          <button onClick={onClose} style={{ position: 'absolute', top: 14, right: 14, width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', color: 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: 24, lineHeight: 1 }}>×</button>
         </div>
         {/* body */}
         <div style={{ padding: 32 }}>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Check, ChevronDown, Shield, Star, Upload } from "lucide-react";
+import { ArrowRight, CalendarDays, Check, CheckCircle, ChevronDown, CreditCard, Shield, Star, Upload } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
 
 export const cls = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ");
@@ -50,6 +50,12 @@ export function trustIcon(icon?: string | null) {
     case "shield": return <Shield className="h-5 w-5" />;
     case "calendar":
     case "clock": return <CalendarDays className="h-5 w-5" />;
+    case "check-circle":
+    case "circle-check":
+    case "verified": return <CheckCircle className="h-5 w-5" />;
+    case "license":
+    case "card":
+    case "credit-card": return <CreditCard className="h-5 w-5" />;
     default: return <Check className="h-5 w-5" />;
   }
 }

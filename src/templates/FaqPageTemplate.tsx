@@ -204,7 +204,7 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
                     {topCategoryItems.map((item, itemIndex) => (
                       <details key={`${key}-top-${itemIndex}`} className="faq-item">
                         <summary>{item.question}</summary>
-                        <div className="faq-answer">{item.answer}</div>
+                        <div className="faq-answer" dangerouslySetInnerHTML={{ __html: item.answer }} />
                       </details>
                     ))}
                   </div>
@@ -215,7 +215,7 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
                           {moreCategoryItems.map((item, itemIndex) => (
                             <details key={`${key}-more-${itemIndex}`} className="faq-item">
                               <summary>{item.question}</summary>
-                              <div className="faq-answer">{item.answer}</div>
+                              <div className="faq-answer" dangerouslySetInnerHTML={{ __html: item.answer }} />
                             </details>
                           ))}
                         </div>
@@ -281,6 +281,7 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
               );
             })}
           </div>
+          <p className="mx-auto mt-8 text-center text-[14px] leading-[1.7] text-[#5c677d]">Not sure if we cover your area? {linkNode("/contact/", "Contact our Connecticut remodeling team", "font-semibold text-[#bc9155] hover:underline")} and we will let you know.</p>
         </div>
       </section>
 
@@ -365,7 +366,8 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
         <div className="mx-auto max-w-[1240px]">
           <div className="mb-10 text-center">
             {label(related?.eyebrow || "Our Services")}
-            <h2 className="text-[clamp(34px,3.8vw,48px)] font-bold tracking-[-0.02em]">{related?.title || "You May Also Need"}</h2>
+            <h2 className="text-[clamp(34px,3.8vw,48px)] font-bold tracking-[-0.02em]">{(() => { const p = parts(related?.title, related?.title_highlight); return <>{p.before}{p.accent ? <span className="text-[#bc9155]">{p.accent}</span> : null}{p.after}</>; })()}</h2>
+            {related?.subtitle ? <p className="mx-auto mt-3 max-w-[760px] text-[15px] leading-[1.8] text-[#5c677d]">{related.subtitle}</p> : null}
           </div>
           <div className="grid gap-7 lg:grid-cols-3">
             {(related?.items || []).map((item: any, index: number) => {

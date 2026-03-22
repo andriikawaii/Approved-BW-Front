@@ -545,5 +545,42 @@ export const FAQ_REFERENCE_CATEGORIES: FaqCategory[] = [
         "answer": "It happens. Behind walls, we sometimes find outdated wiring, deteriorated plumbing, water damage, or structural issues that were not visible during the initial assessment. When this occurs, we document the issue with photos, explain the situation, and provide a written change order with the cost to address it before proceeding. We do not make assumptions or add charges without your approval. Transparency in these situations is non-negotiable for us."
       }
     ]
+  },
+  {
+    "title": "Insurance Reconstruction in Connecticut",
+    "items": [
+      {
+        "question": "Does BuiltWell handle insurance reconstruction work?",
+        "answer": "Yes, BuiltWell CT (HIC License #0668405) has nearly 15 years of experience rebuilding Connecticut homes after fire, water, storm, and mold damage. We work directly with insurance carriers including State Farm, Liberty Mutual, Allstate, Travelers, and others to rebuild homes to pre-loss condition or better. Our <a href=\"/insurance-restoration/\">insurance reconstruction services</a> include drywall, framing, kitchen and bathroom reconstruction, flooring replacement, interior carpentry, and full interior rebuilds."
+      },
+      {
+        "question": "Can I choose my own contractor for insurance reconstruction?",
+        "answer": "Yes, Connecticut law gives homeowners the right to select any licensed contractor for insurance reconstruction. Your insurance company cannot require you to use their preferred vendor. You are entitled to choose a contractor you trust, and the carrier is required to work with them. BuiltWell communicates directly with adjusters and submits supplements as needed to ensure the scope covers what is actually required to <a href=\"/insurance-restoration/\">restore your home</a> correctly."
+      },
+      {
+        "question": "What types of damage does BuiltWell rebuild after?",
+        "answer": "BuiltWell rebuilds Connecticut homes after fire damage, water damage, storm damage, and mold damage. Our <a href=\"/insurance-restoration/\">reconstruction scope</a> includes drywall and framing, kitchen reconstruction, bathroom reconstruction, flooring replacement, interior carpentry and trim, and full interior rebuilds. We handle everything from a single room to a complete interior rebuild, and we coordinate directly with your insurance carrier throughout the process."
+      },
+      {
+        "question": "How does the insurance reconstruction process work with BuiltWell?",
+        "answer": "The <a href=\"/insurance-restoration/\">insurance reconstruction process</a> begins with a free damage assessment after your claim is filed. We review the damage, prepare a detailed scope of work, and submit it to your insurance adjuster. We communicate directly with the carrier on your behalf, handle any supplements or scope disputes, and begin reconstruction once approval is received. You receive daily updates during construction and a final walkthrough before the project is closed. Our nearly 15 years of experience with carrier requirements means fewer delays and fewer denied line items."
+      },
+      {
+        "question": "Does BuiltWell work with my insurance adjuster directly?",
+        "answer": "Yes, BuiltWell communicates directly with your insurance adjuster from the initial scope through project completion. We prepare Xactimate-compatible estimates, document all damage with photos, and submit supplement requests when the initial scope does not cover what is actually needed. Our team has worked with every major carrier in Connecticut -- including State Farm, Liberty Mutual, Allstate, and Travelers -- and understands the documentation and communication standards they require. You should not have to manage that process yourself."
+      },
+      {
+        "question": "How long does insurance reconstruction typically take?",
+        "answer": "Insurance reconstruction timelines depend on the scope of damage and carrier approval speed. A single-room rebuild such as a kitchen or bathroom typically takes 3 to 6 weeks once materials are ordered and permits are pulled. A full interior reconstruction can take 8 to 16 weeks. The largest variable is usually how quickly the insurance carrier approves the scope and releases funds. We build the timeline around realistic carrier response times and communicate a detailed schedule to you before work begins."
+      },
+      {
+        "question": "What if the insurance estimate does not cover the full scope of work?",
+        "answer": "Initial insurance estimates frequently underestimate the true scope of reconstruction needed. When we identify work that is required but not included in the carrier's estimate, we prepare a detailed supplement with documentation and submit it directly to the adjuster. With nearly 15 years of experience navigating the supplement process, we know how to present the information carriers need to approve additional scope. You are not responsible for the gap unless you choose to add upgrades beyond the pre-loss condition."
+      },
+      {
+        "question": "Can I upgrade materials during insurance reconstruction?",
+        "answer": "Yes, homeowners can upgrade materials during <a href=\"/insurance-restoration/\">insurance reconstruction</a> since the home is already being rebuilt. Insurance covers restoration to pre-loss condition, but many Connecticut homeowners choose to upgrade -- for example, from laminate to quartz countertops or from builder-grade cabinets to semi-custom. The carrier covers the cost of replacing to the original standard, and you pay only the difference for the upgrade. We itemize this clearly so you know exactly what the upgrade costs before committing."
+      }
+    ]
   }
 ];

@@ -96,35 +96,41 @@ export default function BeforeAfterGrid({ data }: Props) {
 
                 {/* IMAGE SIDE */}
                 <div
-                  className={`relative group h-full min-h-[400px] ${
+                  className={`relative group h-full min-h-[280px] sm:min-h-[360px] ${
                     isReversed ? 'order-1 md:order-2' : ''
                   }`}
                 >
-                  <div className="grid grid-cols-2 gap-4 h-full">
+                  <div className="grid h-full grid-cols-1 gap-4 sm:grid-cols-2">
                     
                     {/* BEFORE */}
-                    <div className="relative h-full">
+                    <figure className="relative h-full">
                       <span className="absolute top-4 left-4 bg-black/70 text-white text-xs font-bold px-3 py-1.5 rounded z-10 tracking-wider">
                         BEFORE
                       </span>
                       <img
                         src={getBeforeImage(project, index)}
                         alt={`Before ${project.location}`}
-                        className="w-full h-full object-cover rounded-lg shadow-md"
+                        className="h-full min-h-[220px] w-full rounded-lg object-cover shadow-md"
                       />
-                    </div>
+                      <figcaption className="mt-2 text-[12px] font-medium text-[#5b6780]">
+                        Before: {project.location}
+                      </figcaption>
+                    </figure>
 
                     {/* AFTER */}
-                    <div className="relative h-full">
+                    <figure className="relative h-full">
                       <span className="absolute top-4 left-4 bg-[#C68E4D] text-white text-xs font-bold px-3 py-1.5 rounded z-10 tracking-wider">
                         AFTER
                       </span>
                       <img
                         src={getAfterImage(project, index)}
                         alt={`After ${project.location}`}
-                        className="w-full h-full object-cover rounded-lg shadow-md"
+                        className="h-full min-h-[220px] w-full rounded-lg object-cover shadow-md"
                       />
-                    </div>
+                      <figcaption className="mt-2 text-[12px] font-medium text-[#5b6780]">
+                        After: {project.location}
+                      </figcaption>
+                    </figure>
 
                   </div>
                 </div>

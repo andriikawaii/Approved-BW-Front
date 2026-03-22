@@ -23,6 +23,16 @@ type RichTextProps = {
     container_width?: 'narrow' | 'default' | 'wide' | string;
     spacing?: 'compact' | 'normal' | 'relaxed' | string;
     anchor_id?: string | null;
+    town_hub_section?: 'housing_stock' | 'permitting' | 'costs' | string;
+    pre_table_text?: string;
+    table_rows?: Array<{
+      service?: string;
+      typical_price?: string;
+      timeline?: string;
+      notes?: string;
+    }>;
+    post_table_text?: string;
+    what_drives_cost?: string[];
     _section_index?: number;
   };
 };
@@ -318,6 +328,7 @@ export function RichText({ data }: RichTextProps) {
 
   const alignClass = data.align === 'center' ? 'text-center' : data.align === 'right' ? 'text-right' : 'text-left';
   const isDarkSurface = surface === 'dark';
+  const townHubSection = typeof data.town_hub_section === 'string' ? data.town_hub_section : '';
 
   const sectionClass =
     surface === 'dark'
@@ -332,9 +343,12 @@ export function RichText({ data }: RichTextProps) {
   const containerClass = containerWidth === 'narrow' ? 'max-w-3xl' : containerWidth === 'wide' ? 'max-w-6xl' : 'max-w-5xl';
   const headingClass = isDarkSurface ? '!text-white' : 'text-[#1E2F4A]';
   const bodyClass = isDarkSurface ? 'text-white/85' : 'text-[#5e6f86]';
+  const isTownHubCosts = townHubSection === 'costs';
   const contentPanelClass = joinClasses(
     'rounded-2xl border p-6 md:p-8',
     isDarkSurface ? 'border-white/20 bg-white/5' : 'border-[#e6ddcc] bg-white shadow-[0_10px_25px_rgba(30,47,74,0.07)]',
+    townHubSection === 'costs' ? 'border-[#d9c7a8] bg-[#fffaf0] shadow-[0_14px_32px_rgba(30,47,74,0.10)]' : '',
+    townHubSection === 'permitting' ? 'bg-[#fbf8f1]' : '',
   );
 
   const normalizedTitle = (title || '').trim().toLowerCase();
@@ -368,13 +382,15 @@ export function RichText({ data }: RichTextProps) {
     (styleVariant === 'cards' ? cards.length > 0 : cards.length > 1 && cards.length === paragraphs.length);
 
   const markdownComponents = buildMarkdownComponents(isDarkSurface);
+  const costRows = Array.isArray(data.table_rows) ? data.table_rows.filter((row) => row?.service) : [];
+  const costDrivers = Array.isArray(data.what_drives_cost) ? data.what_drives_cost.filter(Boolean) : [];
 
   return (
     <section
       id={anchorId}
       data-richtext-style={styleVariant}
       data-richtext-surface={surface}
-      className={joinClasses('bw-richtext', `bw-richtext--${styleVariant}`, sectionClass, spacingClass)}
+      className={joinClasses('bw-richtext', `bw-richtext--${styleVariant}`, townHubSection ? `bw-town-richtext--${townHubSection}` : '', sectionClass, spacingClass)}
     >
       <div className={joinClasses('mx-auto px-6', containerClass)}>
         <div className={alignClass}>
@@ -382,7 +398,63 @@ export function RichText({ data }: RichTextProps) {
           {showTitle ? <h2 className={joinClasses('text-3xl font-semibold md:text-4xl', headingClass)}>{title}</h2> : null}
         </div>
 
-        {shouldRenderProcess ? (
+        {isTownHubCosts ? (
+          <div className={showTitle ? 'mt-8' : 'mt-0'}>
+            <div className={joinClasses(contentPanelClass, 'p-0 md:p-0 overflow-hidden')}>
+              <div className="px-6 pt-6 md:px-8 md:pt-8">
+                {data.pre_table_text ? (
+                  <p className={joinClasses('text-[16px] leading-[1.8] md:text-[17px]', bodyClass)}>{data.pre_table_text}</p>
+                ) : null}
+              </div>
+
+              {costRows.length > 0 ? (
+                <div className="mt-6 overflow-x-auto px-4 pb-2 md:px-6">
+                  <table className="min-w-full border-separate border-spacing-0 overflow-hidden rounded-xl border border-[#e6d7bc] bg-white text-left">
+                    <thead>
+                      <tr className="bg-[#f0e3cc] text-[#1E2F4A]">
+                        <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.08em] md:text-sm">Service</th>
+                        <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.08em] md:text-sm">Typical Price</th>
+                        <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.08em] md:text-sm">Timeline</th>
+                        <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.08em] md:text-sm">Notes</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {costRows.map((row, index) => (
+                        <tr key={`${row.service}-${index}`} className="odd:bg-[#fffdf8] even:bg-white">
+                          <td className="border-t border-[#eee1c9] px-4 py-3 text-sm font-semibold text-[#1E2F4A] md:text-[15px]">{row.service}</td>
+                          <td className="border-t border-[#eee1c9] px-4 py-3 text-sm text-[#4f5f74] md:text-[15px]">{row.typical_price || '-'}</td>
+                          <td className="border-t border-[#eee1c9] px-4 py-3 text-sm text-[#4f5f74] md:text-[15px]">{row.timeline || '-'}</td>
+                          <td className="border-t border-[#eee1c9] px-4 py-3 text-sm text-[#4f5f74] md:text-[15px]">{row.notes || '-'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : null}
+
+              {(data.post_table_text || costDrivers.length > 0) ? (
+                <div className="px-6 pb-6 pt-6 md:px-8 md:pb-8">
+                  {data.post_table_text ? (
+                    <p className={joinClasses('text-[15px] leading-[1.8] md:text-[16px]', bodyClass)}>{data.post_table_text}</p>
+                  ) : null}
+                  {costDrivers.length > 0 ? (
+                    <div className="mt-5 rounded-xl border border-[#eadcc3] bg-[#fdf8ed] p-4 md:p-5">
+                      <h3 className="text-base font-semibold text-[#9b7644] md:text-lg">What Drives Cost</h3>
+                      <ul className="mt-3 space-y-2">
+                        {costDrivers.map((driver, index) => (
+                          <li key={`${driver}-${index}`} className="flex items-start gap-2 text-sm leading-relaxed text-[#55677f] md:text-[15px]">
+                            <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#c69a62]" />
+                            <span>{driver}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+          </div>
+        ) : shouldRenderProcess ? (
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
             {processItems.map((item, index) => (
               <article

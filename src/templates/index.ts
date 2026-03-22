@@ -4,11 +4,13 @@ import { AboutPageTemplate } from './AboutPageTemplate';
 import { AreasWeServeTemplate } from './AreasWeServeTemplate';
 import { BathroomRemodelingPageTemplate } from './BathroomRemodelingPageTemplate';
 import { CaseStudiesPageTemplate } from './CaseStudiesPageTemplate';
+import { CareersPageTemplate } from './CareersPageTemplate';
 import { CaseStudyDetailPageTemplate } from './CaseStudyDetailPageTemplate';
 import { ContactPageTemplate } from './ContactPageTemplate';
 import { CountyPageTemplate } from './CountyPageTemplate';
 import { DefaultPageTemplate } from './DefaultPageTemplate';
 import { FaqPageTemplate } from './FaqPageTemplate';
+import { FinancingPageTemplate } from './FinancingPageTemplate';
 import { HomePageTemplate } from './HomePageTemplate';
 import { InsuranceRestorationPageTemplate } from './InsuranceRestorationPageTemplate';
 import { KitchenRemodelingCityPageTemplate } from './KitchenRemodelingCityPageTemplate';
@@ -23,7 +25,12 @@ import { TermsPageTemplate } from './TermsPageTemplate';
 import { TownPageTemplate } from './TownPageTemplate';
 import { CountyHubPageTemplate } from './CountyHubPageTemplate';
 import { FreeConsultationPageTemplate } from './FreeConsultationPageTemplate';
-import { GreenwichCTPageTemplate } from './GreenwichCTPageTemplate';
+import { PortfolioPageTemplate } from './PortfolioPageTemplate';
+import { ThankYouPageTemplate } from './ThankYouPageTemplate';
+import { ReviewsPageTemplate } from './ReviewsPageTemplate';
+import { SitemapPageTemplate } from './SitemapPageTemplate';
+import { WarrantyPageTemplate } from './WarrantyPageTemplate';
+import { TownHubPageTemplate } from './TownHubPageTemplate';
 
 type TemplateComponent = (props: { page: CMSPage }) => React.JSX.Element;
 
@@ -54,6 +61,13 @@ function normalizePageSlug(slug: string): string {
   return slug.trim().toLowerCase().replace(/^\/+|\/+$/g, '');
 }
 
+const TOWN_HUB_SLUGS = new Set([
+  'new-haven-county/madison-ct',
+  'fairfield-county/westport-ct',
+  'fairfield-county/greenwich-ct',
+  'new-haven-county/new-haven-ct',
+]);
+
 function resolveTemplateComponent(template: string): TemplateComponent {
   const normalizedTemplate = normalizeTemplateKey(template);
   const mappedTemplate = TEMPLATE_COMPONENTS[normalizedTemplate];
@@ -82,12 +96,12 @@ function resolveTemplateComponent(template: string): TemplateComponent {
 }
 
 export function renderTemplate(page: CMSPage) {
-  if (normalizePageSlug(page.slug) === 'free-consultation') {
-    return createElement(FreeConsultationPageTemplate, { page });
+  if (TOWN_HUB_SLUGS.has(normalizePageSlug(page.slug))) {
+    return createElement(TownHubPageTemplate, { page });
   }
 
-  if (normalizePageSlug(page.slug) === 'fairfield-county/greenwich-ct') {
-    return createElement(GreenwichCTPageTemplate, { page });
+  if (normalizePageSlug(page.slug) === 'free-consultation') {
+    return createElement(FreeConsultationPageTemplate, { page });
   }
 
   if (normalizePageSlug(page.slug) === 'insurance-restoration') {
@@ -148,8 +162,20 @@ export function renderTemplate(page: CMSPage) {
     return createElement(CountyHubPageTemplate, { page });
   }
 
+  if (normalizePageSlug(page.slug) === 'portfolio') {
+    return createElement(PortfolioPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'careers') {
+    return createElement(CareersPageTemplate, { page });
+  }
+
   if (normalizePageSlug(page.slug) === 'faq') {
     return createElement(FaqPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'financing') {
+    return createElement(FinancingPageTemplate, { page });
   }
 
   if (normalizePageSlug(page.slug) === 'pricing') {
@@ -170,6 +196,22 @@ export function renderTemplate(page: CMSPage) {
 
   if (normalizePageSlug(page.slug) === 'terms') {
     return createElement(TermsPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'thank_you' || normalizePageSlug(page.slug) === 'thank-you') {
+    return createElement(ThankYouPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'reviews') {
+    return createElement(ReviewsPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'sitemap') {
+    return createElement(SitemapPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'warranty') {
+    return createElement(WarrantyPageTemplate, { page });
   }
 
   const Template = resolveTemplateComponent(page.template);

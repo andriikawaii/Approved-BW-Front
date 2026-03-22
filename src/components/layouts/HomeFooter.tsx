@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Mail } from 'lucide-react';
 
 type PhoneItem = {
   label: string;
@@ -8,6 +9,8 @@ type PhoneItem = {
 type HomeFooterProps = {
   phones: PhoneItem[];
 };
+
+const SUPPORT_EMAIL = 'info@buildwellct.com';
 
 const SERVICE_LINKS = [
   { label: 'Kitchen Remodeling', href: '/kitchen-remodeling/' },
@@ -30,7 +33,7 @@ const COMPANY_LINKS = [
 const AREA_LINKS = [
   { label: 'Fairfield County', href: '/fairfield-county/' },
   { label: 'New Haven County', href: '/new-haven-county/' },
-  { label: 'Service Areas', href: '/service-areas/' },
+  { label: 'Service Areas', href: '/areas-we-serve/' },
 ];
 
 const LEGAL_LINKS = [
@@ -54,7 +57,7 @@ function FooterColumn({
           <li key={link.href}>
             <Link
               href={link.href}
-              className="text-sm text-white/55 transition-colors hover:text-[#BC9155]"
+              className="inline-flex min-h-[44px] items-center text-sm text-white/55 transition-colors hover:text-[#BC9155]"
             >
               {link.label}
             </Link>
@@ -81,6 +84,13 @@ export default function HomeFooter({ phones }: HomeFooterProps) {
             </p>
             <p className="mt-5 text-sm leading-7">CT Home Improvement Contractor License #0668405</p>
             <p className="text-sm leading-7">Headquartered in Orange, CT</p>
+            <a
+              href={`mailto:${SUPPORT_EMAIL}`}
+              className="mt-4 inline-flex min-h-[44px] items-center gap-2 rounded-[8px] border border-[#bc9155]/40 bg-[#bc9155]/10 px-3.5 text-[15px] font-semibold text-white transition-colors hover:text-[#BC9155]"
+            >
+              <Mail className="h-4 w-4 text-[#BC9155]" />
+              {SUPPORT_EMAIL}
+            </a>
             {phones.length > 0 ? (
               <div className="mt-5 space-y-2 text-sm">
                 {phones.map((phone) => (

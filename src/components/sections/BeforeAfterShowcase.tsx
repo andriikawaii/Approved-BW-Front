@@ -35,6 +35,7 @@ export default function BeforeAfterShowcase({ data }: Props) {
               alt="Before bathroom remodel"
               className="mt-3 w-full rounded-lg border border-[#e6ded1] object-cover shadow-md"
             />
+            <p className="mt-2 text-sm text-[#5c677d]">Before condition</p>
           </article>
 
           <article>
@@ -44,6 +45,7 @@ export default function BeforeAfterShowcase({ data }: Props) {
               alt="After bathroom remodel"
               className="mt-3 w-full rounded-lg border border-[#e6ded1] object-cover shadow-md"
             />
+            <p className="mt-2 text-sm text-[#5c677d]">Completed result</p>
           </article>
         </div>
       </div>

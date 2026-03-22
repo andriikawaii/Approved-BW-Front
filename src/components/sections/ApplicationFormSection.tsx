@@ -73,7 +73,7 @@ export default function ApplicationFormSection({ data }: Props) {
                         value={values[field.name] || ''}
                         onChange={(event) => onChange(field.name, event.target.value)}
                         required={field.required}
-                        className="w-full rounded-md border border-[#d9d0be] bg-white px-3 py-3 text-sm text-[#1E2F4A] outline-none transition-colors focus:border-[#C89B5B]"
+                        className="w-full rounded-md border border-[#d9d0be] bg-white px-3 py-3 text-base text-[#1E2F4A] outline-none transition-colors focus:border-[#C89B5B] md:text-sm"
                       >
                         <option value="">Select...</option>
                         {field.options?.map((option) => (
@@ -98,7 +98,7 @@ export default function ApplicationFormSection({ data }: Props) {
                         name={field.name}
                         type="file"
                         required={field.required}
-                        className="w-full rounded-md border border-[#d9d0be] bg-white px-3 py-2.5 text-sm text-[#1E2F4A] outline-none transition-colors focus:border-[#C89B5B]"
+                        className="w-full rounded-md border border-[#d9d0be] bg-white px-3 py-2.5 text-base text-[#1E2F4A] outline-none transition-colors focus:border-[#C89B5B] md:text-sm"
                       />
                     </div>
                   );
@@ -117,7 +117,7 @@ export default function ApplicationFormSection({ data }: Props) {
                       value={values[field.name] || ''}
                       onChange={(event) => onChange(field.name, event.target.value)}
                       required={field.required}
-                      className="w-full rounded-md border border-[#d9d0be] bg-white px-3 py-3 text-sm text-[#1E2F4A] outline-none transition-colors focus:border-[#C89B5B]"
+                      className="w-full rounded-md border border-[#d9d0be] bg-white px-3 py-3 text-base text-[#1E2F4A] outline-none transition-colors focus:border-[#C89B5B] md:text-sm"
                     />
                   </div>
                 );
@@ -129,7 +129,7 @@ export default function ApplicationFormSection({ data }: Props) {
                 ) : null}
                 <button
                   type="submit"
-                  className="w-full rounded-md bg-[#1E2F4A] px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-[#253e61]"
+                  className="w-full min-h-[44px] rounded-md bg-[#1E2F4A] px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-[#253e61]"
                 >
                   {data.submit_label || 'Submit Application'}
                 </button>

@@ -75,7 +75,7 @@ export default function Header() {
               onClick={() => setMobileOpen(true)}
               aria-label="Toggle menu"
               aria-expanded={mobileOpen}
-              className="flex h-8 w-8 flex-col items-center justify-center gap-[5px] border-0 bg-transparent p-1 lg:hidden"
+              className="flex h-11 w-11 flex-col items-center justify-center gap-[5px] border-0 bg-transparent p-1 lg:hidden"
             >
               <span className="block h-[2px] w-6 rounded-[2px] bg-[#1A2B45]" />
               <span className="block h-[2px] w-6 rounded-[2px] bg-[#1A2B45]" />
@@ -119,7 +119,7 @@ export default function Header() {
             type="button"
             onClick={() => setMobileOpen(false)}
             aria-label="Close menu"
-            className="absolute right-5 top-5 flex h-10 w-10 items-center justify-center"
+            className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center"
           >
             <span className="absolute block h-[2px] w-6 rotate-45 rounded-[2px] bg-white" />
             <span className="absolute block h-[2px] w-6 -rotate-45 rounded-[2px] bg-white" />

@@ -14,10 +14,12 @@ type Props = {
     rating?: string;
     experience?: string;
     areas?: string;
+    town_hub?: boolean;
   };
 };
 
 export default function TrustBar({ data }: Props) {
+  const isTownHub = Boolean(data.town_hub);
   const items: TrustItem[] =
     data.items && data.items.length > 0
       ? data.items.map((item) => ({
@@ -37,10 +39,10 @@ export default function TrustBar({ data }: Props) {
   if (hasValues) {
     return (
       <section
-        className="border-y border-[rgba(188,145,85,0.2)]"
-        style={{ background: 'linear-gradient(135deg, #1E2B43 0%, #151E30 100%)' }}
+        className={isTownHub ? 'border-y border-[#d6c3a0] bg-[#fbf7ef]' : 'border-y border-[rgba(188,145,85,0.2)]'}
+        style={isTownHub ? undefined : { background: 'linear-gradient(135deg, #1E2B43 0%, #151E30 100%)' }}
       >
-        <div className="mx-auto grid max-w-[1280px] grid-cols-2 text-center md:grid-cols-4">
+        <div className={`mx-auto grid max-w-[1280px] grid-cols-2 text-center md:grid-cols-4 ${isTownHub ? 'px-4 md:px-6' : ''}`}>
           {items.map((item, i) => {
             const isShield = item.icon === 'shield' || /bonded|insured/i.test(item.label || '');
             const showBorder = i < items.length - 1;
@@ -48,10 +50,18 @@ export default function TrustBar({ data }: Props) {
             return (
               <div
                 key={i}
-                className={`group cursor-default px-5 py-9 transition-all duration-300 hover:-translate-y-[3px] hover:bg-[rgba(188,145,85,0.08)] ${showBorder ? 'border-r border-[rgba(188,145,85,0.12)]' : ''}`}
+                className={`group cursor-default px-5 py-8 transition-all duration-300 hover:-translate-y-[2px] ${
+                  isTownHub
+                    ? `hover:bg-[#f6efdf] ${showBorder ? 'border-r border-[#e4d4b8]' : ''}`
+                    : `hover:bg-[rgba(188,145,85,0.08)] ${showBorder ? 'border-r border-[rgba(188,145,85,0.12)]' : ''}`
+                }`}
               >
                 <div
-                  className="text-[42px] font-bold leading-none text-[#BC9155] transition-all duration-300 group-hover:text-[#d4a95a] group-hover:[text-shadow:0_0_20px_rgba(188,145,85,0.3)]"
+                  className={`text-[42px] font-bold leading-none transition-all duration-300 ${
+                    isTownHub
+                      ? 'text-[#b7884f] group-hover:text-[#9f7440]'
+                      : 'text-[#BC9155] group-hover:text-[#d4a95a] group-hover:[text-shadow:0_0_20px_rgba(188,145,85,0.3)]'
+                  }`}
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
                   {isShield ? (
@@ -71,7 +81,7 @@ export default function TrustBar({ data }: Props) {
                     item.value
                   )}
                 </div>
-                <div className="mt-2 text-[13px] font-medium uppercase tracking-[1px] text-white/60 transition-colors duration-300 group-hover:text-white/85">
+                <div className={`mt-2 text-[12px] font-medium uppercase tracking-[1px] transition-colors duration-300 ${isTownHub ? 'text-[#5f6f82] group-hover:text-[#344965]' : 'text-white/60 group-hover:text-white/85'}`}>
                   {item.label}
                 </div>
               </div>

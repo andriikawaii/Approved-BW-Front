@@ -48,18 +48,18 @@ export default function CtaSplitForm({ data }: Props) {
           </div>
 
           <div className="rounded-xl bg-white p-10 shadow-xl">
-            <h3 className="text-center text-white text-3xl font-bold md:text-[36px]">
+            <h3 className="text-center text-3xl font-bold text-[#1E2F4A] md:text-[36px]">
               {data.form_title || 'Schedule Your Free Consultation'}
             </h3>
             <p className="mt-3 text-center text-[16px] text-[#6B7280]">Tell us about your project and we will contact you shortly.</p>
 
             <form className="mt-6 space-y-4">
-              <input className="w-full rounded-md border px-4 py-2" placeholder="Full Name" />
-              <input className="w-full rounded-md border px-4 py-2" placeholder="Email Address" />
-              <input className="w-full rounded-md border px-4 py-2" placeholder="Phone Number" />
-              <input className="w-full rounded-md border px-4 py-2" placeholder="Project Type" />
-              <textarea className="w-full rounded-md border px-4 py-2" placeholder="Tell us about your project" rows={4} />
-              <button className="mt-6 rounded-md bg-[#C89B5B] px-6 py-3 text-white">
+              <input className="min-h-[44px] w-full rounded-md border px-4 py-2 text-base md:text-sm" placeholder="Full Name" />
+              <input className="min-h-[44px] w-full rounded-md border px-4 py-2 text-base md:text-sm" placeholder="Email Address" />
+              <input className="min-h-[44px] w-full rounded-md border px-4 py-2 text-base md:text-sm" placeholder="Phone Number" />
+              <input className="min-h-[44px] w-full rounded-md border px-4 py-2 text-base md:text-sm" placeholder="Project Type" />
+              <textarea className="w-full rounded-md border px-4 py-2 text-base md:text-sm" placeholder="Tell us about your project" rows={4} />
+              <button className="mt-6 min-h-[44px] rounded-md bg-[#C89B5B] px-6 py-3 text-white">
                 {data.submit_label || 'Book Free Consultation'}
               </button>
             </form>

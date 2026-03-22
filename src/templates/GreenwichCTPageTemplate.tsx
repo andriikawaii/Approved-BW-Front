@@ -707,7 +707,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
             {/* Kitchen Costs */}
             <FadeUp delay={60}>
               <h3 className="gwch-cost-h3">Kitchen Remodeling Costs in Greenwich</h3>
-              <table className="gwch-cost-table">
+              <div className="gwch-cost-table-wrap"><table className="gwch-cost-table">
                 <thead>
                   <tr><th>Tier</th><th>Scope</th><th>Typical Range</th></tr>
                 </thead>
@@ -716,13 +716,13 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
                   <tr><td>Major Mid-Range</td><td>Layout changes, custom cabinetry, premium appliances, new plumbing/electrical</td><td className="gwch-td-price">$90,000 – $140,000</td></tr>
                   <tr><td>Full Custom</td><td>Complete gut renovation, custom millwork, Sub-Zero/Wolf, Waterworks fixtures, structural changes</td><td className="gwch-td-price">$200,000 – $400,000</td></tr>
                 </tbody>
-              </table>
+              </table></div>
             </FadeUp>
 
             {/* Bathroom Costs */}
             <FadeUp delay={80}>
               <h3 className="gwch-cost-h3">Bathroom Remodeling Costs in Greenwich</h3>
-              <table className="gwch-cost-table">
+              <div className="gwch-cost-table-wrap"><table className="gwch-cost-table">
                 <thead>
                   <tr><th>Tier</th><th>Scope</th><th>Typical Range</th></tr>
                 </thead>
@@ -731,13 +731,13 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
                   <tr><td>Mid-Range</td><td>Custom tile, frameless shower, soaking tub, heated floor</td><td className="gwch-td-price">$25,000 – $55,000</td></tr>
                   <tr><td>High-End</td><td>Full gut, custom steam shower, radiant heat, premium stone, custom vanity</td><td className="gwch-td-price">$55,000 – $120,000+</td></tr>
                 </tbody>
-              </table>
+              </table></div>
             </FadeUp>
 
             {/* Basement Costs */}
             <FadeUp delay={100}>
               <h3 className="gwch-cost-h3">Basement Finishing Costs</h3>
-              <table className="gwch-cost-table">
+              <div className="gwch-cost-table-wrap"><table className="gwch-cost-table">
                 <thead>
                   <tr><th>Tier</th><th>Scope</th><th>Typical Range</th></tr>
                 </thead>
@@ -746,7 +746,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
                   <tr><td>Mid-Range</td><td>Full finish, bathroom, egress window, HVAC extension</td><td className="gwch-td-price">$45,000 – $70,000</td></tr>
                   <tr><td>High-End</td><td>Home theater, wet bar, full bath, custom millwork, waterproofing system</td><td className="gwch-td-price">$70,000 – $100,000+</td></tr>
                 </tbody>
-              </table>
+              </table></div>
               <p className="gwch-cost-note">
                 Moisture management (drainage systems, sump installation, or waterproofing membrane) is often required before framing begins, particularly in Cos Cob, Byram, Riverside, and Old Greenwich, and that work is priced separately from the finish scope.
               </p>
@@ -755,7 +755,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
             {/* Flooring Costs */}
             <FadeUp delay={120}>
               <h3 className="gwch-cost-h3">Flooring Costs</h3>
-              <table className="gwch-cost-table">
+              <div className="gwch-cost-table-wrap"><table className="gwch-cost-table">
                 <thead>
                   <tr><th>Material</th><th>Best For</th><th>Installed Cost/sq ft</th></tr>
                 </thead>
@@ -766,7 +766,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
                   <tr><td>Tile</td><td>Bathrooms, kitchens, entryways</td><td className="gwch-td-price">$12 – $25</td></tr>
                   <tr><td>Carpet</td><td>Bedrooms, basement rec rooms</td><td className="gwch-td-price">$4 – $12</td></tr>
                 </tbody>
-              </table>
+              </table></div>
               <p className="gwch-cost-note">
                 Pre-war homes with original hardwood floors under carpet or vinyl are often worth refinishing rather than replacing. We assess what is actually there and give you an honest recommendation before any material is ordered.
               </p>
@@ -775,7 +775,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
             {/* Home Additions */}
             <FadeUp delay={140}>
               <h3 className="gwch-cost-h3">Home Additions Costs</h3>
-              <table className="gwch-cost-table">
+              <div className="gwch-cost-table-wrap"><table className="gwch-cost-table">
                 <thead>
                   <tr><th>Type</th><th>Scope</th><th>Typical Range</th></tr>
                 </thead>
@@ -784,7 +784,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
                   <tr><td>Single-Story</td><td>Family room, sunroom, or garage conversion</td><td className="gwch-td-price">$150 – $400/sq ft</td></tr>
                   <tr><td>Second-Story</td><td>Full second floor with structural support</td><td className="gwch-td-price">$200 – $400/sq ft</td></tr>
                 </tbody>
-              </table>
+              </table></div>
               <p className="gwch-cost-note">
                 Any addition in Greenwich should carry a ledge contingency of $20,000 to $80,000 depending on rock conditions encountered during excavation. FAR limits may also constrain buildable square footage.
               </p>
@@ -793,7 +793,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
             {/* Interior Painting */}
             <FadeUp delay={160}>
               <h3 className="gwch-cost-h3">Interior Painting Costs</h3>
-              <table className="gwch-cost-table">
+              <div className="gwch-cost-table-wrap"><table className="gwch-cost-table">
                 <thead>
                   <tr><th>Scope</th><th>Details</th><th>Typical Range</th></tr>
                 </thead>
@@ -802,13 +802,13 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
                   <tr><td>Single Room</td><td>Average bedroom or living room</td><td className="gwch-td-price">$800 – $2,500</td></tr>
                   <tr><td>Whole Home</td><td>Full interior, all rooms, trim, doors</td><td className="gwch-td-price">$8,000 – $25,000+</td></tr>
                 </tbody>
-              </table>
+              </table></div>
             </FadeUp>
 
             {/* Interior Carpentry */}
             <FadeUp delay={180}>
               <h3 className="gwch-cost-h3">Interior Carpentry Costs</h3>
-              <table className="gwch-cost-table">
+              <div className="gwch-cost-table-wrap"><table className="gwch-cost-table">
                 <thead>
                   <tr><th>Scope</th><th>Details</th><th>Typical Range</th></tr>
                 </thead>
@@ -817,7 +817,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
                   <tr><td>Crown Molding</td><td>Per linear foot, installed</td><td className="gwch-td-price">$8 – $25/LF</td></tr>
                   <tr><td>Custom Built-Ins</td><td>Bookcases, window seats, mudroom storage</td><td className="gwch-td-price">$3,000 – $15,000+</td></tr>
                 </tbody>
-              </table>
+              </table></div>
               <p className="gwch-cost-note">
                 Custom millwork to match original profiles in pre-war Greenwich homes adds both material cost and lead time. Ovolo, ogee, and beaded molding profiles from the 1890s through the 1930s cannot be matched from any lumber yard shelf in Connecticut.
               </p>
@@ -826,7 +826,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
             {/* Additional Services */}
             <FadeUp delay={200}>
               <h3 className="gwch-cost-h3">Additional Services</h3>
-              <table className="gwch-cost-table">
+              <div className="gwch-cost-table-wrap"><table className="gwch-cost-table">
                 <thead>
                   <tr><th>Service</th><th>Details</th><th>Typical Range</th></tr>
                 </thead>
@@ -836,7 +836,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
                   <tr><td>Design and Planning</td><td>Layout, material selection, 3D rendering, permit drawings</td><td className="gwch-td-price">$2,500 – $15,000</td></tr>
                   <tr><td>Comfort and Accessibility</td><td>Grab bars, walk-in showers, widened doorways, ramps</td><td className="gwch-td-price">$5,000 – $50,000</td></tr>
                 </tbody>
-              </table>
+              </table></div>
             </FadeUp>
 
           </div>
@@ -1422,7 +1422,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
         }
 
         @media (max-width: 768px) {
-          .gwch-page-hero { padding: 52px 20px 36px; min-height: 40vh; max-height: none; }
+          .gwch-page-hero { padding: 88px 20px 36px; min-height: 40vh; max-height: none; }
           .gwch-hero-h1 { font-size: clamp(30px, 7vw, 42px); }
           .gwch-hero-sub { font-size: 15px; }
           .gwch-hero-ctas { flex-direction: column; align-items: stretch; }
@@ -1430,7 +1430,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
           .gwch-breadcrumb { font-size: 12px; }
         }
         @media (max-width: 480px) {
-          .gwch-page-hero { padding: 52px 16px 32px; min-height: 35vh; }
+          .gwch-page-hero { padding: 84px 16px 32px; min-height: 35vh; }
           .gwch-hero-h1 { font-size: clamp(26px, 7vw, 36px); }
         }
 
@@ -1584,7 +1584,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
           gap: 64px;
           align-items: center;
         }
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
           .gwch-alt-block { grid-template-columns: 1fr; gap: 32px; }
           .gwch-alt-block .gwch-alt-content { order: 1; }
           .gwch-alt-block .gwch-alt-img { order: 0; }
@@ -1657,6 +1657,11 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
           border-top: 1px solid var(--gwch-border);
         }
         .gwch-cost-h3:first-of-type { border-top: none; padding-top: 0; margin-top: 32px; }
+        .gwch-cost-table-wrap {
+          width: 100%;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
         .gwch-cost-table {
           width: 100%;
           border-collapse: separate;
@@ -1697,6 +1702,9 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
           padding: 12px 16px;
           border-radius: 0 6px 6px 0;
           margin: 12px 0 0;
+        }
+        @media (max-width: 900px) {
+          .gwch-cost-table { min-width: 640px; }
         }
         @media (max-width: 600px) {
           .gwch-cost-table { font-size: 13px; }
@@ -2367,3 +2375,4 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
     </div>
   );
 }
+

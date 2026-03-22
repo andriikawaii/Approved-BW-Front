@@ -153,3 +153,118 @@ h1 {
 .animate-accordion-up {
   animation: accordion-up 0.2s ease-out;
 }
+
+.bw-town-hub {
+  background: linear-gradient(180deg, #f8f3e9 0%, #f6f0e4 38%, #f9f4eb 100%);
+}
+
+.bw-town-hub .bw-town-hub-section {
+  position: relative;
+}
+
+.bw-town-hub .bw-town-hub-section--hero + .bw-town-hub-section--trust-bar {
+  margin-top: -14px;
+  z-index: 3;
+}
+
+.bw-town-hub .bw-town-hub-section--hero + .bw-town-hub-section--trust-bar section {
+  border-radius: 14px;
+  margin-left: auto;
+  margin-right: auto;
+  width: min(1220px, calc(100% - 2rem));
+  box-shadow: 0 14px 30px rgba(20, 30, 48, 0.2);
+}
+
+.bw-town-hub .bw-town-hub-section--service-overview-with-inline-form,
+.bw-town-hub .bw-town-hub-section--housing-stock,
+.bw-town-hub .bw-town-hub-section--alt-blocks,
+.bw-town-hub .bw-town-hub-section--neighborhoods,
+.bw-town-hub .bw-town-hub-section--permitting,
+.bw-town-hub .bw-town-hub-section--costs,
+.bw-town-hub .bw-town-hub-section--services-grid,
+.bw-town-hub .bw-town-hub-section--what-to-expect,
+.bw-town-hub .bw-town-hub-section--faq,
+.bw-town-hub .bw-town-hub-section--nearby-areas,
+.bw-town-hub .bw-town-hub-section--cta {
+  scroll-margin-top: 86px;
+}
+
+.bw-town-hub .bw-town-hub-section--service-overview-with-inline-form::before,
+.bw-town-hub .bw-town-hub-section--housing-stock::before,
+.bw-town-hub .bw-town-hub-section--alt-blocks::before,
+.bw-town-hub .bw-town-hub-section--permitting::before,
+.bw-town-hub .bw-town-hub-section--costs::before,
+.bw-town-hub .bw-town-hub-section--services-grid::before,
+.bw-town-hub .bw-town-hub-section--what-to-expect::before,
+.bw-town-hub .bw-town-hub-section--faq::before,
+.bw-town-hub .bw-town-hub-section--nearby-areas::before,
+.bw-town-hub .bw-town-hub-section--cta::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: min(1080px, calc(100% - 3rem));
+  height: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, transparent 0%, rgba(196, 154, 92, 0.45) 20%, rgba(196, 154, 92, 0.45) 80%, transparent 100%);
+}
+
+.bw-town-hub .bw-town-hub-section--service-overview-with-inline-form::before {
+  opacity: 0;
+}
+
+.bw-town-hub .bw-town-hub-section--housing-stock .bw-richtext > div,
+.bw-town-hub .bw-town-hub-section--permitting .bw-richtext > div {
+  max-width: 1120px;
+}
+
+.bw-town-hub .bw-town-hub-section--housing-stock .bw-richtext > div > .text-left,
+.bw-town-hub .bw-town-hub-section--permitting .bw-richtext > div > .text-left {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.bw-town-hub .bw-town-hub-section--housing-stock .bw-richtext-content > p:first-of-type,
+.bw-town-hub .bw-town-hub-section--permitting .bw-richtext-content > p:first-of-type,
+.bw-town-hub .bw-town-hub-section--costs .bw-richtext-content > p:first-of-type {
+  font-size: 1.07rem;
+  line-height: 1.85;
+}
+
+.bw-town-hub .bw-town-hub-section--costs .bw-richtext-content table {
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.bw-town-hub .bw-town-hub-section--costs .bw-richtext-content thead th {
+  background: #f0e3cc;
+  color: #1e2f4a;
+}
+
+.bw-town-hub .bw-town-hub-section--costs .bw-richtext-content h3 {
+  margin-top: 1.8rem;
+  color: #9b7644;
+}
+
+.bw-town-hub .bw-town-hub-section--services-grid .group {
+  will-change: transform;
+}
+
+.bw-town-hub .bw-town-hub-section--nearby-areas::before {
+  background: linear-gradient(90deg, transparent 0%, rgba(196, 154, 92, 0.4) 20%, rgba(196, 154, 92, 0.4) 80%, transparent 100%);
+}
+
+.bw-town-hub .bw-town-hub-section--cta {
+  padding-bottom: 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .bw-town-hub .bw-town-hub-section--hero + .bw-town-hub-section--trust-bar {
+    margin-top: -8px;
+  }
+
+  .bw-town-hub .bw-town-hub-section--hero + .bw-town-hub-section--trust-bar section {
+    width: calc(100% - 1.5rem);
+  }
+}

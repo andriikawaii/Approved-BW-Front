@@ -1,10 +1,12 @@
-﻿export type FooterVariant = "A" | "B" | "C" | "D";
+export type FooterVariant = "A" | "B" | "C" | "D";
 
 export function resolveFooterVariant(templateKey: string, slug: string): FooterVariant {
   const normalizedTemplate = templateKey.trim().toLowerCase().replace(/^\/+|\/+$/g, "");
   const normalizedSlug = slug.trim().toLowerCase().replace(/^\/+|\/+$/g, "");
+  const normalizedPath = `/${normalizedSlug}/`;
 
-  if (normalizedSlug === "orange" || normalizedSlug.endsWith("/orange")) {
+  // Keep parity with backend FooterTemplateResolver::isOrangePage.
+  if (normalizedPath === "/new-haven-county/orange-ct/") {
     return "D";
   }
 

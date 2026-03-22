@@ -70,7 +70,7 @@ export default function ConsultationModal({ open, onClose }: Props) {
             type="button"
             aria-label="Close consultation modal"
             onClick={onClose}
-            className="absolute right-6 top-5 text-white/80 transition-colors hover:text-white"
+            className="absolute right-5 top-4 flex h-11 w-11 items-center justify-center rounded-md text-white/80 transition-colors hover:bg-white/10 hover:text-white"
           >
             <X className="h-6 w-6" />
           </button>

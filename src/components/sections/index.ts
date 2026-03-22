@@ -122,4 +122,13 @@ export const sectionMap: Record<string, React.ComponentType<{ data: never }>> = 
   case_study_meta: CaseStudyMeta,
   case_study_body: CaseStudyBody,
   case_study_gallery: CaseStudyGallery,
+  service_overview_with_inline_form: LeadForm,
+  housing_stock: RichText,
+  alt_blocks: ProjectHighlights,
+  neighborhoods: TownList,
+  permitting: RichText,
+  costs: RichText,
+  what_to_expect: ProcessSteps,
+  nearby_areas: TownList,
+  cta: CallToAction,
 };

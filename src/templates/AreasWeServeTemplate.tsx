@@ -12,6 +12,7 @@ import {
   Facebook,
   Instagram,
   Linkedin,
+  Mail,
   Menu,
   MessageSquareMore,
   ShieldCheck,
@@ -1099,6 +1100,7 @@ function AreasFooter({ phones }: { phones: PhoneItem[] }) {
   const fairfieldPhone = phones.find((phone) => phone.label.toLowerCase().includes("fairfield"));
   const newHavenPhone = phones.find((phone) => phone.label.toLowerCase().includes("new haven"));
   const year = new Date().getUTCFullYear();
+  const supportEmail = "info@buildwellct.com";
 
   return (
     <footer className="bg-[#151e30] pb-8 pt-16 text-white">
@@ -1131,6 +1133,11 @@ function AreasFooter({ phones }: { phones: PhoneItem[] }) {
                   Fairfield County: {fairfieldPhone.number}
                 </a>
               ) : null}
+
+              <a href={`mailto:${supportEmail}`} className="inline-flex min-h-[44px] items-center gap-2 font-semibold text-white transition-colors hover:text-[#bc9155]">
+                <Mail className="h-4 w-4 text-[#bc9155]" />
+                {supportEmail}
+              </a>
             </div>
 
             <div className="mt-6 flex items-center gap-3 text-white/55">
@@ -1183,7 +1190,7 @@ function FooterColumn({
       <ul className="mt-5 space-y-3">
         {links.map((link) => (
           <li key={link.href}>
-            <Link href={link.href} className="text-sm text-white/65 transition-colors hover:text-[#bc9155]">
+            <Link href={link.href} className="inline-flex min-h-[44px] items-center text-sm text-white/65 transition-colors hover:text-[#bc9155]">
               {link.label}
             </Link>
           </li>
@@ -1414,7 +1421,7 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
           .areas-page .section-header { margin-bottom:36px; }
           .areas-page .section-header h2 { font-size:24px; margin-bottom:14px; }
           .areas-page .section-header p { font-size:15px; line-height:1.7; }
-          .areas-page .page-hero { padding:52px 20px 36px; min-height:40vh; }
+          .areas-page .page-hero { padding:88px 20px 36px; min-height:40vh; }
           .areas-page .areas-hero-title { font-size:clamp(30px,7vw,42px); }
           .areas-page .hero-subtitle { font-size:15px; }
           .areas-page .hero-ctas { flex-direction:column; align-items:stretch; }

@@ -7,6 +7,8 @@ type FooterProps = {
   slugPath?: string;
 };
 
+const SUPPORT_EMAIL = "info@buildwellct.com";
+
 type FooterContent = {
   heading: string;
   copy: string;
@@ -68,6 +70,10 @@ export default async function Footer({ template, slugPath }: FooterProps) {
             <a href={`tel:${phone.number.replace(/\D/g, "")}`}>{phone.number}</a>
           </p>
         ))}
+        <p>
+          <span>Email: </span>
+          <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
+        </p>
       </section>
       <nav aria-label="Footer">
         <ul>

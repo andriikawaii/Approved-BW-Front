@@ -23,6 +23,7 @@ type Props = {
     headline?: string;
     subtitle?: string;
     subheadline?: string;
+    town_hub?: boolean;
     items?: FaqItem[];
     faqs?: FaqItem[];
   };
@@ -31,14 +32,15 @@ type Props = {
 export default function FAQ({ data }: Props) {
   const title = data.title || data.headline || 'Frequently Asked Questions';
   const subtitle = data.subtitle || data.subheadline;
+  const isTownHub = Boolean(data.town_hub);
   const items = (data.items || data.faqs || []).filter(
     (x) => (x?.question || x?.q) && (x?.answer || x?.a)
   );
   const baseId = useId();
 
   return (
-    <section id="faq" className="bg-[#f8f5ee] py-16 md:py-20">
-      <div className="mx-auto max-w-5xl px-6">
+    <section id="faq" className={isTownHub ? 'bg-[#fcf8f0] py-18 md:py-22' : 'bg-[#f8f5ee] py-16 md:py-20'}>
+      <div className={isTownHub ? 'mx-auto max-w-4xl px-6' : 'mx-auto max-w-5xl px-6'}>
         <div className="mb-12 text-center md:mb-14">
           <span className="bw-section-label mb-3 block">Help Center</span>
           <h2 className="text-3xl font-semibold text-[#1E2F4A] md:text-4xl">
@@ -53,11 +55,11 @@ export default function FAQ({ data }: Props) {
         </div>
 
         <div suppressHydrationWarning>
-          <Accordion type="single" collapsible className="w-full rounded-2xl border border-[#e6ddcc] bg-white p-2 shadow-[0_10px_26px_rgba(30,47,74,0.07)]">
+          <Accordion type="single" collapsible className={isTownHub ? 'w-full rounded-[20px] border border-[#e7dcc8] bg-white p-3 shadow-[0_14px_34px_rgba(30,47,74,0.10)]' : 'w-full rounded-2xl border border-[#e6ddcc] bg-white p-2 shadow-[0_10px_26px_rgba(30,47,74,0.07)]'}>
             {items.map((item, i) => (
-              <AccordionItem key={`${baseId}-${i}`} value={`faq-${i}`} className="border-b border-[#eee4d3] px-2 last:border-b-0">
+              <AccordionItem key={`${baseId}-${i}`} value={`faq-${i}`} className={isTownHub ? 'mx-1 rounded-xl border-b border-[#efe5d4] px-2 last:border-b-0' : 'border-b border-[#eee4d3] px-2 last:border-b-0'}>
                 <AccordionTrigger
-                  className="bg-transparent py-5 text-left text-base font-semibold text-[#1E2F4A] hover:bg-transparent hover:no-underline md:text-lg"
+                  className={isTownHub ? 'bg-transparent py-5 text-left text-[17px] font-semibold text-[#1E2F4A] hover:bg-transparent hover:no-underline md:text-[18px]' : 'bg-transparent py-5 text-left text-base font-semibold text-[#1E2F4A] hover:bg-transparent hover:no-underline md:text-lg'}
                 >
                   {item.question || item.q}
                 </AccordionTrigger>

@@ -17,6 +17,7 @@ type Props = {
     steps?: Step[];
     variant?: 'light' | 'dark';
     background_image?: string;
+    town_hub?: boolean;
   };
 };
 
@@ -24,6 +25,7 @@ export default function ProcessSteps({ data }: Props) {
   const title = data.title || data.headline || "";
   const steps = data.steps || [];
   const [activeStep, setActiveStep] = useState<number | null>(null);
+  const isTownHub = Boolean(data.town_hub);
 
   const desktopColsClass =
     steps.length >= 5
@@ -99,6 +101,47 @@ export default function ProcessSteps({ data }: Props) {
               })}
             </div>
             <p className="text-center mt-7 text-[13px] text-white/40">Click any step to learn more</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (isTownHub) {
+    return (
+      <section className="bg-[#f5efe4] py-18 md:py-22">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="text-center">
+            <span className="bw-section-label mb-3 block">Process Clarity</span>
+            <h2 className="text-3xl font-semibold text-[#1E2F4A] md:text-4xl">{title || 'What To Expect'}</h2>
+            {data.subtitle ? (
+              <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-[#5e6f86] md:text-lg">
+                {data.subtitle}
+              </p>
+            ) : null}
+          </div>
+
+          <div className="relative mt-10">
+            <div className="absolute left-[10%] right-[10%] top-6 hidden h-px bg-[#decdb0] xl:block" />
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {steps.map((step, i) => {
+              const num = String(step.step_number || i + 1).padStart(2, "0");
+              return (
+                <article
+                  key={i}
+                  className="relative rounded-2xl border border-[#e3d7c3] bg-white p-5 shadow-[0_8px_24px_rgba(30,47,74,0.08)] transition-transform duration-300 hover:-translate-y-0.5"
+                >
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#e3cfae] bg-[#f8f1e4] text-sm font-semibold text-[#B98747]">
+                    {num}
+                  </div>
+                  <h3 className="mt-4 text-[21px] font-semibold leading-tight text-[#1E2F4A]">{step.title}</h3>
+                  {step.description ? (
+                    <p className="mt-3 text-sm leading-relaxed text-[#5e6f86] md:text-[15px]">{step.description}</p>
+                  ) : null}
+                </article>
+              );
+            })}
+            </div>
           </div>
         </div>
       </section>

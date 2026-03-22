@@ -3,8 +3,8 @@ import { notFound } from 'next/navigation';
 import { getPageBySlug } from '@/src/api/pages';
 import { PageDataProvider } from '@/src/context/PageDataContext';
 import { renderTemplate } from '@/src/templates';
-import { resolveFooterVariant } from '@/lib/footer';
-import { resolvePhones } from '@/lib/phones';
+import { resolveFooterVariant, type FooterVariant } from '@/lib/footer';
+import { resolvePhones, type PhoneItem } from '@/lib/phones';
 import Layout from '@/src/components/layouts/Layout';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
@@ -20,6 +20,32 @@ type Props = {
 async function resolveSlugPath(params: Props['params']) {
   const { slug } = await params;
   return slug.join('/');
+}
+
+function isFooterVariant(value: unknown): value is FooterVariant {
+  return value === 'A' || value === 'B' || value === 'C' || value === 'D';
+}
+
+function normalizeApiPhones(value: unknown): PhoneItem[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .map((item) => {
+      if (!item || typeof item !== 'object') {
+        return null;
+      }
+      const maybeItem = item as { label?: unknown; number?: unknown };
+      if (typeof maybeItem.label !== 'string' || typeof maybeItem.number !== 'string') {
+        return null;
+      }
+      return {
+        label: maybeItem.label,
+        number: maybeItem.number,
+      };
+    })
+    .filter((item): item is PhoneItem => Boolean(item));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -49,8 +75,13 @@ export default async function DynamicPage({ params }: Props) {
   const page = await getPageBySlug(path);
   if (!page) notFound();
 
-  const footerVariant = resolveFooterVariant(page.template, page.slug);
-  const phones = resolvePhones(footerVariant);
+  const apiFooterTemplate = page.footer?.template?.toUpperCase();
+  const footerVariant = isFooterVariant(apiFooterTemplate)
+    ? apiFooterTemplate
+    : resolveFooterVariant(page.template, page.slug);
+
+  const apiPhones = normalizeApiPhones(page.phones?.items);
+  const phones = apiPhones.length > 0 ? apiPhones : resolvePhones(footerVariant);
 
   return (
     <PageDataProvider footerVariant={footerVariant} phones={phones}>

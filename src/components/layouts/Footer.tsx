@@ -2,63 +2,90 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Instagram, Linkedin, Youtube, Facebook } from 'lucide-react';
 import { usePageData } from '@/src/context/PageDataContext';
 
+const SUPPORT_EMAIL = 'info@buildwellct.com';
+
+const PhoneIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#BC9155" strokeWidth="2">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+  </svg>
+);
+
+const MailIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#BC9155" strokeWidth="2">
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+    <polyline points="22,6 12,13 2,6"/>
+  </svg>
+);
+
 const FOOTER_SERVICES = [
-  { label: 'Additions', href: '/home-additions/' },
-  { label: 'Basements', href: '/basement-finishing/' },
-  { label: 'Bathrooms', href: '/bathroom-remodeling/' },
-  { label: 'Flooring', href: '/flooring/' },
-  { label: 'Interior Carpentry', href: '/interior-carpentry/' },
   { label: 'Kitchens', href: '/kitchen-remodeling/' },
+  { label: 'Bathrooms', href: '/bathroom-remodeling/' },
+  { label: 'Basements', href: '/basement-finishing/' },
+  { label: 'Flooring', href: '/flooring/' },
+  { label: 'Additions', href: '/home-additions/' },
+  { label: 'Painting', href: '/interior-painting/' },
+  { label: 'Carpentry', href: '/interior-carpentry/' },
 ];
 
 const FOOTER_COMPANY = [
-  { label: 'About Us', href: '/about/' },
-  { label: 'Contact', href: '/contact/' },
-  { label: 'FAQ', href: '/faq/' },
+  { label: 'About', href: '/about/' },
   { label: 'Our Process', href: '/process/' },
   { label: 'Portfolio', href: '/portfolio/' },
-  { label: 'Pricing', href: '/pricing/' },
+  { label: 'Case Studies', href: '/case-studies/' },
   { label: 'Reviews', href: '/reviews/' },
+  { label: 'Contact', href: '/contact/' },
+  { label: 'FAQ', href: '/faq/' },
+  { label: 'Careers', href: '/careers/' },
 ];
 
-const FOOTER_AREAS = [
-  { label: 'Fairfield County', href: '/fairfield-county/' },
-  { label: 'New Haven County', href: '/new-haven-county/' },
-  { label: 'See All Areas', href: '/areas-we-serve/' },
+const FOOTER_RESOURCES = [
+  { label: 'Free Consultation', href: '/free-consultation/' },
+  { label: 'Homeowner Hub', href: '/homeowner-hub/' },
+  { label: 'Areas We Serve', href: '/areas-we-serve/' },
+  { label: 'Financing', href: '/financing/' },
 ];
 
 const FOOTER_LEGAL = [
   { label: 'Privacy Policy', href: '/privacy-policy/' },
-  { label: 'Terms of Service', href: '/terms/' },
+  { label: 'Terms', href: '/terms/' },
   { label: 'Warranty', href: '/warranty/' },
 ];
 
 function FooterColumn({
   title,
   links,
+  allLink,
 }: {
   title: string;
   links: Array<{ label: string; href: string }>;
+  allLink?: { label: string; href: string };
 }) {
   return (
     <div>
       <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-white">{title}</h4>
-      <ul className="mt-5 space-y-3">
+      <ul className="mt-4 space-y-0">
         {links.map((link) => (
           <li key={link.href}>
             <Link
               href={link.href}
-              className={`text-sm transition-colors hover:text-[#bc9155] ${
-                link.label.includes('See All') ? 'font-semibold text-white' : 'text-white/78'
-              }`}
+              className="inline-flex py-[7px] text-[14px] text-white/[0.78] transition-colors hover:text-[#bc9155]"
             >
               {link.label}
             </Link>
           </li>
         ))}
+        {allLink && (
+          <li>
+            <Link
+              href={allLink.href}
+              className="inline-flex py-[7px] text-[14px] font-semibold text-white transition-colors hover:text-[#bc9155]"
+            >
+              {allLink.label}
+            </Link>
+          </li>
+        )}
       </ul>
     </div>
   );
@@ -74,67 +101,75 @@ export default function Footer({ currentYear }: { currentYear: number }) {
     <footer className="bg-[#1E2B43] pb-7 pt-14 text-white">
       <div className="mx-auto max-w-[1240px] px-6">
         {/* Top grid */}
-        <div className="grid gap-12 pb-12 lg:grid-cols-[1.35fr_1fr_1fr_1fr]">
+        <div className="grid gap-12 pb-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           {/* Brand column */}
           <div>
-            <Link href="/" className="inline-flex items-center" aria-label="BuiltWell home">
+            <Link href="/" className="inline-flex items-center" aria-label="BuiltWell CT Home">
               <Image
                 src="/logos/builtwell-logo-footer-gold.png"
-                alt="BuiltWell"
-                width={160}
-                height={42}
+                alt="BuiltWell CT licensed Connecticut home remodeling contractor"
+                width={158}
+                height={40}
                 className="h-auto w-[150px]"
               />
             </Link>
 
-            <div className="mt-4 space-y-2.5 text-sm text-white/88">
-              <div>
-                <p className="text-[16px] font-semibold leading-tight text-white">
-                  Headquarters
-                </p>
-                <p className="mt-1 leading-[1.45] text-white/88">206A Boston Post Road<br />Orange, CT 06477</p>
+            <div style={{ paddingLeft: 0, marginTop: 16 }}>
+              <p className="mb-5 max-w-[280px] text-sm leading-[1.7] text-white/75">
+                Professional home remodeling across Fairfield and New Haven Counties, Connecticut.
+              </p>
+
+              <div className="mb-5 flex flex-col gap-2">
+                {fairfieldPhone && (
+                  <a
+                    href={`tel:${fairfieldPhone.number.replace(/\D/g, '')}`}
+                    className="inline-flex items-center gap-2 text-[15px] font-semibold text-white transition-colors hover:text-[#bc9155]"
+                  >
+                    <PhoneIcon />
+                    Fairfield County: {fairfieldPhone.number}
+                  </a>
+                )}
+                {newHavenPhone && (
+                  <a
+                    href={`tel:${newHavenPhone.number.replace(/\D/g, '')}`}
+                    className="inline-flex items-center gap-2 text-[15px] font-semibold text-white transition-colors hover:text-[#bc9155]"
+                  >
+                    <PhoneIcon />
+                    New Haven County: {newHavenPhone.number}
+                  </a>
+                )}
+                <a
+                  href={`mailto:${SUPPORT_EMAIL}`}
+                  className="inline-flex items-center gap-2 text-[13px] text-white/70 transition-colors hover:text-[#bc9155]"
+                >
+                  <MailIcon />
+                  {SUPPORT_EMAIL}
+                </a>
               </div>
 
-              {newHavenPhone ? (
-                <a href={`tel:${newHavenPhone.number.replace(/\D/g, '')}`} className="block text-[15px] leading-tight transition-colors hover:text-[#bc9155]">
-                  {newHavenPhone.number}
-                </a>
-              ) : null}
-              {fairfieldPhone ? (
-                <div className="pt-1.5">
-                  <p className="text-[16px] font-semibold leading-tight text-white">Fairfield County</p>
-                  <a href={`tel:${fairfieldPhone.number.replace(/\D/g, '')}`} className="mt-1 block text-[15px] leading-tight transition-colors hover:text-[#bc9155]">
-                    {fairfieldPhone.number}
-                  </a>
-                </div>
-              ) : null}
-            </div>
-
-            <div className="mt-10 flex items-center gap-3 text-white/55">
-              <a href="https://instagram.com/builtwellct" target="_blank" rel="noopener noreferrer" className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 transition-colors hover:border-[#bc9155] hover:text-[#bc9155]" aria-label="Instagram">
-                <Instagram className="h-4 w-4" />
-              </a>
-              <a href="https://linkedin.com/company/builtwellct" target="_blank" rel="noopener noreferrer" className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 transition-colors hover:border-[#bc9155] hover:text-[#bc9155]" aria-label="LinkedIn">
-                <Linkedin className="h-4 w-4" />
-              </a>
-              <a href="https://youtube.com/@builtwellct" target="_blank" rel="noopener noreferrer" className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 transition-colors hover:border-[#bc9155] hover:text-[#bc9155]" aria-label="YouTube">
-                <Youtube className="h-4 w-4" />
-              </a>
-              <a href="https://facebook.com/builtwellct" target="_blank" rel="noopener noreferrer" className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 transition-colors hover:border-[#bc9155] hover:text-[#bc9155]" aria-label="Facebook">
-                <Facebook className="h-4 w-4" />
-              </a>
+              <div className="text-xs leading-[1.6] text-white/45">
+                <div>CT HIC License #0668405</div>
+                <div>Fully Bonded and Insured</div>
+              </div>
             </div>
           </div>
 
-          {/* Link columns */}
+          {/* Services */}
           <FooterColumn
             title="Services"
-            links={[...FOOTER_SERVICES, { label: 'See All Services →', href: '/services/' }]}
+            links={FOOTER_SERVICES}
+            allLink={{ label: 'All Services \u2192', href: '/services/' }}
           />
+
+          {/* Company */}
           <FooterColumn title="Company" links={FOOTER_COMPANY} />
-          <div className="space-y-10">
-            <FooterColumn title="Areas We Serve" links={FOOTER_AREAS} />
-            <FooterColumn title="Legal" links={FOOTER_LEGAL} />
+
+          {/* Resources + Legal */}
+          <div>
+            <FooterColumn title="Resources" links={FOOTER_RESOURCES} />
+            <div className="mt-8">
+              <FooterColumn title="Legal" links={FOOTER_LEGAL} />
+            </div>
           </div>
         </div>
 
@@ -146,7 +181,12 @@ export default function Footer({ currentYear }: { currentYear: number }) {
         {/* Bottom bar */}
         <div className="flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-white/45 md:flex-row md:items-center md:justify-between">
           <span>&copy; {currentYear} Legacy of Clean LLC d/b/a BuiltWell CT. All rights reserved.</span>
-          <span>CT HIC License #0668405 | Serving Fairfield &amp; New Haven Counties, Connecticut</span>
+          <span>
+            Serving Fairfield &amp; New Haven Counties, CT
+            {newHavenPhone ? ` | ${newHavenPhone.number}` : ''}
+            {fairfieldPhone ? ` | ${fairfieldPhone.number}` : ''}
+            {' '}| CT HIC #0668405
+          </span>
         </div>
       </div>
     </footer>

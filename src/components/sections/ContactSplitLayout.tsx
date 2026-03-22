@@ -156,7 +156,7 @@ export default function ContactSplitLayout({ data }: Props) {
                             name={fieldName}
                             value={values[fieldName] || ''}
                             onChange={(event) => onChange(fieldName, event.target.value)}
-                            className="w-full rounded-md border border-[#d9d0be] bg-white px-3 py-3 text-sm text-[#1E2F4A] outline-none transition-colors focus:border-[#C89B5B]"
+                            className="w-full rounded-md border border-[#d9d0be] bg-white px-3 py-3 text-base text-[#1E2F4A] outline-none transition-colors focus:border-[#C89B5B] md:text-sm"
                             required
                           >
                             <option value="">{config.placeholder}</option>
@@ -174,7 +174,7 @@ export default function ContactSplitLayout({ data }: Props) {
                             value={values[fieldName] || ''}
                             onChange={(event) => onChange(fieldName, event.target.value)}
                             placeholder={config.placeholder}
-                            className="w-full rounded-md border border-[#d9d0be] bg-white px-3 py-3 text-sm text-[#1E2F4A] outline-none transition-colors focus:border-[#C89B5B]"
+                            className="w-full rounded-md border border-[#d9d0be] bg-white px-3 py-3 text-base text-[#1E2F4A] outline-none transition-colors focus:border-[#C89B5B] md:text-sm"
                             required
                           />
                         ) : (
@@ -185,7 +185,7 @@ export default function ContactSplitLayout({ data }: Props) {
                             value={values[fieldName] || ''}
                             onChange={(event) => onChange(fieldName, event.target.value)}
                             placeholder={config.placeholder}
-                            className="w-full rounded-md border border-[#d9d0be] bg-white px-3 py-3 text-sm text-[#1E2F4A] outline-none transition-colors focus:border-[#C89B5B]"
+                            className="w-full rounded-md border border-[#d9d0be] bg-white px-3 py-3 text-base text-[#1E2F4A] outline-none transition-colors focus:border-[#C89B5B] md:text-sm"
                             required
                           />
                         )}
@@ -199,7 +199,7 @@ export default function ContactSplitLayout({ data }: Props) {
                     ) : null}
                     <button
                       type="submit"
-                      className="inline-flex w-full items-center justify-center rounded-md bg-[#C89B5B] px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-[#b98747]"
+                      className="inline-flex min-h-[44px] w-full items-center justify-center rounded-md bg-[#C89B5B] px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-[#b98747]"
                     >
                       {right.submit_label || 'Send Message'}
                     </button>
