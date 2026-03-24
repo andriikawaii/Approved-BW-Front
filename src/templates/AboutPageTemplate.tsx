@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ArrowRight, CalendarDays, Check, ChevronDown, FileText, Shield, ShieldCheck, Star, Upload, Users } from "lucide-react";
+import { ArrowRight, CalendarDays, Check, ChevronDown, CircleCheck, FileText, Shield, ShieldCheck, Star, Upload, Users } from "lucide-react";
 import type { CMSPage, CMSSection } from "@/types/cms";
 
 type RichTextData = {
@@ -97,7 +97,7 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
   const areas = section<any>(page, "areas_served");
   const trust = section<any>(page, "trust_bar");
   const lead = section<any>(page, "lead_form");
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState<number | null>(null);
   const [bioOpen, setBioOpen] = useState<Record<number, boolean>>({});
   const [countyOpen, setCountyOpen] = useState<Record<number, boolean>>({});
   const [serviceOpen, setServiceOpen] = useState(false);
@@ -122,6 +122,38 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
   const timeField = fields.find((field: any) => field.name === "best_time" || field.type === "select");
   const contactField = fields.find((field: any) => field.type === "radio_group");
   const messageField = fields.find((field: any) => field.type === "textarea");
+  const processSteps = ((process?.steps || []).length ? process.steps : [
+    {
+      title: "Consultation",
+      description: "We visit your home or connect via Google Meet or Zoom at no charge and with no obligation, so we can understand the scope before we put anything in writing.",
+    },
+    {
+      title: "Planning",
+      description: "You receive a written proposal with a clear breakdown of exactly what's included, the full project timeline, and the cost. No vague ranges, no surprises later.",
+    },
+    {
+      title: "Selections",
+      description: "We guide you through every material choice and communicate lead times upfront, so nothing delays construction once the schedule is set.",
+    },
+    {
+      title: "Build",
+      description: "Construction begins on the agreed start date. Crews show up on time, daily updates are sent, and the job site is cleaned every evening.",
+    },
+    {
+      title: "Walkthrough",
+      description: "When the work is finished, we walk through the project together. Nothing is signed off until you're satisfied with every detail.",
+    },
+  ]).slice(0, 5);
+  const trustItems = ((trust?.items || []).length ? (trust?.items || []) : [
+    {
+      icon: "star",
+      label: "Google Rating 4.9",
+      url: "https://www.google.com/maps/search/?api=1&query=BuiltWell+CT,+206A+Boston+Post+Road,+Orange,+CT+06477",
+    },
+    { icon: "check", label: "Trusted on Houzz", url: "#houzz" },
+    { icon: "calendar", label: "CT HIC License #0668405", url: "https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx" },
+    { icon: "check", label: "Verified on Angi", url: "#angi" },
+  ]).slice(0, 4);
 
   return (
     <div className="bg-[#f5f1e9] text-[#1e2b43]">
@@ -201,94 +233,363 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-[#1e2b43] px-5 py-16 text-white md:px-10 md:py-[100px]">
-        <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url(${media("/services/builtwell-team-contractors-ct-05.png")})` }} />
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(10,18,34,0.90)_0%,rgba(30,43,67,0.85)_100%)]" />
-        <div className="relative z-10 mx-auto max-w-[1240px]">
-          <FadeUp className="mx-auto mb-16 max-w-[820px] text-center">
-            {label("Our Process", true)}
-            <h2 className="text-[clamp(32px,3.5vw,48px)] font-bold tracking-[-0.5px] text-white">Our Remodeling <span className="text-[#bc9155]">Process</span></h2>
-            {process?.subtitle ? <p className="mx-auto mt-5 max-w-[700px] text-[17px] leading-[1.75] text-white/60">{process.subtitle}</p> : null}
+      <section id="process" className="home-process scroll-mt-28 px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
+        <div className="home-process-bg" aria-hidden="true" />
+        <div className="home-process-inner">
+          <FadeUp className="home-process-header">
+            <span className="home-process-label">{process?.eyebrow || "Our Process"}</span>
+            <h2 className="text-[clamp(32px,3.5vw,48px)] font-bold tracking-[-0.5px] text-white">
+              Our Remodeling <span className="text-[#bc9155]">Process</span>
+            </h2>
+            <p>{process?.subtitle || "We follow the same five-step process on every project, whether it's a single bathroom or a whole-home renovation. It keeps projects on schedule and keeps you informed at every stage."}</p>
           </FadeUp>
-          <FadeUp className="relative grid gap-4 md:grid-cols-2 xl:grid-cols-5 xl:gap-0 xl:before:absolute xl:before:left-[10%] xl:before:right-[10%] xl:before:top-[26px] xl:before:h-[2px] xl:before:bg-[#bc915540] xl:before:content-['']">
-            {(process?.steps || []).map((step: any, index: number) => {
-              const active = activeStep === index;
-
-              return (
-                <button type="button" key={`${step.title || "step"}-${index}`} onClick={() => setActiveStep(index)} className={cls("relative cursor-pointer rounded-[8px] px-4 py-4 text-left transition-colors duration-300 xl:px-4 xl:py-5 xl:text-center", active ? "bg-[#bc915524]" : "hover:bg-[#bc91551a]")}>
-                  <div className="relative z-[1] mb-4 flex h-[52px] w-[52px] items-center justify-center rounded-full border-[2.5px] border-[#bc9155] bg-[rgba(188,145,85,0.42)] font-['Playfair_Display',serif] text-[20px] font-bold text-[#f5e0c0] shadow-[0_0_0_4px_rgba(188,145,85,0.12)] xl:mx-auto xl:mb-5 xl:h-[68px] xl:w-[68px] xl:-translate-y-2 xl:text-[24px]">{index + 1}</div>
-                  <h3 className="mb-3 text-[18px] font-bold text-white">{step.title || step.short}</h3>
-                  <p className={cls("text-[14px] leading-[1.65] text-white/70 transition-all duration-300 max-xl:mt-3", active ? "xl:mt-3 xl:max-h-[240px] xl:opacity-100" : "xl:mt-0 xl:max-h-0 xl:overflow-hidden xl:opacity-0")}>{step.description}</p>
-                </button>
-              );
-            })}
+          <FadeUp className="home-process-timeline">
+            {processSteps.map((step: any, index: number) => (
+              <button
+                type="button"
+                key={`${step.title || "step"}-${index}`}
+                onClick={() => setActiveStep((current) => current === index ? null : index)}
+                className={cls("home-process-step", activeStep === index && "is-active")}
+                aria-expanded={activeStep === index}
+              >
+                <div className="home-process-step-num">{index + 1}</div>
+                <h3>{step.title || step.short || `Step ${index + 1}`}</h3>
+                <p>{step.description}</p>
+              </button>
+            ))}
           </FadeUp>
-          <div className="mt-8 flex justify-center xl:mt-10">
-            <Link href="/contact/" className="inline-flex items-center gap-2 rounded-[4px] bg-[#bc9155] px-6 py-3 text-[13px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48]">Free Consultation <ArrowRight className="h-4 w-4" /></Link>
-          </div>
-          <p className="mt-5 text-center text-[13px] text-white/40 xl:block hidden">Click any step to learn more</p>
+          <p className="home-process-hint">Click any step to learn more</p>
         </div>
+        <style jsx global>{`
+          .home-process {
+            position: relative;
+            overflow: hidden;
+            color: #fff;
+          }
+          .home-process-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(10, 18, 34, 0.9) 0%, rgba(30, 43, 67, 0.85) 100%);
+            z-index: 0;
+          }
+          .home-process-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 1280px;
+            margin: 0 auto;
+          }
+          .home-process-header {
+            text-align: center;
+            margin-bottom: 64px;
+          }
+          .home-process-label {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #9a7340;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+            position: relative;
+            padding-left: 20px;
+          }
+          .home-process-label::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 2px;
+            background: #bc9155;
+          }
+          .home-process-header p {
+            font-size: 17px;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 700px;
+            margin: 20px auto 0;
+            line-height: 1.75;
+          }
+          .home-process-timeline {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 0;
+            position: relative;
+          }
+          .home-process-timeline::before {
+            content: "";
+            position: absolute;
+            top: 34px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: rgba(188, 145, 85, 0.25);
+          }
+          .home-process-step {
+            text-align: center;
+            padding: 16px 16px 20px;
+            position: relative;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.3s;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            outline: none;
+          }
+          .home-process-step:focus,
+          .home-process-step:focus-visible {
+            outline: none;
+            box-shadow: none;
+          }
+          .home-process-step.is-active {
+            background: rgba(188, 145, 85, 0.14);
+            z-index: 2;
+            position: relative;
+          }
+          .home-process-step-num {
+            width: 68px;
+            height: 68px;
+            border-radius: 9999px;
+            background: rgba(188, 145, 85, 0.42);
+            border: 2.5px solid #bc9155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: -8px auto 20px;
+            font-family: "Playfair Display", serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #f5e0c0;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 0 0 4px rgba(188, 145, 85, 0.12);
+            flex-shrink: 0;
+          }
+          .home-process-step h3 {
+            font-size: 18px;
+            margin: 0 0 12px;
+            color: #fff;
+            font-weight: 700;
+            font-family: "Playfair Display", serif;
+            line-height: 1.25;
+            text-align: center;
+          }
+          .home-process-step p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.65;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            margin: 0;
+            transition: max-height 0.4s ease, opacity 0.35s ease, margin-top 0.35s ease;
+            text-align: center;
+          }
+          .home-process-step.is-active p {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 8px;
+          }
+          .home-process-hint {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.4);
+          }
+          @media (max-width: 1024px) {
+            .home-process-timeline {
+              grid-template-columns: repeat(3, minmax(0, 1fr));
+              gap: 24px;
+              max-width: 700px;
+              margin: 0 auto;
+            }
+            .home-process-timeline::before {
+              display: none;
+            }
+            .home-process-step {
+              padding: 16px 8px;
+              gap: 0;
+            }
+            .home-process-step-num {
+              margin: 0 0 10px;
+            }
+            .home-process-step h3 {
+              text-align: center;
+              font-size: 15px;
+              margin: 0;
+            }
+            .home-process-step p {
+              display: none !important;
+            }
+          }
+          @media (max-width: 768px) {
+            .home-process-header {
+              margin-bottom: 36px;
+            }
+            .home-process-header h2 {
+              font-size: 24px;
+              margin-bottom: 14px;
+            }
+            .home-process-header p {
+              font-size: 15px;
+              line-height: 1.7;
+            }
+            .home-process-timeline {
+              grid-template-columns: repeat(3, minmax(0, 1fr));
+              gap: 20px;
+              max-width: 600px;
+            }
+            .home-process-step {
+              padding: 14px 8px;
+            }
+            .home-process-step-num {
+              width: 48px;
+              height: 48px;
+              font-size: 17px;
+              margin: 0 0 8px;
+            }
+            .home-process-step h3 {
+              font-size: 14px;
+              margin-bottom: 0;
+            }
+            .home-process-hint {
+              display: none;
+            }
+          }
+          @media (max-width: 480px) {
+            .home-process-header {
+              margin-bottom: 32px;
+            }
+            .home-process-header h2 {
+              font-size: 26px;
+            }
+            .home-process-header p {
+              font-size: 14px;
+            }
+            .home-process-timeline {
+              gap: 16px !important;
+              max-width: 360px;
+            }
+            .home-process-step {
+              padding: 12px 6px;
+            }
+            .home-process-step-num {
+              width: 44px;
+              height: 44px;
+              font-size: 16px;
+              margin: 0 0 8px;
+            }
+            .home-process-step h3 {
+              font-size: 12px;
+              line-height: 1.3;
+            }
+          }
+        `}</style>
       </section>
 
-      <section className="relative overflow-hidden bg-[linear-gradient(135deg,#2d3e33_0%,#1a2d22_100%)] px-5 py-16 text-white md:px-10 md:py-[100px]">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_80%,rgba(188,145,85,0.06)_0%,transparent_60%)]" />
-        <div className="relative z-10 mx-auto max-w-[1240px]">
-          <FadeUp className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-20">
-            <div>
-              {label(licensed?.eyebrow || "Licensed in Connecticut", true)}
-              <h2 className="text-[clamp(32px,3.5vw,44px)] font-bold tracking-[-0.5px] text-white">{licensedParts.before}{licensedParts.accent ? <span className="text-[#bc9155]">{licensedParts.accent}</span> : null}{licensedParts.after}</h2>
-              <div className="mt-6 space-y-5 text-[16px] leading-[1.8] text-white/70">
-                {paras(licensed?.content || licensed?.body).map((paragraph) => <p key={paragraph.slice(0, 30)}>{paragraph}</p>)}
-              </div>
+      <section className="relative overflow-hidden px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
+        <div className="absolute inset-0 bg-cover bg-center opacity-[0.15]" style={{ backgroundImage: `url(${media("/hero/builtwell-job-site-aerial-hero-ct.jpg")})` }} aria-hidden="true" />
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,#1e2b43_0%,#151e30_100%)]" />
+        <div className="relative z-10 mx-auto grid max-w-[1280px] gap-8 md:gap-10 lg:grid-cols-2 lg:items-center lg:gap-20">
+          <FadeUp>
+            <span className="mb-4 block text-center text-[11px] font-bold uppercase tracking-[1.5px] text-[#bc9155] md:text-[13px]">
+              {licensed?.eyebrow || "Licensed in Connecticut"}
+            </span>
+            <h2 className="text-center text-[clamp(2rem,3.5vw,2.75rem)] font-bold tracking-[-0.5px] text-white">{licensedParts.before}{licensedParts.accent ? <span className="text-[#bc9155]">{licensedParts.accent}</span> : null}{licensedParts.after}</h2>
+            <div className="mt-6 space-y-5 text-[15px] leading-[1.8] text-white/70 md:text-[16px] md:leading-[1.8]">
+              {paras(licensed?.content || licensed?.body).map((paragraph) => <p key={paragraph.slice(0, 30)}>{paragraph}</p>)}
             </div>
-            <div className="grid gap-5 sm:grid-cols-2">
-              {(features?.items || []).map((item: any, index: number) => (
-                <div key={`${item.title || "feature"}-${index}`} className="rounded-[8px] border border-white/8 border-b-2 border-b-transparent bg-white/6 p-6 transition-all duration-300 hover:border-b-[#bc9155] hover:bg-white/[0.09]">
-                  <div className="mb-3.5 flex h-[44px] w-[44px] items-center justify-center rounded-[10px] bg-[#bc915526] text-[#bc9155]">
-                    {item.icon === "shield-check" ? <ShieldCheck className="h-5 w-5" /> : item.icon === "users" ? <Users className="h-5 w-5" /> : item.icon === "file-text" ? <FileText className="h-5 w-5" /> : <Shield className="h-5 w-5" />}
-                  </div>
-                  <h4 className="font-sans text-[15px] font-semibold text-white">{item.title}</h4>
-                  <p className="mt-2 text-[13px] leading-[1.55] text-white/55">{item.description}</p>
+          </FadeUp>
+          <FadeUp className="grid gap-3 md:grid-cols-2 md:gap-5">
+            {(features?.items || []).map((item: any, index: number) => (
+              <article key={`${item.title || "feature"}-${index}`} className="rounded-lg border border-white/15 border-b-2 border-b-transparent bg-white/8 p-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-[3px] hover:border-b-[#bc9155] hover:bg-white/12 hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] md:p-7">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#bc9155]/28 text-[#bc9155]">
+                  {item.icon === "shield-check" ? <ShieldCheck className="h-5 w-5" /> : item.icon === "users" ? <Users className="h-5 w-5" /> : item.icon === "file-text" ? <FileText className="h-5 w-5" /> : item.icon === "circle-check" || item.icon === "check-circle" ? <CircleCheck className="h-5 w-5" /> : <Shield className="h-5 w-5" />}
                 </div>
-              ))}
-            </div>
+                <h4 className="font-sans text-[15px] font-semibold text-white">{item.title}</h4>
+                <p className="mt-1.5 text-[12px] leading-[1.55] text-white/65 md:text-[13px]">{item.description}</p>
+              </article>
+            ))}
           </FadeUp>
         </div>
       </section>
 
-      <section className="bg-[#f5f1e9] px-5 py-16 md:px-10 md:py-[100px]">
-        <div className="mx-auto max-w-[1240px]">
-          <FadeUp className="mb-16 text-center">
+      <section id="areas" className="scroll-mt-28 bg-[#f5f1e9] px-5 pb-[52px] pt-[52px] md:px-8 md:pb-20 md:pt-[72px] lg:px-10 lg:pb-[100px]">
+        <div className="mx-auto max-w-[1280px]">
+          <FadeUp className="mx-auto mb-9 max-w-3xl text-center md:mb-12 lg:mb-16">
             {label(areas?.eyebrow || "Where We Work")}
             <h2 className="text-[clamp(32px,3.5vw,48px)] font-bold tracking-[-0.5px]">{areaParts.before}{areaParts.accent ? <span className="text-[#bc9155]">{areaParts.accent}</span> : null}{areaParts.after}</h2>
+            {areas?.subtitle ? <p className="mx-auto mt-5 max-w-[700px] text-[15px] leading-[1.7] text-[#5c677d] md:text-[17px] md:leading-[1.75]">{areas.subtitle}</p> : null}
           </FadeUp>
-          <FadeUp className="grid gap-8 lg:grid-cols-2">
+          <FadeUp className="grid gap-4 md:gap-8 lg:grid-cols-2">
             {(areas?.counties || []).map((county: any, index: number) => {
+              const countyName = county.name || county.county_name || county.title || "";
               const expanded = !!countyOpen[index];
-              const links = county.town_links || {};
+              const featuredTowns = county.towns || county.cities || [];
+              const links = county.town_links || [];
+
+              const resolveTownUrl = (town: string) => {
+                if (Array.isArray(links)) {
+                  return links.find((entry: any) => entry?.name?.toLowerCase() === town.toLowerCase())?.url || "";
+                }
+                return links[town] || "";
+              };
+
+              const visibleTowns =
+                featuredTowns.length > 0
+                  ? featuredTowns
+                  : Array.isArray(links)
+                    ? links.slice(0, 8).map((item: any) => item.name)
+                    : [];
+              const hiddenTowns =
+                (county.extra_towns || []).length > 0
+                  ? county.extra_towns
+                  : Array.isArray(links) && featuredTowns.length === 0
+                    ? links.slice(8).map((item: any) => item.name)
+                    : [];
 
               return (
-                <article key={`${county.name || "county"}-${index}`} className="group/card flex flex-col overflow-hidden rounded-[12px] border-b-[3px] border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1.5 hover:border-b-[#bc9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]">
-                  <div className="relative h-[220px] overflow-hidden">
-                    <img src={media(county.image, index === 0 ? "/images/areas/fairfield-county.png" : "/images/areas/new-haven-county.png")} alt={county.name || "BuiltWell CT service area"} className={cls("h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105", index === 1 && "object-top")} />
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#1e2b4360] to-transparent" />
+                <article key={`${countyName}-${index}`} className="group overflow-hidden rounded-lg border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 md:hover:-translate-y-[4px] md:hover:border-[#bc9155] md:hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
+                  <div className="relative h-[180px] overflow-hidden md:h-[200px]">
+                    <img src={media(county.image, index === 0 ? "/images/areas/fairfield-county.png" : "/images/areas/new-haven-county.png")} alt={countyName || "BuiltWell CT service area"} className={cls("h-full w-full object-cover transition-transform duration-500 md:group-hover:scale-105", index === 1 && "object-[center_15%]")} />
+                    <div className="absolute inset-x-0 bottom-0 h-[60px] bg-[linear-gradient(to_top,#ffffff,transparent)]" />
                   </div>
-                  <div className="flex flex-1 flex-col p-7 pb-8">
-                    <h3 className="text-[24px] font-bold">{county.name}</h3>
-                    {county.phone ? <p className="mt-1 text-[15px] text-[#5c677d]">Call: <a href={`tel:${county.phone.replace(/\D/g, "")}`} className="font-semibold text-[#bc9155] hover:underline">{county.phone}</a></p> : null}
-                    {county.description ? <p className="mt-4 border-b border-[#1e2b430f] pb-5 text-[14px] leading-[1.7] text-[#5c677d]">{county.description}</p> : null}
-                    <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                      {(county.towns || []).map((town: string) => (
-                        <span key={`${county.name || "county"}-${town}`} className="contents">
-                          {linkNode(Array.isArray(links) ? (links.find((entry: any) => entry?.name === town)?.url || county.url || "#") : (links[town] || county.url || "#"), town, "rounded-full bg-[#f5f1e9] px-3 py-2 text-center text-[11px] font-semibold text-[#1e2b43] transition-colors hover:bg-[#bc9155] hover:text-white")}
-                        </span>
-                      ))}
-                      {expanded && (county.extra_towns || []).map((town: string) => (
-                        <span key={`${county.name || "county"}-extra-${town}`} className="rounded-full bg-[#f5f1e9] px-3 py-2 text-center text-[11px] font-semibold text-[#1e2b43] transition-colors hover:text-[#9a7340]">{town}</span>
-                      ))}
+                  <div className="flex flex-1 flex-col px-5 pb-6 pt-5 text-center md:px-7 md:pb-8 md:pt-7">
+                    <h3 className="text-[22px] font-bold text-[#1e2b43] md:text-2xl">{countyName}</h3>
+                    {county.phone ? <div className="mb-3.5 mt-1.5 text-[15px] text-[#5c677d]">Call: <a href={`tel:${county.phone.replace(/\D/g, "")}`} className="font-semibold text-[#bc9155] hover:underline">{county.phone}</a></div> : null}
+                    {county.description ? <p className="mb-[18px] border-b border-[#1e2b430f] pb-[18px] text-[14px] leading-[1.7] text-[#5c677d]">{county.description}</p> : null}
+
+                    <div className="mb-4 grid grid-cols-3 gap-2 md:grid-cols-4">
+                      {visibleTowns.map((town: string) =>
+                        resolveTownUrl(town) ? (
+                          <Link key={`${countyName}-${town}`} href={resolveTownUrl(town)} className="rounded-full bg-[#f5f1e9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1e2b43] transition-colors hover:bg-[#bc9155] hover:text-white md:px-2.5">
+                            {town}
+                          </Link>
+                        ) : (
+                          <span key={`${countyName}-${town}`} className="rounded-full bg-[#f5f1e9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1e2b43] transition-colors hover:bg-[#bc9155]/10 hover:text-[#9a7340]">
+                            {town}
+                          </span>
+                        ),
+                      )}
+                      {expanded ? hiddenTowns.map((town: string) =>
+                        resolveTownUrl(town) ? (
+                          <Link key={`${countyName}-extra-${town}`} href={resolveTownUrl(town)} className="rounded-full bg-[#f5f1e9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1e2b43] transition-colors hover:text-[#9a7340]">
+                            {town}
+                          </Link>
+                        ) : (
+                          <span key={`${countyName}-extra-${town}`} className="rounded-full bg-[#f5f1e9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1e2b43] transition-colors hover:text-[#9a7340]">
+                            {town}
+                          </span>
+                        ),
+                      ) : null}
+                      {hiddenTowns.length > 0 ? <button type="button" onClick={() => setCountyOpen((current) => ({ ...current, [index]: !current[index] }))} className="col-span-full mt-1 bg-transparent px-0 py-1 text-center text-[13px] font-semibold text-[#bc9155] transition-colors hover:text-[#9a7340]" aria-expanded={expanded}>{expanded ? "Show Less -" : "See All Towns +"}</button> : null}
                     </div>
-                    {county.extra_towns?.length ? <button type="button" onClick={() => setCountyOpen((current) => ({ ...current, [index]: !current[index] }))} className="mt-3 text-center text-[13px] font-semibold text-[#bc9155] transition-colors hover:text-[#a57d48]">{expanded ? "Show Fewer Towns -" : "See All Towns +"}</button> : null}
-                    {county.url ? linkNode(county.url, <><span>{county.cta_label || `Learn more about ${county.name}`}</span><ArrowRight className="h-4 w-4" /></>, "mt-5 inline-flex items-center gap-2 text-[14px] font-semibold text-[#bc9155] transition-all hover:gap-3") : null}
+                    {county.url ? <Link href={county.url} className="mt-auto inline-flex items-center justify-center gap-1.5 text-sm font-semibold text-[#bc9155] transition-all hover:gap-2.5">{county.cta_label || `Learn more about ${countyName}`}<ArrowRight className="h-3.5 w-3.5" /></Link> : null}
                   </div>
                 </article>
               );
@@ -298,30 +599,37 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1a2438_0%,#1e2b43_50%,#151e30_100%)] px-5 py-14 md:px-10">
+      <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1e2b43_0%,#151e30_100%)] px-5 py-10 md:px-8 md:py-14 lg:px-10">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(188,145,85,0.05)_0%,transparent_70%)]" />
-        <div className="relative z-10 mx-auto flex max-w-[1200px] flex-wrap items-center justify-center">
-          {(trust?.items || []).map((item: any, index: number) => (
+        <div className="relative z-10 mx-auto flex max-w-[1200px] flex-wrap items-center justify-center gap-0 md:flex-nowrap">
+          {trustItems.map((item: any, index: number) => (
             <div key={`${item.label || "trust"}-${index}`} className="contents">
-              {item.url ? linkNode(item.url, <div className="flex min-w-[180px] flex-1 flex-col items-center gap-2.5 px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:text-[#bc9155]"><span className="text-[#bc9155] drop-shadow-[0_2px_4px_rgba(188,145,85,0.3)]">{item.icon === "calendar" ? <CalendarDays className="h-[22px] w-[22px]" /> : item.icon === "shield" ? <Shield className="h-[22px] w-[22px]" /> : item.icon === "check" ? <Check className="h-[22px] w-[22px]" /> : <Star className="h-[22px] w-[22px] fill-current" />}</span><span>{[item.label, item.value].filter(Boolean).join(" ")}</span></div>, "flex flex-1 justify-center") : <div className="flex flex-1 justify-center"><div className="flex min-w-[180px] flex-1 flex-col items-center gap-2.5 px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:text-[#bc9155]"><span className="text-[#bc9155] drop-shadow-[0_2px_4px_rgba(188,145,85,0.3)]">{item.icon === "calendar" ? <CalendarDays className="h-[22px] w-[22px]" /> : item.icon === "shield" ? <Shield className="h-[22px] w-[22px]" /> : item.icon === "check" ? <Check className="h-[22px] w-[22px]" /> : <Star className="h-[22px] w-[22px] fill-current" />}</span><span>{[item.label, item.value].filter(Boolean).join(" ")}</span></div></div>}
-              {index < (trust?.items || []).length - 1 ? <div className="hidden h-10 w-px bg-white/10 lg:block" /> : null}
+              {item.url ? linkNode(item.url, <div className="flex min-w-[50%] flex-1 flex-col items-center gap-2.5 px-3 py-4 text-center text-[11px] font-semibold tracking-[0.4px] whitespace-nowrap text-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:text-[#bc9155] md:min-w-0 md:px-8 md:py-5 md:text-[13px]"><span>{item.icon === "star" ? <Star className="h-[18px] w-[18px] fill-[#bc9155] text-[#bc9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]" /> : item.icon === "calendar" ? <CalendarDays className="h-[18px] w-[18px] text-[#bc9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]" /> : <span className="flex h-[18px] w-[18px] items-center justify-center rounded-full border-2 border-current text-[#bc9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]"><Check className="h-3 w-3 md:h-3.5 md:w-3.5" /></span>}</span><span>{[item.label, item.value].filter(Boolean).join(" ")}</span></div>, "flex flex-1 justify-center") : <div className="flex flex-1 justify-center"><div className="flex min-w-[50%] flex-1 flex-col items-center gap-2.5 px-3 py-4 text-center text-[11px] font-semibold tracking-[0.4px] whitespace-nowrap text-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:text-[#bc9155] md:min-w-0 md:px-8 md:py-5 md:text-[13px]"><span>{item.icon === "star" ? <Star className="h-[18px] w-[18px] fill-[#bc9155] text-[#bc9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]" /> : item.icon === "calendar" ? <CalendarDays className="h-[18px] w-[18px] text-[#bc9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]" /> : <span className="flex h-[18px] w-[18px] items-center justify-center rounded-full border-2 border-current text-[#bc9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]"><Check className="h-3 w-3 md:h-3.5 md:w-3.5" /></span>}</span><span>{[item.label, item.value].filter(Boolean).join(" ")}</span></div></div>}
+              {index < trustItems.length - 1 ? <div className="hidden h-10 w-px shrink-0 bg-white/10 lg:block" /> : null}
             </div>
           ))}
         </div>
       </div>
 
-      <section className="bg-[#f5f1e9] px-5 py-16 md:px-10 md:py-20">
+      <section className="bg-[#f5f1e9] px-5 py-[48px] md:px-8 md:py-[64px] lg:px-10 lg:pb-[72px]">
         <div className="mx-auto max-w-[1200px]">
           <FadeUp className="mb-8 text-center">
             {label(lead?.eyebrow || "Get In Touch")}
             <h2 className="text-[clamp(32px,3.5vw,48px)] font-bold tracking-[-0.5px]">{leadParts.before}{leadParts.accent ? <span className="text-[#bc9155]">{leadParts.accent}</span> : null}{leadParts.after}</h2>
-            {lead?.subtitle ? <p className="mx-auto mt-2 max-w-[600px] text-[16px] leading-[1.7] text-[#5c677d]">{lead.subtitle}</p> : null}
+            {lead?.subtitle ? <p className="mx-auto mt-2 max-w-[600px] text-[15px] leading-[1.7] text-[#5c677d] md:text-[16px]">{lead.subtitle}</p> : null}
           </FadeUp>
-          <div className="grid gap-8 lg:grid-cols-[1fr_1.15fr]">
-            <FadeUp className="flex flex-col gap-3">
-              {(lead?.images || []).slice(0, 2).map((image: any, index: number) => <div key={`${image.alt || "lead"}-${index}`} className="relative min-h-[260px] overflow-hidden rounded-[8px]"><img src={media(image.image, index === 0 ? "/portfolio/builtwell-team-client-arrival-ct.jpeg" : "/portfolio/builtwell-contractor-sign-consultation-ct-01.jpg")} alt={image.alt || "BuiltWell CT consultation"} className="h-full w-full object-cover" /><div className="pointer-events-none absolute bottom-0 right-0 h-[60px] w-[60px] rounded-br-[8px] bg-[linear-gradient(135deg,transparent_30%,rgba(30,43,67,0.5)_100%)]" /></div>)}
+          <div className="grid items-stretch gap-6 lg:grid-cols-[1fr_1.15fr] lg:gap-8">
+            <FadeUp className="flex h-full flex-col">
+              <div className="flex h-full flex-1 flex-col gap-3">
+                {(lead?.images || []).slice(0, 2).map((image: any, index: number) => (
+                  <div key={`${image.alt || "lead"}-${index}`} className="relative min-h-[220px] overflow-hidden rounded-[8px] shadow-[0_12px_24px_-18px_rgba(30,43,67,0.6)] md:min-h-[250px] lg:min-h-0 lg:flex-1">
+                    <img src={media(image.image, index === 0 ? "/portfolio/builtwell-team-client-arrival-ct.jpeg" : "/portfolio/builtwell-contractor-sign-consultation-ct-01.jpg")} alt={image.alt || "BuiltWell CT consultation"} className={cls("h-full w-full object-cover", index === 0 && "[object-position:center_30%]")} />
+                    <div className="pointer-events-none absolute bottom-0 right-0 h-[200px] w-[200px] rounded-br-[8px] bg-[radial-gradient(circle_at_bottom_right,rgba(30,43,67,1)_0%,rgba(30,43,67,0.9)_25%,rgba(30,43,67,0.5)_50%,transparent_75%)]" />
+                  </div>
+                ))}
+              </div>
             </FadeUp>
-            <FadeUp className="flex flex-col rounded-[10px] border border-[#1e2b4314] bg-white px-6 py-8 shadow-[0_16px_48px_rgba(30,43,67,0.1),0_4px_12px_rgba(30,43,67,0.04)] md:px-9">
+            <FadeUp className="flex h-full flex-col rounded-[10px] border border-[#1e2b4314] bg-white px-4 py-6 shadow-[0_16px_48px_rgba(30,43,67,0.1),0_4px_12px_rgba(30,43,67,0.04)] md:px-[36px] md:py-8">
               {submitted ? <div className="flex min-h-[420px] flex-col items-center justify-center text-center"><h3 className="text-[34px] font-bold">Thank You</h3><p className="mt-3 max-w-[420px] text-[15px] leading-7 text-[#5c677d]">We received your request and will get back to you within one business day.</p></div> : <form onSubmit={(event) => { event.preventDefault(); setSubmitted(true); }} className="flex flex-1 flex-col">
                 <div className="grid gap-4 md:grid-cols-2">
                   {topFields.map((field: any) => <div key={field.name}><label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">{field.label}{field.required ? " *" : ""}</label><input type={field.type} required={field.required} value={formValues[field.name] || ""} placeholder={field.placeholder || ""} onChange={(event) => setFormValues((current) => ({ ...current, [field.name]: event.target.value }))} className="w-full rounded-[6px] border border-[#1e2b4326] px-3.5 py-3 text-[15px] text-[#1e2b43] outline-none transition-colors focus:border-[#bc9155]" /></div>)}
@@ -334,7 +642,7 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
                 {messageField ? <div className="mt-4"><label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">{messageField.label}</label><textarea rows={7} value={formValues[messageField.name] || ""} placeholder={messageField.placeholder || ""} onChange={(event) => setFormValues((current) => ({ ...current, [messageField.name]: event.target.value }))} className="min-h-[240px] w-full rounded-[6px] border border-[#1e2b4326] px-3.5 py-3 text-[15px] leading-[1.6] text-[#1e2b43] outline-none transition-colors focus:border-[#bc9155]" /></div> : null}
                 <div className="mt-6 grid gap-4 md:grid-cols-2">
                   <div><label className="flex min-h-[52px] cursor-pointer items-center justify-center gap-2 rounded-[8px] border border-[#1e2b4326] px-5 py-3 text-[15px] font-semibold text-[#1e2b43] transition-colors hover:border-[#bc9155]" htmlFor="about-lead-files"><Upload className="h-4 w-4" />Upload Photos</label><input id="about-lead-files" type="file" multiple accept="image/jpeg,image/png,image/heic,.heic" className="hidden" onChange={(event) => setFileNames(Array.from(event.target.files || []).map((file) => file.name))} />{fileNames.length ? <p className="mt-2 text-[12px] text-[#5c677d]">{fileNames.join(", ")}</p> : null}</div>
-                  <button type="submit" className="min-h-[52px] rounded-[8px] bg-[#bc9155] px-5 py-3 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48] hover:shadow-[0_4px_12px_rgba(188,145,85,0.3)]">{lead?.submit_label || "Send Request"}</button>
+                  <button type="submit" className="min-h-[52px] rounded-[8px] bg-[#bc9155] px-5 py-3 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48] hover:shadow-[0_4px_12px_rgba(188,145,85,0.3)]">{lead?.submit_label || "Get Your Free Estimate"}</button>
                 </div>
                 <p className="mt-4 text-center text-[13px] italic text-[#5c677d]">{lead?.consent_text || "We respond within 24 hours. No spam, no obligation."}</p>
               </form>}

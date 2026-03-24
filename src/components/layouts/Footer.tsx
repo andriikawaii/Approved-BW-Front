@@ -3,6 +3,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePageData } from '@/src/context/PageDataContext';
+import FooterA from './FooterA';
+import FooterB from './FooterB';
+import FooterC from './FooterC';
+import FooterD from './FooterD';
 
 const SUPPORT_EMAIL = 'info@buildwellct.com';
 
@@ -92,8 +96,25 @@ function FooterColumn({
 }
 
 export default function Footer({ currentYear }: { currentYear: number }) {
-  const { phones } = usePageData();
+  const { phones, footerVariant } = usePageData();
   const phoneItems = phones ?? [];
+
+  if (footerVariant === 'A') {
+    return <FooterA currentYear={currentYear} phones={phoneItems} />;
+  }
+
+  if (footerVariant === 'B') {
+    return <FooterB currentYear={currentYear} phones={phoneItems} />;
+  }
+
+  if (footerVariant === 'C') {
+    return <FooterC currentYear={currentYear} phones={phoneItems} />;
+  }
+
+  if (footerVariant === 'D') {
+    return <FooterD currentYear={currentYear} phones={phoneItems} />;
+  }
+
   const fairfieldPhone = phoneItems.find((p) => p.label.toLowerCase().includes('fairfield'));
   const newHavenPhone = phoneItems.find((p) => p.label.toLowerCase().includes('new haven'));
 

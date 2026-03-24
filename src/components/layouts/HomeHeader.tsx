@@ -71,7 +71,7 @@ export default function HomeHeader({ phones }: HomeHeaderProps) {
               onClick={() => setConsultationOpen(true)}
               className="rounded-sm bg-[#BC9155] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#a57d48]"
             >
-              Free Consultation
+              Get Your Free Estimate
             </button>
             {phones[0] ? (
               <a
@@ -146,7 +146,7 @@ export default function HomeHeader({ phones }: HomeHeaderProps) {
                   setConsultationOpen(true);
                 }}
               >
-                Free Consultation
+                Get Your Free Estimate
               </button>
             </nav>
 

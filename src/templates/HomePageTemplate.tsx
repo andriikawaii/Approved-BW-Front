@@ -4,21 +4,22 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowRight,
-  Brush,
   CalendarDays,
   Check,
+  CircleCheck,
   DraftingCompass,
+  FileText,
   HeartHandshake,
   Home,
   LayoutGrid,
   PaintBucket,
-  Upload,
-  ShieldCheck,
   Shield,
+  ShieldCheck,
+  Upload,
   SquareStack,
   Star,
-  TimerReset,
   Trees,
+  Users,
   Wrench,
   ChevronDown,
 } from 'lucide-react';
@@ -130,8 +131,9 @@ type County = {
   description?: string;
   towns?: string[];
   cities?: string[];
+  extra_towns?: string[];
   towns_expanded?: string[];
-  town_links?: TownLink[];
+  town_links?: TownLink[] | Record<string, string>;
 };
 
 type AreasServedData = {
@@ -636,7 +638,9 @@ function HomeServicesSection({
   secondaryServices: MergedService[];
   primaryLabel?: string | null;
 }) {
-  if (primaryServices.length === 0 && secondaryServices.length === 0) {
+  const allServices = [...primaryServices, ...secondaryServices].slice(0, 6);
+
+  if (allServices.length === 0) {
     return null;
   }
 
@@ -645,14 +649,15 @@ function HomeServicesSection({
       <div className="mx-auto max-w-[1280px]">
         <HomeSectionHeader label={primaryLabel || 'Our Services'} title={title} description={description} />
 
-        {/* Primary services - cards with images */}
-        {primaryServices.length > 0 ? (
-          <div className="home-fade-up grid gap-4 md:mb-6 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
-            {primaryServices.map((service) => (
+        <div className="home-fade-up grid gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
+          {allServices.map((service) => {
+            const Icon = serviceIcon(service.title);
+
+            return (
               <Link
                 key={service.title}
                 href={service.url}
-                className="group overflow-hidden rounded-lg border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 md:hover:-translate-y-[6px] md:hover:border-[#BC9155] md:hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
+                className="group overflow-hidden rounded-[8px] border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 md:hover:-translate-y-[6px] md:hover:border-[#BC9155] md:hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
               >
                 <div className="relative h-[180px] overflow-hidden md:h-[200px]">
                   {service.image ? (
@@ -662,62 +667,26 @@ function HomeServicesSection({
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
                     />
-                  ) : null}
+                  ) : (
+                    <div className="flex h-full items-center justify-center bg-[#1E2B43]/5">
+                      <Icon className="h-12 w-12 text-[#BC9155]/40" />
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_40%,rgba(188,145,85,0.12)_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 </div>
-                <div className="px-[18px] py-5 md:px-[22px] md:py-6">
-                  <h3 className="font-sans text-[17px] font-semibold text-[#1E2B43] md:text-lg">{service.title}</h3>
-                  <p className="mt-2.5 line-clamp-3 text-[13px] leading-[1.65] text-[#5C677D] md:text-sm">{service.description}</p>
-                  <span className="mt-3.5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#BC9155] transition-all duration-300 group-hover:gap-2.5 group-hover:text-[#9A7340]">
-                    {service.ctaLabel}
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-[3px]" />
-                  </span>
+                <div className="px-[18px] py-5 text-center md:px-[22px] md:py-6">
+                  <h3 className="font-sans text-[17px] font-semibold text-[#1E2B43] transition-colors duration-300 group-hover:text-[#BC9155] md:text-[18px]">
+                    {service.title}
+                  </h3>
+                  <div className="mx-auto mb-[14px] mt-[10px] h-0.5 w-10 bg-[#BC9155]" />
+                  <p className="line-clamp-3 text-[13px] leading-[1.65] text-[#5C677D] md:text-[14px]">
+                    {service.description}
+                  </p>
                 </div>
               </Link>
-            ))}
-          </div>
-        ) : null}
-
-        {/* Secondary services - cards with images */}
-        {secondaryServices.length > 0 ? (
-          <div className="home-fade-up mt-4 grid gap-4 md:mt-6 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
-            {secondaryServices.map((service) => {
-              const Icon = serviceIcon(service.title);
-
-              return (
-                <Link
-                  key={service.title}
-                  href={service.url}
-                  className="group overflow-hidden rounded-lg border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 md:hover:-translate-y-[6px] md:hover:border-[#BC9155] md:hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
-                >
-                  <div className="relative h-[180px] overflow-hidden md:h-[200px]">
-                    {service.image ? (
-                      <img
-                        src={service.image}
-                        alt={service.title}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="flex h-full items-center justify-center bg-[#1E2B43]/5">
-                        <Icon className="h-12 w-12 text-[#BC9155]/40" />
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_40%,rgba(188,145,85,0.12)_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                  </div>
-                  <div className="px-[18px] py-5 md:px-[22px] md:py-6">
-                    <h3 className="font-sans text-[17px] font-semibold text-[#1E2B43] md:text-lg">{service.title}</h3>
-                    <p className="mt-2.5 line-clamp-3 text-[13px] leading-[1.65] text-[#5C677D] md:text-sm">{service.description}</p>
-                    <span className="mt-3.5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#BC9155] transition-all duration-300 group-hover:gap-2.5 group-hover:text-[#9A7340]">
-                      {service.ctaLabel}
-                      <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-[3px]" />
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        ) : null}
+            );
+          })}
+        </div>
 
         <div className="home-fade-up mt-8 text-center md:mt-12">
           <Link
@@ -734,7 +703,34 @@ function HomeServicesSection({
 }
 
 function HomeProcessSection({ data }: { data: ProcessStepsData | null }) {
-  const steps = data?.steps ?? [];
+  const fallbackSteps: ProcessStep[] = [
+    {
+      title: 'Consultation',
+      description:
+        'We visit your home or connect via Google Meet or Zoom at no charge and with no obligation, so we can understand the scope before we put anything in writing.',
+    },
+    {
+      title: 'Planning',
+      description:
+        "You receive a written proposal with a clear breakdown of exactly what's included, the full project timeline, and the cost. No vague ranges, no surprises later.",
+    },
+    {
+      title: 'Selections',
+      description:
+        'We guide you through every material choice and communicate lead times upfront, so nothing delays construction once the schedule is set.',
+    },
+    {
+      title: 'Build',
+      description:
+        'Construction begins on the agreed start date. Crews show up on time, daily updates are sent, and the job site is cleaned every evening.',
+    },
+    {
+      title: 'Walkthrough',
+      description:
+        "When the work is finished, we walk through the project together. Nothing is signed off until you're satisfied with every detail.",
+    },
+  ];
+  const steps = (data?.steps && data.steps.length > 0 ? data.steps : fallbackSteps).slice(0, 5);
   const [activeStep, setActiveStep] = useState<number | null>(null);
 
   if (steps.length === 0) {
@@ -742,55 +738,276 @@ function HomeProcessSection({ data }: { data: ProcessStepsData | null }) {
   }
 
   return (
-    <section id="process" className="scroll-mt-28 relative overflow-hidden px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/portfolio/builtwell-team-contractors-ct-04.png')" }}
-        aria-hidden="true"
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(10,18,34,0.90)_0%,rgba(30,43,67,0.85)_100%)]" />
-      <div className="relative z-10 mx-auto max-w-[1280px]">
-        <HomeSectionHeader
-          label={data?.eyebrow || 'Our Process'}
-          title={data?.title}
-          description={data?.subtitle}
-          dark
-        />
+    <section id="process" className="home-process scroll-mt-28 px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
+      <div className="home-process-bg" aria-hidden="true" />
+      <div className="home-process-inner">
+        <div className="home-fade-up home-process-header">
+          <span className="home-process-label">{data?.eyebrow || 'Our Process'}</span>
+          <h2
+            dangerouslySetInnerHTML={{
+              __html: highlightTitleHtml(data?.title || 'Our Remodeling Process'),
+            }}
+          />
+          <p>
+            {data?.subtitle ||
+              "We follow the same five-step process on every project, whether it's a single bathroom or a whole-home renovation. It keeps projects on schedule and keeps you informed at every stage."}
+          </p>
+        </div>
 
-        <div className="home-fade-up relative mx-auto grid max-w-full gap-0 lg:max-w-none lg:grid-cols-5">
-          <div className="absolute bottom-[34px] left-[25px] top-[28px] w-0.5 bg-[#BC9155]/25 md:left-[33px] md:top-[34px] lg:bottom-auto lg:left-[10%] lg:right-[10%] lg:top-[34px] lg:h-0.5 lg:w-auto" />
+        <div className="home-fade-up home-process-timeline">
           {steps.map((step, index) => (
             <button
               type="button"
-              key={`${step.title}-${index}`}
+              key={`${step.title || step.short || 'step'}-${index}`}
               onClick={() => setActiveStep((current) => (current === index ? null : index))}
-                className={joinClasses(
-                  'relative flex w-full cursor-pointer items-start gap-4 rounded-lg border-0 bg-transparent px-0 py-3 text-left transition-colors duration-300 hover:bg-[#BC9155]/8 md:gap-5 md:py-4 lg:block lg:px-4 lg:pb-5 lg:pt-4 lg:text-center',
-                  activeStep === index && 'bg-[#BC9155]/14'
-                )}
+              className={joinClasses('home-process-step', activeStep === index && 'is-active')}
               aria-expanded={activeStep === index}
             >
-              <div className="relative z-10 flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-full border-[2.5px] border-[#BC9155] bg-[#BC9155]/42 font-serif text-[18px] font-bold text-[#f5e0c0] shadow-[0_0_0_4px_rgba(188,145,85,0.12)] md:h-[68px] md:w-[68px] md:text-2xl lg:-mt-2 lg:mx-auto lg:mb-5">
-                {index + 1}
-              </div>
-              <div>
-                <h3 className="mb-1.5 text-left text-base font-semibold text-white md:mb-3 md:text-lg lg:text-center">{step.title || step.short}</h3>
-                {step.description ? (
-                  <p
-                    className={joinClasses(
-                      'text-left text-[14px] leading-[1.6] text-white/70 transition-all duration-300 lg:text-center lg:leading-[1.65]',
-                      activeStep === index ? 'max-h-[200px] opacity-100' : 'max-h-none opacity-100 lg:max-h-0 lg:overflow-hidden lg:opacity-0'
-                    )}
-                  >
-                    {step.description}
-                  </p>
-                ) : null}
-              </div>
+              <div className="home-process-step-num">{index + 1}</div>
+              <h3>{step.title || step.short || `Step ${index + 1}`}</h3>
+              <p>{step.description || fallbackSteps[index]?.description || ''}</p>
             </button>
           ))}
         </div>
-        <p className="mt-7 hidden text-center text-[13px] text-white/40 lg:block">Click any step to learn more</p>
+        <p className="home-process-hint">Click any step to learn more</p>
       </div>
+      <style jsx>{`
+        .home-process {
+          position: relative;
+          overflow: hidden;
+          color: #fff;
+        }
+        .home-process-bg {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(10, 18, 34, 0.9) 0%, rgba(30, 43, 67, 0.85) 100%);
+          z-index: 0;
+        }
+        .home-process-inner {
+          position: relative;
+          z-index: 1;
+          max-width: 1280px;
+          margin: 0 auto;
+        }
+        .home-process-header {
+          text-align: center;
+          margin-bottom: 64px;
+        }
+        .home-process-label {
+          display: inline-block;
+          font-size: 13px;
+          font-weight: 700;
+          color: #9a7340;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          margin-bottom: 16px;
+          position: relative;
+          padding-left: 20px;
+        }
+        .home-process-label::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 10px;
+          height: 2px;
+          background: #bc9155;
+        }
+        .home-process-header h2 {
+          font-size: clamp(32px, 3.5vw, 48px);
+          margin-bottom: 20px;
+          letter-spacing: -0.5px;
+          color: #fff;
+          font-weight: 700;
+        }
+        .home-process-header p {
+          font-size: 17px;
+          color: rgba(255, 255, 255, 0.6);
+          max-width: 700px;
+          margin: 0 auto;
+          line-height: 1.75;
+        }
+        .home-process-timeline {
+          display: grid;
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          gap: 0;
+          position: relative;
+        }
+        .home-process-timeline::before {
+          content: '';
+          position: absolute;
+          top: 34px;
+          left: 10%;
+          right: 10%;
+          height: 2px;
+          background: rgba(188, 145, 85, 0.25);
+        }
+        .home-process-step {
+          text-align: center;
+          padding: 16px 16px 20px;
+          position: relative;
+          cursor: pointer;
+          border-radius: 8px;
+          transition: background 0.3s;
+          border: 0;
+          background: transparent;
+          color: inherit;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+          outline: none;
+        }
+        .home-process-step:focus,
+        .home-process-step:focus-visible {
+          outline: none;
+          box-shadow: none;
+        }
+        .home-process-step.is-active {
+          background: rgba(188, 145, 85, 0.14);
+          z-index: 2;
+          position: relative;
+        }
+        .home-process-step-num {
+          width: 68px;
+          height: 68px;
+          border-radius: 9999px;
+          background: rgba(188, 145, 85, 0.42);
+          border: 2.5px solid #bc9155;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: -8px auto 20px;
+          font-family: 'Playfair Display', serif;
+          font-size: 24px;
+          font-weight: 700;
+          color: #f5e0c0;
+          position: relative;
+          z-index: 2;
+          box-shadow: 0 0 0 4px rgba(188, 145, 85, 0.12);
+          flex-shrink: 0;
+        }
+        .home-process-step h3 {
+          font-size: 18px;
+          margin: 0 0 12px;
+          color: #fff;
+          font-weight: 700;
+          font-family: 'Playfair Display', serif;
+          line-height: 1.25;
+          text-align: center;
+        }
+        .home-process-step p {
+          font-size: 14px;
+          color: rgba(255, 255, 255, 0.7);
+          line-height: 1.65;
+          max-height: 0;
+          opacity: 0;
+          overflow: hidden;
+          margin: 0;
+          transition: max-height 0.4s ease, opacity 0.35s ease, margin-top 0.35s ease;
+          text-align: center;
+        }
+        .home-process-step.is-active p {
+          max-height: 200px;
+          opacity: 1;
+          margin-top: 8px;
+        }
+        .home-process-hint {
+          text-align: center;
+          margin-top: 28px;
+          font-size: 13px;
+          color: rgba(255, 255, 255, 0.4);
+        }
+        @media (max-width: 1024px) {
+          .home-process-timeline {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+            max-width: 700px;
+            margin: 0 auto;
+          }
+          .home-process-timeline::before {
+            display: none;
+          }
+          .home-process-step {
+            padding: 16px 8px;
+            gap: 0;
+          }
+          .home-process-step-num {
+            margin: 0 0 10px;
+          }
+          .home-process-step h3 {
+            text-align: center;
+            font-size: 15px;
+            margin: 0;
+          }
+          .home-process-step p {
+            display: none !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .home-process-header {
+            margin-bottom: 36px;
+          }
+          .home-process-header h2 {
+            font-size: 24px;
+            margin-bottom: 14px;
+          }
+          .home-process-header p {
+            font-size: 15px;
+            line-height: 1.7;
+          }
+          .home-process-timeline {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            max-width: 600px;
+          }
+          .home-process-step {
+            padding: 14px 8px;
+          }
+          .home-process-step-num {
+            width: 48px;
+            height: 48px;
+            font-size: 17px;
+            margin: 0 0 8px;
+          }
+          .home-process-step h3 {
+            font-size: 14px;
+            margin-bottom: 0;
+          }
+          .home-process-hint {
+            display: none;
+          }
+        }
+        @media (max-width: 480px) {
+          .home-process-header {
+            margin-bottom: 32px;
+          }
+          .home-process-header h2 {
+            font-size: 26px;
+          }
+          .home-process-header p {
+            font-size: 14px;
+          }
+          .home-process-timeline {
+            gap: 16px !important;
+            max-width: 360px;
+          }
+          .home-process-step {
+            padding: 12px 6px;
+          }
+          .home-process-step-num {
+            width: 44px;
+            height: 44px;
+            font-size: 16px;
+            margin: 0 0 8px;
+          }
+          .home-process-step h3 {
+            font-size: 12px;
+            line-height: 1.3;
+          }
+        }
+      `}</style>
     </section>
   );
 }
@@ -820,17 +1037,36 @@ function HomeAreasSection({
         <div className="home-fade-up grid gap-4 md:gap-8 lg:grid-cols-2">
           {counties.map((county) => {
             const countyName = county.name || county.county_name || county.title || '';
-            const towns = county.towns || county.cities || [];
+            const featuredTowns = county.towns || county.cities || [];
+            const extraTowns = county.extra_towns || county.towns_expanded || [];
             const townLinks = county.town_links || [];
-            const townItems = townLinks.length > 0 ? townLinks : towns.map((town) => ({ name: town, url: '' }));
-            const visibleTowns = townItems.slice(0, 8);
-            const hiddenTowns = townItems.slice(8);
+
+            const resolveTownUrl = (town: string) => {
+              if (Array.isArray(townLinks)) {
+                return townLinks.find((link) => normalizeTitle(link.name) === normalizeTitle(town))?.url || '';
+              }
+
+              return townLinks[town] || '';
+            };
+
+            const visibleTowns =
+              featuredTowns.length > 0
+                ? featuredTowns
+                : Array.isArray(townLinks)
+                  ? townLinks.slice(0, 8).map((item) => item.name)
+                  : [];
+            const hiddenTowns =
+              extraTowns.length > 0
+                ? extraTowns
+                : Array.isArray(townLinks) && featuredTowns.length === 0
+                  ? townLinks.slice(8).map((item) => item.name)
+                  : [];
             const isExpanded = expandedCounties[countyName] ?? false;
 
             return (
               <article
                 key={countyName}
-                className="group overflow-hidden rounded-lg border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 md:hover:-translate-y-1 md:hover:border-[#BC9155] md:hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
+                className="group overflow-hidden rounded-lg border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 md:hover:-translate-y-[4px] md:hover:border-[#BC9155] md:hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
               >
                 {county.image ? (
                   <div className="relative h-[180px] overflow-hidden md:h-[200px]">
@@ -846,7 +1082,7 @@ function HomeAreasSection({
                     <div className="absolute inset-x-0 bottom-0 h-[60px] bg-[linear-gradient(to_top,#ffffff,transparent)]" />
                   </div>
                 ) : null}
-                <div className="flex flex-1 flex-col px-5 pb-6 pt-5 md:px-7 md:pb-8 md:pt-7">
+                <div className="flex flex-1 flex-col px-5 pb-6 pt-5 text-center md:px-7 md:pb-8 md:pt-7">
                   <h3 className="font-serif text-[22px] font-bold text-[#1E2B43] md:text-2xl">{countyName}</h3>
                   {county.phone ? (
                     <div className="mb-3.5 mt-1.5 text-[15px] text-[#5C677D]">
@@ -861,32 +1097,32 @@ function HomeAreasSection({
 
                   <div className="mb-4 grid grid-cols-3 gap-2 md:grid-cols-4">
                     {visibleTowns.map((town) =>
-                      town.url ? (
+                      resolveTownUrl(town) ? (
                         <Link
-                          key={town.name}
-                          href={town.url}
-                          className="rounded-full bg-[#F5F1E9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1E2B43] transition-all hover:bg-[#BC9155] hover:text-white md:px-2.5"
+                          key={town}
+                          href={resolveTownUrl(town)}
+                          className="rounded-full bg-[#F5F1E9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1E2B43] transition-colors hover:bg-[#BC9155] hover:text-white md:px-2.5"
                         >
-                          {town.name}
+                          {town}
                         </Link>
                       ) : (
-                        <span key={town.name} className="rounded-full bg-[#F5F1E9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1E2B43] transition-colors hover:bg-[#BC9155]/10 hover:text-[#9A7340]">
-                          {town.name}
+                        <span key={town} className="rounded-full bg-[#F5F1E9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1E2B43] transition-colors hover:bg-[#BC9155]/10 hover:text-[#9A7340]">
+                          {town}
                         </span>
                       )
                     )}
                     {isExpanded ? hiddenTowns.map((town) => (
-                      town.url ? (
+                      resolveTownUrl(town) ? (
                         <Link
-                          key={town.name}
-                          href={town.url}
-                          className="rounded-full bg-[#F5F1E9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1E2B43] transition-all hover:bg-[#BC9155] hover:text-white"
+                          key={town}
+                          href={resolveTownUrl(town)}
+                          className="rounded-full bg-[#F5F1E9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1E2B43] transition-colors hover:text-[#9A7340]"
                         >
-                          {town.name}
+                          {town}
                         </Link>
                       ) : (
-                        <span key={town.name} className="rounded-full bg-[#F5F1E9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1E2B43] transition-colors hover:bg-[#BC9155]/10 hover:text-[#9A7340]">
-                          {town.name}
+                        <span key={town} className="rounded-full bg-[#F5F1E9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1E2B43] transition-colors hover:text-[#9A7340]">
+                          {town}
                         </span>
                       )
                     )) : null}
@@ -910,7 +1146,7 @@ function HomeAreasSection({
                   {county.url ? (
                     <Link
                       href={county.url}
-                      className="mt-auto inline-flex items-center gap-1.5 text-sm font-semibold text-[#BC9155] transition-all hover:gap-2.5"
+                      className="mt-auto inline-flex items-center justify-center gap-1.5 text-sm font-semibold text-[#BC9155] transition-all hover:gap-2.5"
                     >
                       Learn more about {countyName}
                       <ArrowRight className="h-3.5 w-3.5" />
@@ -928,28 +1164,45 @@ function HomeAreasSection({
 
 function HomeTrustStrip() {
   const trustItems = [
-    { label: 'Google Rating 4.9', icon: 'star', href: '#google-reviews' },
-    { label: 'BBB A+ Accredited', icon: 'shield', href: 'https://www.bbb.org/search?find_country=USA&find_text=builtwell+ct&find_loc=Orange%2C+CT', external: true },
+    {
+      label: 'Google Rating 4.9',
+      icon: 'star',
+      href: 'https://www.google.com/maps/search/?api=1&query=BuiltWell+CT,+206A+Boston+Post+Road,+Orange,+CT+06477',
+      external: true,
+    },
     { label: 'Trusted on Houzz', icon: 'check', href: '#houzz' },
-    { label: 'CT HIC License #0668405', icon: 'license', href: 'https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx', external: true },
-    { label: 'Verified on Angi & Thumbtack', icon: 'check', href: '#angi' },
+    {
+      label: 'CT HIC License #0668405',
+      icon: 'license',
+      href: 'https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx',
+      external: true,
+    },
+    { label: 'Verified on Angi', icon: 'check', href: 'https://www.angi.com', external: true },
   ];
 
   return (
-    <div className="border-t border-[#1E2B43]/8 bg-white px-5 py-8 md:px-6 md:py-10 lg:px-10 lg:py-14">
-      <div className="home-fade-up mx-auto flex max-w-[1200px] flex-wrap items-center justify-center gap-0">
+    <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] px-5 py-10 md:px-8 md:py-14 lg:px-10">
+      <div
+        className="absolute inset-0 opacity-[0.12]"
+        style={{
+          backgroundImage: "url('/portfolio/builtwell-job-site-aerial-ct.jpg')",
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'contain',
+        }}
+        aria-hidden="true"
+      />
+      <div className="home-fade-up relative z-10 mx-auto flex max-w-[1200px] flex-wrap items-center justify-center gap-0">
         {trustItems.map((item, index) => (
           <div key={item.label} className="contents">
             <a
               href={item.href}
               target={item.external ? '_blank' : undefined}
               rel={item.external ? 'noopener noreferrer' : undefined}
-              className="flex min-w-[50%] flex-1 flex-col items-center gap-2.5 px-4 py-3 text-center text-[11px] font-semibold tracking-[0.4px] whitespace-nowrap text-[#1E2B43] transition-all hover:-translate-y-0.5 hover:text-[#BC9155] md:min-w-[140px] md:px-5 md:py-4 md:text-[12px] lg:min-w-[180px] lg:px-8 lg:py-5 lg:text-[13px]"
+              className="flex min-w-[50%] flex-1 flex-col items-center gap-2.5 px-3 py-4 text-center text-[11px] font-semibold tracking-[0.4px] whitespace-nowrap text-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:text-[#BC9155] md:min-w-[180px] md:px-8 md:py-5 md:text-[13px]"
             >
               {item.icon === 'star' ? (
                 <Star className="h-[18px] w-[18px] fill-[#BC9155] text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]" />
-              ) : item.icon === 'shield' ? (
-                <Shield className="h-[18px] w-[18px] text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]" />
               ) : item.icon === 'license' ? (
                 <CalendarDays className="h-[18px] w-[18px] text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]" />
               ) : (
@@ -960,7 +1213,7 @@ function HomeTrustStrip() {
               {item.label}
             </a>
             {index < trustItems.length - 1 ? (
-              <div className="hidden h-10 w-px shrink-0 bg-[#1E2B43]/10 lg:block" />
+              <div className="hidden h-10 w-px shrink-0 bg-white/10 lg:block" />
             ) : null}
           </div>
         ))}
@@ -969,12 +1222,40 @@ function HomeTrustStrip() {
   );
 }
 
+function HomeFinancingStrip() {
+  return (
+    <section className="border-t border-[#1E2B43]/8 bg-white px-5 py-10 md:px-8 md:py-14 lg:px-10">
+      <div className="home-fade-up mx-auto flex max-w-[1200px] flex-col items-center gap-6 text-center">
+        <div className="flex flex-col items-center gap-4">
+          <span className="text-[28px] font-bold tracking-[-0.3px]">
+            <span className="text-[#6BBF4E]">Green</span>
+            <span className="text-[#1E2B43]">Sky</span>
+          </span>
+          <p className="text-[16px] leading-[1.6] text-[#5C677D]">
+            <strong className="text-[#1E2B43]">Flexible Financing Available.</strong>{' '}
+            Get approved in about 60 seconds and start your project today.
+          </p>
+        </div>
+        <a
+          href="https://www.greensky.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex min-h-[52px] min-w-[280px] items-center justify-center gap-2.5 rounded-[8px] bg-[#BC9155] px-8 py-3.5 text-[15px] font-semibold tracking-[0.3px] text-white transition-all duration-200 hover:-translate-y-px hover:bg-[#a57d48] hover:shadow-[0_4px_12px_rgba(188,145,85,0.3)]"
+        >
+          Check Financing Options
+          <ArrowRight className="h-3.5 w-3.5" />
+        </a>
+      </div>
+    </section>
+  );
+}
+
 function HomeMidCta() {
   return (
     <section className="relative overflow-hidden bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] px-5 py-[52px] text-center md:px-10 md:py-[72px]">
       <div
-        className="absolute inset-0 bg-cover bg-center opacity-10"
-        style={{ backgroundImage: "url('/portfolio/builtwell-contractor-handshake-arrival-ct-optimized.jpg')" }}
+        className="absolute inset-0 bg-cover bg-[center_40%] opacity-25"
+        style={{ backgroundImage: "url('/hero/builtwell-team-van-consultation-hero-ct.jpg')" }}
         aria-hidden="true"
       />
       <div className="home-fade-up relative z-10">
@@ -988,7 +1269,7 @@ function HomeMidCta() {
           href="/free-consultation/"
           className="inline-flex min-h-[52px] w-full items-center justify-center rounded-lg bg-[#BC9155] px-6 py-4 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48] md:min-h-0 md:min-w-[min(340px,100%)] md:w-auto md:rounded-md md:px-11 md:py-[18px]"
         >
-          Schedule a Free Consultation
+          Get Your Free Estimate
           <ArrowRight className="ml-2 h-4 w-4" />
         </Link>
         <p className="mt-4 text-[13px] italic text-white/40">
@@ -1093,22 +1374,22 @@ function HomeLicensedSection({
   const licenseNumber = extractLicenseNumber(bodyText);
   const features = [
     {
-      icon: ShieldCheck,
+      icon: Shield,
       title: `CT License ${licenseNumber}`,
       copy: 'Issued by the Department of Consumer Protection',
     },
     {
-      icon: Brush,
+      icon: CircleCheck,
       title: 'General Liability Insurance',
       copy: 'Full coverage on every project we take on',
     },
     {
-      icon: TimerReset,
+      icon: Users,
       title: "Workers' Compensation",
       copy: 'Every crew member is covered while on your property',
     },
     {
-      icon: Wrench,
+      icon: FileText,
       title: 'Licensed Subcontractors',
       copy: 'All specialty trades are licensed and insured',
     },
@@ -1118,26 +1399,26 @@ function HomeLicensedSection({
     <section className="relative overflow-hidden px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
       <div
         className="absolute inset-0 bg-cover bg-center opacity-[0.15]"
-        style={{ backgroundImage: "url('/portfolio/builtwell-job-site-aerial-ct.jpg')" }}
+        style={{ backgroundImage: "url('/hero/builtwell-job-site-aerial-hero-ct.jpg')" }}
         aria-hidden="true"
       />
-      <div className="absolute inset-0 bg-[linear-gradient(135deg,#2D3E33_0%,#1A2D22_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)]" />
       <div className="home-fade-up relative z-10 mx-auto grid max-w-[1280px] gap-8 md:gap-10 lg:grid-cols-2 lg:items-center lg:gap-20">
         <div>
           {title ? (
             <>
-              <span className="relative mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1px] text-[#BC9155] before:absolute before:left-0 before:top-1/2 before:h-0.5 before:w-2.5 before:-translate-y-1/2 before:bg-[#BC9155] md:text-[13px] md:tracking-[1.5px]">
+              <span className="mb-4 block text-center text-[11px] font-bold uppercase tracking-[1.5px] text-[#BC9155] md:text-[13px]">
                 Licensed in Connecticut
               </span>
               <h2
-                className="text-[clamp(1.75rem,6vw,2.75rem)] font-bold tracking-[-0.5px] text-white"
+                className="text-center text-[clamp(2rem,3.5vw,2.75rem)] font-bold tracking-[-0.5px] text-white"
                 dangerouslySetInnerHTML={{
                   __html: highlightTitleHtml(title),
                 }}
               />
             </>
           ) : null}
-          <div className="mt-6 space-y-5 text-[15px] leading-[1.7] text-white/70 md:text-base md:leading-8">
+          <div className="mt-6 space-y-5 text-[15px] leading-[1.8] text-white/70 md:text-[16px] md:leading-[1.8]">
             {paragraphs.map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
             ))}
@@ -1151,12 +1432,12 @@ function HomeLicensedSection({
             return (
               <article
                 key={feature.title}
-                className="rounded-lg border border-white/15 bg-white/8 p-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-[3px] hover:border-b-2 hover:border-b-[#BC9155] hover:bg-white/12 hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] md:p-7"
+                className="rounded-lg border border-white/15 border-b-2 border-b-transparent bg-white/8 p-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-[3px] hover:border-b-[#BC9155] hover:bg-white/12 hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] md:p-7"
               >
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#BC9155]/28 text-[#BC9155]">
                   <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="font-sans text-[14px] font-semibold text-white md:text-[15px]">{feature.title}</h3>
+                <h3 className="font-sans text-[15px] font-semibold text-white">{feature.title}</h3>
                 <p className="mt-1.5 text-[12px] leading-[1.55] text-white/65 md:text-[13px]">{feature.copy}</p>
               </article>
             );
@@ -1306,7 +1587,7 @@ function HomeLeadFormSection({ data }: { data: LeadFormData }) {
       <div className="mx-auto max-w-[1200px]">
         <div className="home-fade-up mb-8 text-center">
           <span className="relative mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1px] text-[#9A7340] before:absolute before:left-0 before:top-1/2 before:h-0.5 before:w-2.5 before:-translate-y-1/2 before:bg-[#BC9155] md:text-[13px] md:tracking-[1.5px]">
-            Get in touch
+            GET IN TOUCH
           </span>
           <h2
             className="text-[clamp(1.875rem,5vw,2.625rem)] font-bold tracking-[-0.5px] text-[#1E2B43]"
@@ -1318,30 +1599,30 @@ function HomeLeadFormSection({ data }: { data: LeadFormData }) {
         </div>
 
         <div className="grid items-stretch gap-6 lg:grid-cols-[1fr_1.15fr] lg:gap-8">
-          <div className="home-fade-up flex flex-col gap-4">
-            <div className="flex flex-col gap-3">
-              <div className="relative h-[240px] overflow-hidden rounded-lg md:h-[300px]">
+          <div className="home-fade-up flex h-full flex-col">
+            <div className="flex h-full flex-1 flex-col gap-3">
+              <div className="relative min-h-[220px] overflow-hidden rounded-[8px] shadow-[0_12px_24px_-18px_rgba(30,43,67,0.6)] md:min-h-[250px] lg:min-h-0 lg:flex-1">
                 <img
-                  src={data.background_image || '/portfolio/builtwell-team-client-arrival-ct.jpeg'}
+                  src={data.background_image || '/team/builtwell-owner-handshake-client-ct-02.jpg'}
                   alt="BuiltWell consultation arrival"
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover [object-position:center_30%]"
                   loading="lazy"
                 />
-                <div className="pointer-events-none absolute bottom-0 right-0 h-[60px] w-[60px] rounded-br-lg bg-[linear-gradient(135deg,transparent_30%,rgba(30,43,67,0.5)_100%)]" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[60px] bg-[linear-gradient(to_top,rgba(245,241,233,1)_0%,rgba(245,241,233,0.6)_40%,transparent_100%)]" />
               </div>
-              <div className="relative h-[240px] overflow-hidden rounded-lg md:h-[300px]">
+              <div className="relative min-h-[220px] overflow-hidden rounded-[8px] shadow-[0_12px_24px_-18px_rgba(30,43,67,0.6)] md:min-h-[250px] lg:min-h-0 lg:flex-1">
                 <img
-                  src="/portfolio/builtwell-contractor-client-consultation-ct.jpeg"
-                  alt="BuiltWell client consultation"
+                  src="/portfolio/builtwell-job-site-aerial-ct.jpg"
+                  alt="BuiltWell CT job site with two vans at a Connecticut home renovation"
                   className="h-full w-full object-cover"
                   loading="lazy"
                 />
-                <div className="pointer-events-none absolute bottom-0 right-0 h-[60px] w-[60px] rounded-br-lg bg-[linear-gradient(135deg,transparent_30%,rgba(30,43,67,0.5)_100%)]" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[60px] bg-[linear-gradient(to_top,rgba(245,241,233,1)_0%,rgba(245,241,233,0.6)_40%,transparent_100%)]" />
               </div>
             </div>
           </div>
 
-          <div className="home-fade-up flex flex-col rounded-[10px] border border-[#1E2B43]/8 bg-white px-4 py-6 shadow-[0_16px_48px_rgba(30,43,67,0.1),0_4px_12px_rgba(30,43,67,0.04)] md:px-9 md:py-8">
+          <div className="home-fade-up flex h-full flex-col rounded-[10px] border border-[#1E2B43]/8 bg-white px-4 py-6 shadow-[0_16px_48px_rgba(30,43,67,0.1),0_4px_12px_rgba(30,43,67,0.04)] md:px-[36px] md:py-8">
             <form
               onSubmit={(event) => {
                 event.preventDefault();
@@ -1511,7 +1792,7 @@ function HomeLeadFormSection({ data }: { data: LeadFormData }) {
                   type="submit"
                   className="min-h-[52px] rounded-lg bg-[#BC9155] px-5 py-3.5 text-[15px] font-semibold tracking-[0.3px] text-white transition-all hover:-translate-y-px hover:bg-[#a57d48] hover:shadow-[0_4px_12px_rgba(188,145,85,0.3)]"
                 >
-                  {data.submit_label || 'Send Request'}
+                  {data.submit_label || 'Get Your Free Estimate'}
                 </button>
               </div>
 
@@ -1541,7 +1822,7 @@ function HomeCtaSection({
     <section id="contact" className="scroll-mt-28 bg-[#F5F1E9] px-5 pb-[52px] pt-12 text-center md:px-8 md:pb-[72px] md:pt-16">
       <div className="mx-auto max-w-5xl">
         <span className="relative mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1px] text-[#9A7340] before:absolute before:left-0 before:top-1/2 before:h-0.5 before:w-2.5 before:-translate-y-1/2 before:bg-[#BC9155] md:text-[13px] md:tracking-[1.5px]">
-          Get in touch
+          GET IN TOUCH
         </span>
         {data?.title ? (
           <h2
@@ -1705,31 +1986,32 @@ export function HomePageTemplate({ page }: { page: CMSPage }) {
         counties={areas?.counties ?? []}
       />
 
-      {/* 7. Trust Strip */}
-      <HomeTrustStrip />
-
-      {/* 8. Mid CTA */}
+      {/* 7. Mid CTA */}
       <HomeMidCta />
 
-      {/* 9. Projects */}
+      {/* 8. Projects */}
       <HomeProjectsSection
         title={projects?.title}
         description={projects?.subtitle}
         projects={projectItems}
       />
 
-      {/* 10. Licensed */}
+      {/* 9. Licensed */}
       <HomeLicensedSection
         title={licensedCopy?.title}
         paragraphs={licensedParagraphs}
       />
 
-      {/* 11. Lead Form (if available) or CTA fallback */}
+      {/* 10. Lead Form (if available) or CTA fallback */}
       {leadForm ? (
         <HomeLeadFormSection data={leadForm} />
       ) : (
         <HomeCtaSection data={cta} phones={phones} />
       )}
+
+      {/* 11. Trust + Financing strip */}
+      <HomeTrustStrip />
+      <HomeFinancingStrip />
       <style jsx global>{`
         .home-fade-up {
           opacity: 0;

@@ -36,6 +36,8 @@ type HomeHeroProps = {
 
 export default function HomeHero({ data }: HomeHeroProps) {
   const hasVideo = !!data.background_video;
+  const heroEyebrow = 'SERVING FAIRFIELD & NEW HAVEN COUNTIES';
+  const primaryLabel = 'Get Your Free Estimate';
   const renderTagline = () => {
     if (!data.tagline) {
       return null;
@@ -57,7 +59,7 @@ export default function HomeHero({ data }: HomeHeroProps) {
   };
 
   return (
-    <section className="relative isolate flex min-h-[80vh] items-center justify-center overflow-hidden bg-[#151E30] pt-16 md:min-h-[92vh]">
+    <section className="relative isolate flex min-h-[92vh] items-center justify-center overflow-hidden bg-[#151E30] pt-16">
       {/* Video background */}
       {hasVideo ? (
         <video
@@ -86,19 +88,17 @@ export default function HomeHero({ data }: HomeHeroProps) {
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(21,30,48,0.25)_0%,rgba(21,30,48,0.5)_60%,rgba(21,30,48,0.95)_100%)]" />
 
       {/* Content */}
-      <div className="relative z-10 mx-auto w-full max-w-[1240px] px-5 pb-12 pt-12 text-center md:px-8 md:pb-[60px] md:pt-10">
+      <div className="relative z-10 mx-auto w-full max-w-[1240px] px-5 pb-[60px] pt-10 text-center md:px-8">
         <div className="mx-auto max-w-[1080px] text-white">
           {/* Eyebrow badge */}
-          {data.eyebrow ? (
-            <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#BC9155]/30 bg-[#BC9155]/15 px-[18px] py-2.5 text-[10px] font-semibold uppercase tracking-[1px] text-[#BC9155] md:mb-6 md:px-6 md:py-3 md:text-[11px] md:tracking-[1.5px]">
+          <p className="mb-6 inline-flex items-center gap-2 rounded-full border-[1.5px] border-[#BC9155]/50 bg-[rgba(21,30,48,0.7)] px-[26px] py-3 text-[11px] font-bold uppercase tracking-[1.5px] text-white [backdrop-filter:blur(12px)] [-webkit-backdrop-filter:blur(12px)]">
               <span className="h-1.5 w-1.5 rounded-full bg-[#BC9155]" />
-              {data.eyebrow}
+              {heroEyebrow}
             </p>
-          ) : null}
 
           {/* Headline */}
           {data.headline ? (
-            <h1 className="mb-3 text-[clamp(28px,7vw,56px)] font-bold leading-[1.1] tracking-[-0.5px] !text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.3)] md:leading-[1.05]">
+            <h1 className="mb-5 text-[clamp(38px,4.2vw,56px)] font-bold leading-[1.05] tracking-[-0.5px] !text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.3)]">
               {data.headline.includes('Connecticut') ? (
                 <>
                   {data.headline.split('Connecticut')[0]}
@@ -113,27 +113,20 @@ export default function HomeHero({ data }: HomeHeroProps) {
 
           {/* Tagline */}
           {data.tagline ? (
-            <p className="mb-4 font-serif text-[clamp(18px,4vw,28px)] italic text-[#BC9155] md:mb-5">
+            <p className="mb-8 mt-4 font-serif text-[clamp(20px,2.2vw,28px)] italic text-[#BC9155]">
               {renderTagline()}
-            </p>
-          ) : null}
-
-          {/* Subheadline */}
-          {data.subheadline ? (
-            <p className="mx-auto mb-7 max-w-[680px] text-[15px] leading-[1.65] text-white/72 md:mb-8 md:leading-[1.5]">
-              {data.subheadline}
             </p>
           ) : null}
 
           {/* CTA buttons */}
           {(data.cta_primary || data.cta_secondary) ? (
-            <div className="flex flex-col items-stretch justify-center gap-3 md:flex-row md:flex-wrap md:items-center md:gap-4">
+            <div className="mt-3 flex flex-col items-stretch justify-center gap-3 md:flex-row md:flex-wrap md:items-center md:gap-4">
               {data.cta_primary ? (
                 <Link
                   href={data.cta_primary.url}
-                  className="inline-flex min-h-[52px] w-full max-w-full items-center justify-center rounded-lg bg-[#BC9155] px-6 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48] md:min-h-[64px] md:w-[340px] md:px-8 md:text-base"
+                  className="inline-flex min-h-[64px] w-full max-w-full items-center justify-center rounded-[8px] bg-[#BC9155] px-8 text-[16px] font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-[#a57d48] md:w-[340px]"
                 >
-                  {data.cta_primary.label}
+                  {primaryLabel}
                   <svg className="ml-2 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7" />
                   </svg>
@@ -143,14 +136,14 @@ export default function HomeHero({ data }: HomeHeroProps) {
                 data.cta_secondary.url.startsWith('tel:') ? (
                   <a
                     href={data.cta_secondary.url}
-                    className="inline-flex min-h-[52px] w-full max-w-full items-center justify-center rounded-lg border border-white/25 px-6 text-[15px] font-medium text-white transition-colors hover:border-[#BC9155] hover:text-[#BC9155] md:min-h-[64px] md:w-[340px] md:px-8 md:text-base"
+                    className="inline-flex min-h-[64px] w-full max-w-full items-center justify-center rounded-[8px] border border-white/25 px-8 text-[16px] font-medium text-white transition-all duration-200 hover:border-[#BC9155] hover:text-[#BC9155] md:w-[340px]"
                   >
                     {data.cta_secondary.label}
                   </a>
                 ) : (
                   <Link
                     href={data.cta_secondary.url}
-                    className="inline-flex min-h-[52px] w-full max-w-full items-center justify-center rounded-lg border border-white/25 px-6 text-[15px] font-medium text-white transition-colors hover:border-[#BC9155] hover:text-[#BC9155] md:min-h-[64px] md:w-[340px] md:px-8 md:text-base"
+                    className="inline-flex min-h-[64px] w-full max-w-full items-center justify-center rounded-[8px] border border-white/25 px-8 text-[16px] font-medium text-white transition-all duration-200 hover:border-[#BC9155] hover:text-[#BC9155] md:w-[340px]"
                   >
                     {data.cta_secondary.label}
                   </Link>
@@ -161,7 +154,7 @@ export default function HomeHero({ data }: HomeHeroProps) {
 
           {/* Supporting line */}
           {data.supporting_line ? (
-            <p className="mt-3.5 text-[14px] italic leading-[1.5] text-white/88 md:mt-[18px] md:text-[17px]">
+            <p className="mt-[18px] text-[17px] italic leading-[1.5] text-white/88">
               {data.supporting_line}
             </p>
           ) : null}
