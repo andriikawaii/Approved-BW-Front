@@ -8,7 +8,6 @@ import {
   CheckCircle2,
   ChevronDown,
   Clock3,
-  DollarSign,
   Facebook,
   Instagram,
   Linkedin,
@@ -17,7 +16,6 @@ import {
   MessageSquareMore,
   ShieldCheck,
   Star,
-  Upload,
   X,
   Youtube,
 } from "lucide-react";
@@ -506,25 +504,22 @@ function AreasHero({ data, phones }: { data?: HeroData; phones: PhoneItem[] }) {
 
         <div className="hero-ctas areas-hero-ctas">
           <ExternalOrInternalLink
-            href={toTelHref(fairfieldPhone)}
-            className="hero-cta-btn areas-hero-cta-btn"
+            href="#contact"
+            className="hero-cta-btn hero-cta-primary areas-hero-cta-btn-simple"
           >
-            <span className="hero-cta-label">Fairfield County</span>
-            <span className="hero-cta-phone">{fairfieldPhone}</span>
+            Get Your Free Estimate
+          </ExternalOrInternalLink>
+          <ExternalOrInternalLink
+            href={toTelHref(fairfieldPhone)}
+            className="hero-cta-btn areas-hero-cta-btn-simple"
+          >
+            Fairfield: {fairfieldPhone}
           </ExternalOrInternalLink>
           <ExternalOrInternalLink
             href={toTelHref(newHavenPhone)}
-            className="hero-cta-btn areas-hero-cta-btn"
+            className="hero-cta-btn areas-hero-cta-btn-simple"
           >
-            <span className="hero-cta-label">New Haven County</span>
-            <span className="hero-cta-phone">{newHavenPhone}</span>
-          </ExternalOrInternalLink>
-          <ExternalOrInternalLink
-            href="#contact"
-            className="hero-cta-btn hero-cta-primary areas-hero-cta-btn areas-hero-cta-btn-primary"
-          >
-            <span className="hero-cta-label">Free Estimate</span>
-            <span className="hero-cta-phone">Schedule Now</span>
+            New Haven: {newHavenPhone}
           </ExternalOrInternalLink>
         </div>
       </div>
@@ -733,30 +728,9 @@ function ServiceCard({ item }: { item: ServiceItem }) {
         <h3>
           <Link href={item.url || "#"}>{item.title}</Link>
         </h3>
+        <div className="service-card-divider" />
 
         {item.summary ? <p>{item.summary}</p> : null}
-
-        {item.price || item.timeline ? (
-          <div className="service-meta">
-            {item.price ? (
-              <span className="service-badge">
-                <DollarSign className="h-[14px] w-[14px]" />
-                {item.price}
-              </span>
-            ) : null}
-            {item.timeline ? (
-              <span className="service-badge">
-                <Clock3 className="h-[14px] w-[14px]" />
-                {item.timeline}
-              </span>
-            ) : null}
-          </div>
-        ) : null}
-
-        <Link href={item.url || "#"} className="service-link">
-          {item.cta_label || "Learn More"}
-          <ArrowRight className="h-[14px] w-[14px]" />
-        </Link>
       </div>
     </article>
   );
@@ -849,7 +823,6 @@ function ContactSection({ data }: { data?: LeadFormData }) {
   const [servicesOpen, setServicesOpen] = useState(false);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [contactMethod, setContactMethod] = useState("call");
-  const [fileNames, setFileNames] = useState<string[]>([]);
   const titleParts = getHighlightParts(data?.title, data?.title_highlight || undefined);
   const images = (data?.images || []).map((item) => ({
     src: normalizeMediaPath(item.image) || "/portfolio/builtwell-contractor-client-consultation-ct.jpeg",
@@ -1034,30 +1007,26 @@ function ContactSection({ data }: { data?: LeadFormData }) {
                   </div>
                 ) : null}
 
-                <div className="form-bottom-row">
-                  <div className="form-bottom-upload">
-                    <button type="button" aria-label="Upload project photos">
-                      <Upload className="h-4 w-4" />
-                      Upload Photos
-                      <input
-                        type="file"
-                        multiple
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(event) =>
-                          setFileNames(Array.from(event.target.files || []).map((file) => file.name))
-                        }
-                      />
-                    </button>
-                    {fileNames.length > 0 ? (
-                      <p>{fileNames.join(", ")}</p>
-                    ) : null}
-                  </div>
-
-                  <button type="submit" className="form-submit" aria-label="Send consultation request">
-                    {data?.submit_label || "Send Request"}
-                  </button>
+                <div className="form-consent">
+                  <label>
+                    <input type="checkbox" name="consent" required />
+                    <span>
+                      I agree to the{" "}
+                      <ExternalOrInternalLink href="/privacy-policy/" className="form-consent-link">
+                        Privacy Policy
+                      </ExternalOrInternalLink>{" "}
+                      and{" "}
+                      <ExternalOrInternalLink href="/terms/" className="form-consent-link">
+                        Terms of Service
+                      </ExternalOrInternalLink>
+                      . I consent to receive calls, texts (SMS), and emails from BuiltWell CT, including automated messages. Msg &amp; data rates may apply. Reply STOP to opt out.
+                    </span>
+                  </label>
                 </div>
+
+                <button type="submit" className="form-submit" aria-label="Send consultation request">
+                  {data?.submit_label || "Get Your Free Estimate"}
+                </button>
 
                 <p className="form-note">{data?.consent_text || "We respond within 24 hours. No spam, no obligation."}</p>
               </form>
@@ -1250,13 +1219,11 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
         .areas-page .hero-breadcrumb .current { color:#fff; font-weight:600; }
         .areas-page .areas-hero-title { max-width:900px; margin-bottom:12px; font:700 clamp(40px,4.5vw,56px)/1.08 "Playfair Display",serif; letter-spacing:-.5px; text-shadow:0 2px 20px rgba(0,0,0,.5); }
         .areas-page .hero-subtitle { max-width:560px; margin:16px auto 0; color:rgba(255,255,255,.82); font-size:17px; line-height:1.7; }
-        .areas-page .hero-ctas { display:flex; flex-wrap:wrap; gap:16px; justify-content:center; margin-top:32px; }
-        .areas-page .hero-cta-btn { min-width:180px; padding:16px 28px; border-radius:8px; text-align:center; display:flex; flex-direction:column; align-items:center; text-decoration:none; color:#fff; background:rgba(10,18,35,.42); border:1px solid rgba(255,255,255,.18); border-bottom:2px solid var(--gold); backdrop-filter:blur(12px); transition:.3s; }
-        .areas-page .hero-cta-btn:hover { background:rgba(10,18,35,.62); border-color:rgba(255,255,255,.28); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.3),0 0 0 1px rgba(188,145,85,.2); }
-        .areas-page .hero-cta-btn.hero-cta-primary { background:var(--gold); border:1px solid var(--gold); border-bottom:2px solid #a57d48; backdrop-filter:none; }
+        .areas-page .hero-ctas { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; align-items:center; margin-top:28px; }
+        .areas-page .hero-cta-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 32px; border-radius:8px; text-decoration:none; color:#fff; background:rgba(10,18,35,.42); border:1px solid rgba(255,255,255,.22); backdrop-filter:blur(12px); font-size:15px; font-weight:600; letter-spacing:.3px; white-space:nowrap; transition:background .3s,border-color .3s,transform .3s,box-shadow .3s; }
+        .areas-page .hero-cta-btn:hover { background:rgba(10,18,35,.62); border-color:rgba(255,255,255,.35); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.3); }
+        .areas-page .hero-cta-btn.hero-cta-primary { background:var(--gold); border:1px solid var(--gold); backdrop-filter:none; }
         .areas-page .hero-cta-btn.hero-cta-primary:hover { background:#d4a95a; border-color:#d4a95a; box-shadow:0 8px 24px rgba(188,145,85,.4); }
-        .areas-page .hero-cta-label { margin-bottom:4px; font-size:11px; letter-spacing:1.2px; text-transform:uppercase; opacity:.75; }
-        .areas-page .hero-cta-phone { font:600 18px/1.2 "Playfair Display",serif; }
 
         .areas-page .trust-bar { background:linear-gradient(135deg,#1e2b43 0%,#151e30 100%); border-top:1px solid rgba(188,145,85,.2); border-bottom:1px solid rgba(188,145,85,.2); }
         .areas-page .trust-bar-inner { max-width:1280px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); text-align:center; }
@@ -1273,19 +1240,19 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
 
         .areas-page .where-we-work, .areas-page .areas-services-section { background:var(--cream); }
         .areas-page .areas-services-section { padding-top:60px; padding-bottom:60px; }
-        .areas-page .areas-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; }
-        .areas-page .area-card { background:#fff; border-radius:12px; overflow:hidden; border-bottom:3px solid transparent; box-shadow:0 2px 12px rgba(30,43,67,.06),0 1px 3px rgba(30,43,67,.04); transition:.35s cubic-bezier(.4,0,.2,1); }
+        .areas-page .areas-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:start; }
+        .areas-page .area-card { background:#fff; border-radius:12px; overflow:hidden; border-bottom:3px solid transparent; box-shadow:0 2px 12px rgba(30,43,67,.06),0 1px 3px rgba(30,43,67,.04); transition:.35s cubic-bezier(.4,0,.2,1); position:relative; display:flex; flex-direction:column; }
         .areas-page .area-card:hover { transform:translateY(-6px); border-bottom-color:var(--gold); box-shadow:0 16px 40px rgba(30,43,67,.1),0 32px 64px rgba(30,43,67,.08); }
         .areas-page .area-card-img { height:220px; position:relative; overflow:hidden; }
         .areas-page .area-card-img:after { content:""; position:absolute; left:0; right:0; bottom:0; height:80px; background:linear-gradient(to top,rgba(30,43,67,.4),transparent); }
         .areas-page .area-card-img img { width:100%; height:100%; object-fit:cover; transition:transform .5s; }
         .areas-page .area-card:hover .area-card-img img { transform:scale(1.05); }
         .areas-page .area-card-img img.show-top { object-position:top; }
-        .areas-page .area-card-body { padding:28px 28px 32px; }
+        .areas-page .area-card-body { padding:28px 28px 32px; text-align:center; }
         .areas-page .area-card-body h3 { margin-bottom:6px; font:700 24px/1.2 "Playfair Display",serif; color:var(--oxford-blue); }
         .areas-page .area-card-phone { margin-bottom:14px; font-size:15px; color:var(--slate); }
         .areas-page .area-card-phone a { color:var(--gold); font-weight:600; }
-        .areas-page .area-card-desc { margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid rgba(30,43,67,.06); font-size:14px; line-height:1.7; color:var(--slate); }
+        .areas-page .area-card-desc { margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid rgba(30,43,67,.06); font-size:14px; line-height:1.7; color:var(--slate); flex:1; }
         .areas-page .area-towns { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
         .areas-page .area-town { background:var(--cream); border-radius:50px; padding:7px 10px; text-align:center; font-size:11px; font-weight:600; letter-spacing:.2px; color:var(--oxford-blue); text-decoration:none; white-space:nowrap; transition:.2s; }
         .areas-page .area-town:hover { background:var(--gold-light); color:var(--gold-dark); }
@@ -1298,10 +1265,9 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
         .areas-page .area-link { display:inline-flex; align-items:center; gap:6px; margin-top:4px; color:var(--gold); font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; }
         .areas-page .area-link:hover { gap:10px; }
 
-        .areas-page .services-grid, .areas-page .services-more { display:flex; flex-wrap:wrap; justify-content:center; gap:32px; }
-        .areas-page .services-grid .service-card, .areas-page .services-more .service-card { flex:0 0 calc(33.333% - 22px); max-width:calc(33.333% - 22px); }
-        .areas-page .services-more { display:none; width:100%; margin-top:8px; }
-        .areas-page .services-more.show { display:flex; }
+        .areas-page .services-grid, .areas-page .services-more { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+        .areas-page .services-more { display:none; width:100%; margin-top:24px; }
+        .areas-page .services-more.show { display:grid; margin-top:32px; }
         .areas-page .services-toggle-wrap { width:100%; display:flex; justify-content:center; margin:40px 0 8px; }
         .areas-page .services-toggle-btn { display:inline-flex; align-items:center; gap:8px; border:2px solid var(--gold); color:var(--gold); background:none; border-radius:6px; padding:12px 32px; font-size:14px; font-weight:600; cursor:pointer; transition:.3s; }
         .areas-page .services-toggle-btn:hover { background:var(--gold); color:#fff; }
@@ -1309,19 +1275,17 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
         .areas-page .services-toggle-btn.open svg { transform:rotate(180deg); }
         .areas-page .service-card { background:#fff; border-radius:8px; overflow:hidden; border-bottom:2px solid transparent; box-shadow:0 2px 12px rgba(30,43,67,.06),0 1px 3px rgba(30,43,67,.04); transition:.35s cubic-bezier(.4,0,.2,1); display:flex; flex-direction:column; }
         .areas-page .service-card:hover { transform:translateY(-4px); border-bottom-color:var(--gold); box-shadow:0 12px 28px rgba(30,43,67,.1),0 28px 56px rgba(30,43,67,.12); }
-        .areas-page .service-card-img { height:280px; overflow:hidden; }
+        .areas-page .service-card-img { height:200px; overflow:hidden; }
         .areas-page .service-card-img img { width:100%; height:100%; object-fit:cover; transition:transform .5s; }
         .areas-page .service-card:hover .service-card-img img { transform:scale(1.05); }
-        .areas-page .service-card-body { padding:28px 28px 32px; display:flex; flex-direction:column; flex:1; }
-        .areas-page .service-card-body h3 { margin-bottom:12px; font:700 22px/1.2 "Playfair Display",serif; }
-        .areas-page .service-card-body h3 a { color:inherit; transition:color .2s; }
+        .areas-page .service-card-body { padding:24px 22px; display:flex; flex-direction:column; flex:1; text-align:center; }
+        .areas-page .service-card-body h3 { margin-bottom:0; font:600 18px/1.2 "Inter",sans-serif; }
+        .areas-page .service-card-body h3 a { color:inherit; transition:color .2s; text-decoration:none; }
         .areas-page .service-card-body h3 a:hover { color:var(--gold); }
-        .areas-page .service-card-body p { flex:1; margin-bottom:20px; font-size:15px; line-height:1.7; color:var(--slate); }
-        .areas-page .service-meta { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:20px; }
-        .areas-page .service-badge { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:6px 14px; background:var(--gold-light); color:var(--gold-dark); font-size:12px; font-weight:600; }
-        .areas-page .service-badge svg { color:var(--gold); }
-        .areas-page .service-link { display:inline-flex; align-items:center; gap:6px; color:var(--gold); font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; }
-        .areas-page .service-link:hover { gap:10px; }
+        .areas-page .service-card-divider { width:40px; height:2px; background:var(--gold); margin:10px auto 14px; }
+        .areas-page .service-card-body p { flex:1; margin-bottom:0; font-size:14px; line-height:1.65; color:var(--slate); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+        .areas-page .service-meta { display:none; }
+        .areas-page .service-link { display:none; }
         .areas-page .service-card-cta { background:var(--oxford-blue); border-bottom-color:var(--gold); align-items:center; justify-content:center; }
         .areas-page .service-card-cta:hover { background:#151e30; }
         .areas-page .service-card-cta-inner { height:100%; padding:40px 32px; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; }
@@ -1353,16 +1317,19 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
         .areas-page .cta-header h2 { margin-bottom:8px; font:700 clamp(30px,3vw,42px)/1.2 "Playfair Display",serif; }
         .areas-page .cta-header .sub { max-width:600px; margin:0 auto; font-size:16px; line-height:1.7; color:var(--slate); }
         .areas-page .cta-body { display:grid; grid-template-columns:1fr 1.15fr; gap:32px; align-items:stretch; }
-        .areas-page .cta-left,.areas-page .cta-images { display:flex; flex-direction:column; gap:12px; }
-        .areas-page .cta-images { flex:1; }
-        .areas-page .cta-img-wrap { flex:1; min-height:0; overflow:hidden; border-radius:8px; }
-        .areas-page .cta-img-wrap img { width:100%; height:100%; object-fit:cover; }
-        .areas-page .contact-form-wrap { background:#fff; border-radius:10px; padding:32px 36px; border:1px solid rgba(30,43,67,.08); box-shadow:0 16px 48px rgba(30,43,67,.1),0 4px 12px rgba(30,43,67,.04); }
+        .areas-page .cta-left { display:flex; flex-direction:column; gap:16px; }
+        .areas-page .cta-images { display:flex; flex-direction:column; gap:12px; flex:1; }
+        .areas-page .cta-img-wrap { position:relative; flex:1; min-height:0; overflow:hidden; border-radius:8px; }
+        .areas-page .cta-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+        .areas-page .cta-img-wrap:after { content:""; position:absolute; bottom:0; right:0; width:200px; height:200px; background:radial-gradient(circle at bottom right,rgba(30,43,67,1) 0%,rgba(30,43,67,.9) 25%,rgba(30,43,67,.5) 50%,transparent 75%); pointer-events:none; border-radius:0 0 8px 0; }
+        .areas-page .contact-form-wrap { background:#fff; border-radius:10px; padding:32px 36px; border:1px solid rgba(30,43,67,.08); box-shadow:0 16px 48px rgba(30,43,67,.1),0 4px 12px rgba(30,43,67,.04); display:flex; flex-direction:column; }
+        .areas-page .contact-form-wrap form { display:flex; flex-direction:column; flex:1; }
         .areas-page .areas-form-success { min-height:420px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
         .areas-page .areas-form-success h3 { margin-top:16px; font:700 32px/1.2 "Playfair Display",serif; color:var(--oxford-blue); }
         .areas-page .areas-form-success p { margin-top:12px; max-width:420px; line-height:1.7; color:var(--slate); }
         .areas-page .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
         .areas-page .form-group { margin-bottom:16px; border:none; padding:0; min-width:0; }
+        .areas-page .form-row fieldset.form-group { grid-column:1 / -1; }
         .areas-page .form-group label,.areas-page .form-group legend { display:block; margin-bottom:6px; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:.5px; color:var(--oxford-blue); }
         .areas-page .form-group input:not([type="radio"]):not([type="checkbox"]),.areas-page .form-group select,.areas-page .form-group textarea,.areas-page .multi-select-toggle { width:100%; border:1px solid rgba(30,43,67,.15); border-radius:6px; padding:12px 14px; font-size:15px; color:var(--oxford-blue); background:#fff; transition:border-color .2s; }
         .areas-page .form-group textarea { min-height:120px; line-height:1.6; resize:vertical; }
@@ -1381,24 +1348,24 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
         .areas-page .multi-select-dropdown input[type="checkbox"] { appearance:none; -webkit-appearance:none; width:18px; height:18px; border:2px solid rgba(30,43,67,.25); border-radius:3px; position:relative; cursor:pointer; margin:0; }
         .areas-page .multi-select-dropdown input[type="checkbox"]:checked { background:var(--gold); border-color:var(--gold); }
         .areas-page .multi-select-dropdown input[type="checkbox"]:checked:after { content:""; position:absolute; left:5px; top:2px; width:5px; height:9px; border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg); }
-        .areas-page .form-radio-group { display:flex; gap:10px; }
+        .areas-page .form-radio-group { display:flex; gap:10px; flex-wrap:nowrap; }
         .areas-page .form-radio-group label { flex:1; margin:0; padding:12px 14px; border:2px solid rgba(30,43,67,.12); border-radius:6px; display:flex; justify-content:center; align-items:center; text-transform:none; letter-spacing:0; font-size:13px; font-weight:500; cursor:pointer; transition:.2s; }
         .areas-page .form-radio-group label:hover { border-color:var(--gold); }
         .areas-page .form-radio-group input { display:none!important; opacity:0!important; width:0!important; height:0!important; margin:0!important; padding:0!important; border:0!important; position:absolute!important; pointer-events:none!important; appearance:none!important; -webkit-appearance:none!important; }
         .areas-page .form-radio-group input:checked + span { color:var(--gold); font-weight:600; }
         .areas-page .form-radio-group label:has(input:checked) { border-color:var(--gold); background:rgba(188,145,85,.06); }
-        .areas-page .form-bottom-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:8px; }
-        .areas-page .form-bottom-upload button { width:100%; min-height:52px; border:1px solid rgba(30,43,67,.15); border-radius:8px; background:#fff; display:inline-flex; justify-content:center; align-items:center; gap:8px; padding:14px 20px; font-size:15px; font-weight:600; color:var(--oxford-blue); cursor:pointer; transition:border-color .2s; }
-        .areas-page .form-bottom-upload button:hover { border-color:var(--gold); }
-        .areas-page .form-bottom-upload p { margin-top:6px; font-size:12px; color:var(--slate); }
-        .areas-page .form-submit { width:100%; min-height:52px; border:none; border-radius:8px; background:var(--gold); color:#fff; font-size:15px; font-weight:600; cursor:pointer; transition:.2s; }
+        .areas-page .form-consent { margin:10px 0 8px; }
+        .areas-page .form-consent label { display:flex; align-items:flex-start; gap:10px; font-size:12px; line-height:1.5; color:#6b7280; cursor:pointer; }
+        .areas-page .form-consent input[type="checkbox"] { margin-top:3px; accent-color:var(--gold); min-width:16px; }
+        .areas-page .form-consent-link { color:var(--gold); text-decoration:underline; }
+        .areas-page .form-submit { width:100%; min-height:52px; padding:14px 20px; border:none; border-radius:8px; background:var(--gold); color:#fff; font-size:15px; font-weight:600; letter-spacing:.3px; cursor:pointer; transition:background .2s,transform .2s,box-shadow .2s; }
         .areas-page .form-submit:hover { background:#a57d48; transform:translateY(-1px); box-shadow:0 4px 12px rgba(188,145,85,.3); }
         .areas-page .form-note { margin-top:16px; text-align:center; font-size:13px; font-style:italic; color:var(--slate); }
 
         .areas-page .financing-strip { background:#fff; border-top:1px solid rgba(30,43,67,.08); padding:56px 40px; }
         .areas-page .financing-strip-inner { max-width:1200px; margin:0 auto; display:flex; flex-direction:column; align-items:center; gap:24px; text-align:center; }
-        .areas-page .financing-strip-left { display:flex; align-items:center; gap:24px; }
-        .areas-page .greensky-logo { font-size:24px; font-weight:700; letter-spacing:-.3px; }
+        .areas-page .financing-strip-left { display:flex; flex-direction:column; align-items:center; gap:16px; }
+        .areas-page .greensky-logo { font-size:28px; font-weight:700; letter-spacing:-.3px; }
         .areas-page .gs-green { color:#6bbf4e; }
         .areas-page .gs-dark { color:var(--oxford-blue); }
         .areas-page .financing-strip-text { font-size:16px; line-height:1.6; color:var(--slate); }
@@ -1409,7 +1376,7 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
         @media (max-width:1024px) {
           .areas-page .section { padding:80px 32px; }
           .areas-page .areas-grid { grid-template-columns:1fr; max-width:640px; margin:0 auto; }
-          .areas-page .services-grid .service-card,.areas-page .services-more .service-card { flex:0 0 calc(50% - 16px); max-width:calc(50% - 16px); }
+          .areas-page .services-grid,.areas-page .services-more { grid-template-columns:repeat(2,1fr); }
           .areas-page .trust-strip-divider { display:none; }
           .areas-page .trust-strip-item-wrap { min-width:140px; }
           .areas-page .financing-strip { padding:36px 32px; }
@@ -1428,18 +1395,18 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
           .areas-page .trust-bar-inner { grid-template-columns:repeat(2,1fr); }
           .areas-page .trust-item { padding:24px 16px; background:rgba(188,145,85,.08); }
           .areas-page .trust-item:hover { transform:none; }
-          .areas-page .services-grid,.areas-page .services-more { gap:24px; }
-          .areas-page .services-grid .service-card,.areas-page .services-more .service-card { flex:0 0 calc(50% - 16px); max-width:calc(50% - 16px); }
-          .areas-page .service-card-img { height:240px; }
+          .areas-page .services-grid,.areas-page .services-more { grid-template-columns:repeat(2,1fr); gap:24px; }
           .areas-page .trust-strip { padding:32px 20px; }
           .areas-page .trust-strip-item-wrap { min-width:50%; }
           .areas-page .trust-strip-item { padding:12px 16px; font-size:11px; }
           .areas-page .trust-strip-item svg { width:18px; height:18px; }
           .areas-page .cta-section { padding:48px 20px; }
           .areas-page .cta-body { grid-template-columns:1fr; }
-          .areas-page .cta-left { display:none; }
+          .areas-page .cta-left { order:2; }
+          .areas-page .cta-img-wrap + .cta-img-wrap { display:none; }
+          .areas-page .cta-images img { max-height:200px; object-fit:cover; border-radius:10px; }
           .areas-page .contact-form-wrap { padding:24px 18px; }
-          .areas-page .form-row,.areas-page .form-bottom-row { grid-template-columns:1fr; }
+          .areas-page .form-row { grid-template-columns:1fr; }
           .areas-page .form-radio-group { flex-wrap:wrap; }
           .areas-page .form-group input:not([type="radio"]):not([type="checkbox"]),.areas-page .form-group select,.areas-page .form-group textarea { font-size:16px; }
           .areas-page .form-submit { font-size:16px; font-weight:700; }
@@ -1448,10 +1415,10 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
         }
 
         @media (max-width:560px) {
-          .areas-page .services-grid .service-card,.areas-page .services-more .service-card { flex:0 0 100%; max-width:100%; }
+          .areas-page .services-grid,.areas-page .services-more { grid-template-columns:1fr; }
           .areas-page .service-card-img { height:200px; }
-          .areas-page .service-card-body { padding:20px 20px 24px; }
-          .areas-page .service-card-body h3 { font-size:19px; }
+          .areas-page .service-card-body { padding:20px 18px 22px; }
+          .areas-page .service-card-body h3 { font-size:16px; }
           .areas-page .area-towns,.areas-page .area-towns-more { grid-template-columns:repeat(2,1fr); }
         }
       `}</style>

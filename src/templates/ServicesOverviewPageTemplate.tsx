@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
-import { DarkTrustStrip, FinancingStrip, HeroTrustBar, LeadFormSection, cls, label, linkNode, media, parts, section, sections, trustIcon } from "./template-utils";
+import { AreasSection, DarkTrustStrip, FinancingStrip, HeroTrustBar, LeadFormSection, cls, label, linkNode, media, parts, section, sections, trustIcon } from "./template-utils";
 
 type RichTextData = {
   eyebrow?: string | null;
@@ -133,7 +133,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
               <span className="font-semibold text-white">Services</span>
             </li>
           </ol>
-          <h1 className="fade-up mb-3 max-w-[900px] text-[clamp(40px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.5px] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]" style={{ ...fadeUpStyle, transitionDelay: "0.1s" }}>
+          <h1 className="fade-up mb-3 whitespace-nowrap font-serif text-[clamp(28px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.5px] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]" style={{ ...fadeUpStyle, transitionDelay: "0.1s" }}>
             <span className="text-white">{heroParts.before || "Home Remodeling "}</span>
             <span className="text-[#bc9155]">{heroParts.accent || "Services in Connecticut"}</span>
             <span className="text-white">{heroParts.after}</span>
@@ -156,8 +156,8 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
                         className={cls(
                           "flex min-w-[180px] flex-col items-center rounded-[8px] border px-7 py-4 text-center transition-all duration-300 hover:-translate-y-[2px]",
                           isPrimary
-                            ? "border-[#bc9155] border-b-2 border-b-[#a57d48] bg-[#bc9155] text-white hover:border-[#d4a95a] hover:border-b-[#a57d48] hover:bg-[#d4a95a] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
-                            : "border-b-2 border-b-[#bc9155] border-white/[0.18] bg-[rgba(10,18,35,0.42)] text-white backdrop-blur-[12px] hover:border-white/[0.28] hover:border-b-[#bc9155] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3),0_0_0_1px_rgba(188,145,85,0.2)]",
+                            ? "border-[#bc9155] bg-[#bc9155] text-white hover:border-[#d4a95a] hover:bg-[#d4a95a] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
+                            : "border-white/[0.22] bg-[rgba(10,18,35,0.42)] text-white backdrop-blur-[12px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]",
                         )}
                       >
                         <div className={cls("text-[11px] uppercase tracking-[1.2px]", isPrimary ? "opacity-90" : "opacity-70")}>
@@ -179,9 +179,9 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
       </section>
 
       {/* ══════ SERVICES GRID ══════ */}
-      <section className="bg-[#f5f1e9] px-5 py-24 md:px-10">
+      <section className="bg-[#f5f1e9] px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
         <div className="mx-auto max-w-[1240px]">
-          <div className="fade-up mx-auto mb-20 max-w-3xl text-center" style={fadeUpStyle}>
+          <div className="fade-up mx-auto mb-16 max-w-3xl text-center" style={fadeUpStyle}>
             {label(servicesGrid?.eyebrow || "What We Do")}
             <h2 className="font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px]">
               {gridParts.before || "Our "}
@@ -193,18 +193,18 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
 
           <div className="fade-up grid gap-8 sm:grid-cols-2 lg:grid-cols-3" style={{ ...fadeUpStyle, transitionDelay: "0.15s" }}>
             {(servicesGrid?.items || []).map((item: any, index: number) => (
-              <article key={`${item.title}-${index}`} className="group flex flex-col overflow-hidden rounded-[8px] border-b-[3px] border-b-transparent bg-white hover:border-b-[#bc9155] shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
+              <article key={`${item.title}-${index}`} className="group flex flex-col overflow-hidden rounded-[8px] border-b-2 border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
                 <div className="h-[280px] overflow-hidden">
                   <img src={localMedia(item.image, "/images/services/service-kitchen.jpg")} alt={item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                 </div>
-                <div className="flex flex-1 flex-col px-7 pb-8 pt-7">
+                <div className="flex flex-1 flex-col items-center px-7 pb-8 pt-7 text-center">
                   <h3 className="mb-3 text-[22px] font-bold leading-[1.2]">{item.url ? linkNode(item.url, item.title, "transition-colors group-hover:text-[#bc9155]") : item.title}</h3>
                   <p className="mb-5 flex-1 text-[15px] leading-[1.7] text-[#5c677d]">{item.summary}</p>
-                  <div className="mb-5 flex flex-wrap gap-3">
-                    {item.price ? <span className="inline-flex items-center gap-1.5 rounded-full bg-[#bc91551a] px-3.5 py-1.5 text-[12px] font-semibold text-[#9a7340]"><span className="text-[#bc9155]">$</span>{item.price}</span> : null}
-                    {item.timeline ? <span className="inline-flex items-center gap-1.5 rounded-full bg-[#bc91551a] px-3.5 py-1.5 text-[12px] font-semibold text-[#9a7340]"><svg className="h-3.5 w-3.5 text-[#bc9155]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{item.timeline}</span> : null}
+                  <div className="mb-5 flex flex-wrap justify-center gap-3">
+                    {item.price ? <span className="inline-flex items-center gap-[6px] rounded-full bg-[#bc91551a] px-[14px] py-[6px] text-[12px] font-semibold text-[#9a7340]"><svg className="h-[14px] w-[14px] text-[#bc9155]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>{item.price}</span> : null}
+                    {item.timeline ? <span className="inline-flex items-center gap-[6px] rounded-full bg-[#bc91551a] px-[14px] py-[6px] text-[12px] font-semibold text-[#9a7340]"><svg className="h-[14px] w-[14px] text-[#bc9155]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{item.timeline}</span> : null}
                   </div>
-                  {item.url ? linkNode(item.url, <><span>{item.cta_label || "Learn More"}</span><ArrowRight className="h-[14px] w-[14px]" /></>, "inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-2.5") : null}
+                  {item.url ? linkNode(item.url, <><span>{item.cta_label || "Learn More"}</span><ArrowRight className="h-[14px] w-[14px]" /></>, "inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-[10px]") : null}
                 </div>
               </article>
             ))}
@@ -212,78 +212,82 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      {/* ══════ OUR PROCESS — matching home page style ══════ */}
-      <section className="relative overflow-hidden px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
+      {/* ══════ OUR PROCESS ══════ */}
+      <section className="relative overflow-hidden px-5 py-16 text-white md:px-10 md:py-20 lg:py-[100px]">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/portfolio/builtwell-team-contractors-ct-04.png')" }} aria-hidden="true" />
         <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(10,18,34,0.90)_0%,rgba(30,43,67,0.85)_100%)]" />
-        <div className="relative z-10 mx-auto max-w-[1280px]">
-          <div className="fade-up mb-14 text-center" style={fadeUpStyle}>
+        <div className="relative z-10 mx-auto max-w-[1240px]">
+          <div className="fade-up mb-16 text-center" style={fadeUpStyle}>
             {label(process?.eyebrow || "Our Process", true)}
-            <h2 className="font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px]">
+            <h2 className="mx-auto max-w-[780px] font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px]">
               {processParts.before || "Our Remodeling "}
               <span className="text-[#bc9155]">{processParts.accent || "Process"}</span>
               {processParts.after}
             </h2>
-            {process?.subtitle ? <p className="mx-auto mt-4 max-w-[860px] text-[15px] leading-[1.8] text-white/78">{process.subtitle}</p> : null}
+            {process?.subtitle ? <p className="mx-auto mt-5 max-w-[700px] text-[17px] leading-[1.75] text-white/[0.65]">{process.subtitle}</p> : null}
           </div>
 
-          <div className="fade-up relative mx-auto grid max-w-full gap-0 lg:max-w-none lg:grid-cols-5" style={{ ...fadeUpStyle, transitionDelay: "0.15s" }}>
-            {/* Connecting line — vertical on mobile, horizontal on desktop */}
-            <div className="absolute bottom-[34px] left-[25px] top-[28px] w-0.5 bg-[#bc9155]/25 md:left-[33px] md:top-[34px] lg:bottom-auto lg:left-[10%] lg:right-[10%] lg:top-[34px] lg:h-0.5 lg:w-auto" />
+          <div className="fade-up relative mx-auto grid grid-cols-1 gap-5 md:grid-cols-3 lg:grid-cols-5 lg:gap-0" style={{ ...fadeUpStyle, transitionDelay: "0.15s" }}>
+            {/* Connecting line — horizontal on desktop */}
+            <div className="absolute left-[10%] right-[10%] top-[34px] hidden h-0.5 bg-[#bc9155]/[0.35] lg:block" />
             {(process?.steps || []).map((item: any, index: number) => (
               <button
                 type="button"
                 key={`${item.title}-${index}`}
                 onClick={() => setActiveProcessStep(activeProcessStep === index ? -1 : index)}
                 className={cls(
-                  "relative flex w-full cursor-pointer items-start gap-4 rounded-lg border-0 bg-transparent px-0 py-3 text-left transition-colors duration-300 hover:bg-[#bc9155]/[0.08] md:gap-5 md:py-4 lg:block lg:px-4 lg:pb-5 lg:pt-4 lg:text-center",
+                  "relative cursor-pointer rounded-lg border-0 bg-transparent px-4 pb-5 pt-4 text-center transition-[background] duration-300 hover:bg-[#bc9155]/[0.08]",
                   activeProcessStep === index && "bg-[#bc9155]/[0.14]",
                 )}
                 aria-expanded={activeProcessStep === index}
               >
-                <div className="relative z-10 flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-full border-[2.5px] border-[#bc9155] bg-[#bc9155]/[0.42] font-serif text-[18px] font-bold text-[#f5e0c0] shadow-[0_0_0_4px_rgba(188,145,85,0.12)] md:h-[68px] md:w-[68px] md:text-2xl lg:-mt-2 lg:mx-auto lg:mb-5">
+                <div className={cls(
+                  "relative z-[2] mx-auto mb-5 flex h-[56px] w-[56px] items-center justify-center rounded-full border-[2.5px] border-[#bc9155] bg-[#bc9155]/[0.42] font-serif text-[20px] font-bold text-[#f5e0c0] shadow-[0_0_0_4px_rgba(188,145,85,0.12)] transition-all duration-[250ms] md:h-[68px] md:w-[68px] md:text-2xl",
+                  (activeProcessStep === index) && "scale-105 bg-[#bc9155]/[0.65]",
+                )}>
                   {index + 1}
                 </div>
-                <div>
-                  <h3 className="mb-1.5 text-left text-base font-semibold text-white md:mb-3 md:text-lg lg:text-center">{item.title}</h3>
-                  {item.description ? (
-                    <p className={cls(
-                      "text-left text-[14px] leading-[1.6] text-white/70 transition-all duration-300 lg:text-center lg:leading-[1.65]",
-                      activeProcessStep === index ? "max-h-[200px] opacity-100" : "max-h-none opacity-100 lg:max-h-0 lg:overflow-hidden lg:opacity-0",
-                    )}>
-                      {item.description}
-                    </p>
-                  ) : null}
-                </div>
+                <h3 className="mb-3 text-[17px] font-semibold text-white md:text-lg">{item.title}</h3>
+                {item.description ? (
+                  <p className={cls(
+                    "text-[14px] leading-[1.65] text-white/80 transition-all duration-[400ms]",
+                    activeProcessStep === index ? "mt-2 max-h-[200px] opacity-100" : "max-h-0 overflow-hidden opacity-0",
+                  )}>
+                    {item.description}
+                  </p>
+                ) : null}
               </button>
             ))}
           </div>
-          <p className="mt-7 hidden text-center text-[13px] text-white/40 lg:block">Click any step to learn more</p>
+          <p className="mt-7 hidden text-center text-[13px] tracking-[0.5px] text-white/40 lg:block">Click any step to learn more</p>
         </div>
       </section>
 
       {/* ══════ TRUSTED BRANDS ══════ */}
-      <section className="bg-white px-5 py-24 md:px-10">
+      <section className="bg-[#f5f1e9] px-5 pb-[52px] pt-10 md:px-8 md:pb-20 lg:px-10 lg:pb-[100px]">
         <div className="mx-auto max-w-[1240px] text-center">
-          <div className="fade-up" style={fadeUpStyle}>
+          <div className="fade-up mb-10" style={fadeUpStyle}>
             {label("Trusted Brands")}
-            <h2 className="font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px]">
+            <h2 className="mx-auto max-w-[780px] font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px]">
               {brandsParts.before || "Materials We "}
               <span className="text-[#bc9155]">{brandsParts.accent || "Stand Behind"}</span>
               {brandsParts.after}
             </h2>
-            {brands?.subtitle ? <p className="mx-auto mt-4 max-w-[760px] text-[15px] leading-[1.8] text-[#5c677d]">{brands.subtitle}</p> : null}
+            {brands?.subtitle ? <p className="mx-auto mt-5 max-w-[700px] text-[17px] leading-[1.75] text-[#5c677d]">{brands.subtitle}</p> : null}
           </div>
-          <div className="fade-up relative mx-auto mt-14 max-w-[1320px] overflow-hidden" style={{ ...fadeUpStyle, transitionDelay: "0.15s" }}>
-            <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-white to-transparent" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-white to-transparent" />
-            <div className="flex w-max min-w-full animate-[servicesLogoMarquee_28s_linear_infinite] items-center gap-16 whitespace-nowrap">
+          <div className="fade-up relative overflow-hidden" style={{
+            ...fadeUpStyle,
+            transitionDelay: "0.15s",
+            maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+            WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+          }}>
+            <div className="flex w-max items-center gap-12 animate-[servicesLogoMarquee_32s_linear_infinite] hover:[animation-play-state:paused]">
               {[...(brands?.items || []), ...(brands?.items || [])].map((item: any, index: number) => (
-                <a key={`${item.name}-${index}`} href={item.url || "#"} target="_blank" rel="noreferrer" className="flex min-h-[30px] items-center justify-center text-center opacity-90 transition-opacity hover:opacity-100">
+                <a key={`${item.name}-${index}`} href={item.url || "#"} target="_blank" rel="noreferrer" className="flex h-[44px] shrink-0 items-center justify-center px-[18px] opacity-[0.55] transition-opacity duration-200 hover:opacity-100">
                   {item.logo ? (
-                    <img src={localMedia(item.logo, "/logos/builtwell-logo-text-only.png")} alt={item.name} className="max-h-8 w-auto object-contain" />
+                    <img src={localMedia(item.logo, "/logos/builtwell-logo-text-only.png")} alt={item.name} className="h-8 w-auto max-w-[140px] object-contain" />
                   ) : (
-                    <span className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[#7f8898]">{item.name}</span>
+                    <span className="whitespace-nowrap text-[16px] font-bold uppercase tracking-[1px] text-[#1e2b43]">{item.name}</span>
                   )}
                 </a>
               ))}
@@ -293,7 +297,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
       </section>
 
       {/* ══════ AREAS WE SERVE ══════ */}
-      <ServicesAreasSection data={areas} areasParts={areasParts} countyOpen={countyOpen} setCountyOpen={setCountyOpen} />
+      <AreasSection data={areas} />
 
       {/* ══════ TRUST STRIP (Google rating section) ══════ */}
       <DarkTrustStrip items={trustStripItems} />

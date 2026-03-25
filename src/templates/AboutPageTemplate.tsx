@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ArrowRight, CalendarDays, Check, ChevronDown, CircleCheck, FileText, Shield, ShieldCheck, Star, Upload, Users } from "lucide-react";
 import type { CMSPage, CMSSection } from "@/types/cms";
+import { AreasSection as SharedAreasSection, FinancingStrip as SharedFinancingStrip, LeadFormSection as SharedLeadFormSection } from "./template-utils";
 
 type RichTextData = {
   eyebrow?: string | null;
@@ -519,85 +520,7 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      <section id="areas" className="scroll-mt-28 bg-[#f5f1e9] px-5 pb-[52px] pt-[52px] md:px-8 md:pb-20 md:pt-[72px] lg:px-10 lg:pb-[100px]">
-        <div className="mx-auto max-w-[1280px]">
-          <FadeUp className="mx-auto mb-9 max-w-3xl text-center md:mb-12 lg:mb-16">
-            {label(areas?.eyebrow || "Where We Work")}
-            <h2 className="text-[clamp(32px,3.5vw,48px)] font-bold tracking-[-0.5px]">{areaParts.before}{areaParts.accent ? <span className="text-[#bc9155]">{areaParts.accent}</span> : null}{areaParts.after}</h2>
-            {areas?.subtitle ? <p className="mx-auto mt-5 max-w-[700px] text-[15px] leading-[1.7] text-[#5c677d] md:text-[17px] md:leading-[1.75]">{areas.subtitle}</p> : null}
-          </FadeUp>
-          <FadeUp className="grid gap-4 md:gap-8 lg:grid-cols-2">
-            {(areas?.counties || []).map((county: any, index: number) => {
-              const countyName = county.name || county.county_name || county.title || "";
-              const expanded = !!countyOpen[index];
-              const featuredTowns = county.towns || county.cities || [];
-              const links = county.town_links || [];
-
-              const resolveTownUrl = (town: string) => {
-                if (Array.isArray(links)) {
-                  return links.find((entry: any) => entry?.name?.toLowerCase() === town.toLowerCase())?.url || "";
-                }
-                return links[town] || "";
-              };
-
-              const visibleTowns =
-                featuredTowns.length > 0
-                  ? featuredTowns
-                  : Array.isArray(links)
-                    ? links.slice(0, 8).map((item: any) => item.name)
-                    : [];
-              const hiddenTowns =
-                (county.extra_towns || []).length > 0
-                  ? county.extra_towns
-                  : Array.isArray(links) && featuredTowns.length === 0
-                    ? links.slice(8).map((item: any) => item.name)
-                    : [];
-
-              return (
-                <article key={`${countyName}-${index}`} className="group overflow-hidden rounded-lg border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 md:hover:-translate-y-[4px] md:hover:border-[#bc9155] md:hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
-                  <div className="relative h-[180px] overflow-hidden md:h-[200px]">
-                    <img src={media(county.image, index === 0 ? "/images/areas/fairfield-county.png" : "/images/areas/new-haven-county.png")} alt={countyName || "BuiltWell CT service area"} className={cls("h-full w-full object-cover transition-transform duration-500 md:group-hover:scale-105", index === 1 && "object-[center_15%]")} />
-                    <div className="absolute inset-x-0 bottom-0 h-[60px] bg-[linear-gradient(to_top,#ffffff,transparent)]" />
-                  </div>
-                  <div className="flex flex-1 flex-col px-5 pb-6 pt-5 text-center md:px-7 md:pb-8 md:pt-7">
-                    <h3 className="text-[22px] font-bold text-[#1e2b43] md:text-2xl">{countyName}</h3>
-                    {county.phone ? <div className="mb-3.5 mt-1.5 text-[15px] text-[#5c677d]">Call: <a href={`tel:${county.phone.replace(/\D/g, "")}`} className="font-semibold text-[#bc9155] hover:underline">{county.phone}</a></div> : null}
-                    {county.description ? <p className="mb-[18px] border-b border-[#1e2b430f] pb-[18px] text-[14px] leading-[1.7] text-[#5c677d]">{county.description}</p> : null}
-
-                    <div className="mb-4 grid grid-cols-3 gap-2 md:grid-cols-4">
-                      {visibleTowns.map((town: string) =>
-                        resolveTownUrl(town) ? (
-                          <Link key={`${countyName}-${town}`} href={resolveTownUrl(town)} className="rounded-full bg-[#f5f1e9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1e2b43] transition-colors hover:bg-[#bc9155] hover:text-white md:px-2.5">
-                            {town}
-                          </Link>
-                        ) : (
-                          <span key={`${countyName}-${town}`} className="rounded-full bg-[#f5f1e9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1e2b43] transition-colors hover:bg-[#bc9155]/10 hover:text-[#9a7340]">
-                            {town}
-                          </span>
-                        ),
-                      )}
-                      {expanded ? hiddenTowns.map((town: string) =>
-                        resolveTownUrl(town) ? (
-                          <Link key={`${countyName}-extra-${town}`} href={resolveTownUrl(town)} className="rounded-full bg-[#f5f1e9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1e2b43] transition-colors hover:text-[#9a7340]">
-                            {town}
-                          </Link>
-                        ) : (
-                          <span key={`${countyName}-extra-${town}`} className="rounded-full bg-[#f5f1e9] px-2.5 py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] whitespace-nowrap text-[#1e2b43] transition-colors hover:text-[#9a7340]">
-                            {town}
-                          </span>
-                        ),
-                      ) : null}
-                      {hiddenTowns.length > 0 ? <button type="button" onClick={() => setCountyOpen((current) => ({ ...current, [index]: !current[index] }))} className="col-span-full mt-1 bg-transparent px-0 py-1 text-center text-[13px] font-semibold text-[#bc9155] transition-colors hover:text-[#9a7340]" aria-expanded={expanded}>{expanded ? "Show Less -" : "See All Towns +"}</button> : null}
-                    </div>
-                    {county.url ? <Link href={county.url} className="mt-auto inline-flex items-center justify-center gap-1.5 text-sm font-semibold text-[#bc9155] transition-all hover:gap-2.5">{county.cta_label || `Learn more about ${countyName}`}<ArrowRight className="h-3.5 w-3.5" /></Link> : null}
-                  </div>
-                </article>
-              );
-            })}
-          </FadeUp>
-          <FadeUp><p className="mt-8 text-center text-[14px] text-[#5c677d]">Not sure if we cover your area? {linkNode("/contact/", "Contact our Connecticut remodeling team", "font-semibold text-[#bc9155] transition-colors hover:text-[#a57d48]")} and we&apos;ll let you know.</p></FadeUp>
-        </div>
-      </section>
+      <SharedAreasSection data={areas} />
 
       <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1e2b43_0%,#151e30_100%)] px-5 py-10 md:px-8 md:py-14 lg:px-10">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(188,145,85,0.05)_0%,transparent_70%)]" />
@@ -611,47 +534,8 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </div>
 
-      <section className="bg-[#f5f1e9] px-5 py-[48px] md:px-8 md:py-[64px] lg:px-10 lg:pb-[72px]">
-        <div className="mx-auto max-w-[1200px]">
-          <FadeUp className="mb-8 text-center">
-            {label(lead?.eyebrow || "Get In Touch")}
-            <h2 className="text-[clamp(32px,3.5vw,48px)] font-bold tracking-[-0.5px]">{leadParts.before}{leadParts.accent ? <span className="text-[#bc9155]">{leadParts.accent}</span> : null}{leadParts.after}</h2>
-            {lead?.subtitle ? <p className="mx-auto mt-2 max-w-[600px] text-[15px] leading-[1.7] text-[#5c677d] md:text-[16px]">{lead.subtitle}</p> : null}
-          </FadeUp>
-          <div className="grid items-stretch gap-6 lg:grid-cols-[1fr_1.15fr] lg:gap-8">
-            <FadeUp className="flex h-full flex-col">
-              <div className="flex h-full flex-1 flex-col gap-3">
-                {(lead?.images || []).slice(0, 2).map((image: any, index: number) => (
-                  <div key={`${image.alt || "lead"}-${index}`} className="relative min-h-[220px] overflow-hidden rounded-[8px] shadow-[0_12px_24px_-18px_rgba(30,43,67,0.6)] md:min-h-[250px] lg:min-h-0 lg:flex-1">
-                    <img src={media(image.image, index === 0 ? "/portfolio/builtwell-team-client-arrival-ct.jpeg" : "/portfolio/builtwell-contractor-sign-consultation-ct-01.jpg")} alt={image.alt || "BuiltWell CT consultation"} className={cls("h-full w-full object-cover", index === 0 && "[object-position:center_30%]")} />
-                    <div className="pointer-events-none absolute bottom-0 right-0 h-[200px] w-[200px] rounded-br-[8px] bg-[radial-gradient(circle_at_bottom_right,rgba(30,43,67,1)_0%,rgba(30,43,67,0.9)_25%,rgba(30,43,67,0.5)_50%,transparent_75%)]" />
-                  </div>
-                ))}
-              </div>
-            </FadeUp>
-            <FadeUp className="flex h-full flex-col rounded-[10px] border border-[#1e2b4314] bg-white px-4 py-6 shadow-[0_16px_48px_rgba(30,43,67,0.1),0_4px_12px_rgba(30,43,67,0.04)] md:px-[36px] md:py-8">
-              {submitted ? <div className="flex min-h-[420px] flex-col items-center justify-center text-center"><h3 className="text-[34px] font-bold">Thank You</h3><p className="mt-3 max-w-[420px] text-[15px] leading-7 text-[#5c677d]">We received your request and will get back to you within one business day.</p></div> : <form onSubmit={(event) => { event.preventDefault(); setSubmitted(true); }} className="flex flex-1 flex-col">
-                <div className="grid gap-4 md:grid-cols-2">
-                  {topFields.map((field: any) => <div key={field.name}><label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">{field.label}{field.required ? " *" : ""}</label><input type={field.type} required={field.required} value={formValues[field.name] || ""} placeholder={field.placeholder || ""} onChange={(event) => setFormValues((current) => ({ ...current, [field.name]: event.target.value }))} className="w-full rounded-[6px] border border-[#1e2b4326] px-3.5 py-3 text-[15px] text-[#1e2b43] outline-none transition-colors focus:border-[#bc9155]" /></div>)}
-                </div>
-                <div className="mt-4 grid gap-4 md:grid-cols-2">
-                  {servicesField ? <div className="md:col-span-2 lg:col-span-1"><label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">{servicesField.label}{servicesField.required ? " *" : ""}</label><div className="relative"><button type="button" onClick={() => setServiceOpen((current) => !current)} className="flex w-full items-center justify-between rounded-[4px] border border-[#1e2b4326] px-3.5 py-3 text-left text-[15px] text-[#1e2b43]"><span className={cls("truncate", pickedServices.length ? "font-medium text-[#1e2b43]" : "text-[#5c677d]")}>{pickedServices.length ? pickedServices.join(", ") : "Select services"}</span><ChevronDown className={cls("h-4 w-4 transition-transform", serviceOpen && "rotate-180")} /></button><div className={cls("absolute left-0 right-0 top-[calc(100%+4px)] z-20 max-h-60 overflow-y-auto rounded-[6px] border border-[#1e2b4326] bg-white py-1 shadow-[0_8px_24px_rgba(0,0,0,0.12)]", serviceOpen ? "block" : "hidden")}>{opts(servicesField.options).map((option) => <label key={option.value} className="flex cursor-pointer items-center gap-2.5 px-3.5 py-2 text-[14px] text-[#1e2b43] transition-colors hover:bg-[#bc91550f]"><input type="checkbox" checked={pickedServices.includes(option.value)} onChange={() => setPickedServices((current) => current.includes(option.value) ? current.filter((value) => value !== option.value) : [...current, option.value])} className="h-[18px] w-[18px] rounded-[3px] accent-[#bc9155]" />{option.label}</label>)}</div></div></div> : null}
-                  {timeField ? <div><label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">{timeField.label}{timeField.required ? " *" : ""}</label><select required={timeField.required} value={formValues[timeField.name] || ""} onChange={(event) => setFormValues((current) => ({ ...current, [timeField.name]: event.target.value }))} className="w-full rounded-[6px] border border-[#1e2b4326] bg-white px-3.5 py-3 text-[15px] text-[#1e2b43] outline-none transition-colors focus:border-[#bc9155]"><option value="">Select a time</option>{opts(timeField.options).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></div> : null}
-                  {contactField ? <fieldset className="md:col-span-2"><legend className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">{contactField.label}{contactField.required ? " *" : ""}</legend><div className="flex flex-wrap gap-2.5 md:flex-nowrap">{opts(contactField.options).map((option) => { const checked = (formValues[contactField.name] || "call") === option.value; return <label key={option.value} className={cls("flex flex-1 cursor-pointer items-center justify-center rounded-[6px] border-2 px-4 py-3 text-[13px] font-medium transition-colors", checked ? "border-[#bc9155] bg-[#bc91550f] text-[#bc9155]" : "border-[#1e2b431f] bg-white text-[#1e2b43]")}><input type="radio" name={contactField.name} checked={checked} onChange={() => setFormValues((current) => ({ ...current, [contactField.name]: option.value }))} className="hidden" /><span>{option.label}</span></label>; })}</div></fieldset> : null}
-                </div>
-                {messageField ? <div className="mt-4"><label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">{messageField.label}</label><textarea rows={7} value={formValues[messageField.name] || ""} placeholder={messageField.placeholder || ""} onChange={(event) => setFormValues((current) => ({ ...current, [messageField.name]: event.target.value }))} className="min-h-[240px] w-full rounded-[6px] border border-[#1e2b4326] px-3.5 py-3 text-[15px] leading-[1.6] text-[#1e2b43] outline-none transition-colors focus:border-[#bc9155]" /></div> : null}
-                <div className="mt-6 grid gap-4 md:grid-cols-2">
-                  <div><label className="flex min-h-[52px] cursor-pointer items-center justify-center gap-2 rounded-[8px] border border-[#1e2b4326] px-5 py-3 text-[15px] font-semibold text-[#1e2b43] transition-colors hover:border-[#bc9155]" htmlFor="about-lead-files"><Upload className="h-4 w-4" />Upload Photos</label><input id="about-lead-files" type="file" multiple accept="image/jpeg,image/png,image/heic,.heic" className="hidden" onChange={(event) => setFileNames(Array.from(event.target.files || []).map((file) => file.name))} />{fileNames.length ? <p className="mt-2 text-[12px] text-[#5c677d]">{fileNames.join(", ")}</p> : null}</div>
-                  <button type="submit" className="min-h-[52px] rounded-[8px] bg-[#bc9155] px-5 py-3 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48] hover:shadow-[0_4px_12px_rgba(188,145,85,0.3)]">{lead?.submit_label || "Get Your Free Estimate"}</button>
-                </div>
-                <p className="mt-4 text-center text-[13px] italic text-[#5c677d]">{lead?.consent_text || "We respond within 24 hours. No spam, no obligation."}</p>
-              </form>}
-            </FadeUp>
-          </div>
-        </div>
-      </section>
-
-      {financing ? <div className="border-t border-[#1e2b4314] bg-white px-5 py-12 md:px-10 md:py-14"><div className="mx-auto flex max-w-[1200px] flex-col items-center gap-6 text-center"><div className="flex flex-col items-center gap-4"><div className="text-[24px] font-bold tracking-[-0.5px]"><span className="text-[#6bbf4e]">Green</span><span className="text-[#1e2b43]">Sky</span></div><p className="max-w-[760px] text-[16px] leading-[1.6] text-[#5c677d]"><strong className="text-[#1e2b43]">{financing.title}.</strong> {(financing.content || financing.body || "").replace(/^\s*Get approved/i, "Get approved")}</p></div>{financing.cta?.url ? linkNode(financing.cta.url, <><span>{financing.cta.label || "Check Financing Options"}</span><ArrowRight className="h-4 w-4" /></>, "inline-flex min-h-[52px] min-w-[280px] items-center justify-center gap-2 rounded-[8px] bg-[#bc9155] px-8 py-3 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48] hover:shadow-[0_4px_12px_rgba(188,145,85,0.3)]") : null}</div></div> : null}
+      <SharedLeadFormSection page={page} data={lead} accent={lead?.title_highlight || "Project"} />
+      <SharedFinancingStrip data={financing} />
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { CMSPage } from "@/types/cms";
+import { AreasSection as SharedAreasSection, FinancingStrip as SharedFinancingStrip, LeadFormSection as SharedLeadFormSection } from "./template-utils";
 
 type KitchenPage = CMSPage & {
   phones?: { items?: Array<{ label?: string; number?: string }> };
@@ -260,6 +261,19 @@ const splitDuration = (value?: string | null) => {
     ? { duration: match[1].trim(), body: match[2].trim() }
     : { duration: source, body: "" };
 };
+const normalizePhoneChipLabel = (label?: string | null) => {
+  const source = (label || "").toLowerCase();
+  if (source.includes("fairfield")) return "Fairfield";
+  if (source.includes("new haven")) return "New Haven";
+  return label || "Call";
+};
+const trustStripText = (item: any) => {
+  const label = item?.label || "";
+  const value = item?.value || "";
+  if (label === "Houzz" || label === "Angi") return value || label;
+  if (label === "CT HIC License") return [label, value].filter(Boolean).join(" ");
+  return [label, value].filter(Boolean).join(" ");
+};
 
 function AccentTitle({
   text,
@@ -458,6 +472,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
   const intro = section<any>(page, "service_intro_split");
   const caseStudies = section<any>(page, "before_after_grid");
   const pricing = section<any>(page, "pricing_table");
+  const midPageCta = section<any>(page, "cta_block");
   const process = section<any>(page, "process_steps");
   const timeline = section<any>(page, "feature_grid");
   const areas = section<any>(page, "areas_served");
@@ -475,6 +490,10 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
   const phones = kitchenPage.phones?.items || [];
   const heroStats = trustBars[0];
   const trustStrip = trustBars[1];
+  const overviewParagraphs = paras(overview?.content);
+  const localExpertiseParagraphs = paras(localExpertise?.content);
+  const localExpertiseIntro = localExpertiseParagraphs[0];
+  const localExpertiseBody = localExpertiseParagraphs.slice(1);
   const counties = areas?.counties || [];
   const townHref = (town: string) =>
     `/${serviceRoot}/${town.toLowerCase().replace(/\s+/g, "-")}-ct/`;
@@ -544,7 +563,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
   return (
     <div className="bg-white text-[#1E2B43]">
       <main id="main">
-        <section className="relative isolate overflow-hidden bg-[#151E30] px-5 pb-8 pt-[80px] text-white sm:pb-9 sm:pt-[92px] md:px-10 md:pb-12 md:pt-[120px]">
+        <section className="relative isolate overflow-hidden bg-[#151E30] px-5 pb-10 pt-[80px] text-white sm:pb-10 sm:pt-[92px] md:px-10 md:pb-12 md:pt-[120px]">
           <div
             className="absolute inset-0 bg-cover bg-[position:center_30%] opacity-[0.72]"
             style={{
@@ -579,40 +598,32 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                 </span>
               </li>
             </ol>
-            <h1 className="max-w-[900px] font-serif text-[clamp(40px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.5px] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]">
+            <h1 className="whitespace-nowrap font-serif text-[clamp(28px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.5px] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]">
               <AccentTitle
-                text={hero?.title || "Remodeling in Connecticut"}
+                text={hero?.title || "Kitchen Remodeling in Connecticut"}
                 accent="Connecticut"
               />
             </h1>
             <p className="mt-4 max-w-[560px] text-[17px] leading-[1.7] text-white/80">
               {hero?.subtitle}
             </p>
-            <div className="mt-8 flex w-full max-w-[620px] flex-col gap-4 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center">
+            <div className="mt-7 flex w-full max-w-[620px] flex-col items-center gap-[14px] sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center">
               {ctaPhones.map((item) => (
                 <a
                   key={item.label}
                   href={`tel:${(item.number || "").replace(/\D/g, "")}`}
-                  className="min-w-[180px] rounded-[8px] border border-white/20 border-b-2 border-b-[#BC9155] bg-[rgba(10,18,35,0.42)] px-7 py-4 text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/30 hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3),0_0_0_1px_rgba(188,145,85,0.2)]"
+                  className="min-w-[190px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
                 >
-                  <span className="mb-1 block text-[11px] uppercase tracking-[1.2px] text-white/70">
-                    {item.label}
-                  </span>
-                  <span className="font-serif text-[18px] font-semibold text-white">
-                    {item.number}
+                  <span className="text-[15px] font-semibold tracking-[0.1px] text-white">
+                    {`${normalizePhoneChipLabel(item.label)}: ${item.number}`}
                   </span>
                 </a>
               ))}
               <a
                 href={hero?.primary_cta?.url || "#contact"}
-                className="min-w-[180px] rounded-[8px] border border-[#BC9155] border-b-2 border-b-[#A57D48] bg-[#BC9155] px-7 py-4 text-center transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#D4A95A] hover:bg-[#D4A95A] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
+                className="order-first min-w-[220px] rounded-[8px] border border-[#BC9155] bg-[#BC9155] px-8 py-[14px] text-center text-[15px] font-semibold text-white transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#D4A95A] hover:bg-[#D4A95A] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
               >
-                <span className="mb-1 block text-[11px] uppercase tracking-[1.2px] text-white/90">
-                  {hero?.primary_cta?.label || "Free Estimate"}
-                </span>
-                <span className="font-serif text-[18px] font-semibold text-white">
-                  Schedule Now
-                </span>
+                {hero?.primary_cta?.label || "Get Your Free Estimate"}
               </a>
             </div>
           </div>
@@ -655,7 +666,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             ))}
           </div>
         </section>
-        <section className="border-b border-b-[#1E2B43]/6 bg-white px-4 py-20 md:px-10">
+        <section className="border-b border-b-[#1E2B43]/6 bg-white px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
           <div className="mx-auto max-w-[820px] text-center">
             <span className="mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#9A7340] before:relative before:-left-5 before:top-[-3px] before:inline-block before:h-[2px] before:w-[10px] before:bg-[#BC9155]">
               {overview?.eyebrow || "Connecticut Remodeling Contractor"}
@@ -669,7 +680,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                 accent={overview?.highlight_text || "Across Connecticut"}
               />
             </h2>
-            {paras(overview?.content).map((paragraph) => (
+            {overviewParagraphs.map((paragraph) => (
               <p
                 key={paragraph.slice(0, 24)}
                 className="mb-5 text-[16px] leading-[1.85] text-[#5C677D] last:mb-0"
@@ -681,7 +692,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
         </section>
         <section className="bg-[#F5F1E9] px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
           <div className="mx-auto max-w-[1240px]">
-            <div className="mb-12 text-center kitchen-fade-up">
+            <div className="mb-16 text-center kitchen-fade-up">
               <span className="mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#9A7340] before:relative before:-left-5 before:top-[-3px] before:inline-block before:h-[2px] before:w-[10px] before:bg-[#BC9155]">
                 Scope of Work
               </span>
@@ -748,7 +759,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             </div>
           </div>
         </section>
-        <section className="border-t border-t-[#1E2B43]/8 bg-[#F5F1E9] px-4 py-20 md:px-10">
+        <section className="border-t border-t-[#1E2B43]/8 bg-[#F5F1E9] px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
           <div className="mx-auto max-w-[1240px]">
             <div className="mb-12 text-center">
               <span className="mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#9A7340] before:relative before:-left-5 before:top-[-3px] before:inline-block before:h-[2px] before:w-[10px] before:bg-[#BC9155]">
@@ -829,7 +840,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             </div>
           </div>
         </section>
-        <section className="border-t border-t-[#1E2B43]/8 bg-white px-4 py-20 md:px-10">
+        <section className="border-t border-t-[#1E2B43]/8 bg-white px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
           <div className="mx-auto max-w-[1240px]">
             <div className="mb-10 text-center">
               <span className="mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#9A7340] before:relative before:-left-5 before:top-[-3px] before:inline-block before:h-[2px] before:w-[10px] before:bg-[#BC9155]">
@@ -846,13 +857,13 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
               </p>
             </div>
             <div className="mx-auto max-w-[800px] overflow-x-auto">
-              <table className="w-full overflow-hidden rounded-[12px] bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)]">
+              <table className="w-full border-collapse overflow-hidden rounded-[10px] bg-white text-[15px] shadow-[0_2px_8px_rgba(30,43,67,0.06)]">
                 <thead>
                   <tr>
                     {(pricing?.columns || []).map((column: string) => (
                       <th
                         key={column}
-                        className="bg-[#1E2B43] px-6 py-4 text-left text-[12px] uppercase tracking-[0.5px] text-white"
+                        className="bg-[#1E2B43] px-6 py-4 text-left text-[13px] font-semibold uppercase tracking-[0.5px] text-white"
                       >
                         {column}
                       </th>
@@ -868,24 +879,74 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                       <td className="border-b border-b-[#1E2B43]/6 px-6 py-4 text-[15px]">
                         {row.label}
                       </td>
-                      <td className="border-b border-b-[#1E2B43]/6 px-6 py-4 font-serif text-[16px] font-bold text-[#BC9155]">
+                      <td className="border-b border-b-[#1E2B43]/6 px-6 py-4 text-[15px]">
                         {row.price}
                       </td>
-                      <td className="border-b border-b-[#1E2B43]/6 px-6 py-4 text-[15px]">
+                      <td className="border-b border-b-[#1E2B43]/6 px-6 py-4 font-serif text-[16px] font-semibold text-[#BC9155]">
                         {row.notes}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-              <p className="mt-5 text-center text-[14px] italic text-[#5C677D]">
+              <p className="mt-5 text-[14px] italic text-[#5C677D]">
                 All prices include labor and materials. Final cost depends on
                 scope, selections, and site conditions.
+              </p>
+              <p className="mt-3 text-[14px] leading-[1.7] text-[#5C677D]">
+                Worth noting: Connecticut homeowners may qualify for energy
+                rebates through Energize CT on ENERGY STAR appliances and
+                lighting upgrades.{" "}
+                <a
+                  href="https://energizect.com"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="font-semibold text-[#BC9155] hover:text-[#9A7340]"
+                >
+                  Visit Energize CT
+                </a>{" "}
+                for current programs.
               </p>
             </div>
           </div>
         </section>
-        <section className="border-t border-t-[#1E2B43]/8 bg-white px-4 py-20 md:px-10">
+        {midPageCta ? (
+          <section className="relative overflow-hidden px-5 py-16 text-white md:px-10">
+            <div className="absolute inset-0 bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)]" />
+            <div
+              className="absolute inset-0 bg-cover bg-[center_15%] opacity-[0.25]"
+              style={{
+                backgroundImage:
+                  "url('/portfolio/builtwell-contractor-client-consultation-ct.jpeg')",
+              }}
+            />
+            <div className="relative z-10 mx-auto max-w-[700px] px-3 text-center">
+              <h2 className="font-serif text-[clamp(28px,3.5vw,40px)] font-bold tracking-[-0.5px]">
+                <AccentTitle
+                  text={midPageCta.title || "Ready to Begin Your Kitchen Remodel?"}
+                  accent="Kitchen Remodel"
+                />
+              </h2>
+              {midPageCta.subtitle ? (
+                <p className="mx-auto mt-3 max-w-[620px] text-[16px] leading-[1.7] text-white/70">
+                  {midPageCta.subtitle}
+                </p>
+              ) : null}
+              <a
+                href={midPageCta.button?.url || "#contact"}
+                className="mt-7 inline-flex rounded-[8px] bg-[#BC9155] px-12 py-4 text-[16px] font-semibold text-white transition-[background,transform,box-shadow] duration-300 hover:-translate-y-[1px] hover:bg-[#D4A95A] hover:shadow-[0_8px_24px_rgba(188,145,85,0.35)]"
+              >
+                {midPageCta.button?.label || "Get Your Free Estimate"}
+              </a>
+              {midPageCta.subtext ? (
+                <p className="mt-4 text-[14px] italic text-white/50">
+                  {midPageCta.subtext}
+                </p>
+              ) : null}
+            </div>
+          </section>
+        ) : null}
+        <section className="border-t border-t-[#1E2B43]/8 bg-white px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
           <div className="mx-auto max-w-[820px]">
             <div className="mb-10 text-center">
               <span className="mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#9A7340] before:relative before:-left-5 before:top-[-3px] before:inline-block before:h-[2px] before:w-[10px] before:bg-[#BC9155]">
@@ -897,8 +958,13 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                   accent={localExpertise?.highlight_text || "Local Expertise"}
                 />
               </h2>
+              {localExpertiseIntro ? (
+                <p className="mx-auto mt-3 max-w-[720px] text-[17px] leading-[1.75] text-[#5C677D]">
+                  {localExpertiseIntro}
+                </p>
+              ) : null}
             </div>
-            {paras(localExpertise?.content).map((paragraph) => (
+            {localExpertiseBody.map((paragraph) => (
               <p
                 key={paragraph.slice(0, 24)}
                 className="mb-5 text-[16px] leading-[1.8] text-[#5C677D] last:mb-0"
@@ -908,34 +974,23 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             ))}
           </div>
         </section>
-        <section className="relative overflow-hidden px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{
-              backgroundImage:
-                "url('/portfolio/builtwell-team-contractors-ct-04.png')",
-            }}
-            aria-hidden="true"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(10,18,34,0.90)_0%,rgba(30,43,67,0.85)_100%)]" />
-          <div className="relative z-10 mx-auto max-w-[1240px]">
-            <div className="mb-10 text-center kitchen-fade-up">
-              <span className="mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#BC9155] before:relative before:-left-5 before:top-[-3px] before:inline-block before:h-[2px] before:w-[10px] before:bg-[#BC9155]">
-                Our Process
+        <section className="kitchen-process px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
+          <div className="kitchen-process-bg" aria-hidden="true" />
+          <div className="kitchen-process-inner">
+            <div className="kitchen-fade-up kitchen-process-header">
+              <span className="kitchen-process-label">
+                {process?.eyebrow || "Our Process"}
               </span>
-              <h2 className="font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px] text-white">
+              <h2>
                 <AccentTitle
                   text={process?.title || "Our Remodeling Process"}
-                  accent="Process"
+                  accent="Remodeling Process"
                 />
               </h2>
-              <p className="mx-auto mt-3 max-w-[720px] text-[17px] leading-[1.75] text-white/70">
-                {process?.subtitle}
-              </p>
+              <p>{process?.subtitle}</p>
             </div>
 
-            <div className="kitchen-fade-up relative mx-auto grid max-w-full gap-0 lg:grid-cols-5">
-              <div className="absolute bottom-[34px] left-[25px] top-[28px] w-0.5 bg-[#BC9155]/25 md:left-[33px] md:top-[34px] lg:bottom-auto lg:left-[10%] lg:right-[10%] lg:top-[34px] lg:h-0.5 lg:w-auto" />
+            <div className="kitchen-fade-up kitchen-process-timeline">
               {(process?.steps || []).map((item: any, index: number) => (
                 <button
                   type="button"
@@ -946,66 +1001,21 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                     )
                   }
                   className={cx(
-                    "relative flex w-full items-start gap-4 rounded-[8px] border-0 bg-transparent px-0 py-3 text-left transition-colors md:gap-5 md:py-4 lg:block lg:px-4 lg:pb-5 lg:pt-4 lg:text-center lg:hover:bg-[#BC9155]/10",
-                    activeStep === index && "bg-[#BC9155]/14",
+                    "kitchen-process-step",
+                    activeStep === index && "is-active",
                   )}
                   aria-expanded={activeStep === index}
                 >
-                  <div className="relative z-10 flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-full border-[2.5px] border-[#BC9155] bg-[#BC9155]/42 font-serif text-[18px] font-bold text-[#F5E0C0] shadow-[0_0_0_4px_rgba(188,145,85,0.12)] md:h-[68px] md:w-[68px] md:text-2xl lg:-mt-2 lg:mx-auto lg:mb-5">
-                    {index + 1}
-                  </div>
-                  <div>
-                    <h3 className="mb-1.5 text-left text-base font-semibold text-white md:mb-3 md:text-lg lg:text-center">
-                      {item.title}
-                    </h3>
-                    <p
-                      className={cx(
-                        "text-left text-[14px] leading-[1.6] text-white/70 transition-all duration-300 lg:text-center lg:leading-[1.65]",
-                        activeStep === index
-                          ? "max-h-[220px] opacity-100"
-                          : "max-h-none opacity-100 lg:max-h-0 lg:overflow-hidden lg:opacity-0",
-                      )}
-                    >
-                      {(isKitchenService && EXACT_PROCESS[item.title]) ||
-                        item.description}
-                    </p>
-                  </div>
+                  <div className="kitchen-process-step-num">{index + 1}</div>
+                  <h3>{item.title}</h3>
+                  <p>
+                    {(isKitchenService && EXACT_PROCESS[item.title]) ||
+                      item.description}
+                  </p>
                 </button>
               ))}
             </div>
-
-            <div className="mt-2 flex items-start gap-4 lg:hidden md:mt-4 md:gap-5">
-              <div className="relative z-10 flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-full border-[2.5px] border-[#BC9155] bg-[#BC9155] text-white shadow-[0_0_0_4px_rgba(188,145,85,0.12)] md:h-[68px] md:w-[68px]">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  aria-hidden="true"
-                >
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="mb-[6px] text-[16px] font-semibold text-white md:text-[18px]">
-                  Get Started
-                </h3>
-                <p className="text-[14px] leading-[1.6] text-white/70">
-                  Ready to begin? Schedule your free consultation today.
-                </p>
-                <a
-                  href="#contact"
-                  className="mt-3 inline-flex rounded-[4px] bg-[#BC9155] px-5 py-[10px] text-[13px] font-semibold text-white transition-[background,transform] duration-200 hover:-translate-y-px hover:bg-[#A57D48]"
-                >
-                  Free Consultation
-                </a>
-              </div>
-            </div>
-            <p className="mt-7 hidden text-center text-[13px] text-white/40 lg:block">
-              Click any step to learn more
-            </p>
+            <p className="kitchen-process-hint">Click any step to learn more</p>
           </div>
         </section>
         <section className="bg-[#F5F1E9] px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
@@ -1051,119 +1061,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             </p>
           </div>
         </section>
-        <section className="bg-[#F5F1E9] px-4 py-20 md:px-10">
-          <div className="mx-auto max-w-[1240px]">
-            <div className="mb-10 text-center kitchen-fade-up">
-              <span className="mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#9A7340] before:relative before:-left-5 before:top-[-3px] before:inline-block before:h-[2px] before:w-[10px] before:bg-[#BC9155]">
-                {areas?.eyebrow || "Where We Work"}
-              </span>
-              <h2 className="font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px]">
-                <AccentTitle
-                  text={areas?.title || "Remodeling Across Two Counties"}
-                  accent={areas?.highlight_text || "Two Counties"}
-                />
-              </h2>
-              <p className="mx-auto mt-3 max-w-[720px] text-[17px] leading-[1.75] text-[#5C677D]">
-                {areas?.subtitle}
-              </p>
-            </div>
-            <div className="grid gap-8 lg:grid-cols-2">
-              {counties.map((county: any, index: number) => {
-                const expanded = !!countyOpen[index];
-                return (
-                  <article
-                    key={`${county.name}-${index}`}
-                    className="kitchen-fade-up group overflow-hidden rounded-[12px] border-b-[3px] border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-[6px] hover:border-b-[#BC9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]"
-                    style={{
-                      transitionDelay: `${Math.min(index * 90, 180)}ms`,
-                    }}
-                  >
-                    <div className="relative h-[220px] overflow-hidden">
-                      <img
-                        src={media(
-                          county.image,
-                          index === 0
-                            ? "/images/areas/fairfield-county.jpg"
-                            : "/images/areas/new-haven-county.jpg",
-                        )}
-                        className={`absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${index === 1 ? "object-top" : ""}`}
-                        alt={county.name}
-                      />
-                      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#1E2B43]/40 to-transparent" />
-                    </div>
-                    <div className="px-7 py-8">
-                      <h3 className="mb-[6px] text-[24px] font-bold">
-                        {county.name}
-                      </h3>
-                      <div className="mb-[14px] text-[15px] text-[#5C677D]">
-                        Call:{" "}
-                        <a
-                          href={`tel:${(county.phone || "").replace(/\D/g, "")}`}
-                          className="font-semibold text-[#BC9155] hover:underline"
-                        >
-                          {county.phone}
-                        </a>
-                      </div>
-                      <p className="mb-[18px] border-b border-b-[#1E2B43]/6 pb-[18px] text-[14px] leading-[1.7] text-[#5C677D]">
-                        {county.description}
-                      </p>
-                      <div className="grid grid-cols-3 gap-2 md:grid-cols-4">
-                        {(county.towns || []).map((town: string) => (
-                          <div key={town}>
-                            {linkNode(townHref(town), town, townLinkPillClass)}
-                          </div>
-                        ))}
-                        {expanded
-                          ? (county.extra_towns || []).map((town: string) => (
-                              <span key={town} className={townStaticPillClass}>
-                                {town}
-                              </span>
-                            ))
-                          : null}
-                        {county.extra_towns?.length ? (
-                          <button
-                            className="col-span-full mt-1 bg-transparent px-0 py-1 text-center text-[13px] font-semibold text-[#BC9155]"
-                            aria-expanded={expanded}
-                            onClick={() =>
-                              setCountyOpen((current) => ({
-                                ...current,
-                                [index]: !current[index],
-                              }))
-                            }
-                          >
-                            {expanded ? "Show Less -" : "See All Towns +"}
-                          </button>
-                        ) : null}
-                      </div>
-                      {county.url
-                        ? linkNode(
-                            county.url,
-                            <>
-                              <span>
-                                {county.cta_label ||
-                                  `Learn more about ${county.name}`}
-                              </span>
-                              <Arrow />
-                            </>,
-                            "mt-4 inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#BC9155] transition-all hover:gap-[10px]",
-                          )
-                        : null}
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-            <p className="kitchen-fade-up mt-8 text-center text-[14px] text-[#5C677D]">
-              Not sure if we cover your area?{" "}
-              {linkNode(
-                "/contact/",
-                "Contact our Connecticut remodeling team",
-                "font-semibold text-[#BC9155] underline",
-              )}{" "}
-              and we&apos;ll let you know.
-            </p>
-          </div>
-        </section>
+        <SharedAreasSection data={areas} />
         <section className="border-t border-t-[#1E2B43]/8 bg-white px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
           <div className="mx-auto max-w-[800px]">
             <div className="mb-10 text-center kitchen-fade-up">
@@ -1238,17 +1136,6 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                         <rect x="3" y="4" width="18" height="16" rx="2" />
                         <path d="M8 2v4M16 2v4M3 10h18" />
                       </svg>
-                    ) : item.label === "BBB" ? (
-                      <svg
-                        width="22"
-                        height="22"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                      </svg>
                     ) : (
                       <svg
                         width="22"
@@ -1263,19 +1150,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                       </svg>
                     )}
                   </span>
-                  <span>
-                    {item.label === "Google"
-                      ? `Google ${item.value}`
-                      : item.label === "Houzz"
-                        ? item.value
-                        : item.label === "Angi & Thumbtack"
-                          ? `${item.value} on Angi & Thumbtack`
-                          : item.label === "CT HIC License"
-                            ? `${item.label} ${item.value}`
-                            : [item.label, item.value]
-                                .filter(Boolean)
-                                .join(" ")}
-                  </span>
+                  <span>{trustStripText(item)}</span>
                 </a>
                 {index < (trustStrip?.items || []).length - 1 ? (
                   <div className="hidden h-10 w-px bg-white/10 lg:block" />
@@ -1284,7 +1159,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             ))}
           </div>
         </div>
-        <section className="border-t border-t-[#1E2B43]/8 bg-white px-4 py-20 md:px-10">
+        <section className="border-t border-t-[#1E2B43]/8 bg-white px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
           <div className="mx-auto max-w-[1240px] text-center">
             <span className="mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#9A7340] before:relative before:-left-5 before:top-[-3px] before:inline-block before:h-[2px] before:w-[10px] before:bg-[#BC9155]">
               Trusted Brands
@@ -1316,327 +1191,9 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             </div>
           </div>
         </section>
-        <section
-          className="bg-[#F5F1E9] px-5 py-12 md:px-8 md:py-[72px] lg:px-10"
-          id="contact"
-        >
-          <div className="mx-auto max-w-[1200px]">
-            <div className="mb-8 text-center kitchen-fade-up">
-              <span className="mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#9A7340] before:relative before:-left-5 before:top-[-3px] before:inline-block before:h-[2px] before:w-[10px] before:bg-[#BC9155]">
-                {lead?.eyebrow || "GET IN TOUCH"}
-              </span>
-              <h2 className="font-serif text-[clamp(30px,3vw,42px)] font-bold tracking-[-0.5px]">
-                <AccentTitle
-                  text={`${lead?.title || "Ready to Start Your Remodeling"} ${lead?.title_highlight || "Project"}?`}
-                  accent={lead?.title_highlight || "Remodeling Project"}
-                />
-              </h2>
-              <p className="mx-auto mt-3 max-w-[620px] text-[16px] leading-[1.7] text-[#5C677D]">
-                {lead?.subtitle}
-              </p>
-            </div>
-            <div className="grid items-stretch gap-8 md:grid-cols-[1fr_1.15fr]">
-              <div className="hidden gap-3 kitchen-fade-up md:grid">
-                {(lead?.images || [])
-                  .slice(0, 2)
-                  .map((image: any, index: number) => (
-                    <div
-                      key={`${image.alt}-${index}`}
-                      className="relative overflow-hidden rounded-[8px]"
-                    >
-                      <img
-                        src={media(
-                          image.image,
-                          index === 0
-                            ? "/portfolio/builtwell-team-client-arrival-ct.jpeg"
-                            : "/portfolio/builtwell-contractor-sign-consultation-ct-01.jpg",
-                        )}
-                        alt={image.alt}
-                        className="h-full min-h-[260px] w-full object-cover"
-                      />
-                      <div className="pointer-events-none absolute bottom-0 right-0 h-[60px] w-[60px] rounded-br-[8px] bg-[linear-gradient(135deg,transparent_30%,rgba(30,43,67,0.5)_100%)]" />
-                    </div>
-                  ))}
-              </div>
-              <div className="kitchen-fade-up rounded-[10px] border border-[#1E2B43]/8 bg-white px-5 py-8 shadow-[0_16px_48px_rgba(30,43,67,0.1),0_4px_12px_rgba(30,43,67,0.04)] md:px-9">
-                {submitted ? (
-                  <div className="flex min-h-[420px] flex-col items-center justify-center text-center">
-                    <h3 className="mb-3 font-serif text-[34px] font-bold">
-                      Thank You
-                    </h3>
-                    <p className="max-w-[420px] leading-[1.8] text-[#5C677D]">
-                      We received your request and will get back to you within
-                      one business day.
-                    </p>
-                  </div>
-                ) : (
-                  <form
-                    onSubmit={(event) => {
-                      event.preventDefault();
-                      setSubmitted(true);
-                    }}
-                    className="flex flex-1 flex-col"
-                  >
-                    <div className="grid gap-4 md:grid-cols-2">
-                      {basicFields.map((field: any) => (
-                        <div key={field.name}>
-                          <label
-                            htmlFor={`kitchen-${field.name}`}
-                            className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1E2B43]"
-                          >
-                            {field.label} *
-                          </label>
-                          <input
-                            id={`kitchen-${field.name}`}
-                            type={field.type}
-                            value={formValues[field.name] || ""}
-                            placeholder={field.placeholder || ""}
-                            onChange={(event) =>
-                              setFormValues((current) => ({
-                                ...current,
-                                [field.name]: event.target.value,
-                              }))
-                            }
-                            className="w-full rounded-[6px] border border-[#1E2B43]/15 bg-white px-[14px] py-3 text-[15px] text-[#1E2B43] outline-none transition-colors focus:border-[#BC9155]"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                    <div className="mt-4 grid gap-4 md:grid-cols-2">
-                      {servicesField ? (
-                        <div>
-                          <label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1E2B43]">
-                            Services Needed *
-                          </label>
-                          <div className="relative">
-                            <button
-                              type="button"
-                              className="flex w-full items-center justify-between rounded-[4px] border border-[#1E2B43]/15 bg-white px-[14px] py-[13px] text-left text-[15px] text-[#1E2B43]"
-                              aria-expanded={serviceOpen}
-                              onClick={() =>
-                                setServiceOpen((current) => !current)
-                              }
-                            >
-                              <span
-                                className={`${pickedServices.length ? "font-medium text-[#1E2B43]" : "text-[#5C677D]"} truncate`}
-                              >
-                                {pickedServices.length
-                                  ? pickedServices.join(", ")
-                                  : "Select services"}
-                              </span>
-                              <ChevronDownIcon
-                                className={cx(
-                                  "text-[#5C677D] transition-transform",
-                                  serviceOpen && "rotate-180",
-                                )}
-                              />
-                            </button>
-                            <div
-                              className={`${serviceOpen ? "block" : "hidden"} absolute left-0 right-0 top-[calc(100%+4px)] z-20 max-h-60 overflow-y-auto rounded-[6px] border border-[#1E2B43]/15 bg-white py-1 shadow-[0_8px_24px_rgba(0,0,0,0.12)]`}
-                            >
-                              {opts(servicesField.options).map((option) => (
-                                <label
-                                  key={option.value}
-                                  className="flex cursor-pointer items-center gap-2.5 px-[14px] py-2 text-[14px] text-[#1E2B43] hover:bg-[#BC9155]/[0.06]"
-                                >
-                                  <input
-                                    type="checkbox"
-                                    checked={pickedServices.includes(
-                                      option.value,
-                                    )}
-                                    onChange={() =>
-                                      setPickedServices((current) =>
-                                        current.includes(option.value)
-                                          ? current.filter(
-                                              (value) => value !== option.value,
-                                            )
-                                          : [...current, option.value],
-                                      )
-                                    }
-                                    className="kitchen-multi-checkbox h-[18px] w-[18px] cursor-pointer rounded-[3px] border-2 border-[#1E2B43]/25 bg-white"
-                                  />
-                                  {option.label}
-                                </label>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      ) : null}
-                      {timeField ? (
-                        <div>
-                          <label
-                            htmlFor="kitchen-best-time"
-                            className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1E2B43]"
-                          >
-                            Best Time to Contact *
-                          </label>
-                          <select
-                            id="kitchen-best-time"
-                            value={formValues[timeField.name] || ""}
-                            onChange={(event) =>
-                              setFormValues((current) => ({
-                                ...current,
-                                [timeField.name]: event.target.value,
-                              }))
-                            }
-                            className="w-full appearance-none rounded-[6px] border border-[#1E2B43]/15 bg-white bg-[right_16px_center] bg-no-repeat px-[14px] py-3 pr-10 text-[15px] text-[#1E2B43] outline-none transition-colors focus:border-[#BC9155]"
-                            style={{
-                              backgroundImage:
-                                "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235C677D' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E\")",
-                            }}
-                          >
-                            <option value="">Select a time</option>
-                            {opts(timeField.options).map((option) => (
-                              <option key={option.value} value={option.value}>
-                                {option.label}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      ) : null}
-                    </div>
-                    <fieldset className="mt-4 m-0 border-0 p-0">
-                      <legend className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1E2B43]">
-                        Preferred Contact Method *
-                      </legend>
-                      <div className="flex flex-wrap gap-2.5 md:flex-nowrap">
-                        {["call", "text", "email"].map((method) => (
-                          <label
-                            key={method}
-                            className={cx(
-                              "inline-flex min-w-[84px] cursor-pointer items-center justify-center rounded-[6px] border px-5 py-3 text-[13px] font-medium transition-colors",
-                              contactMethod === method
-                                ? "border-[#BC9155] bg-[#BC9155]/[0.06] text-[#BC9155]"
-                                : "border-[#1E2B43]/18 bg-white text-[#1E2B43] hover:border-[#BC9155]",
-                            )}
-                          >
-                            <input
-                              type="radio"
-                              checked={contactMethod === method}
-                              onChange={() => setContactMethod(method)}
-                              className="sr-only"
-                            />
-                            <span>
-                              {method === "call"
-                                ? "Call"
-                                : method === "text"
-                                  ? "Text"
-                                  : "Email"}
-                            </span>
-                          </label>
-                        ))}
-                      </div>
-                    </fieldset>
-                    {messageField ? (
-                      <div className="mt-4">
-                        <label
-                          htmlFor="kitchen-message"
-                          className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1E2B43]"
-                        >
-                          {messageField.label}
-                        </label>
-                        <textarea
-                          id="kitchen-message"
-                          rows={4}
-                          value={formValues[messageField.name] || ""}
-                          placeholder={messageField.placeholder || ""}
-                          onChange={(event) =>
-                            setFormValues((current) => ({
-                              ...current,
-                              [messageField.name]: event.target.value,
-                            }))
-                          }
-                          className="min-h-[120px] w-full rounded-[6px] border border-[#1E2B43]/15 bg-white px-[14px] py-3 text-[15px] leading-[1.6] text-[#1E2B43] outline-none transition-colors focus:border-[#BC9155]"
-                        />
-                      </div>
-                    ) : null}
-                    <div className="mt-2 grid gap-4 md:grid-cols-2">
-                      <div>
-                        <button
-                          type="button"
-                          className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-[8px] border border-[#1E2B43]/15 bg-white px-5 py-3 text-[15px] font-semibold tracking-[0.3px] text-[#1E2B43] transition-colors hover:border-[#BC9155]"
-                          onClick={() =>
-                            document.getElementById("kitchen-files")?.click()
-                          }
-                        >
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                            <polyline points="17 8 12 3 7 8" />
-                            <line x1="12" y1="3" x2="12" y2="15" />
-                          </svg>
-                          Upload Photos
-                        </button>
-                        <input
-                          id="kitchen-files"
-                          type="file"
-                          multiple
-                          accept="image/jpeg,image/png,image/heic,.heic"
-                          hidden
-                          onChange={(event) =>
-                            setFileNames(
-                              Array.from(event.target.files || []).map(
-                                (file) => file.name,
-                              ),
-                            )
-                          }
-                        />
-                        {fileNames.length ? (
-                          <p className="mt-1.5 text-[12px] text-[#5C677D]">
-                            {fileNames.join(", ")}
-                          </p>
-                        ) : null}
-                      </div>
-                      <button
-                        type="submit"
-                        className="min-h-[52px] rounded-[8px] bg-[#BC9155] px-5 py-3 text-[15px] font-semibold tracking-[0.3px] text-white transition-all hover:-translate-y-px hover:bg-[#A57D48] hover:shadow-[0_4px_12px_rgba(188,145,85,0.3)]"
-                      >
-                        {lead?.submit_label || "Send Request"}
-                      </button>
-                    </div>
-                    <p className="mt-4 text-center text-[13px] italic text-[#5C677D]">
-                      {lead?.consent_text}
-                    </p>
-                  </form>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-        {financing ? (
-          <div className="border-t border-t-[#1E2B43]/8 bg-white px-4 py-14 md:px-10">
-            <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-6 text-center md:flex-row md:justify-between md:text-left">
-              <div className="flex flex-col items-center gap-4 md:flex-row">
-                <div className="text-[24px] font-bold tracking-[-0.3px]">
-                  <span className="text-[#6BBF4E]">Green</span>
-                  <span className="text-[#1E2B43]">Sky</span>
-                </div>
-                <p className="text-[16px] leading-[1.6] text-[#5C677D]">
-                  <strong className="text-[#1E2B43]">{financing.title}.</strong>{" "}
-                  {financing.content}
-                </p>
-              </div>
-              {financing.cta?.url ? (
-                <a
-                  href={financing.cta.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex min-h-[52px] min-w-[280px] items-center justify-center gap-[10px] rounded-[8px] bg-[#BC9155] px-8 py-3 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#A57D48] hover:shadow-[0_4px_12px_rgba(188,145,85,0.3)]"
-                >
-                  {financing.cta.label || "Check Financing Options"}
-                  <Arrow />
-                </a>
-              ) : null}
-            </div>
-          </div>
-        ) : null}
-        <section className="bg-[#F5F1E9] px-4 py-20 md:px-10">
+        <SharedLeadFormSection page={page} data={lead} accent={lead?.title_highlight || "Remodeling Project"} />
+        <SharedFinancingStrip data={financing} />
+        <section className="bg-[#F5F1E9] px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
           <div className="mx-auto max-w-[1240px]">
             <div className="mb-10 text-center">
               <span className="mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#9A7340] before:relative before:-left-5 before:top-[-3px] before:inline-block before:h-[2px] before:w-[10px] before:bg-[#BC9155]">
@@ -1696,6 +1253,154 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
         </section>
       </main>
       <style jsx global>{`
+        .kitchen-process {
+          position: relative;
+          overflow: hidden;
+          color: #fff;
+        }
+        .kitchen-process-bg {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(10, 18, 34, 0.9) 0%, rgba(30, 43, 67, 0.85) 100%);
+          z-index: 0;
+        }
+        .kitchen-process-inner {
+          position: relative;
+          z-index: 1;
+          max-width: 1280px;
+          margin: 0 auto;
+        }
+        .kitchen-process-header {
+          text-align: center;
+          margin-bottom: 64px;
+        }
+        .kitchen-process-label {
+          display: inline-block;
+          font-size: 11px;
+          font-weight: 700;
+          color: #9a7340;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          margin-bottom: 16px;
+          position: relative;
+          padding-left: 20px;
+        }
+        .kitchen-process-label::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 10px;
+          height: 2px;
+          background: #bc9155;
+        }
+        .kitchen-process-header h2 {
+          font-size: clamp(28px, 3.5vw, 44px);
+          margin-bottom: 20px;
+          letter-spacing: -0.5px;
+          color: #fff;
+          font-weight: 700;
+          line-height: 1.2;
+        }
+        .kitchen-process-header p {
+          font-size: 17px;
+          color: rgba(255, 255, 255, 0.6);
+          max-width: 700px;
+          margin: 0 auto;
+          line-height: 1.75;
+        }
+        .kitchen-process-timeline {
+          display: grid;
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          gap: 0;
+          position: relative;
+        }
+        .kitchen-process-timeline::before {
+          content: "";
+          position: absolute;
+          top: 34px;
+          left: 10%;
+          right: 10%;
+          height: 2px;
+          background: rgba(188, 145, 85, 0.25);
+        }
+        .kitchen-process-step {
+          text-align: center;
+          padding: 16px 16px 20px;
+          position: relative;
+          cursor: pointer;
+          border-radius: 8px;
+          transition: background 0.3s;
+          border: 0;
+          background: transparent;
+          color: inherit;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+          outline: none;
+        }
+        .kitchen-process-step:focus,
+        .kitchen-process-step:focus-visible {
+          outline: none;
+          box-shadow: none;
+        }
+        .kitchen-process-step.is-active {
+          background: rgba(188, 145, 85, 0.14);
+          z-index: 2;
+          position: relative;
+        }
+        .kitchen-process-step-num {
+          width: 68px;
+          height: 68px;
+          border-radius: 9999px;
+          background: rgba(188, 145, 85, 0.42);
+          border: 2.5px solid #bc9155;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: -8px auto 20px;
+          font-family: "Playfair Display", serif;
+          font-size: 24px;
+          font-weight: 700;
+          color: #f5e0c0;
+          position: relative;
+          z-index: 2;
+          box-shadow: 0 0 0 4px rgba(188, 145, 85, 0.12);
+          flex-shrink: 0;
+        }
+        .kitchen-process-step h3 {
+          font-size: 18px;
+          margin: 0 0 12px;
+          color: #fff;
+          font-weight: 700;
+          font-family: "Playfair Display", serif;
+          line-height: 1.25;
+          text-align: center;
+        }
+        .kitchen-process-step p {
+          font-size: 14px;
+          color: rgba(255, 255, 255, 0.7);
+          line-height: 1.65;
+          max-height: 0;
+          opacity: 0;
+          overflow: hidden;
+          margin: 0;
+          transition: max-height 0.4s ease, opacity 0.35s ease, margin-top 0.35s ease;
+          text-align: center;
+        }
+        .kitchen-process-step.is-active p {
+          max-height: 200px;
+          opacity: 1;
+          margin-top: 8px;
+        }
+        .kitchen-process-hint {
+          text-align: center;
+          margin-top: 28px;
+          font-size: 13px;
+          color: rgba(255, 255, 255, 0.4);
+        }
         .brand-mask {
           -webkit-mask-image: linear-gradient(
             to right,
@@ -1770,6 +1475,94 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             opacity: 1;
             transform: none;
             transition: none;
+          }
+        }
+        @media (max-width: 1024px) {
+          .kitchen-process-timeline {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+            max-width: 700px;
+            margin: 0 auto;
+          }
+          .kitchen-process-timeline::before {
+            display: none;
+          }
+          .kitchen-process-step {
+            padding: 16px 8px;
+            gap: 0;
+          }
+          .kitchen-process-step-num {
+            margin: 0 0 10px;
+          }
+          .kitchen-process-step h3 {
+            text-align: center;
+            font-size: 15px;
+            margin: 0;
+          }
+          .kitchen-process-step p {
+            display: none !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .kitchen-process-header {
+            margin-bottom: 36px;
+          }
+          .kitchen-process-header h2 {
+            font-size: 24px;
+            margin-bottom: 14px;
+          }
+          .kitchen-process-header p {
+            font-size: 15px;
+            line-height: 1.7;
+          }
+          .kitchen-process-timeline {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            max-width: 600px;
+          }
+          .kitchen-process-step {
+            padding: 14px 8px;
+          }
+          .kitchen-process-step-num {
+            width: 48px;
+            height: 48px;
+            font-size: 17px;
+            margin: 0 0 8px;
+          }
+          .kitchen-process-step h3 {
+            font-size: 14px;
+            margin-bottom: 0;
+          }
+          .kitchen-process-hint {
+            display: none;
+          }
+        }
+        @media (max-width: 480px) {
+          .kitchen-process-header {
+            margin-bottom: 32px;
+          }
+          .kitchen-process-header h2 {
+            font-size: 26px;
+          }
+          .kitchen-process-header p {
+            font-size: 14px;
+          }
+          .kitchen-process-timeline {
+            gap: 16px !important;
+            max-width: 360px;
+          }
+          .kitchen-process-step {
+            padding: 12px 6px;
+          }
+          .kitchen-process-step-num {
+            width: 44px;
+            height: 44px;
+            font-size: 16px;
+            margin: 0 0 8px;
+          }
+          .kitchen-process-step h3 {
+            font-size: 12px;
+            line-height: 1.3;
           }
         }
       `}</style>

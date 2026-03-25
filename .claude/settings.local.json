@@ -33,7 +33,9 @@
       "Bash(__NEW_LINE_6ce4bd817d6b8119__ mkdir:*)",
       "Bash(cp \"$BASE/hero/builtwell-job-site-aerial-hero-ct.jpg\" \"$DEST/hero/\")",
       "Bash(cp \"$BASE/hero/builtwell-team-van-consultation-hero-ct.jpg\" \"$DEST/hero/\")",
-      "Bash(cp \"$BASE/team/builtwell-owner-handshake-client-ct-02.jpg\" \"$DEST/team/\")"
+      "Bash(cp \"$BASE/team/builtwell-owner-handshake-client-ct-02.jpg\" \"$DEST/team/\")",
+      "Bash(for file:*)",
+      "Bash(do echo:*)"
     ]
   }
 }

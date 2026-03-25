@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import type { CMSPage } from '@/types/cms';
+import { AreasSection as SharedAreasSection, FinancingStrip as SharedFinancingStrip, LeadFormSection as SharedLeadFormSection } from './template-utils';
 
 // ─── FadeUp ───────────────────────────────────────────────────────────────────
 function FadeUp({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
@@ -999,74 +1000,23 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
         </section>
 
         {/* ── 12. NEARBY AREAS ────────────────────────────────────────── */}
-        <section className="gwch-nearby-section">
-          <div className="gwch-section-inner">
-            <FadeUp>
-              <div className="gwch-section-header">
-                <SectionLabel text="Nearby Towns" />
-                <h2 className="gwch-h2">
-                  Fairfield County Towns <strong>We Also Serve</strong>
-                </h2>
-                <p className="gwch-section-subtitle">
-                  BuiltWell CT serves all 23 towns in Fairfield County through our dedicated Fairfield County Service Area Team, including Westport, Darien, New Canaan, Stamford, Norwalk, Fairfield, and Ridgefield, reachable at (203) 919-9616.
-                </p>
-              </div>
-            </FadeUp>
-
-            <FadeUp delay={80}>
-              <article className="gwch-area-card">
-                <div className="gwch-area-img">
-                  <img src="/images/areas/fairfield-county.jpg" alt="Fairfield County, CT" />
-                </div>
-                <div className="gwch-area-body">
-                  <h3 className="gwch-area-name">Fairfield County</h3>
-                  <p className="gwch-area-phone">
-                    Call:{' '}
-                    <a href="tel:2039199616" className="gwch-area-phone-link">
-                      (203) 919-9616
-                    </a>
-                  </p>
-                  <p className="gwch-area-desc">
-                    Served by our Fairfield County Service Area Team. We cover every town in the county with dedicated local crews who know the housing stock and building departments.
-                  </p>
-                  <div className="gwch-area-towns-grid">
-                    {primaryTowns.map((town) =>
-                      town.highlight ? (
-                        <span key={town.name} className="gwch-town-pill gwch-town-highlight">
-                          {town.name}
-                        </span>
-                      ) : (
-                        <Link key={town.name} href={town.href || '/fairfield-county/'} className="gwch-town-pill">
-                          {town.name}
-                        </Link>
-                      )
-                    )}
-                  </div>
-
-                  <div className={`gwch-area-towns-more${townsExpanded ? ' show' : ''}`}>
-                    <div className="gwch-area-towns-extra">
-                      {moreTowns.map((town) => (
-                        <span key={town} className="gwch-town-pill">{town}</span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    className="gwch-towns-expand"
-                    onClick={() => setTownsExpanded((v) => !v)}
-                  >
-                    {townsExpanded ? 'Show Less −' : `Show ${moreTowns.length} More Towns +`}
-                  </button>
-
-                  <Link href="/fairfield-county/" className="gwch-area-cta">
-                    Learn more about Fairfield County →
-                  </Link>
-                </div>
-              </article>
-            </FadeUp>
-          </div>
-        </section>
+        <SharedAreasSection data={{
+          eyebrow: "Nearby Towns",
+          title: "Fairfield County Towns We Also Serve",
+          highlight_text: "We Also Serve",
+          subtitle: "BuiltWell CT serves all 23 towns in Fairfield County through our dedicated Fairfield County Service Area Team, including Westport, Darien, New Canaan, Stamford, Norwalk, Fairfield, and Ridgefield, reachable at (203) 919-9616.",
+          counties: [{
+            name: "Fairfield County",
+            phone: "(203) 919-9616",
+            image: "/images/areas/fairfield-county.jpg",
+            description: "Served by our Fairfield County Service Area Team. We cover every town in the county with dedicated local crews who know the housing stock and building departments.",
+            towns: primaryTowns.map((t) => t.name),
+            extra_towns: moreTowns,
+            town_links: Object.fromEntries(primaryTowns.filter((t) => t.href).map((t) => [t.name, t.href as string])),
+            url: "/fairfield-county/",
+            cta_label: "Learn more about Fairfield County",
+          }],
+        }} />
 
         {/* ── 13. TRUST STRIP ─────────────────────────────────────────── */}
         <section className="gwch-trust-strip">
@@ -1137,51 +1087,10 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
         </section>
 
         {/* ── 14. CTA FORM ────────────────────────────────────────────── */}
-        <section className="gwch-cta-section" id="contact">
-          <div className="gwch-section-inner">
-            <FadeUp>
-              <div className="gwch-section-header">
-                <SectionLabel text="Get Started" />
-                <h2 className="gwch-h2">
-                  Schedule Your Free <strong>Consultation</strong>
-                </h2>
-                <p className="gwch-cta-subline">On-site or remote (Google Meet or Zoom). Call (203) 919-9616 or fill out the form below.</p>
-                <p className="gwch-cta-subline">We'll confirm your appointment details and the name of the team member visiting within one business day.</p>
-              </div>
-            </FadeUp>
-            <div className="gwch-cta-body">
-              <div className="gwch-cta-left">
-                <div className="gwch-cta-img-stack">
-                  <img src="/hero/builtwell-team-van-consultation-hero-ct.jpg" alt="BuiltWell team van arriving for consultation" className="gwch-cta-img" />
-                  <img src="/team/builtwell-owner-handshake-client-ct-02.jpg" alt="BuiltWell owner handshake with client" className="gwch-cta-img" />
-                </div>
-              </div>
-              <div className="gwch-cta-right">
-                <div className="gwch-cta-form-wrap">
-                  <LeadForm formId="cta" submitLabel="Send Request" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <SharedLeadFormSection page={_page} data={{ eyebrow: "Get Started", title: "Schedule Your Free Consultation", title_highlight: "Consultation", subtitle: "On-site or remote (Google Meet or Zoom). We respond within one business day.", images: [{ src: "/hero/builtwell-team-van-consultation-hero-ct.jpg", alt: "BuiltWell team van arriving for consultation" }, { src: "/team/builtwell-owner-handshake-client-ct-02.jpg", alt: "BuiltWell owner handshake with client" }] }} accent="Consultation" />
 
         {/* ── 15. FINANCING STRIP ─────────────────────────────────────── */}
-        <section className="gwch-financing-strip">
-          <div className="gwch-financing-inner">
-            <div className="gwch-financing-left">
-              <div className="gwch-greensky-logo">
-                <span className="gwch-gs-green">Green</span>
-                <span className="gwch-gs-dark">Sky</span>
-              </div>
-              <p className="gwch-financing-text">
-                <strong>Flexible Financing Available.</strong> Get approved in about 60 seconds and start your project today.
-              </p>
-            </div>
-            <Link href="/financing/" className="gwch-financing-cta">
-              Check Financing Options →
-            </Link>
-          </div>
-        </section>
+        <SharedFinancingStrip data={{ title: "Flexible Financing Available", content: "Get approved in about 60 seconds and start your project today.", cta: { url: "/financing/", label: "Check Financing Options" } }} />
 
       </main>
 

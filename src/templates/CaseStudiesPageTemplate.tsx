@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { ArrowRight, CalendarDays, CheckCircle2, ChevronDown, Star, Upload } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
-import { cls, linkNode, media, opts, parts, section, sections } from "./template-utils";
+import { FinancingStrip as SharedFinancingStrip, LeadFormSection as SharedLeadFormSection, cls, linkNode, media, opts, parts, section, sections } from "./template-utils";
 
 type PhoneItem = {
   label: string;
@@ -521,8 +521,8 @@ export function CaseStudiesPageTemplate({ page }: { page: CMSPage }) {
         <IntroSection data={intro} />
         <CaseStudyGrid cards={cards} />
         <TrustStrip data={linkStrip} />
-        <ContactSection page={page} data={lead} />
-        <FinancingBand data={financing} />
+        <SharedLeadFormSection page={page} data={lead} accent={lead?.title_highlight || "Remodeling Project"} />
+        <SharedFinancingStrip data={financing} />
       </main>
     </div>
   );

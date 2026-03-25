@@ -1,10 +1,11 @@
-"use client";
+﻿"use client";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Check, ChevronDown, Home, Monitor, Shield, Star, Upload } from "lucide-react";
+import { CalendarDays, Check, Clock3, ChevronDown, Home, Mail, MapPin, Monitor, Phone, Shield, Star } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
+import { AreasSection as SharedAreasSection, FinancingStrip as SharedFinancingStrip, LeadFormSection as SharedLeadFormSection } from "./template-utils";
 
 type RichTextData = {
   eyebrow?: string | null;
@@ -79,12 +80,16 @@ function label(text: React.ReactNode, dark = false) {
   );
 }
 
-function linkNode(href: string, children: React.ReactNode, className?: string) {
+function linkNode(href: string, children: React.ReactNode, className?: string, style?: React.CSSProperties) {
   return /^https?:\/\//i.test(href) ? (
-    <a href={href} className={className} target="_blank" rel="noreferrer">{children}</a>
+    <a href={href} className={className} style={style} target="_blank" rel="noreferrer">{children}</a>
   ) : (
-    <Link href={href} className={className}>{children}</Link>
+    <Link href={href} className={className} style={style}>{children}</Link>
   );
+}
+
+function staggerStyle(index: number): React.CSSProperties {
+  return { ["--contact-stagger-index" as string]: index };
 }
 
 function tomorrowISO() {
@@ -113,6 +118,12 @@ function trustText(item: { label?: string; value?: string }) {
   return label.toLowerCase().includes(value.toLowerCase()) ? label : `${label} ${value}`;
 }
 
+function mapEmbedFromAddress(address?: string | null) {
+  const value = (address || "").trim();
+  if (!value) return "https://www.google.com/maps?q=Orange%20CT&output=embed";
+  return `https://www.google.com/maps?q=${encodeURIComponent(value)}&output=embed`;
+}
+
 export function ContactPageTemplate({ page }: { page: CMSPage }) {
   const pageRef = useRef<HTMLDivElement>(null);
   const serviceWrapRef = useRef<HTMLDivElement>(null);
@@ -121,6 +132,7 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
   const hero = section<any>(page, "hero") || section<any>(page, "page_hero");
   const lead = section<any>(page, "lead_form");
   const areas = section<any>(page, "areas_served");
+  const office = section<any>(page, "office_info");
   const trust = section<any>(page, "trust_bar");
   const rich = sections<RichTextData>(page, "rich_text");
   const grids = sections<any>(page, "feature_grid");
@@ -129,6 +141,14 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
   const financing = rich.find((item) => item.style_variant === "financing_strip");
   const consultCards = grids[0]?.items || [];
   const expectCards = grids[1]?.items || [];
+  const rawTrustItems = trust?.items || [];
+  const trustStripOrdered = [
+    rawTrustItems.find((item: any) => /google/i.test(`${item?.label || ""} ${item?.value || ""}`)),
+    rawTrustItems.find((item: any) => /houzz/i.test(`${item?.label || ""} ${item?.value || ""}`)),
+    rawTrustItems.find((item: any) => /license|hic/i.test(`${item?.label || ""} ${item?.value || ""}`)),
+    rawTrustItems.find((item: any) => /angi|thumbtack/i.test(`${item?.label || ""} ${item?.value || ""}`)),
+  ].filter(Boolean);
+  const trustStripItems = [...new Set(trustStripOrdered)].concat(rawTrustItems).filter((item: any, index: number, arr: any[]) => arr.indexOf(item) === index).slice(0, 4);
   const [countyOpen, setCountyOpen] = useState<Record<number, boolean>>({});
   const [serviceOpen, setServiceOpen] = useState(false);
   const [pickedServices, setPickedServices] = useState<string[]>([]);
@@ -147,6 +167,27 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
   const areaParts = parts(areas?.title, areas?.highlight_text || "New Haven");
   const consultParts = parts(consultIntro?.title, "Consultation");
   const expectParts = parts(expectIntro?.title, "Expect");
+  const officeParts = parts(office?.title || "Our Office & Location", "Location");
+  const officeMap = office?.map_embed_url || mapEmbedFromAddress(office?.address);
+  const fairfieldPhone = page.phones?.items?.find((item: any) => /fairfield/i.test(item?.label || ""))?.number;
+  const newHavenPhone = office?.phone || page.phones?.items?.find((item: any) => /new haven/i.test(item?.label || ""))?.number || "";
+  const officePhoneText = newHavenPhone || fairfieldPhone || "";
+  const officePhoneHref = officePhoneText ? `tel:${String(officePhoneText).replace(/\D/g, "")}` : null;
+  const officeEmailText = office?.email || "info@builtwellct.com";
+  const officeEmailHref = officeEmailText ? `mailto:${officeEmailText}` : null;
+  const businessHours = Array.isArray(office?.business_hours) && office.business_hours.length
+    ? office.business_hours
+    : ["Monday - Friday: 8:00 AM - 5:00 PM", "Saturday: 8:00 AM - 3:00 PM", "Sunday: Closed"];
+  const parsedBusinessHours: Array<{ day: string; time: string }> = businessHours.map((row: string) => {
+    const [day, ...rest] = String(row).split(":");
+    return {
+      day: day.trim(),
+      time: rest.join(":").trim(),
+    };
+  });
+  const fairfieldLine = fairfieldPhone
+    ? `Dedicated local team serving Greenwich, Westport, Darien, New Canaan, Stamford, Norwalk, Fairfield, Ridgefield, and all surrounding towns.`
+    : "Serving homeowners across Greenwich, Stamford, Norwalk, Westport, and nearby Fairfield County towns.";
 
   const fields = lead?.fields || [];
   const topFields = fields.filter((field: any) => !["checkbox_group", "radio_group", "textarea", "file", "select"].includes(field.type));
@@ -307,102 +348,98 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      <section className="bg-[#f5f1e9] px-5 py-16 md:px-10 md:py-[72px]" id="contact">
-        <div className="mx-auto max-w-[1200px]">
-          <div className="contact-fade-up mb-8 text-center">
-            {label(lead?.eyebrow || "Get In Touch")}
-            <h2 className="text-[clamp(30px,3vw,42px)] font-bold tracking-[-0.02em]">{leadParts.before}{leadParts.accent ? <span className="text-[#bc9155]">{leadParts.accent}</span> : null}{leadParts.after}</h2>
-            {lead?.subtitle ? <p className="mx-auto mt-2 max-w-[600px] text-[16px] leading-[1.7] text-[#5c677d]">{lead.subtitle}</p> : null}
-          </div>
-          <div className="grid gap-8 lg:grid-cols-[1fr_1.15fr] lg:items-stretch">
-            <div className="contact-fade-up flex flex-col gap-3">
-              {(lead?.images || []).slice(0, 2).map((image: any, index: number) => <div key={`${image.alt || "lead"}-${index}`} className="relative min-h-[220px] overflow-hidden rounded-[8px] lg:min-h-[258px]"><img src={media(image.image, index === 0 ? "/portfolio/builtwell-team-client-arrival-ct.jpeg" : "/portfolio/builtwell-contractor-sign-consultation-ct-01.jpg")} alt={image.alt || "BuiltWell CT consultation"} className="h-full w-full object-cover" /><div className="pointer-events-none absolute bottom-0 right-0 h-[60px] w-[60px] rounded-br-[8px] bg-[linear-gradient(135deg,transparent_30%,rgba(30,43,67,0.5)_100%)]" /></div>)}
-            </div>
-            <div className="contact-fade-up flex flex-col rounded-[10px] border border-[#1e2b4314] bg-white px-6 py-8 shadow-[0_16px_48px_rgba(30,43,67,0.1),0_4px_12px_rgba(30,43,67,0.04)] md:px-9">
-              {submitted ? <div className="flex min-h-[420px] flex-col items-center justify-center text-center"><h3 className="text-[34px] font-bold">Thank You</h3><p className="mt-3 max-w-[420px] text-[15px] leading-7 text-[#5c677d]">We received your request and will get back to you within one business day.</p></div> : <form onSubmit={(event) => { event.preventDefault(); setSubmitted(true); }} className="flex flex-1 flex-col" aria-label="Request a free consultation">
-                <div className="grid gap-4 md:grid-cols-2">
-                  {topFields.map((field: any) => {
-                    const isZipField = field.name === "zip" || field.name === "zip_code";
-                    return <div key={field.name}><label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">{field.label}{field.required ? " *" : ""}</label><input type={field.type === "phone" ? "tel" : field.type} required={field.required} value={formValues[field.name] || ""} placeholder={field.placeholder || ""} maxLength={isZipField ? 5 : undefined} pattern={isZipField ? "[0-9]{5}" : undefined} onChange={(event) => setFormValues((current) => ({ ...current, [field.name]: event.target.value }))} className="w-full rounded-[6px] border border-[#1e2b4326] px-3.5 py-3 text-[15px] text-[#1e2b43] outline-none transition-colors duration-200 focus:border-[#bc9155]" /></div>;
-                  })}
-                </div>
-                <div className="mt-4 grid gap-4 md:grid-cols-2">
-                  {servicesField ? <div className="md:col-span-2 lg:col-span-1"><label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">{servicesField.label}{servicesField.required ? " *" : ""}</label><div ref={serviceWrapRef} className="relative"><button type="button" onClick={() => setServiceOpen((current) => !current)} aria-expanded={serviceOpen} className="flex w-full items-center justify-between rounded-[4px] border border-[#1e2b4326] px-3.5 py-[13px] text-left text-[15px] text-[#1e2b43]"><span className={cls("truncate", pickedServices.length ? "font-medium text-[#1e2b43]" : "text-[#5c677d]")}>{selectedServicesLabel}</span><ChevronDown className={cls("h-4 w-4 transition-transform duration-200", serviceOpen && "rotate-180")} /></button><div className={cls("absolute left-0 right-0 top-[calc(100%+4px)] z-20 max-h-60 overflow-y-auto rounded-[6px] border border-[#1e2b4326] bg-white py-1 shadow-[0_8px_24px_rgba(0,0,0,0.12)]", serviceOpen ? "block" : "hidden")}>{opts(servicesField.options).map((option) => <label key={option.value} className="flex cursor-pointer items-center gap-2.5 px-3.5 py-2 text-[14px] font-normal text-[#1e2b43] transition-colors duration-150 hover:bg-[#bc91550f]"><input type="checkbox" checked={pickedServices.includes(option.value)} onChange={() => setPickedServices((current) => current.includes(option.value) ? current.filter((value) => value !== option.value) : [...current, option.value])} className="contact-multiselect-checkbox" />{option.label}</label>)}</div></div></div> : null}
-                  {timeField ? <div><label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">{timeField.label}{timeField.required ? " *" : ""}</label><select required={timeField.required} value={formValues[timeField.name] || ""} onChange={(event) => setFormValues((current) => ({ ...current, [timeField.name]: event.target.value }))} style={selectChevronStyle} className="w-full appearance-none rounded-[6px] border border-[#1e2b4326] bg-white px-3.5 py-3 pr-10 text-[15px] text-[#1e2b43] outline-none transition-colors duration-200 focus:border-[#bc9155]"><option value="">Select a time</option>{opts(timeField.options).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></div> : null}
-                  {contactField ? <fieldset className="md:col-span-2"><legend className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">{contactField.label}{contactField.required ? " *" : ""}</legend><div className="flex flex-wrap gap-2.5 md:flex-nowrap">{opts(contactField.options).map((option) => { const checked = (formValues[contactField.name] || "call") === option.value; return <label key={option.value} className={cls("flex flex-1 cursor-pointer items-center justify-center rounded-[6px] border-2 px-4 py-3 text-[13px] font-medium transition-colors duration-200 hover:border-[#bc9155]", checked ? "border-[#bc9155] bg-[#bc91550f] text-[#bc9155]" : "border-[#1e2b431f] bg-white text-[#1e2b43]")}><input type="radio" name={contactField.name} checked={checked} onChange={() => setFormValues((current) => ({ ...current, [contactField.name]: option.value }))} className="hidden" /><span>{option.label}</span></label>; })}</div></fieldset> : null}
-                </div>
-                {messageField ? <div className="mt-4"><label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.04em] text-[#1e2b43]">{messageField.label}</label><textarea rows={4} value={formValues[messageField.name] || ""} placeholder={messageField.placeholder || ""} onChange={(event) => setFormValues((current) => ({ ...current, [messageField.name]: event.target.value }))} className="min-h-[120px] w-full rounded-[6px] border border-[#1e2b4326] px-3.5 py-3 text-[15px] leading-[1.6] text-[#1e2b43] outline-none transition-colors duration-200 focus:border-[#bc9155] md:min-h-[160px]" /></div> : null}
-                <div className="mt-2 grid gap-4 pt-2 md:grid-cols-2">
-                  <div><label className="flex min-h-[52px] cursor-pointer items-center justify-center gap-2 rounded-[8px] border border-[#1e2b4326] px-5 py-3 text-[15px] font-semibold text-[#1e2b43] transition-colors duration-200 hover:border-[#bc9155]" htmlFor="contact-lead-files"><Upload className="h-4 w-4" />Upload Photos</label><input id="contact-lead-files" type="file" multiple accept="image/jpeg,image/png,image/heic,.heic" className="hidden" onChange={(event) => setFileNames(Array.from(event.target.files || []).map((file) => file.name))} />{fileNames.length ? <p className="mt-1.5 text-[12px] text-[#5c677d]">{fileNames.join(", ")}</p> : null}</div>
-                  <button type="submit" className="min-h-[52px] rounded-[8px] bg-[#bc9155] px-5 py-3 text-[15px] font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-[#a57d48] hover:shadow-[0_4px_12px_rgba(188,145,85,0.3)]">{lead?.submit_label || "Send Request"}</button>
-                </div>
-                <p className="mt-4 text-center text-[13px] italic text-[#5c677d]">{lead?.consent_text || "We respond within 24 hours. No spam, no obligation."}</p>
-              </form>}
-            </div>
-          </div>
-        </div>
-      </section>
+      <div className="contact-fade-up contact-lead-wrap">
+        <SharedLeadFormSection page={page} data={lead} accent={lead?.title_highlight || "Consultation"} />
+      </div>
 
-      <section className="bg-[#f5f1e9] px-5 py-16 md:px-10 md:py-20">
-        <div className="mx-auto max-w-[1240px]">
-          <div className="contact-fade-up mb-12 text-center">
-            {label(areas?.eyebrow || "Where We Work")}
-            <h2 className="text-[clamp(32px,3.5vw,48px)] font-bold tracking-[-0.02em]">{areaParts.before}{areaParts.accent ? <span className="text-[#bc9155]">{areaParts.accent}</span> : null}{areaParts.after}</h2>
-          </div>
-          <div className="contact-fade-up grid gap-8 lg:grid-cols-2">
-            {(areas?.counties || []).map((county: any, index: number) => {
-              const expanded = !!countyOpen[index];
-              const links = county.town_links || {};
-              const topTowns = county.towns || [];
-              const visibleExtraTowns = expanded ? (county.extra_towns || []) : [];
-              const resolveTownUrl = (town: string) => {
-                if (Array.isArray(links)) return links.find((entry: any) => entry?.name === town)?.url;
-                return links[town];
-              };
-              const renderTown = (town: string, allowCountyFallback = false) => {
-                const townUrl = resolveTownUrl(town) || (allowCountyFallback ? county.url : undefined);
-                if (townUrl) {
-                  return linkNode(townUrl, town, "rounded-full bg-[#f5f1e9] px-[10px] py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] text-[#1e2b43] transition-colors duration-200 hover:bg-[#bc9155] hover:text-white");
-                }
-                return <span className="rounded-full bg-[#f5f1e9] px-[10px] py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] text-[#1e2b43] transition-colors duration-200 hover:bg-[#bc91551a] hover:text-[#9a7340]">{town}</span>;
-              };
-
-              return (
-                <article key={`${county.name || "county"}-${index}`} className="group flex flex-col overflow-hidden rounded-[12px] border-b-[3px] border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1.5 hover:border-b-[#bc9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]">
-                  <div className="relative h-[220px] overflow-hidden">
-                    <img src={media(county.image, index === 0 ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")} alt={county.name || "BuiltWell CT service area"} className={cls("h-full w-full object-cover transition-transform duration-500 group-hover:scale-105", index === 1 && "object-top")} />
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#1e2b4360] to-transparent" />
-                  </div>
-                  <div className="flex flex-1 flex-col p-7 pb-8">
-                    <h3 className="text-[24px] font-bold">{county.name}</h3>
-                    {county.phone ? <p className="mt-1 text-[15px] text-[#5c677d]">Call: <a href={`tel:${county.phone.replace(/\D/g, "")}`} className="font-semibold text-[#bc9155] hover:underline">{county.phone}</a></p> : null}
-                    {county.description ? <p className="mt-4 border-b border-[#1e2b430f] pb-5 text-[14px] leading-[1.7] text-[#5c677d]">{county.description}</p> : null}
-                    <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                      {topTowns.map((town: string) => <span key={`${county.name || "county"}-top-${town}`} className="contents">{renderTown(town, true)}</span>)}
-                      {visibleExtraTowns.map((town: string) => <span key={`${county.name || "county"}-more-${town}`} className="contents">{renderTown(town)}</span>)}
-                    </div>
-                    {county.extra_towns?.length ? <button type="button" onClick={() => setCountyOpen((current) => ({ ...current, [index]: !current[index] }))} className="mt-3 text-center text-[13px] font-semibold text-[#bc9155] transition-colors hover:text-[#a57d48]">{expanded ? "Show Fewer Towns -" : "See All Towns +"}</button> : null}
-                    {county.url ? linkNode(county.url, <><span>{county.cta_label || `Learn more about ${county.name}`}</span><ArrowRight className="h-4 w-4" /></>, "mt-1 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-2.5") : null}
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-          <p className="contact-fade-up mt-8 text-center text-[14px] text-[#5c677d]">Not sure if we cover your area? {linkNode("/contact/", "Contact our Connecticut remodeling team", "font-semibold text-[#bc9155] underline transition-colors duration-200 hover:text-[#a57d48]")} and we&apos;ll let you know.</p>
-        </div>
-      </section>
-
-      <div className="relative overflow-hidden px-5 py-14 md:px-10" style={{ background: "linear-gradient(135deg, #1e2b43 0%, #151e30 100%)" }}>
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/hero/builtwell-job-site-aerial-hero-ct.jpg')", opacity: 0.06 }} />
-        <div className="relative z-10 mx-auto flex max-w-[1200px] flex-wrap items-center justify-center">
-          {(trust?.items || []).map((item: any, index: number) => (
-            <div key={`${item.label || "trust"}-${index}`} className="contents">
-              {item.url ? linkNode(item.url, <div className="flex min-w-[180px] flex-1 flex-col items-center gap-2.5 px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:text-[#bc9155]"><span className="text-[#bc9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))]">{trustIcon(item.icon)}</span><span className="whitespace-nowrap">{trustText(item)}</span></div>, "flex flex-1 justify-center") : <div className="flex flex-1 justify-center"><div className="flex min-w-[180px] flex-1 flex-col items-center gap-2.5 px-8 py-5 text-center text-[13px] font-semibold tracking-[0.03em] text-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:text-[#bc9155]"><span className="text-[#bc9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))]">{trustIcon(item.icon)}</span><span className="whitespace-nowrap">{trustText(item)}</span></div></div>}
-              {index < (trust?.items || []).length - 1 ? <div className="hidden h-10 w-px bg-white/10 lg:block" /> : null}
+      <section className="contact-fade-up contact-reveal-stagger contact-trust-strip" role="region" aria-label="Trust indicators">
+        <div className="contact-trust-strip-inner">
+          {trustStripItems.map((item: any, index: number) => (
+            <div key={`${item.label || "trust"}-${item.value || "value"}-${index}`} className="contents">
+              {item?.url
+                ? linkNode(item.url, <><span className="contact-trust-strip-icon">{trustIcon(item.icon)}</span><span>{trustText(item)}</span></>, "contact-stagger-item contact-trust-strip-item", staggerStyle(index))
+                : <div className="contact-stagger-item contact-trust-strip-item" style={staggerStyle(index)}><span className="contact-trust-strip-icon">{trustIcon(item.icon)}</span><span>{trustText(item)}</span></div>}
+              {index < trustStripItems.length - 1 ? <div className="contact-trust-strip-divider" /> : null}
             </div>
           ))}
         </div>
+      </section>
+
+      <div className="contact-fade-up contact-areas-wrap">
+        <SharedAreasSection data={areas} />
       </div>
+
+            {office ? (
+        <section className="contact-location-section">
+          <div className="contact-location-inner">
+            <div className="contact-fade-up contact-location-header text-center">
+              {label((office?.eyebrow || "Visit Us").toUpperCase(), true)}
+              <h2>{officeParts.before}<span className="text-[#c89b5b]">{officeParts.accent}</span>{officeParts.after}</h2>
+            </div>
+            <div className="contact-fade-up contact-reveal-stagger contact-location-grid">
+              <div className="contact-details-col">
+                <div className="contact-stagger-item contact-detail-item" style={staggerStyle(0)}>
+                  <div className="contact-detail-icon">
+                    <MapPin />
+                  </div>
+                  <div className="contact-detail-text">
+                    <h4>Headquarters</h4>
+                    {office?.address ? <p>{office.address}</p> : null}
+                  </div>
+                </div>
+
+                <div className="contact-stagger-item contact-detail-item" style={staggerStyle(1)}>
+                  <div className="contact-detail-icon">
+                    <Clock3 />
+                  </div>
+                  <div className="contact-detail-text">
+                    <h4>Business Hours</h4>
+                    <div className="hours-table">
+                      {parsedBusinessHours.map((item) => (
+                        <div key={`${item.day}-${item.time}`} className="hours-row">
+                          <span className="day">{item.day}</span>
+                          <span>{item.time || "Closed"}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <span className="hours-status">{"\u2022"} Closed</span>
+                  </div>
+                </div>
+
+                <div className="contact-stagger-item contact-detail-item" style={staggerStyle(2)}>
+                  <div className="contact-detail-icon">
+                    <Phone />
+                  </div>
+                  <div className="contact-detail-text">
+                    <h4>Phone</h4>
+                    {newHavenPhone ? <p>New Haven County: <a href={`tel:${String(newHavenPhone).replace(/\D/g, "")}`}>{newHavenPhone}</a></p> : null}
+                    {fairfieldPhone ? <p>Fairfield County: <a href={`tel:${String(fairfieldPhone).replace(/\D/g, "")}`}>{fairfieldPhone}</a></p> : null}
+                    {!newHavenPhone && !fairfieldPhone && officePhoneHref ? <p><a href={officePhoneHref}>{officePhoneText}</a></p> : null}
+                  </div>
+                </div>
+
+                <div className="contact-stagger-item contact-detail-item" style={staggerStyle(3)}>
+                  <div className="contact-detail-icon">
+                    <Mail />
+                  </div>
+                  <div className="contact-detail-text">
+                    <h4>Email</h4>
+                    {officeEmailHref ? <p><a href={officeEmailHref}>{officeEmailText}</a></p> : <p>{officeEmailText}</p>}
+                  </div>
+                </div>
+              </div>
+
+              <div className="contact-stagger-item contact-map-col" style={staggerStyle(4)}>
+                <iframe src={officeMap} title={office?.title || "BuiltWell CT office map"} loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+              </div>
+            </div>
+
+            <div className="contact-fade-up fairfield-note">
+              <p><strong>Fairfield County:</strong> {fairfieldLine}</p>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <section className="bg-[#f5f1e9] px-5 py-16 md:px-10 md:py-20">
         <div className="mx-auto max-w-[1240px]">
@@ -411,8 +448,8 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
             <h2 className="text-[clamp(32px,3.5vw,48px)] font-bold tracking-[-0.02em]">{consultParts.before}{consultParts.accent ? <span className="text-[#bc9155]">{consultParts.accent}</span> : null}{consultParts.after}</h2>
             {consultIntro?.content || consultIntro?.body ? <p className="mx-auto mt-3 max-w-[780px] text-[15px] leading-[1.8] text-[#5c677d]">{consultIntro?.content || consultIntro?.body}</p> : null}
           </div>
-          <div className="contact-fade-up grid gap-7 md:grid-cols-2">
-            {consultCards.map((item: any, index: number) => <article key={`${item.title || "consult"}-${index}`} className="flex flex-col rounded-[8px] border-b-2 border-b-transparent bg-white p-8 shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"><div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#bc9155] bg-[#bc91551f] text-[#bc9155]">{index === 0 ? <Home className="h-6 w-6" /> : <Monitor className="h-6 w-6" />}</div><h3 className="text-[20px] font-bold">{item.title}</h3><p className="mt-3 text-[15px] leading-[1.7] text-[#5c677d]">{item.description}</p><button type="button" onClick={() => openScheduleModal(index === 0 ? "in-person" : "remote")} className="mt-5 inline-flex min-w-[200px] items-center justify-center rounded-[4px] bg-[#bc9155] px-8 py-3 text-[14px] font-semibold text-white transition-colors duration-300 hover:bg-[#9a7340]">{index === 0 ? "Book In-Person" : "Book Remote"}</button></article>)}
+          <div className="contact-fade-up contact-reveal-stagger grid gap-7 md:grid-cols-2">
+            {consultCards.map((item: any, index: number) => <article key={`${item.title || "consult"}-${index}`} style={staggerStyle(index)} className="contact-stagger-item flex flex-col rounded-[8px] border-b-2 border-b-transparent bg-white p-8 shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"><div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#bc9155] bg-[#bc91551f] text-[#bc9155]">{index === 0 ? <Home className="h-6 w-6" /> : <Monitor className="h-6 w-6" />}</div><h3 className="text-[20px] font-bold">{item.title}</h3><p className="mt-3 text-[15px] leading-[1.7] text-[#5c677d]">{item.description}</p><button type="button" onClick={() => openScheduleModal(index === 0 ? "in-person" : "remote")} className="mt-5 inline-flex min-w-[200px] items-center justify-center rounded-[4px] bg-[#bc9155] px-8 py-3 text-[14px] font-semibold text-white transition-colors duration-300 hover:bg-[#9a7340]">{index === 0 ? "Book In-Person" : "Book Remote"}</button></article>)}
           </div>
         </div>
       </section>
@@ -424,13 +461,15 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
             <h2 className="text-[clamp(32px,3.5vw,48px)] font-bold tracking-[-0.02em]">{expectParts.before}{expectParts.accent ? <span className="text-[#bc9155]">{expectParts.accent}</span> : null}{expectParts.after}</h2>
             {expectIntro?.content || expectIntro?.body ? <p className="mx-auto mt-3 max-w-[720px] text-[15px] leading-[1.8] text-[#5c677d]">{expectIntro?.content || expectIntro?.body}</p> : null}
           </div>
-          <div className="contact-fade-up grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            {expectCards.map((item: any, index: number) => <article key={`${item.title || "expect"}-${index}`} className="rounded-[8px] border-b-2 border-b-transparent bg-white px-4 pb-8 pt-7 text-center shadow-[0_2px_12px_rgba(30,43,67,0.06)] transition-all duration-300 hover:-translate-y-1.5 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.08)]"><div className="mx-auto mb-4 flex h-[52px] w-[52px] items-center justify-center rounded-full border-2 border-[#bc9155] bg-[#bc91551f] text-[20px] font-bold text-[#bc9155]">{index + 1}</div><h4 className="text-[17px] font-bold">{item.title}</h4><p className="mt-2.5 text-[14px] leading-[1.65] text-[#5c677d]">{item.description}</p></article>)}
+          <div className="contact-fade-up contact-reveal-stagger grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {expectCards.map((item: any, index: number) => <article key={`${item.title || "expect"}-${index}`} style={staggerStyle(index)} className="contact-stagger-item rounded-[8px] border-b-2 border-b-transparent bg-white px-4 pb-8 pt-7 text-center shadow-[0_2px_12px_rgba(30,43,67,0.06)] transition-all duration-300 hover:-translate-y-1.5 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.08)]"><div className="mx-auto mb-4 flex h-[52px] w-[52px] items-center justify-center rounded-full border-2 border-[#bc9155] bg-[#bc91551f] text-[20px] font-bold text-[#bc9155]">{index + 1}</div><h4 className="text-[17px] font-bold">{item.title}</h4><p className="mt-2.5 text-[14px] leading-[1.65] text-[#5c677d]">{item.description}</p></article>)}
           </div>
         </div>
       </section>
 
-      {financing ? <div className="border-t border-[#1e2b4314] bg-white px-5 py-12 md:px-10 md:py-14"><div className="mx-auto flex max-w-[1200px] flex-col items-center gap-6 text-center"><div className="flex flex-col items-center gap-4"><div className="text-[24px] font-bold tracking-[-0.02em]"><span className="text-[#6bbf4e]">Green</span><span className="text-[#1e2b43]">Sky</span></div><p className="max-w-[760px] text-[16px] leading-[1.6] text-[#5c677d]"><strong className="text-[#1e2b43]">{financing.title}.</strong> {(financing.content || financing.body || "").replace(/^\s*Get approved/i, "Get approved")}</p></div>{financing.cta?.url ? linkNode(financing.cta.url, <><span>{financing.cta.label || "Check Financing Options"}</span><ArrowRight className="h-4 w-4" /></>, "inline-flex min-h-[52px] min-w-[280px] items-center justify-center gap-2 rounded-[8px] bg-[#bc9155] px-8 py-3 text-[15px] font-semibold text-white transition-all duration-200 hover:-translate-y-[2px] hover:bg-[#a57d48] hover:shadow-[0_6px_24px_rgba(188,145,85,0.4)]") : null}</div></div> : null}
+      <div className="contact-fade-up contact-greensky-wrap">
+        <SharedFinancingStrip data={financing} />
+      </div>
 
             {scheduleOpen ? <div className="contact-schedule-overlay fixed inset-0 z-50 flex items-center justify-center bg-[#151e30]/70 backdrop-blur-sm" onMouseDown={(event) => { if (event.target === event.currentTarget) setScheduleOpen(false); }}><div className="contact-schedule-modal max-h-[90vh] w-[92%] max-w-[640px] overflow-y-auto rounded-[12px] bg-white shadow-[0_24px_80px_rgba(0,0,0,0.3)]"><div className="contact-schedule-header relative rounded-t-[12px] bg-[#1e2b43] px-8 py-7 text-center text-white"><h3 className="contact-schedule-title text-[24px] font-bold">Schedule a <span className="text-[#bc9155]">Free Consultation</span></h3><p className="mt-1 text-[14px] text-white/65">No charge, no obligation. Pick a time that works for you.</p><button type="button" onClick={() => setScheduleOpen(false)} className="contact-schedule-close absolute right-5 top-5 bg-transparent p-1 text-[24px] leading-none text-white/60 transition-colors duration-200 hover:text-white" aria-label="Close schedule modal">&times;</button></div><div className="contact-schedule-body p-8"><div className="contact-schedule-tabs mb-7 grid gap-3 sm:grid-cols-2"><button type="button" onClick={() => { if (!isSaturday) { setScheduleMode("in-person"); setSelectedSlot(""); } }} className={cls("contact-schedule-tab rounded-[8px] border-2 p-4 text-center transition-all duration-200", scheduleMode === "in-person" ? "border-[#bc9155] bg-[#bc91550f]" : "border-[#1e2b431a] bg-white hover:border-[#bc9155]", isSaturday && "cursor-not-allowed opacity-40")}><Home className="mx-auto mb-2 h-7 w-7 text-[#bc9155]" /><h4 className="text-[15px] font-semibold text-[#1e2b43]">In-Person Visit</h4><p className="mt-1 text-[12px] text-[#5c677d]">We come to your home<br />Mon-Fri, 8am - 4pm<br />2-hour windows</p></button><button type="button" onClick={() => { setScheduleMode("remote"); setScheduleCounty(null); setSelectedSlot(""); }} className={cls("contact-schedule-tab rounded-[8px] border-2 p-4 text-center transition-all duration-200", scheduleMode === "remote" ? "border-[#bc9155] bg-[#bc91550f]" : "border-[#1e2b431a] bg-white hover:border-[#bc9155]")}><Monitor className="mx-auto mb-2 h-7 w-7 text-[#bc9155]" /><h4 className="text-[15px] font-semibold text-[#1e2b43]">Google Meet</h4><p className="mt-1 text-[12px] text-[#5c677d]">Video call from anywhere<br />Mon-Fri 8am-6pm, Sat 9am-3pm<br />1-hour windows</p></button></div>
 
@@ -458,6 +497,214 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
         [data-contact-page] .contact-fade-up.contact-fade-up-visible {
           opacity: 1;
           transform: translateY(0);
+        }
+
+        [data-contact-page] .contact-reveal-stagger .contact-stagger-item {
+          opacity: 0;
+          transform: translateY(24px);
+          transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+          transition-delay: calc(var(--contact-stagger-index, 0) * 90ms + 40ms);
+        }
+
+        [data-contact-page] .contact-reveal-stagger.contact-fade-up-visible .contact-stagger-item {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        [data-contact-page] .contact-lead-wrap .bw-cta-header,
+        [data-contact-page] .contact-lead-wrap .bw-cta-images .bw-cta-img-wrap,
+        [data-contact-page] .contact-lead-wrap .bw-contact-form-wrap,
+        [data-contact-page] .contact-areas-wrap .bw-area-card,
+        [data-contact-page] .contact-greensky-wrap .bw-financing-strip-inner {
+          opacity: 0;
+          transform: translateY(24px);
+          transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-contact-page] .contact-lead-wrap.contact-fade-up-visible .bw-cta-header,
+        [data-contact-page] .contact-lead-wrap.contact-fade-up-visible .bw-cta-images .bw-cta-img-wrap,
+        [data-contact-page] .contact-lead-wrap.contact-fade-up-visible .bw-contact-form-wrap,
+        [data-contact-page] .contact-areas-wrap.contact-fade-up-visible .bw-area-card,
+        [data-contact-page] .contact-greensky-wrap.contact-fade-up-visible .bw-financing-strip-inner {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        [data-contact-page] .contact-lead-wrap.contact-fade-up-visible .bw-cta-images .bw-cta-img-wrap:nth-child(1),
+        [data-contact-page] .contact-areas-wrap.contact-fade-up-visible .bw-area-card:nth-child(1) {
+          transition-delay: 100ms;
+        }
+
+        [data-contact-page] .contact-lead-wrap.contact-fade-up-visible .bw-cta-images .bw-cta-img-wrap:nth-child(2),
+        [data-contact-page] .contact-areas-wrap.contact-fade-up-visible .bw-area-card:nth-child(2) {
+          transition-delay: 180ms;
+        }
+
+        [data-contact-page] .contact-lead-wrap.contact-fade-up-visible .bw-contact-form-wrap {
+          transition-delay: 220ms;
+        }
+
+        [data-contact-page] .contact-location-section {
+          background: #1e2b43;
+          padding: 56px 40px 0;
+          position: relative;
+        }
+
+        [data-contact-page] .contact-location-inner {
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+
+        [data-contact-page] .contact-location-header {
+          margin-bottom: 64px;
+        }
+
+        [data-contact-page] .contact-location-header h2 {
+          color: #fff;
+          font-family: "Playfair Display", serif;
+          font-size: clamp(42px, 3.8vw, 56px);
+          line-height: 1.1;
+          letter-spacing: -0.02em;
+          font-weight: 700;
+        }
+
+        [data-contact-page] .contact-location-grid {
+          display: grid;
+          grid-template-columns: 1fr 1.2fr;
+          gap: 48px;
+          align-items: stretch;
+        }
+
+        [data-contact-page] .contact-details-col {
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+          padding: 0 0 36px;
+        }
+
+        [data-contact-page] .contact-detail-item {
+          display: grid;
+          grid-template-columns: 42px 1fr;
+          gap: 16px;
+          align-items: start;
+          padding: 18px 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        [data-contact-page] .contact-detail-item:last-of-type {
+          border-bottom: none;
+        }
+
+        [data-contact-page] .contact-detail-icon {
+          width: 42px;
+          height: 42px;
+          background: rgba(188, 145, 85, 0.1);
+          border: 1px solid rgba(188, 145, 85, 0.18);
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #bc9155;
+          flex-shrink: 0;
+        }
+
+        [data-contact-page] .contact-detail-icon :global(svg) {
+          width: 18px;
+          height: 18px;
+          stroke-width: 1.9;
+        }
+
+        [data-contact-page] .contact-detail-text h4 {
+          font-family: "Inter", sans-serif;
+          font-size: 11px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 1.2px;
+          margin-bottom: 4px;
+          color: #bc9155;
+        }
+
+        [data-contact-page] .contact-detail-text p {
+          font-size: 15px;
+          color: rgba(255, 255, 255, 0.7);
+          line-height: 1.6;
+          margin: 0;
+        }
+
+        [data-contact-page] .contact-detail-text p + p {
+          margin-top: 2px;
+        }
+
+        [data-contact-page] .contact-detail-text a {
+          color: #fff;
+          font-weight: 600;
+          transition: color 0.2s;
+        }
+
+        [data-contact-page] .contact-detail-text a:hover {
+          color: #bc9155;
+        }
+
+        [data-contact-page] .hours-table {
+          display: grid;
+          gap: 4px;
+        }
+
+        [data-contact-page] .hours-row {
+          display: grid;
+          grid-template-columns: 140px 1fr;
+          font-size: 14px;
+          color: rgba(255, 255, 255, 0.55);
+          column-gap: 12px;
+        }
+
+        [data-contact-page] .hours-row .day {
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.86);
+        }
+
+        [data-contact-page] .hours-status {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 12px;
+          font-weight: 600;
+          margin-top: 8px;
+          letter-spacing: 0.3px;
+          color: #d85f5f;
+        }
+
+        [data-contact-page] .contact-map-col {
+          border-radius: 12px;
+          overflow: hidden;
+          min-height: 400px;
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        [data-contact-page] .contact-map-col iframe {
+          width: 100%;
+          height: 100%;
+          min-height: 400px;
+          display: block;
+          border: 0;
+        }
+
+        [data-contact-page] .fairfield-note {
+          border-top: 1px solid rgba(255, 255, 255, 0.07);
+          padding: 20px 0 24px;
+        }
+
+        [data-contact-page] .fairfield-note p {
+          margin: 0;
+          font-size: 15px;
+          color: rgba(255, 255, 255, 0.45);
+          line-height: 1.7;
+        }
+
+        [data-contact-page] .fairfield-note strong {
+          color: #bc9155;
+          font-weight: 700;
         }
 
         [data-contact-page] .contact-multiselect-checkbox {
@@ -498,6 +745,78 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
           opacity: 0.72;
         }
 
+        [data-contact-page] .contact-trust-strip {
+          background: linear-gradient(135deg, #1e2b43 0%, #151e30 100%);
+          padding: 56px 40px;
+          position: relative;
+          overflow: hidden;
+        }
+
+        [data-contact-page] .contact-trust-strip::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: url("/hero/builtwell-job-site-aerial-hero-ct.jpg") center/cover no-repeat;
+          opacity: 0.12;
+        }
+
+        [data-contact-page] .contact-trust-strip-inner {
+          max-width: 1200px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0;
+          flex-wrap: wrap;
+          position: relative;
+          z-index: 1;
+        }
+
+        [data-contact-page] .contact-trust-strip-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          font-size: 13px;
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.9);
+          letter-spacing: 0.4px;
+          white-space: nowrap;
+          text-decoration: none;
+          transition: all 0.3s;
+          padding: 20px 32px;
+          flex: 1;
+          min-width: 180px;
+          text-align: center;
+        }
+
+        [data-contact-page] .contact-trust-strip-item:hover {
+          color: #bc9155;
+          transform: translateY(-2px);
+        }
+
+        [data-contact-page] .contact-trust-strip-icon {
+          color: #bc9155;
+          width: 22px;
+          height: 22px;
+          filter: drop-shadow(0 2px 4px rgba(188, 145, 85, 0.3));
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        [data-contact-page] .contact-trust-strip-icon :global(svg) {
+          width: 22px;
+          height: 22px;
+        }
+
+        [data-contact-page] .contact-trust-strip-divider {
+          width: 1px;
+          height: 40px;
+          background: rgba(255, 255, 255, 0.1);
+          flex-shrink: 0;
+        }
+
         [data-contact-page] .contact-schedule-title {
           font-family: "Playfair Display", serif;
           line-height: 1.15;
@@ -510,6 +829,21 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
           cursor: pointer;
         }
 
+        @media (max-width: 1024px) {
+          [data-contact-page] .contact-location-grid {
+            grid-template-columns: 1fr;
+            gap: 24px;
+          }
+
+          [data-contact-page] .contact-location-header {
+            margin-bottom: 44px;
+          }
+
+          [data-contact-page] .contact-details-col {
+            padding-bottom: 12px;
+          }
+        }
+
         @media (max-width: 768px) {
           [data-contact-page] .contact-fade-up {
             transform: translateY(20px);
@@ -519,6 +853,65 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
             min-height: 40vh;
             padding-top: 52px;
             padding-bottom: 36px;
+          }
+
+          [data-contact-page] .contact-trust-strip {
+            padding: 32px 20px;
+          }
+
+          [data-contact-page] .contact-trust-strip-inner {
+            gap: 0;
+            flex-wrap: wrap;
+          }
+
+          [data-contact-page] .contact-trust-strip-item {
+            padding: 16px 12px;
+            min-width: 33.33%;
+            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+          }
+
+          [data-contact-page] .contact-trust-strip-icon,
+          [data-contact-page] .contact-trust-strip-icon :global(svg) {
+            width: 18px;
+            height: 18px;
+          }
+
+          [data-contact-page] .contact-trust-strip-divider {
+            display: none;
+          }
+
+          [data-contact-page] .contact-location-section {
+            padding: 48px 20px 0;
+          }
+
+          [data-contact-page] .contact-location-header {
+            margin-bottom: 34px;
+          }
+
+          [data-contact-page] .contact-location-header h2 {
+            font-size: clamp(34px, 8.6vw, 44px);
+          }
+
+          [data-contact-page] .contact-map-col,
+          [data-contact-page] .contact-map-col iframe {
+            min-height: 280px;
+          }
+
+          [data-contact-page] .hours-row {
+            grid-template-columns: 130px 1fr;
+          }
+
+          [data-contact-page] .fairfield-note {
+            padding: 14px 0 20px;
+          }
+
+          [data-contact-page] .fairfield-note p {
+            font-size: 14px;
           }
 
           [data-contact-page] .contact-schedule-overlay {
@@ -608,6 +1001,23 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
             padding-bottom: 32px;
           }
 
+          [data-contact-page] .contact-location-section {
+            padding: 36px 16px 0;
+          }
+
+          [data-contact-page] .contact-location-header {
+            margin-bottom: 30px;
+          }
+
+          [data-contact-page] .contact-location-header h2 {
+            font-size: clamp(32px, 10vw, 40px);
+          }
+
+          [data-contact-page] .hours-row {
+            grid-template-columns: 1fr;
+            gap: 2px;
+          }
+
           [data-contact-page] .contact-schedule-header {
             padding: 20px 16px;
           }
@@ -631,9 +1041,21 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
             transform: none;
             transition: none;
           }
+
+          [data-contact-page] .contact-reveal-stagger .contact-stagger-item,
+          [data-contact-page] .contact-lead-wrap .bw-cta-header,
+          [data-contact-page] .contact-lead-wrap .bw-cta-images .bw-cta-img-wrap,
+          [data-contact-page] .contact-lead-wrap .bw-contact-form-wrap,
+          [data-contact-page] .contact-areas-wrap .bw-area-card,
+          [data-contact-page] .contact-greensky-wrap .bw-financing-strip-inner {
+            opacity: 1;
+            transform: none;
+            transition: none;
+          }
         }
       `}</style>
     </div>
   );
 }
+
 

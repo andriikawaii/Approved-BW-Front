@@ -262,7 +262,7 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
       </section>
 
       {/* ══════ WHERE WE WORK ══════ */}
-      <ProcessAreasSection data={areas} countyOpen={countyOpen} setCountyOpen={setCountyOpen} />
+      <AreasSection data={areas} />
 
       {/* ══════ FAQ ══════ */}
       <section className="border-t border-[rgba(30,43,67,0.08)] bg-white px-5 py-24 md:px-10">

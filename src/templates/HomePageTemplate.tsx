@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import type { CMSPage, CMSSection } from '@/types/cms';
 import HomeHero from '@/src/components/sections/HomeHero';
+import { AreasSection as SharedAreasSection, FinancingStrip as SharedFinancingStrip, LeadFormSection as SharedLeadFormSection } from './template-utils';
 
 type PhoneItem = {
   label: string;
@@ -1222,33 +1223,6 @@ function HomeTrustStrip() {
   );
 }
 
-function HomeFinancingStrip() {
-  return (
-    <section className="border-t border-[#1E2B43]/8 bg-white px-5 py-10 md:px-8 md:py-14 lg:px-10">
-      <div className="home-fade-up mx-auto flex max-w-[1200px] flex-col items-center gap-6 text-center">
-        <div className="flex flex-col items-center gap-4">
-          <span className="text-[28px] font-bold tracking-[-0.3px]">
-            <span className="text-[#6BBF4E]">Green</span>
-            <span className="text-[#1E2B43]">Sky</span>
-          </span>
-          <p className="text-[16px] leading-[1.6] text-[#5C677D]">
-            <strong className="text-[#1E2B43]">Flexible Financing Available.</strong>{' '}
-            Get approved in about 60 seconds and start your project today.
-          </p>
-        </div>
-        <a
-          href="https://www.greensky.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex min-h-[52px] min-w-[280px] items-center justify-center gap-2.5 rounded-[8px] bg-[#BC9155] px-8 py-3.5 text-[15px] font-semibold tracking-[0.3px] text-white transition-all duration-200 hover:-translate-y-px hover:bg-[#a57d48] hover:shadow-[0_4px_12px_rgba(188,145,85,0.3)]"
-        >
-          Check Financing Options
-          <ArrowRight className="h-3.5 w-3.5" />
-        </a>
-      </div>
-    </section>
-  );
-}
 
 function HomeMidCta() {
   return (
@@ -1979,12 +1953,7 @@ export function HomePageTemplate({ page }: { page: CMSPage }) {
       <HomeProcessSection data={process} />
 
       {/* 6. Areas */}
-      <HomeAreasSection
-        title={areas?.title}
-        eyebrow={areas?.eyebrow}
-        description={areas?.subtitle}
-        counties={areas?.counties ?? []}
-      />
+      <SharedAreasSection data={areas} />
 
       {/* 7. Mid CTA */}
       <HomeMidCta />
@@ -2004,14 +1973,14 @@ export function HomePageTemplate({ page }: { page: CMSPage }) {
 
       {/* 10. Lead Form (if available) or CTA fallback */}
       {leadForm ? (
-        <HomeLeadFormSection data={leadForm} />
+        <SharedLeadFormSection page={page} data={leadForm} />
       ) : (
         <HomeCtaSection data={cta} phones={phones} />
       )}
 
       {/* 11. Trust + Financing strip */}
       <HomeTrustStrip />
-      <HomeFinancingStrip />
+      <SharedFinancingStrip data={{ title: "Flexible Financing Available", content: "Get approved in about 60 seconds and start your project today.", cta: { url: "https://www.greensky.com", label: "Check Financing Options" } }} />
       <style jsx global>{`
         .home-fade-up {
           opacity: 0;

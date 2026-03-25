@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
 import {
+  AreasSection as SharedAreasSection,
   FinancingStrip,
   cls,
   label,
@@ -1274,7 +1275,7 @@ export function InsuranceRestorationPageTemplate({ page }: { page: CMSPage }) {
       <ProcessSection data={process} />
       <FaqSection data={faq} />
       <CallToActionBand data={cta} phones={phones} />
-      <AreasSection data={areas} />
+      <SharedAreasSection data={areas} />
       <TrustStrip data={trustBars[1]} />
       <ContactSection page={page} data={lead} />
       <FinancingStrip data={financing} />

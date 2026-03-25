@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import type { CMSPage } from '@/types/cms';
+import { AreasSection as SharedAreasSection, FinancingStrip as SharedFinancingStrip, LeadFormSection as SharedLeadFormSection } from './template-utils';
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
@@ -557,9 +558,6 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
           .two-col-grid { grid-template-columns: 1fr !important; }
           .three-col-grid { grid-template-columns: 1fr !important; }
           .four-col-trust { grid-template-columns: repeat(2, 1fr) !important; }
-          .cta-body-grid { grid-template-columns: 1fr !important; }
-          .cta-left-hide { display: none !important; }
-          .form-row-2 { grid-template-columns: 1fr !important; }
           .trust-strip-inner-grid { flex-wrap: wrap !important; }
           .trust-strip-item-hover { min-width: 50% !important; }
           .hero-ctas-wrap { flex-direction: column !important; align-items: stretch !important; }
@@ -733,53 +731,16 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
       </section>
 
       {/* ── SERVICE AREAS ────────────────────────────────────────────────────── */}
-      <section style={{ background: '#fff', padding: '100px 40px' }}>
-        <div style={{ maxWidth: 1240, margin: '0 auto' }}>
-          <FadeUp>
-            <div style={{ textAlign: 'center', marginBottom: 64 }}>
-              <SectionLabel>Where We Work</SectionLabel>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 3.5vw, 44px)', marginBottom: 20, letterSpacing: '-0.5px', maxWidth: 780, marginLeft: 'auto', marginRight: 'auto', color: '#1E2B43' }}>
-                Serving Homeowners Across <span style={{ color: '#BC9155' }}>Two Counties</span>
-              </h2>
-              <p style={{ fontSize: 17, color: '#5C677D', maxWidth: 700, margin: '0 auto', lineHeight: 1.75 }}>
-                Free consultations are available throughout Fairfield and New Haven Counties, with dedicated teams serving both regions.
-              </p>
-            </div>
-          </FadeUp>
-          <FadeUp delay={100}>
-            <div className="two-col-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
-              <AreaCard
-                county="Fairfield County"
-                phone="(203) 919-9616"
-                img="/images/areas/fairfield-county.jpg"
-                alt="Fairfield County, Connecticut — home remodeling service area for BuiltWell CT"
-                desc="Serving all of Fairfield County with dedicated local crews. From Greenwich estates to Ridgefield colonials, we know the housing stock and building departments across the county."
-                primaryTowns={FAIRFIELD_TOWNS_PRIMARY}
-                moreTowns={FAIRFIELD_TOWNS_MORE}
-                townLinks={FAIRFIELD_TOWN_LINKS}
-                countyHref="/fairfield-county/"
-              />
-              <AreaCard
-                county="New Haven County"
-                phone="(203) 466-9148"
-                img="/images/areas/new-haven-county.jpg"
-                alt="New Haven County, Connecticut — home remodeling service area for BuiltWell CT"
-                desc="Served from our Orange, CT office. We cover every town in New Haven County from coastal Branford and Madison to inland Woodbridge and Cheshire — delivering expert remodeling across the region."
-                primaryTowns={NEW_HAVEN_TOWNS_PRIMARY}
-                moreTowns={NEW_HAVEN_TOWNS_MORE}
-                townLinks={NEW_HAVEN_TOWN_LINKS}
-                countyHref="/new-haven-county/"
-                showTop
-              />
-            </div>
-          </FadeUp>
-          <FadeUp delay={150}>
-            <p style={{ textAlign: 'center', fontSize: 14, color: '#5C677D', marginTop: 32 }}>
-              Not sure if we serve your area? <Link href="/contact/" style={{ color: '#BC9155', fontWeight: 600, textDecoration: 'underline' }}>Contact our Connecticut remodeling team</Link> and we&apos;ll let you know.
-            </p>
-          </FadeUp>
-        </div>
-      </section>
+      <SharedAreasSection data={{
+        eyebrow: "Where We Work",
+        title: "Serving Homeowners Across Two Counties",
+        highlight_text: "Two Counties",
+        subtitle: "Free consultations are available throughout Fairfield and New Haven Counties, with dedicated teams serving both regions.",
+        counties: [
+          { name: "Fairfield County", phone: "(203) 919-9616", image: "/images/areas/fairfield-county.jpg", description: "Serving all of Fairfield County with dedicated local crews. From Greenwich estates to Ridgefield colonials, we know the housing stock and building departments across the county.", towns: FAIRFIELD_TOWNS_PRIMARY, extra_towns: FAIRFIELD_TOWNS_MORE, town_links: FAIRFIELD_TOWN_LINKS, url: "/fairfield-county/", cta_label: "Learn more about Fairfield County" },
+          { name: "New Haven County", phone: "(203) 466-9148", image: "/images/areas/new-haven-county.jpg", description: "Served from our Orange, CT office. We cover every town in New Haven County from coastal Branford and Madison to inland Woodbridge and Cheshire — delivering expert remodeling across the region.", towns: NEW_HAVEN_TOWNS_PRIMARY, extra_towns: NEW_HAVEN_TOWNS_MORE, town_links: NEW_HAVEN_TOWN_LINKS, url: "/new-haven-county/", cta_label: "Learn more about New Haven County" },
+        ],
+      }} />
 
       {/* ── TRUST STRIP ──────────────────────────────────────────────────────── */}
       <div style={{ background: 'linear-gradient(135deg, #1E2B43 0%, #151E30 100%)', padding: '56px 40px', position: 'relative', overflow: 'hidden' }} role="region" aria-label="Trust indicators">
@@ -801,56 +762,10 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
       </div>
 
       {/* ── CTA SECTION WITH LEAD FORM ───────────────────────────────────────── */}
-      <section id="contact" style={{ background: '#F5F1E9', padding: '64px 40px 72px', borderTop: '1px solid rgba(30,43,67,0.08)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <FadeUp>
-            <div style={{ marginBottom: 32, textAlign: 'center' }}>
-              <SectionLabel>Get Started</SectionLabel>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(30px, 3vw, 42px)', marginBottom: 8, color: '#1E2B43' }}>
-                Schedule Your Free <span style={{ color: '#BC9155' }}>Consultation</span>
-              </h2>
-              <p style={{ fontSize: 16, color: '#5C677D', lineHeight: 1.7, maxWidth: 600, margin: '0 auto' }}>
-                On-site or remote (Google Meet or Zoom). We respond within one business day.
-              </p>
-            </div>
-          </FadeUp>
-          <div className="cta-body-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.15fr', gap: 32, alignItems: 'stretch' }}>
-            {/* left images */}
-            <FadeUp stretch>
-              <div className="cta-left-hide" style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1 }}>
-                <div style={{ flex: 1, borderRadius: 8, overflow: 'hidden', minHeight: 0, position: 'relative' }}>
-                  <img src="/portfolio/builtwell-team-van-exterior-ct-01.jpg" alt="BuiltWell CT remodeling team arriving at a Connecticut home for a free consultation" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} loading="lazy" decoding="async" />
-                </div>
-                <div style={{ flex: 1, borderRadius: 8, overflow: 'hidden', minHeight: 0, position: 'relative' }}>
-                  <img src="/portfolio/builtwell-contractor-handshake-client-ct.jpg" alt="BuiltWell CT owner meeting with a Connecticut homeowner for a remodeling consultation" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} loading="lazy" decoding="async" />
-                </div>
-              </div>
-            </FadeUp>
-            {/* right form */}
-            <FadeUp delay={100}>
-              <LeadFormSection cmsData={cmsFormData} />
-            </FadeUp>
-          </div>
-        </div>
-      </section>
+      <SharedLeadFormSection page={page} data={cmsFormData || { eyebrow: "Get Started", title: "Schedule Your Free Consultation", title_highlight: "Consultation", subtitle: "On-site or remote (Google Meet or Zoom). We respond within one business day.", images: [{ image: "/portfolio/builtwell-team-van-exterior-ct-01.jpg", alt: "BuiltWell CT remodeling team arriving at a Connecticut home for a free consultation" }, { image: "/portfolio/builtwell-contractor-handshake-client-ct.jpg", alt: "BuiltWell CT owner meeting with a Connecticut homeowner for a remodeling consultation" }] }} accent="Consultation" />
 
       {/* ── FINANCING STRIP ──────────────────────────────────────────────────── */}
-      <div style={{ background: '#fff', padding: '56px 40px', borderTop: '1px solid rgba(30,43,67,0.08)' }} role="region" aria-label="Financing options">
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24, textAlign: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-            <span style={{ fontWeight: 700, fontSize: 24, letterSpacing: '-0.3px', flexShrink: 0 }}>
-              <span style={{ color: '#6BBF4E' }}>Green</span><span style={{ color: '#1E2B43' }}>Sky</span>
-            </span>
-            <p style={{ fontSize: 16, color: '#5C677D', lineHeight: 1.6 }}>
-              <strong style={{ fontWeight: 700, color: '#1E2B43' }}>Flexible Financing Available.</strong> Get approved in about 60 seconds and start your project today.
-            </p>
-          </div>
-          <a href="https://www.greensky.com" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, minWidth: 280, minHeight: 52, padding: '14px 32px', borderRadius: 8, fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 15, background: '#BC9155', color: '#fff', letterSpacing: '0.3px', whiteSpace: 'nowrap', textDecoration: 'none', transition: 'background 0.2s, transform 0.2s, box-shadow 0.2s' }} onMouseEnter={(e) => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = '#a57d48'; el.style.transform = 'translateY(-1px)'; el.style.boxShadow = '0 4px 12px rgba(188,145,85,0.3)'; }} onMouseLeave={(e) => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = '#BC9155'; el.style.transform = 'none'; el.style.boxShadow = 'none'; }}>
-            Check Financing Options
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-          </a>
-        </div>
-      </div>
+      <SharedFinancingStrip data={{ title: "Flexible Financing Available", content: "Get approved in about 60 seconds and start your project today.", cta: { url: "https://www.greensky.com", label: "Check Financing Options" } }} />
 
       {/* ── RELATED SERVICES ─────────────────────────────────────────────────── */}
       <section style={{ background: '#F5F1E9', padding: '100px 40px' }}>

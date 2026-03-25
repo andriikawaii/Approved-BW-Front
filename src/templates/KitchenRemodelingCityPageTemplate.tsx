@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import type { Components } from "react-markdown";
 import type { CMSPage } from "@/types/cms";
 import {
+  AreasSection as SharedAreasSection,
   DarkTrustStrip,
   FinancingStrip,
   HeroTrustBar,
@@ -569,46 +570,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
           </div>
         </section>
 
-        <section className="bg-[#f5f1e9] px-5 py-20 md:px-10">
-          <div className="mx-auto max-w-[1240px]">
-            <div className="mb-10 text-center">
-              {label(areas?.eyebrow || "Where We Work")}
-              <h2 className="text-[clamp(32px,3.8vw,46px)] font-bold leading-[1.2] tracking-[-0.02em]">
-                <AccentTitle text={areas?.title || `${config.serviceLabel} Across Two Counties`} accent={areas?.highlight_text || "Two Counties"} />
-              </h2>
-              {areas?.subtitle ? <p className="mx-auto mt-3 max-w-[760px] text-[17px] leading-[1.75] text-[#5c677d]">{areas.subtitle}</p> : null}
-            </div>
-            <div className="grid gap-8 lg:grid-cols-2">
-              {(areas?.counties || []).map((county, index) => {
-                const expanded = !!countyOpen[index];
-                const links = county.town_links || {};
-                const displayPhone = resolveAreaPhone(phones, county.name, county.phone);
-                return (
-                  <article key={`${county.name}-${index}`} className="group overflow-hidden rounded-[12px] border-b-[3px] border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-[6px] hover:border-b-[#bc9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]">
-                    <div className="relative h-[220px] overflow-hidden">
-                      <img src={media(county.image, index === 0 ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")} alt={county.name || "County"} className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${index === 1 ? "object-top" : ""}`} />
-                      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-[linear-gradient(to_top,rgba(30,43,67,0.4),transparent)]" />
-                    </div>
-                    <div className="px-7 py-8">
-                      <h3 className="text-[24px] font-bold text-[#1e2b43]">{county.name}</h3>
-                      <div className="mt-1 text-[15px] text-[#5c677d]">Call: <a href={`tel:${String(displayPhone || "").replace(/\D/g, "")}`} className="font-semibold text-[#bc9155] hover:underline">{displayPhone}</a></div>
-                      <p className="mt-4 border-b border-[#1e2b430f] pb-[18px] text-[14px] leading-[1.7] text-[#5c677d]">{county.description}</p>
-                      <div className="mt-5 grid grid-cols-3 gap-2 md:grid-cols-4">
-                        {(county.towns || []).map((town) => (
-                          <div key={`${county.name}-${town}`}>{linkNode(links[town] || county.url || "#", town, "block rounded-full bg-[#f5f1e9] px-[10px] py-[7px] text-center text-[11px] font-semibold text-[#1e2b43] transition-colors hover:bg-[#bc9155] hover:text-white")}</div>
-                        ))}
-                        {expanded ? (county.extra_towns || []).map((town) => <span key={`${county.name}-${town}`} className="rounded-full bg-[#f5f1e9] px-[10px] py-[7px] text-center text-[11px] font-semibold text-[#1e2b43] transition-colors hover:text-[#9a7340]">{town}</span>) : null}
-                        {county.extra_towns?.length ? <button type="button" className="col-span-full mt-1 text-center text-[13px] font-semibold text-[#bc9155]" aria-expanded={expanded} onClick={() => setCountyOpen((current) => ({ ...current, [index]: !current[index] }))}>{expanded ? "Show Less -" : "See All Towns +"}</button> : null}
-                      </div>
-                      {county.url ? linkNode(county.url, <span className="mt-4 inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#bc9155]">{county.cta_label || `Learn more about ${county.name}`}<span aria-hidden="true">-&gt;</span></span>) : null}
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-            <p className="mt-8 text-center text-[14px] text-[#5c677d]">Not sure if we cover your area? {linkNode("/contact/", "Contact our Connecticut remodeling team", "font-semibold text-[#bc9155] underline")} and we'll let you know.</p>
-          </div>
-        </section>
+        <SharedAreasSection data={areas} />
 
         <section className="bg-white px-5 py-20 md:px-10">
           <div className="mx-auto max-w-[800px]">

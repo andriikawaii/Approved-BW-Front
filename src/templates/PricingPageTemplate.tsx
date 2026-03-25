@@ -349,7 +349,7 @@ export function PricingPageTemplate({ page }: { page: CMSPage }) {
       </section>
 
       {/* ══════ WHERE WE WORK ══════ */}
-      <PricingAreasSection data={areas} />
+      <AreasSection data={areas} />
 
       {/* ══════ TRUST STRIP (below Where We Work) ══════ */}
       <DarkTrustStrip items={trustStripItems} />
