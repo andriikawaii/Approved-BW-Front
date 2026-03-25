@@ -12,10 +12,13 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
   useEffect(() => {
     const root = wrapRef.current;
     if (!root) return;
-    const els = root.querySelectorAll<HTMLElement>(".rv-fade");
+    root
+      .querySelectorAll<HTMLElement>(".bw-cta-header, .bw-cta-left, .bw-contact-form-wrap")
+      .forEach((el) => el.classList.add("fade-up"));
+    const els = root.querySelectorAll<HTMLElement>(".fade-up");
     const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) { (e.target as HTMLElement).classList.add("rv-visible"); io.unobserve(e.target); } }),
-      { threshold: 0.15 }
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { (e.target as HTMLElement).classList.add("visible"); io.unobserve(e.target); } }),
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
@@ -24,11 +27,13 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
   const phoneItems = phones ?? [];
   const fairfieldPhone = phoneItems.find((p) => p.label.toLowerCase().includes("fairfield"));
   const newHavenPhone = phoneItems.find((p) => p.label.toLowerCase().includes("new haven"));
+  const fairfieldNumber = fairfieldPhone?.number || "(203) 919-9616";
+  const newHavenNumber = newHavenPhone?.number || "(203) 466-9148";
 
   const hero = section<any>(page, "hero");
   const trustBars = sections<any>(page, "trust_bar");
-  const heroTrust = trustBars[0];
-  const darkTrust = trustBars[1];
+  const heroTrust = trustBars.find((entry: any) => String(entry?.variant || "").toLowerCase() === "stats") || trustBars[0];
+  const darkTrust = trustBars.find((entry: any) => String(entry?.variant || "").toLowerCase() === "links") || trustBars[1];
   const richTexts = page.sections.filter((s) => s.is_active && s.type === "rich_text").map((s) => s.data as any);
   const introData = richTexts.find((r: any) => r.style_variant === "intro");
   const testimonialsData = richTexts.find((r: any) => r.style_variant === "testimonials");
@@ -37,47 +42,49 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
   const financingData = richTexts.find((r: any) => r.style_variant === "financing_strip");
   const leadForm = section<any>(page, "lead_form");
 
-  const hp = parts(hero?.title || "Customer Reviews for BuiltWell Connecticut", hero?.title_highlight || "Connecticut");
+  const heroTitle = hero?.title || hero?.headline || "Customer Reviews for BuiltWell CT";
+  const hp = parts(heroTitle, hero?.title_highlight || "CT");
+  const heroSubtitle = hero?.subtitle || hero?.subheadline || "Real projects, real feedback from homeowners across Fairfield and New Haven County.";
 
   const testimonials = testimonialsData?.cards || [
     {
       quote: "We were devastated when we saw the damage. BuiltWell took everything off our plate.",
-      author: "The Martins",
+      author: "Homeowner",
       location: "Hamden, CT",
       badge: "Whole-Home Restoration",
-      description: 'The Martins needed coordinated work across multiple trades following significant interior damage. We managed the full scope, including <a href="/flooring/">flooring</a> replacement, <a href="/bathroom-remodeling/">bathroom</a> restoration, drywall repair, and <a href="/interior-painting/">repainting</a>, so they didn\'t have to coordinate between contractors during an already difficult time. The project was completed in five weeks.',
+      description: 'This homeowner needed coordinated work across multiple trades following significant interior damage. We managed the full scope, including <a href="/flooring/">flooring</a> replacement, <a href="/bathroom-remodeling/">bathroom</a> restoration, drywall repair, and <a href="/interior-painting/">repainting</a>, so they didn\'t have to coordinate between contractors during an already difficult time. The project was completed in five weeks.',
       case_study_url: "/case-studies/whole-home-restoration-hamden/",
     },
     {
       quote: "We should have done this ten years ago.",
-      author: "Steve R.",
+      author: "Homeowner",
       location: "Darien, CT",
       badge: "Basement Finishing",
-      description: 'Steve\'s basement had been raw storage space for years. We finished 850 square feet into usable living area, installed LVP <a href="/flooring/">flooring</a> throughout, and added an egress window to meet code requirements. The project came in on schedule at six weeks.',
+      description: 'This homeowner\'s basement had been raw storage space for years. We finished 850 square feet into usable living area, installed LVP <a href="/flooring/">flooring</a> throughout, and added an egress window to meet code requirements. The project came in on schedule at six weeks.',
       case_study_url: "/case-studies/basement-finishing-darien/",
     },
     {
       quote: "Four weeks of construction, and now I have the bathroom I've been dreaming about.",
-      author: "Jennifer M.",
+      author: "Homeowner",
       location: "Westport, CT",
       badge: "Bathroom Remodeling",
-      description: "Jennifer's project was a complete gut renovation: everything out, everything new. New tile, new fixtures, new layout. Four weeks from first day of demolition to final walkthrough.",
+      description: "This project was a complete gut renovation: everything out, everything new. New tile, new fixtures, new layout. Four weeks from first day of demolition to final walkthrough.",
       case_study_url: "/case-studies/bathroom-remodeling-westport/",
     },
     {
       quote: "BuiltWell made it straightforward. Now we can't imagine how we lived before.",
-      author: "The Chens",
+      author: "Homeowner",
       location: "New Canaan, CT",
       badge: "Kitchen Remodeling",
-      description: 'The Chens wanted a <a href="/kitchen-remodeling/">kitchen</a> that worked better for their household: new cabinets, countertops, layout adjustments, and updated <a href="/flooring/">flooring</a> throughout. The project ran ten weeks, which included lead time for custom cabinet fabrication.',
+      description: 'This homeowner wanted a <a href="/kitchen-remodeling/">kitchen</a> that worked better for their household: new cabinets, countertops, layout adjustments, and updated <a href="/flooring/">flooring</a> throughout. The project ran ten weeks, which included lead time for custom cabinet fabrication.',
       case_study_url: "/case-studies/kitchen-remodeling-new-canaan/",
     },
     {
       quote: "BuiltWell made it easy. They showed up when they said they would, cleaned up every day.",
-      author: "Ivana P.",
+      author: "Homeowner",
       location: "Milford, CT",
       badge: "Kitchen Remodeling",
-      description: 'Ivana\'s <a href="/kitchen-remodeling/">kitchen remodel</a> included new cabinets, countertops, appliances, and LVP <a href="/flooring/">flooring</a> extended through the adjacent living space. Six weeks, on schedule, with daily cleanup that kept the rest of her home livable throughout construction.',
+      description: 'This <a href="/kitchen-remodeling/">kitchen remodel</a> included new cabinets, countertops, appliances, and LVP <a href="/flooring/">flooring</a> extended through the adjacent living space. Six weeks, on schedule, with daily cleanup that kept the rest of her home livable throughout construction.',
       case_study_url: "/case-studies/kitchen-remodeling-milford/",
     },
   ];
@@ -92,8 +99,8 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
     <div ref={wrapRef}>
       <style>{`
         /* FADE-UP */
-        .rv-fade{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease}
-        .rv-fade.rv-visible{opacity:1;transform:translateY(0)}
+        .fade-up{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease}
+        .fade-up.visible{opacity:1;transform:translateY(0)}
 
         /* HERO */
         .rv-hero{background:#151E30;padding:0 40px 48px;padding-top:120px;color:#fff;position:relative;overflow:hidden;min-height:50vh;display:flex;align-items:stretch;isolation:isolate}
@@ -108,14 +115,11 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
         .rv-breadcrumb .current{color:#fff;font-weight:600}
         .rv-hero h1{font-size:clamp(40px,4.5vw,56px);line-height:1.08;margin-bottom:12px;letter-spacing:-0.5px;text-shadow:0 2px 20px rgba(0,0,0,0.5)}
         .rv-hero .subtitle{font-size:17px;color:rgba(255,255,255,0.82);line-height:1.7;max-width:560px;margin:16px auto 0;font-family:Inter,sans-serif;font-weight:400}
-        .rv-hero-ctas{display:flex;gap:16px;margin-top:32px;flex-wrap:wrap;justify-content:center}
-        .rv-cta-btn{display:flex;flex-direction:column;align-items:center;padding:16px 28px;border-radius:8px;background:rgba(10,18,35,0.42);border:1px solid rgba(255,255,255,0.18);border-bottom:2px solid #BC9155;backdrop-filter:blur(12px);color:#fff;text-decoration:none;transition:background 0.3s,border-color 0.3s,transform 0.3s,box-shadow 0.3s;min-width:180px;text-align:center}
-        .rv-cta-btn:hover{background:rgba(10,18,35,0.62);border-color:rgba(255,255,255,0.28);border-bottom-color:#BC9155;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3),0 0 0 1px rgba(188,145,85,0.2)}
-        .rv-cta-btn.rv-cta-primary{background:#BC9155;border:1px solid #BC9155;border-bottom:2px solid #a57d48;backdrop-filter:none}
-        .rv-cta-btn.rv-cta-primary:hover{background:#d4a95a;border-color:#d4a95a;border-bottom-color:#a57d48;box-shadow:0 8px 24px rgba(188,145,85,0.4)}
-        .rv-cta-label{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;opacity:0.7;margin-bottom:4px}
-        .rv-cta-primary .rv-cta-label{opacity:0.9}
-        .rv-cta-phone{font-size:18px;font-weight:600;font-family:'Playfair Display',serif}
+        .rv-hero-ctas{display:flex;gap:14px;margin-top:28px;justify-content:center;align-items:center;flex-wrap:wrap}
+        .rv-cta-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 32px;border-radius:8px;background:rgba(10,18,35,0.42);border:1px solid rgba(255,255,255,0.22);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;text-decoration:none;font-size:15px;font-weight:600;letter-spacing:.3px;transition:background .3s,border-color .3s,transform .3s,box-shadow .3s;white-space:nowrap}
+        .rv-cta-btn:hover{background:rgba(10,18,35,0.62);border-color:rgba(255,255,255,0.35);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+        .rv-cta-btn.rv-cta-primary{background:#BC9155;border:1px solid #BC9155;backdrop-filter:none}
+        .rv-cta-btn.rv-cta-primary:hover{background:#d4a95a;border-color:#d4a95a;box-shadow:0 8px 24px rgba(188,145,85,.4)}
 
         /* INTRO */
         .rv-intro{padding:80px 0;background:#fff;border-bottom:1px solid rgba(30,43,67,0.06)}
@@ -145,10 +149,9 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
         .rv-card-meta{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
         .rv-badge{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#fff;background:#BC9155;padding:5px 14px;border-radius:4px}
         .rv-location{font-size:13px;font-weight:500;color:#5C677D}
-        .rv-card-details>p{font-size:15px;line-height:1.8;color:#5C677D;margin-bottom:16px}
-        .rv-card-details a.rv-inline{color:#BC9155;font-weight:500}
-        .rv-case-link{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:#BC9155;transition:gap 0.3s}
-        .rv-case-link:hover{gap:10px}
+        .rv-card-details>p{font-size:15px;line-height:1.8;color:#5C677D;margin-bottom:0}
+        .rv-card-details a{color:#BC9155;font-weight:500;text-decoration:none}
+        .rv-card-details a:hover{text-decoration:underline}
 
         /* LEAVE A REVIEW */
         .rv-leave{padding:80px 0;background:#fff}
@@ -167,11 +170,12 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
         .rv-feedback article a{color:#BC9155;font-weight:500}
 
         @media(max-width:768px){
+          .fade-up{opacity:1!important;transform:translateY(0)!important;transition:none!important}
           .rv-hero{padding:110px 20px 40px;min-height:auto}
           .rv-hero h1{font-size:clamp(32px,7vw,44px)}
           .rv-hero .subtitle{font-size:15px}
           .rv-hero-ctas{flex-direction:column;align-items:center}
-          .rv-cta-btn{min-width:100%;max-width:320px}
+          .rv-cta-btn{min-height:44px;width:100%;max-width:300px;justify-content:center;font-size:14px;padding:12px 24px}
           .rv-testimonials{padding:60px 20px}
           .rv-section-header{margin-bottom:40px}
           .rv-card-quote{padding:24px 20px 20px}
@@ -203,24 +207,17 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
             {hp.before}<span className="text-[#bc9155]">{hp.accent}</span>{hp.after}
           </h1>
           <p className="subtitle">
-            {hero?.subtitle || "Real projects, real feedback from homeowners across Fairfield and New Haven County."}
+            {heroSubtitle}
           </p>
           <div className="rv-hero-ctas">
-            {fairfieldPhone && (
-              <a href={`tel:${fairfieldPhone.number.replace(/\D/g, "")}`} className="rv-cta-btn">
-                <span className="rv-cta-label">Fairfield County</span>
-                <span className="rv-cta-phone">{fairfieldPhone.number}</span>
-              </a>
-            )}
-            {newHavenPhone && (
-              <a href={`tel:${newHavenPhone.number.replace(/\D/g, "")}`} className="rv-cta-btn">
-                <span className="rv-cta-label">New Haven County</span>
-                <span className="rv-cta-phone">{newHavenPhone.number}</span>
-              </a>
-            )}
-            <a href="#contact" className="rv-cta-btn rv-cta-primary">
-              <span className="rv-cta-label">No Obligation</span>
-              <span className="rv-cta-phone">Get a Quote</span>
+            <a href={hero?.cta_primary?.url || "/free-consultation/"} className="rv-cta-btn rv-cta-primary">
+              {hero?.cta_primary?.label || "Get Your Free Estimate"}
+            </a>
+            <a href={`tel:${fairfieldNumber.replace(/\D/g, "")}`} className="rv-cta-btn">
+              Fairfield: {fairfieldNumber}
+            </a>
+            <a href={`tel:${newHavenNumber.replace(/\D/g, "")}`} className="rv-cta-btn">
+              New Haven: {newHavenNumber}
             </a>
           </div>
         </div>
@@ -232,14 +229,14 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
       {/* INTRO */}
       <section className="rv-intro">
         <div className="rv-intro-inner">
-          <div className="rv-section-header rv-fade">
+          <div className="rv-section-header fade-up">
             <span className="rv-label">{introData?.eyebrow || "Reviews"}</span>
             {(() => {
               const ip = parts(introData?.title || "Why Connecticut Homeowners Trust BuiltWell", introData?.title_highlight || "Trust BuiltWell");
               return <h2 className="font-serif font-bold">{ip.before}<span className="text-[#bc9155]">{ip.accent}</span>{ip.after}</h2>;
             })()}
           </div>
-          <div className="rv-fade">
+          <div className="fade-up">
             <p>{introData?.paragraphs?.[0] || "BuiltWell maintains a 4.9 Google rating across 100+ completed remodeling projects in Fairfield and New Haven County, with consistent feedback on punctuality, communication, and quality."}</p>
             <p>{introData?.paragraphs?.[1] || "A remodeling contractor's reputation is built project by project, on whether we showed up when we said we would, communicated clearly when something changed, and handed over work that matched what was agreed on. The feedback below reflects that. These are real projects completed for real homeowners across Connecticut."}</p>
           </div>
@@ -249,7 +246,7 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
       {/* PROJECT TESTIMONIALS */}
       <section className="rv-testimonials">
         <div className="rv-testimonials-inner">
-          <div className="rv-section-header rv-fade">
+          <div className="rv-section-header fade-up">
             <span className="rv-label">{testimonialsData?.eyebrow || "Real Projects"}</span>
             {(() => {
               const tp = parts(testimonialsData?.title || "Project Testimonials", testimonialsData?.title_highlight || "Testimonials");
@@ -259,12 +256,12 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
           </div>
 
           {testimonials.map((t: any, i: number) => (
-            <div key={i} className="rv-card rv-fade">
+            <div key={i} className="rv-card fade-up">
               <div className="rv-card-quote">
                 <svg className="rv-quote-icon" width="32" height="32" viewBox="0 0 24 24" fill="#BC9155" aria-hidden="true"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
                 <blockquote>
                   <p>{t.quote}</p>
-                  <cite>&mdash; {t.author}, {t.location}</cite>
+                  <cite>&mdash; {t.author || "Homeowner"}, {t.location}</cite>
                 </blockquote>
               </div>
               <div className="rv-card-details">
@@ -273,10 +270,6 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
                   <span className="rv-location">{t.location}</span>
                 </div>
                 <p dangerouslySetInnerHTML={{ __html: t.description }} />
-                <Link href={t.case_study_url || "#"} className="rv-case-link">
-                  Read the full case study
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </Link>
               </div>
             </div>
           ))}
@@ -286,19 +279,19 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
       {/* LEAVE A REVIEW */}
       <section className="rv-leave">
         <div className="rv-leave-inner">
-          <div className="rv-section-header rv-fade">
+          <div className="rv-section-header fade-up">
             <span className="rv-label">{leaveReviewData?.eyebrow || "Share Your Experience"}</span>
             {(() => {
               const lp = parts(leaveReviewData?.title || "Leave a Review", leaveReviewData?.title_highlight || "Review");
               return <h2 className="font-serif font-bold">{lp.before}<span className="text-[#bc9155]">{lp.accent}</span>{lp.after}</h2>;
             })()}
           </div>
-          <div className="rv-fade">
+          <div className="fade-up">
             <p>{leaveReviewData?.paragraphs?.[0] || "Past BuiltWell customers can leave a review on Google to help other Connecticut homeowners find a licensed, reliable remodeling contractor in Fairfield or New Haven County. Honest reviews from real customers are how a company like ours builds its reputation over time."}</p>
             <div style={{ textAlign: "center", margin: "32px 0" }}>
-              <a href="https://www.google.com/search?q=builtwell+ct+reviews" target="_blank" rel="noopener noreferrer" className="rv-leave-btn">
+              <a href={leaveReviewData?.cta?.url || "https://www.google.com/search?q=builtwell+ct+reviews"} target="_blank" rel="noopener noreferrer" className="rv-leave-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                Leave a Google Review
+                {leaveReviewData?.cta?.label || "Leave a Google Review"}
               </a>
             </div>
             <p>{leaveReviewData?.paragraphs?.[1] || "We read every review. We take the feedback seriously. And we are grateful to the customers who take the time to write one."}</p>
@@ -309,14 +302,14 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
       {/* WHAT CONSISTENT FEEDBACK LOOKS LIKE */}
       <section className="rv-feedback">
         <div className="rv-feedback-inner">
-          <div className="rv-section-header rv-fade">
+          <div className="rv-section-header fade-up">
             <span className="rv-label">{feedbackData?.eyebrow || "Our Standards"}</span>
             {(() => {
               const fp = parts(feedbackData?.title || "What Consistent Feedback Looks Like", feedbackData?.title_highlight || "Looks Like");
               return <h2 className="font-serif font-bold">{fp.before}<span className="text-[#bc9155]">{fp.accent}</span>{fp.after}</h2>;
             })()}
           </div>
-          <article className="rv-fade">
+          <article className="fade-up">
             <p>{feedbackData?.intro_paragraphs?.[0] || "Across 100+ completed projects in Connecticut, three themes appear in nearly every BuiltWell review: on-time arrival, daily communication, and clean job sites throughout construction."}</p>
             <p>{feedbackData?.intro_paragraphs?.[1] || "These are not about tile patterns or cabinet finishes. They are about how the project was managed: we showed up when we said we would, we communicated when something needed to be communicated, and we cleaned up at the end of every day. These things matter to homeowners more than most contractors seem to understand."}</p>
 

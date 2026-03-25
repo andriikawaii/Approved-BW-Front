@@ -1186,10 +1186,10 @@ function HomeTrustStrip() {
       <div
         className="absolute inset-0 opacity-[0.12]"
         style={{
-          backgroundImage: "url('/portfolio/builtwell-job-site-aerial-ct.jpg')",
+          backgroundImage: "url('/hero/builtwell-job-site-aerial-hero-ct.jpg')",
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
-          backgroundSize: 'contain',
+          backgroundSize: 'cover',
         }}
         aria-hidden="true"
       />
@@ -1267,14 +1267,45 @@ function HomeProjectsSection({
     return null;
   }
 
+  const projectsDescription = (description || "").trim() || "Here's a look at three projects we've completed recently. You can read the full write-ups in our case studies.";
+  const caseStudiesPhrase = "case studies";
+  const phraseIndex = projectsDescription.toLowerCase().indexOf(caseStudiesPhrase);
+  const getCaseStudyCtaLabel = (project: ProjectItem) => {
+    const key = `${project.url || ''} ${project.title || ''}`.toLowerCase();
+    if (key.includes('new-canaan')) return 'Read the New Canaan kitchen remodel case study';
+    if (key.includes('darien')) return 'Read the Darien basement finishing case study';
+    if (key.includes('westport')) return 'Read the Westport bathroom remodel case study';
+    return 'Read case study';
+  };
+
   return (
     <section id="projects" className="scroll-mt-28 bg-white px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
       <div className="mx-auto max-w-[1280px]">
         <HomeSectionHeader
           label="Case Studies"
           title={title}
-          description={description}
         />
+        <div className="home-fade-up mx-auto -mt-10 mb-9 max-w-3xl text-center md:mb-12 lg:mb-16">
+          <p className="mx-auto max-w-[700px] text-[15px] leading-[1.7] text-[#5C677D] md:text-[17px] md:leading-[1.75]">
+            {phraseIndex >= 0 ? (
+              <>
+                {projectsDescription.slice(0, phraseIndex)}
+                <Link href="/case-studies/" className="font-semibold text-[#BC9155] transition-colors hover:text-[#a57d48]">
+                  {projectsDescription.slice(phraseIndex, phraseIndex + caseStudiesPhrase.length)}
+                </Link>
+                {projectsDescription.slice(phraseIndex + caseStudiesPhrase.length)}
+              </>
+            ) : (
+              <>
+                {projectsDescription}{" "}
+                <Link href="/case-studies/" className="font-semibold text-[#BC9155] transition-colors hover:text-[#a57d48]">
+                  case studies
+                </Link>
+                .
+              </>
+            )}
+          </p>
+        </div>
 
         <div className="home-fade-up grid gap-4 md:gap-7 lg:grid-cols-3">
           {projects.map((project) => (
@@ -1292,15 +1323,17 @@ function HomeProjectsSection({
                   />
                 ) : null}
               </div>
-              <div className="flex flex-1 flex-col px-5 py-[22px] md:px-6 md:py-7">
-                <h3 className="text-[18px] font-bold text-[#1E2B43] md:text-xl">{project.title}</h3>
-                <p className="mt-3 text-[13px] leading-[1.7] text-[#5C677D] md:text-sm">{project.description}</p>
+              <div className="flex flex-1 flex-col px-6 py-6 md:px-7 md:py-7">
+                <h3 className="text-center text-[18px] font-bold text-[#1E2B43] md:text-[20px]">{project.title}</h3>
+                <p className="mt-3 text-center text-[13px] leading-[1.7] text-[#5C677D] md:text-[14px]">{project.description}</p>
 
                 {project.quote ? (
-                  <div className="mb-5 mt-auto mt-5 min-h-0 rounded-r-md border-l-[3px] border-[#BC9155] bg-[#F5F1E9] px-4 py-[14px] md:min-h-[80px] md:px-5 md:py-[18px]">
-                    <p className="text-[13px] italic leading-[1.5] text-[#1E2B43] md:text-sm">{project.quote}</p>
+                  <div className="mb-6 mt-6 rounded-r-md border-l-[3px] border-[#BC9155] bg-[#F5F1E9] px-4 py-[14px] md:px-5 md:py-[18px]">
+                    <p className="text-center text-[13px] italic leading-[1.55] text-[#1E2B43] md:text-[14px]">{project.quote}</p>
                     {project.tag ? (
-                      <span className="mt-1.5 block text-xs font-semibold text-[#5C677D]">&mdash; {project.tag}</span>
+                      <span className="mt-2 block text-center text-[12px] font-semibold text-[#5C677D] md:text-[13px]">
+                        &mdash; {project.tag}
+                      </span>
                     ) : null}
                   </div>
                 ) : null}
@@ -1308,10 +1341,9 @@ function HomeProjectsSection({
                 {project.url ? (
                   <Link
                     href={project.url}
-                    className="mt-auto flex min-h-12 w-full items-center justify-center gap-2 rounded bg-[#BC9155] px-5 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-[#a57d48]"
+                    className="mt-auto flex min-h-[56px] w-full items-center justify-center rounded bg-[#BC9155] px-5 py-3.5 text-center text-[14px] font-semibold leading-[1.3] text-white transition-colors hover:bg-[#a57d48]"
                   >
-                    Read case study
-                    <ArrowRight className="h-3.5 w-3.5" />
+                    {getCaseStudyCtaLabel(project)}
                   </Link>
                 ) : null}
               </div>
@@ -1925,7 +1957,7 @@ export function HomePageTemplate({ page }: { page: CMSPage }) {
   }, []);
 
   return (
-    <div className="bg-white text-[#1E2B43]">
+    <div className="home-page-template bg-white text-[#1E2B43]">
       {/* 1. Hero */}
       {hero ? <HomeHero data={hero} /> : null}
 
@@ -1973,7 +2005,7 @@ export function HomePageTemplate({ page }: { page: CMSPage }) {
 
       {/* 10. Lead Form (if available) or CTA fallback */}
       {leadForm ? (
-        <SharedLeadFormSection page={page} data={leadForm} />
+        <SharedLeadFormSection page={page} data={leadForm} accent={leadForm?.title_highlight || "Consultation"} />
       ) : (
         <HomeCtaSection data={cta} phones={phones} />
       )}
@@ -2015,6 +2047,53 @@ export function HomePageTemplate({ page }: { page: CMSPage }) {
           border: solid #fff;
           border-width: 0 2px 2px 0;
           transform: rotate(45deg);
+        }
+        .home-page-template .bw-area-card {
+          border-radius: 12px;
+          border-bottom-width: 3px;
+        }
+        .home-page-template .bw-area-card-img {
+          box-shadow: inset 0 -18px 28px -16px rgba(255, 255, 255, 0.75);
+        }
+        .home-page-template .bw-area-card-img::after {
+          height: 96px;
+          background: linear-gradient(
+            to top,
+            rgba(255, 255, 255, 1) 0%,
+            rgba(255, 255, 255, 0.9) 26%,
+            rgba(255, 255, 255, 0.58) 60%,
+            rgba(255, 255, 255, 0) 100%
+          );
+          filter: blur(2.8px);
+          transform: translateY(10px);
+        }
+        .home-page-template .bw-area-card-img::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: -1px;
+          height: 44px;
+          background: radial-gradient(120% 100% at 50% 100%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.38) 55%, transparent 100%);
+          pointer-events: none;
+          z-index: 2;
+        }
+        .home-page-template .bw-cta-img-wrap::after {
+          content: '';
+          position: absolute;
+          width: 100%;
+          left: 0;
+          right: auto;
+          bottom: 0;
+          height: 60px;
+          background: linear-gradient(
+            to top,
+            rgba(245, 241, 233, 1) 0%,
+            rgba(245, 241, 233, 0.6) 40%,
+            rgba(245, 241, 233, 0) 100%
+          );
+          pointer-events: none;
+          z-index: 2;
         }
         @media (prefers-reduced-motion: reduce) {
           .home-fade-up {

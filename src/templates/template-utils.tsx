@@ -105,6 +105,11 @@ export function AreasSection({ data }: { data: any }) {
   const [expanded, setExpanded] = useState<Record<number, boolean>>({});
   const titleParts = parts(data?.title, data?.highlight_text);
   const counties: any[] = data?.counties || [];
+  const subtitle = (data?.subtitle || "").trim();
+  const subtitleLinkText = (data?.subtitle_link_text || "").trim();
+  const subtitleLinkUrl = (data?.subtitle_link_url || "").trim();
+  const subtitleLinkIndex = subtitle.toLowerCase().indexOf(subtitleLinkText.toLowerCase());
+  const hasSubtitleInlineLink = Boolean(subtitle && subtitleLinkText && subtitleLinkUrl && subtitleLinkIndex >= 0);
 
   const resolveTownUrl = (county: any, town: string) => {
     const links = county.town_links;
@@ -120,13 +125,40 @@ export function AreasSection({ data }: { data: any }) {
           <div className="bw-areas-header">
             {label(data?.eyebrow || "Where We Work")}
             <h2>{titleParts.before}{titleParts.accent ? <span className="bw-gold">{titleParts.accent}</span> : null}{titleParts.after}</h2>
-            {data?.subtitle ? <p>{data.subtitle}</p> : null}
+            {subtitle ? (
+              <p>
+                {hasSubtitleInlineLink ? (
+                  <>
+                    {subtitle.slice(0, subtitleLinkIndex)}
+                    {linkNode(
+                      subtitleLinkUrl,
+                      subtitle.slice(subtitleLinkIndex, subtitleLinkIndex + subtitleLinkText.length),
+                      "bw-areas-subtitle-link"
+                    )}
+                    {subtitle.slice(subtitleLinkIndex + subtitleLinkText.length)}
+                  </>
+                ) : (
+                  subtitle
+                )}
+              </p>
+            ) : null}
           </div>
           <div className="bw-areas-grid">
             {counties.map((county: any, index: number) => {
               const isExpanded = !!expanded[index];
-              const featuredTowns: string[] = county.towns || [];
-              const extraTowns: string[] = county.extra_towns || [];
+              const townLinks = county.town_links;
+              const featuredFromLinks: string[] = Array.isArray(townLinks) ? townLinks.slice(0, 8).map((entry: any) => entry?.name).filter(Boolean) : [];
+              const extraFromLinks: string[] = Array.isArray(townLinks) ? townLinks.slice(8).map((entry: any) => entry?.name).filter(Boolean) : [];
+              const featuredTownsRaw: string[] = county.towns || county.cities || featuredFromLinks || [];
+              const extraTownsRaw: string[] =
+                county.extra_towns ||
+                county.towns_expanded ||
+                (featuredTownsRaw.length === 0 ? extraFromLinks : []) ||
+                [];
+              const normalizeTown = (town: string) => String(town || "").trim().toLowerCase();
+              const featuredTownSet = new Set(featuredTownsRaw.map(normalizeTown));
+              const featuredTowns: string[] = featuredTownsRaw.filter(Boolean);
+              const extraTowns: string[] = extraTownsRaw.filter((town: string) => Boolean(town) && !featuredTownSet.has(normalizeTown(town)));
               const countyKey = String(county.slug || county.url || county.name || county.phone || `county-${index}`);
               const featuredTownKeyCounts: Record<string, number> = {};
               const extraTownKeyCounts: Record<string, number> = {};
@@ -153,10 +185,13 @@ export function AreasSection({ data }: { data: any }) {
                       })}
                       <div className={`bw-area-towns-more${isExpanded ? " show" : ""}`}>
                         {extraTowns.map((town: string) => {
+                          const url = resolveTownUrl(county, town);
                           const extraBaseKey = `${countyKey}-extra-${town.toLowerCase().replace(/[^a-z0-9]+/g, "-") || "town"}`;
                           extraTownKeyCounts[extraBaseKey] = (extraTownKeyCounts[extraBaseKey] || 0) + 1;
                           const extraTownKey = extraTownKeyCounts[extraBaseKey] === 1 ? extraBaseKey : `${extraBaseKey}-${extraTownKeyCounts[extraBaseKey]}`;
-                          return <span key={extraTownKey} className="bw-area-town bw-area-town-static">{town}</span>;
+                          return url
+                            ? <span key={extraTownKey} className="contents">{linkNode(url, town, "bw-area-town")}</span>
+                            : <span key={extraTownKey} className="bw-area-town bw-area-town-static">{town}</span>;
                         })}
                       </div>
                       {extraTowns.length > 0 ? (
@@ -180,7 +215,9 @@ export function AreasSection({ data }: { data: any }) {
         .bw-areas-inner { max-width:1200px; margin:0 auto; }
         .bw-areas-header { text-align:center; margin-bottom:48px; }
         .bw-areas-header h2 { font:700 clamp(34px,3.8vw,50px)/1.15 "Playfair Display",serif; color:#1e2b43; letter-spacing:-.02em; margin:0; }
-        .bw-areas-header p { max-width:760px; margin:12px auto 0; font-size:15px; line-height:1.8; color:#5c677d; }
+        .bw-areas-header p { max-width:760px; margin:12px auto 0; font-size:17px; line-height:1.8; color:#5c677d; }
+        .bw-areas-subtitle-link { color:#bc9155; font-weight:600; text-decoration:none !important; transition:color .2s; }
+        .bw-areas-subtitle-link:hover, .bw-areas-subtitle-link:focus-visible { color:#9a7340; text-decoration:none !important; }
         .bw-gold { color:#bc9155; }
         .bw-areas-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:start; }
         .bw-area-card { background:#fff; border-radius:12px; overflow:hidden; border-bottom:3px solid transparent; box-shadow:0 2px 12px rgba(30,43,67,.06),0 1px 3px rgba(30,43,67,.04); transition:all .35s cubic-bezier(.4,0,.2,1); position:relative; display:flex; flex-direction:column; }

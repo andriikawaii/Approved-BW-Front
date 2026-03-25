@@ -157,7 +157,7 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
   ]).slice(0, 4);
 
   return (
-    <div className="bg-[#f5f1e9] text-[#1e2b43]">
+    <div className="about-page-template bg-[#f5f1e9] text-[#1e2b43]">
       <section className="relative isolate flex min-h-[50vh] items-stretch overflow-hidden bg-[#151e30] px-5 pb-12 pt-[60px] text-white md:px-10">
         <div className="absolute inset-0 bg-cover bg-[center_15%] opacity-[0.72]" style={{ backgroundImage: `url(${media(hero?.background_image, "/images/hero/hero-carousel-2.jpg")})` }} />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_97%_97%,rgba(21,30,48,1)_0%,rgba(21,30,48,0.9)_8%,transparent_30%),radial-gradient(ellipse_at_3%_97%,rgba(21,30,48,0.9)_0%,transparent_25%),linear-gradient(180deg,rgba(21,30,48,0.35)_0%,rgba(21,30,48,0.2)_30%,rgba(21,30,48,0.45)_65%,rgba(21,30,48,0.92)_100%)]" />
@@ -402,7 +402,36 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
             font-size: 13px;
             color: rgba(255, 255, 255, 0.4);
           }
+          .about-page-template .about-areas-wrap .bw-areas-section {
+            padding: 100px 40px;
+          }
+          .about-page-template .about-areas-wrap .bw-areas-inner {
+            max-width: 1240px;
+          }
+          .about-page-template .about-areas-wrap .bw-areas-header {
+            margin-bottom: 64px;
+          }
+          .about-page-template .about-areas-wrap .bw-areas-header h2 {
+            font-size: clamp(32px, 3.5vw, 48px);
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+          }
+          .about-page-template .about-areas-wrap .bw-areas-note {
+            margin-top: 32px;
+            font-size: 14px;
+            line-height: 1.7;
+          }
+          .about-page-template .about-areas-wrap .bw-areas-note a,
+          .about-page-template .about-areas-wrap .bw-areas-note a:hover {
+            text-decoration: none;
+          }
+          .about-page-template .about-areas-wrap .bw-areas-note a:hover {
+            color: #a57d48;
+          }
           @media (max-width: 1024px) {
+            .about-page-template .about-areas-wrap .bw-areas-section {
+              padding: 60px 32px;
+            }
             .home-process-timeline {
               grid-template-columns: repeat(3, minmax(0, 1fr));
               gap: 24px;
@@ -429,6 +458,12 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
             }
           }
           @media (max-width: 768px) {
+            .about-page-template .about-areas-wrap .bw-areas-section {
+              padding: 48px 20px;
+            }
+            .about-page-template .about-areas-wrap .bw-areas-header {
+              margin-bottom: 36px;
+            }
             .home-process-header {
               margin-bottom: 36px;
             }
@@ -520,7 +555,9 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      <SharedAreasSection data={areas} />
+      <div className="about-areas-wrap">
+        <SharedAreasSection data={areas} />
+      </div>
 
       <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1e2b43_0%,#151e30_100%)] px-5 py-10 md:px-8 md:py-14 lg:px-10">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(188,145,85,0.05)_0%,transparent_70%)]" />
