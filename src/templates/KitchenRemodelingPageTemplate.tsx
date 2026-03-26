@@ -49,6 +49,10 @@ const INCLUDED_COPY: Record<string, string> = {
     "Floor and wall tile installation with proper substrate preparation and grout finishing.",
   Ventilation:
     "Properly sized exhaust fan ducted to exterior. We correct improperly vented fans found during demolition.",
+  Demolition:
+    "Full removal of existing tile, fixtures, vanity, and flooring. Subfloor and framing inspection before any new work begins.",
+  "Vanity & Countertop":
+    "Vanity installation with countertop, faucet, and mirror. Stock, semi-custom, or custom options available.",
   "Permits & Finish":
     "All permit applications, inspection coordination, interior painting, drywall patching, and final walkthrough.",
   "Moisture Assessment":
@@ -413,7 +417,7 @@ function IncludedCardIcon({ label }: { label: string }) {
       </svg>
     );
   }
-  if (label === "Demolition & Prep") {
+  if (label === "Demolition & Prep" || label === "Demolition") {
     return (
       <svg
         viewBox="0 0 24 24"
@@ -424,6 +428,67 @@ function IncludedCardIcon({ label }: { label: string }) {
         aria-hidden="true"
       >
         <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+      </svg>
+    );
+  }
+  if (label === "Waterproofing") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      </svg>
+    );
+  }
+  if (label === "Vanity & Countertop") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <rect x="2" y="7" width="20" height="14" rx="2" />
+        <path d="M16 7V5a4 4 0 0 0-8 0v2" />
+        <line x1="12" y1="12" x2="12" y2="16" />
+      </svg>
+    );
+  }
+  if (label === "Ventilation") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <line x1="2" y1="10" x2="22" y2="10" />
+      </svg>
+    );
+  }
+  if (label === "Permits & Finish") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <path d="M3 21h18" />
+        <path d="M3 21V8l9-5 9 5v13" />
+        <rect x="9" y="13" width="6" height="8" />
       </svg>
     );
   }
@@ -523,6 +588,8 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
     () => [...(brands?.items || []), ...(brands?.items || [])],
     [brands?.items],
   );
+  const processSteps: any[] = process?.steps || [];
+  const processColumns = Math.min(Math.max(processSteps.length, 1), 6);
   const [activeStep, setActiveStep] = useState<number | null>(null);
   const [countyOpen, setCountyOpen] = useState<Record<number, boolean>>({});
   const [serviceOpen, setServiceOpen] = useState(false);
@@ -637,40 +704,61 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
         </section>
         <section className="border-y border-y-[#BC9155]/20 bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)]">
           <div className="mx-auto grid max-w-[1280px] grid-cols-2 text-center lg:grid-cols-4">
-            {(heroStats?.items || []).map((item: any, index: number) => (
-              <div
-                key={`${item.label}-${index}`}
-                className={cx(
-                  "group cursor-default bg-[#BC9155]/[0.08] px-4 py-6 transition-all duration-300 md:bg-transparent md:px-5 md:py-9 md:hover:-translate-y-[3px] md:hover:bg-[#BC9155]/8",
-                  index % 2 === 0 && "border-r border-[#BC9155]/12",
-                  index < 2 && "border-b border-[#BC9155]/12",
-                  "lg:border-b-0",
-                  index < (heroStats?.items || []).length - 1
-                    ? "lg:border-r lg:border-[#BC9155]/12"
-                    : "lg:border-r-0",
-                )}
-              >
-                <div className="flex min-h-[42px] items-center justify-center font-serif text-[32px] font-bold leading-none text-[#BC9155] transition-all duration-300 md:text-[42px] md:group-hover:text-[#D4A95A] md:group-hover:[text-shadow:0_0_20px_rgba(188,145,85,0.3)]">
-                  {item.value ? (
-                    item.value
-                  ) : (
-                    <svg
-                      width="28"
-                      height="28"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                    </svg>
-                  )}
+            {(heroStats?.items || []).map((item: any, index: number) => {
+              const cellClass = cx(
+                "group bg-[#BC9155]/[0.08] px-4 py-6 transition-all duration-300 md:bg-transparent md:px-5 md:py-9 md:hover:-translate-y-[3px] md:hover:bg-[#BC9155]/8",
+                item.url ? "cursor-pointer" : "cursor-default",
+                index % 2 === 0 && "border-r border-[#BC9155]/12",
+                index < 2 && "border-b border-[#BC9155]/12",
+                "lg:border-b-0",
+                index < (heroStats?.items || []).length - 1
+                  ? "lg:border-r lg:border-[#BC9155]/12"
+                  : "lg:border-r-0",
+              );
+              const cellInner = (
+                <>
+                  <div className="flex min-h-[42px] items-center justify-center font-serif text-[32px] font-bold leading-none text-[#BC9155] transition-all duration-300 md:text-[42px] md:group-hover:text-[#D4A95A] md:group-hover:[text-shadow:0_0_20px_rgba(188,145,85,0.3)]">
+                    {item.value ? (
+                      item.value
+                    ) : (
+                      <svg
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="mt-1.5 text-[11px] font-medium uppercase tracking-[0.8px] text-white/85 transition-colors duration-300 md:mt-2 md:text-[13px] md:tracking-[1px] md:text-white/60 md:group-hover:text-white/85">
+                    {item.label}
+                  </div>
+                </>
+              );
+              return item.url ? (
+                <a
+                  key={`${item.label}-${index}`}
+                  href={item.url}
+                  target={item.url.startsWith("http") ? "_blank" : undefined}
+                  rel={
+                    item.url.startsWith("http")
+                      ? "noreferrer noopener"
+                      : undefined
+                  }
+                  className={cellClass}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  {cellInner}
+                </a>
+              ) : (
+                <div key={`${item.label}-${index}`} className={cellClass}>
+                  {cellInner}
                 </div>
-                <div className="mt-1.5 text-[11px] font-medium uppercase tracking-[0.8px] text-white/85 transition-colors duration-300 md:mt-2 md:text-[13px] md:tracking-[1px] md:text-white/60 md:group-hover:text-white/85">
-                  {item.label}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
         <section className="border-b border-b-[#1E2B43]/6 bg-white px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
@@ -760,7 +848,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                     {item.text}
                   </h3>
                   <p className="text-[14px] leading-[1.65] text-[#5C677D]">
-                    {INCLUDED_COPY[item.text] ||
+                    {item.description || INCLUDED_COPY[item.text] ||
                       "Included as part of a full-scope remodeling project."}
                   </p>
                 </article>
@@ -902,6 +990,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                 All prices include labor and materials. Final cost depends on
                 scope, selections, and site conditions.
               </p>
+              {isKitchenService && (
               <p className="mt-3 text-[14px] leading-[1.7] text-[#5C677D]">
                 Worth noting: Connecticut homeowners may qualify for energy
                 rebates through Energize CT on ENERGY STAR appliances and
@@ -916,6 +1005,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                 </a>{" "}
                 for current programs.
               </p>
+              )}
             </div>
           </div>
         </section>
@@ -999,30 +1089,68 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
               <p>{process?.subtitle}</p>
             </div>
 
-            <div className="kitchen-fade-up kitchen-process-timeline">
-              {(process?.steps || []).map((item: any, index: number) => (
-                <button
-                  type="button"
-                  key={`${item.title}-${index}`}
-                  onClick={() =>
-                    setActiveStep((current) =>
-                      current === index ? null : index,
-                    )
-                  }
-                  className={cx(
-                    "kitchen-process-step",
-                    activeStep === index && "is-active",
-                  )}
-                  aria-expanded={activeStep === index}
-                >
-                  <div className="kitchen-process-step-num">{index + 1}</div>
-                  <h3>{item.title}</h3>
-                  <p>
-                    {(isKitchenService && EXACT_PROCESS[item.title]) ||
-                      item.description}
-                  </p>
-                </button>
-              ))}
+            <div
+              className="kitchen-fade-up kitchen-process-timeline"
+              style={
+                processColumns > 5
+                  ? {
+                      gridTemplateColumns: `repeat(${processColumns}, minmax(0, 1fr))`,
+                    }
+                  : undefined
+              }
+            >
+              {processSteps.map((item: any, index: number) => {
+                const isCtaStep = Boolean(item?.is_cta);
+                const stepDescription =
+                  (isKitchenService && EXACT_PROCESS[item.title]) ||
+                  item.description;
+
+                if (isCtaStep) {
+                  return (
+                    <a
+                      key={`${item.title}-${index}`}
+                      href={item.cta_url || "#contact"}
+                      className="kitchen-process-step is-cta"
+                      aria-label={item.title || "Get Started"}
+                    >
+                      <div className="kitchen-process-step-num">
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.2 18.85a19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.11 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                        </svg>
+                      </div>
+                      <h3>{item.title || "Get Started"}</h3>
+                    </a>
+                  );
+                }
+
+                return (
+                  <button
+                    type="button"
+                    key={`${item.title}-${index}`}
+                    onClick={() =>
+                      setActiveStep((current) =>
+                        current === index ? null : index,
+                      )
+                    }
+                    className={cx(
+                      "kitchen-process-step",
+                      activeStep === index && "is-active",
+                    )}
+                    aria-expanded={activeStep === index}
+                  >
+                    <div className="kitchen-process-step-num">{index + 1}</div>
+                    <h3>{item.title}</h3>
+                    <p>{stepDescription}</p>
+                  </button>
+                );
+              })}
             </div>
             <p className="kitchen-process-hint">Click any step to learn more</p>
           </div>
@@ -1347,6 +1475,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
           align-items: center;
           width: 100%;
           outline: none;
+          text-decoration: none;
         }
         .kitchen-process-step:focus,
         .kitchen-process-step:focus-visible {
@@ -1357,6 +1486,10 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
           background: rgba(188, 145, 85, 0.14);
           z-index: 2;
           position: relative;
+        }
+        .kitchen-process-step.is-cta {
+          background: rgba(188, 145, 85, 0.14);
+          border: 1px solid rgba(188, 145, 85, 0.35);
         }
         .kitchen-process-step-num {
           width: 68px;
@@ -1376,6 +1509,12 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
           z-index: 2;
           box-shadow: 0 0 0 4px rgba(188, 145, 85, 0.12);
           flex-shrink: 0;
+        }
+        .kitchen-process-step.is-cta .kitchen-process-step-num {
+          background: #bc9155;
+          border-color: #bc9155;
+          color: #fff;
+          box-shadow: 0 0 0 4px rgba(188, 145, 85, 0.18);
         }
         .kitchen-process-step h3 {
           font-size: 18px;
@@ -1398,7 +1537,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
           text-align: center;
         }
         .kitchen-process-step.is-active p {
-          max-height: 520px;
+          max-height: 640px;
           opacity: 1;
           margin-top: 8px;
         }

@@ -164,7 +164,13 @@ export function AreasSection({ data }: { data: any }) {
                 county.towns_expanded ||
                 (featuredTownsRaw.length === 0 ? extraFromLinks : []) ||
                 [];
-              const MAX_VISIBLE_TOWNS = 8;
+              const maxVisibleFromData = Number(
+                county.initial_visible_towns ?? data?.initial_visible_towns ?? 8
+              );
+              const MAX_VISIBLE_TOWNS =
+                Number.isFinite(maxVisibleFromData) && maxVisibleFromData > 0
+                  ? Math.floor(maxVisibleFromData)
+                  : 8;
               const normalizeTown = (town: string) => String(town || "").trim().toLowerCase();
               const featuredTownsLimited = featuredTownsRaw.filter(Boolean).slice(0, MAX_VISIBLE_TOWNS);
               const overflowFeaturedTowns = featuredTownsRaw.filter(Boolean).slice(MAX_VISIBLE_TOWNS);
@@ -194,12 +200,18 @@ export function AreasSection({ data }: { data: any }) {
                     <div className="bw-area-towns">
                       {featuredTowns.map((town: string) => {
                         const url = resolveTownUrl(county, town);
+                        const normalizedUrl = String(url || "").replace(/\/+$/, "");
+                        const normalizedCountyUrl = String(county.url || "").replace(/\/+$/, "");
+                        const isCountyLevelLink =
+                          Boolean(normalizedUrl) &&
+                          Boolean(normalizedCountyUrl) &&
+                          normalizedUrl === normalizedCountyUrl;
                         const normalizedTown = (String(town || "town").trim().toLowerCase().replace(/[^a-z0-9]+/g, "-")) || "town";
-                        const normalizedUrl = (url || "").toLowerCase().replace(/[^a-z0-9]+/g, "-");
-                        const townBaseKey = `${countyKey}-town-${normalizedTown}-${normalizedUrl}`;
+                        const normalizedUrlKey = (url || "").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+                        const townBaseKey = `${countyKey}-town-${normalizedTown}-${normalizedUrlKey}`;
                         featuredTownKeyCounts[townBaseKey] = (featuredTownKeyCounts[townBaseKey] || 0) + 1;
                         const townKey = featuredTownKeyCounts[townBaseKey] === 1 ? townBaseKey : `${townBaseKey}-${featuredTownKeyCounts[townBaseKey]}`;
-                        return url
+                        return url && !isCountyLevelLink
                           ? <span key={townKey} className="contents">{linkNode(url, town, "bw-area-town")}</span>
                           : <span key={townKey} className="bw-area-town bw-area-town-static">{town}</span>;
                       })}
