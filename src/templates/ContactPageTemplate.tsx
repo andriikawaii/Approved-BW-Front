@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { CalendarDays, Check, Clock3, ChevronDown, Home, Mail, MapPin, Monitor, Phone, Shield, Star } from "lucide-react";
+import { Clock3, Home, Mail, MapPin, Monitor, Phone } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
 import { AreasSection as SharedAreasSection, FinancingStrip as SharedFinancingStrip, LeadFormSection as SharedLeadFormSection } from "./template-utils";
 
@@ -25,7 +25,6 @@ const cls = (...values: Array<string | false | null | undefined>) => values.filt
 const section = <T,>(page: CMSPage, type: string) => page.sections.find((entry) => entry.is_active && entry.type === type)?.data as T | undefined;
 const sections = <T,>(page: CMSPage, type: string) => page.sections.filter((entry) => entry.is_active && entry.type === type).map((entry) => entry.data as T);
 const media = (value?: string | null, fallback = "") => FALLBACK_MEDIA[value || ""] || value || fallback;
-const opts = (value?: Array<string | { label: string; value: string }> | null) => (value || []).map((item) => typeof item === "string" ? { label: item, value: item } : item);
 
 const IN_PERSON_SLOTS = [
   "8:00 AM - 10:00 AM",
@@ -56,12 +55,32 @@ const REMOTE_SATURDAY_SLOTS = [
   "2:00 PM - 3:00 PM",
 ];
 
-const selectChevronStyle = {
-  backgroundImage:
-    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235C677D' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E\")",
-  backgroundRepeat: "no-repeat",
-  backgroundPosition: "right 16px center",
-};
+type ContactTrustIcon = "star" | "check" | "license";
+
+const CONTACT_TRUST_ITEMS: Array<{ label: string; url: string; icon: ContactTrustIcon; external?: boolean }> = [
+  {
+    label: "Google Rating 4.9",
+    url: "https://www.google.com/maps/search/?api=1&query=BuiltWell+CT,+206A+Boston+Post+Road,+Orange,+CT+06477",
+    icon: "star",
+    external: true,
+  },
+  {
+    label: "Trusted on Houzz",
+    url: "#houzz",
+    icon: "check",
+  },
+  {
+    label: "CT HIC License #0668405",
+    url: "https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx",
+    icon: "license",
+    external: true,
+  },
+  {
+    label: "Verified on Angi",
+    url: "#angi",
+    icon: "check",
+  },
+];
 
 function parts(text?: string | null, mark?: string | null) {
   const source = (text || "").trim();
@@ -81,8 +100,10 @@ function label(text: React.ReactNode, dark = false) {
 }
 
 function linkNode(href: string, children: React.ReactNode, className?: string, style?: React.CSSProperties) {
-  return /^https?:\/\//i.test(href) ? (
-    <a href={href} className={className} style={style} target="_blank" rel="noreferrer">{children}</a>
+  const isHttp = /^https?:\/\//i.test(href);
+  const isAnchorLike = href.startsWith("#") || href.startsWith("tel:") || href.startsWith("mailto:");
+  return isHttp || isAnchorLike ? (
+    <a href={href} className={className} style={style} target={isHttp ? "_blank" : undefined} rel={isHttp ? "noreferrer" : undefined}>{children}</a>
   ) : (
     <Link href={href} className={className} style={style}>{children}</Link>
   );
@@ -103,19 +124,37 @@ function dayFromISO(value: string) {
   return new Date(`${value}T12:00:00`).getDay();
 }
 
-function trustIcon(icon?: string) {
-  if (icon === "calendar") return <CalendarDays className="h-[22px] w-[22px]" />;
-  if (icon === "shield") return <Shield className="h-[22px] w-[22px]" />;
-  if (icon === "check") return <Check className="h-[22px] w-[22px]" />;
-  return <Star className="h-[22px] w-[22px] fill-current" />;
+function trustIcon(icon: ContactTrustIcon) {
+  if (icon === "star") {
+    return (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden>
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+      </svg>
+    );
+  }
+  if (icon === "license") {
+    return (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+        <rect x="3" y="4" width="18" height="16" rx="2" />
+        <path d="M8 2v4M16 2v4M3 10h18" />
+      </svg>
+    );
+  }
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M9 12l2 2 4-4" />
+    </svg>
+  );
 }
 
-function trustText(item: { label?: string; value?: string }) {
-  const label = (item.label || "").trim();
-  const value = (item.value || "").trim();
-  if (!label) return value;
-  if (!value) return label;
-  return label.toLowerCase().includes(value.toLowerCase()) ? label : `${label} ${value}`;
+function isOpenNowInEastern() {
+  const easternNow = new Date(new Date().toLocaleString("en-US", { timeZone: "America/New_York" }));
+  const day = easternNow.getDay();
+  const time = easternNow.getHours() + easternNow.getMinutes() / 60;
+  if (day >= 1 && day <= 5 && time >= 8 && time < 17) return true;
+  if (day === 6 && time >= 8 && time < 15) return true;
+  return false;
 }
 
 function mapEmbedFromAddress(address?: string | null) {
@@ -126,14 +165,12 @@ function mapEmbedFromAddress(address?: string | null) {
 
 export function ContactPageTemplate({ page }: { page: CMSPage }) {
   const pageRef = useRef<HTMLDivElement>(null);
-  const serviceWrapRef = useRef<HTMLDivElement>(null);
   const tomorrow = useMemo(() => tomorrowISO(), []);
 
   const hero = section<any>(page, "hero") || section<any>(page, "page_hero");
   const lead = section<any>(page, "lead_form");
   const areas = section<any>(page, "areas_served");
   const office = section<any>(page, "office_info");
-  const trust = section<any>(page, "trust_bar");
   const rich = sections<RichTextData>(page, "rich_text");
   const grids = sections<any>(page, "feature_grid");
   const consultIntro = rich.find((item) => item.style_variant !== "financing_strip");
@@ -141,30 +178,15 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
   const financing = rich.find((item) => item.style_variant === "financing_strip");
   const consultCards = grids[0]?.items || [];
   const expectCards = grids[1]?.items || [];
-  const rawTrustItems = trust?.items || [];
-  const trustStripOrdered = [
-    rawTrustItems.find((item: any) => /google/i.test(`${item?.label || ""} ${item?.value || ""}`)),
-    rawTrustItems.find((item: any) => /houzz/i.test(`${item?.label || ""} ${item?.value || ""}`)),
-    rawTrustItems.find((item: any) => /license|hic/i.test(`${item?.label || ""} ${item?.value || ""}`)),
-    rawTrustItems.find((item: any) => /angi|thumbtack/i.test(`${item?.label || ""} ${item?.value || ""}`)),
-  ].filter(Boolean);
-  const trustStripItems = [...new Set(trustStripOrdered)].concat(rawTrustItems).filter((item: any, index: number, arr: any[]) => arr.indexOf(item) === index).slice(0, 4);
-  const [countyOpen, setCountyOpen] = useState<Record<number, boolean>>({});
-  const [serviceOpen, setServiceOpen] = useState(false);
-  const [pickedServices, setPickedServices] = useState<string[]>([]);
-  const [formValues, setFormValues] = useState<Record<string, string>>({ contact_method: "call" });
-  const [fileNames, setFileNames] = useState<string[]>([]);
-  const [submitted, setSubmitted] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [scheduleMode, setScheduleMode] = useState<"in-person" | "remote">("in-person");
   const [scheduleCounty, setScheduleCounty] = useState<"fairfield" | "new-haven" | null>(null);
   const [scheduleDate, setScheduleDate] = useState(tomorrow);
   const [selectedSlot, setSelectedSlot] = useState<string>("");
   const [scheduleValues, setScheduleValues] = useState({ name: "", phone: "", email: "", zip: "" });
+  const [officeOpenNow, setOfficeOpenNow] = useState(false);
 
   const heroParts = parts(hero?.headline || hero?.title, "BuiltWell CT");
-  const leadParts = parts(lead?.title, lead?.title_highlight || "Project");
-  const areaParts = parts(areas?.title, areas?.highlight_text || "New Haven");
   const consultParts = parts(consultIntro?.title, "Consultation");
   const expectParts = parts(expectIntro?.title, "Expect");
   const officeParts = parts(office?.title || "Our Office & Location", "Location");
@@ -188,18 +210,14 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
   const fairfieldLine = fairfieldPhone
     ? `Dedicated local team serving Greenwich, Westport, Darien, New Canaan, Stamford, Norwalk, Fairfield, Ridgefield, and all surrounding towns.`
     : "Serving homeowners across Greenwich, Stamford, Norwalk, Westport, and nearby Fairfield County towns.";
-
-  const fields = lead?.fields || [];
-  const topFields = fields.filter((field: any) => !["checkbox_group", "radio_group", "textarea", "file", "select"].includes(field.type));
-  const servicesField = fields.find((field: any) => field.type === "checkbox_group");
-  const timeField = fields.find((field: any) => field.name === "best_time" || field.type === "select");
-  const contactField = fields.find((field: any) => field.type === "radio_group");
-  const messageField = fields.find((field: any) => field.type === "textarea");
-  const selectedServicesLabel = !pickedServices.length
-    ? "Select services"
-    : pickedServices.length <= 2
-      ? pickedServices.join(", ")
-      : `${pickedServices.length} services selected`;
+  const areasWithFallbackNote = useMemo(() => {
+    if (!areas) return areas;
+    if (areas.note || areas.note_html) return areas;
+    return {
+      ...areas,
+      note_html: "Not sure if we cover your area? <a href=\"/contact/\">Contact our Connecticut remodeling team</a> and we'll let you know.",
+    };
+  }, [areas]);
 
   const day = useMemo(() => dayFromISO(scheduleDate), [scheduleDate]);
   const isSaturday = day === 6;
@@ -210,28 +228,6 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
     if (scheduleMode === "in-person") return isSaturday ? [] : IN_PERSON_SLOTS;
     return isSaturday ? REMOTE_SATURDAY_SLOTS : REMOTE_WEEKDAY_SLOTS;
   }, [isSaturday, isSunday, scheduleMode]);
-
-  useEffect(() => {
-    if (!serviceOpen) return;
-
-    const onDocumentClick = (event: MouseEvent) => {
-      if (serviceWrapRef.current && !serviceWrapRef.current.contains(event.target as Node)) {
-        setServiceOpen(false);
-      }
-    };
-
-    const onEsc = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setServiceOpen(false);
-    };
-
-    document.addEventListener("mousedown", onDocumentClick);
-    document.addEventListener("keydown", onEsc);
-
-    return () => {
-      document.removeEventListener("mousedown", onDocumentClick);
-      document.removeEventListener("keydown", onEsc);
-    };
-  }, [serviceOpen]);
 
   useEffect(() => {
     if (!scheduleOpen) return;
@@ -273,6 +269,13 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
 
     elements.forEach((element) => observer.observe(element));
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const updateStatus = () => setOfficeOpenNow(isOpenNowInEastern());
+    updateStatus();
+    const interval = window.setInterval(updateStatus, 60000);
+    return () => window.clearInterval(interval);
   }, []);
 
   const openScheduleModal = (type: "in-person" | "remote") => {
@@ -349,24 +352,34 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
       </section>
 
       <div className="contact-fade-up contact-lead-wrap">
-        <SharedLeadFormSection page={page} data={lead} accent={lead?.title_highlight || "Consultation"} />
+        <SharedLeadFormSection
+          page={page}
+          data={{ ...(lead || {}), title: "Tell Us About Your Project", title_highlight: "Project" }}
+          accent="Project"
+        />
       </div>
 
       <section className="contact-fade-up contact-reveal-stagger contact-trust-strip" role="region" aria-label="Trust indicators">
         <div className="contact-trust-strip-inner">
-          {trustStripItems.map((item: any, index: number) => (
-            <div key={`${item.label || "trust"}-${item.value || "value"}-${index}`} className="contents">
-              {item?.url
-                ? linkNode(item.url, <><span className="contact-trust-strip-icon">{trustIcon(item.icon)}</span><span>{trustText(item)}</span></>, "contact-stagger-item contact-trust-strip-item", staggerStyle(index))
-                : <div className="contact-stagger-item contact-trust-strip-item" style={staggerStyle(index)}><span className="contact-trust-strip-icon">{trustIcon(item.icon)}</span><span>{trustText(item)}</span></div>}
-              {index < trustStripItems.length - 1 ? <div className="contact-trust-strip-divider" /> : null}
+          {CONTACT_TRUST_ITEMS.map((item, index) => (
+            <div key={`${item.label}-${index}`} className="contents">
+              {linkNode(
+                item.url,
+                <>
+                  <span className="contact-trust-strip-icon">{trustIcon(item.icon)}</span>
+                  <span>{item.label}</span>
+                </>,
+                "contact-stagger-item contact-trust-strip-item",
+                staggerStyle(index),
+              )}
+              {index < CONTACT_TRUST_ITEMS.length - 1 ? <div className="contact-trust-strip-divider" /> : null}
             </div>
           ))}
         </div>
       </section>
 
       <div className="contact-fade-up contact-areas-wrap">
-        <SharedAreasSection data={areas} />
+        <SharedAreasSection data={areasWithFallbackNote} />
       </div>
 
             {office ? (
@@ -402,7 +415,7 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
                         </div>
                       ))}
                     </div>
-                    <span className="hours-status">{"\u2022"} Closed</span>
+                    <span className={cls("hours-status", officeOpenNow ? "is-open" : "is-closed")}>{officeOpenNow ? "Open Now" : "Closed"}</span>
                   </div>
                 </div>
 
@@ -449,7 +462,14 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
             {consultIntro?.content || consultIntro?.body ? <p className="mx-auto mt-3 max-w-[780px] text-[15px] leading-[1.8] text-[#5c677d]">{consultIntro?.content || consultIntro?.body}</p> : null}
           </div>
           <div className="contact-fade-up contact-reveal-stagger grid gap-7 md:grid-cols-2">
-            {consultCards.map((item: any, index: number) => <article key={`${item.title || "consult"}-${index}`} style={staggerStyle(index)} className="contact-stagger-item flex flex-col rounded-[8px] border-b-2 border-b-transparent bg-white p-8 shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"><div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#bc9155] bg-[#bc91551f] text-[#bc9155]">{index === 0 ? <Home className="h-6 w-6" /> : <Monitor className="h-6 w-6" />}</div><h3 className="text-[20px] font-bold">{item.title}</h3><p className="mt-3 text-[15px] leading-[1.7] text-[#5c677d]">{item.description}</p><button type="button" onClick={() => openScheduleModal(index === 0 ? "in-person" : "remote")} className="mt-5 inline-flex min-w-[200px] items-center justify-center rounded-[4px] bg-[#bc9155] px-8 py-3 text-[14px] font-semibold text-white transition-colors duration-300 hover:bg-[#9a7340]">{index === 0 ? "Book In-Person" : "Book Remote"}</button></article>)}
+            {consultCards.map((item: any, index: number) => (
+              <article key={`${item.title || "consult"}-${index}`} style={staggerStyle(index)} className="contact-stagger-item contact-consult-card">
+                <div className="contact-consult-card-icon">{index === 0 ? <Home className="h-6 w-6" /> : <Monitor className="h-6 w-6" />}</div>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+                <button type="button" onClick={() => openScheduleModal(index === 0 ? "in-person" : "remote")} className="contact-consult-card-btn">{index === 0 ? "Book In-Person" : "Book Remote"}</button>
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -461,8 +481,14 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
             <h2 className="text-[clamp(32px,3.5vw,48px)] font-bold tracking-[-0.02em]">{expectParts.before}{expectParts.accent ? <span className="text-[#bc9155]">{expectParts.accent}</span> : null}{expectParts.after}</h2>
             {expectIntro?.content || expectIntro?.body ? <p className="mx-auto mt-3 max-w-[720px] text-[15px] leading-[1.8] text-[#5c677d]">{expectIntro?.content || expectIntro?.body}</p> : null}
           </div>
-          <div className="contact-fade-up contact-reveal-stagger grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            {expectCards.map((item: any, index: number) => <article key={`${item.title || "expect"}-${index}`} style={staggerStyle(index)} className="contact-stagger-item rounded-[8px] border-b-2 border-b-transparent bg-white px-4 pb-8 pt-7 text-center shadow-[0_2px_12px_rgba(30,43,67,0.06)] transition-all duration-300 hover:-translate-y-1.5 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.08)]"><div className="mx-auto mb-4 flex h-[52px] w-[52px] items-center justify-center rounded-full border-2 border-[#bc9155] bg-[#bc91551f] text-[20px] font-bold text-[#bc9155]">{index + 1}</div><h4 className="text-[17px] font-bold">{item.title}</h4><p className="mt-2.5 text-[14px] leading-[1.65] text-[#5c677d]">{item.description}</p></article>)}
+          <div className="contact-fade-up contact-reveal-stagger contact-expect-grid">
+            {expectCards.map((item: any, index: number) => (
+              <article key={`${item.title || "expect"}-${index}`} style={staggerStyle(index)} className="contact-stagger-item contact-expect-step">
+                <div className="contact-expect-step-num">{index + 1}</div>
+                <h4>{item.title}</h4>
+                <p>{item.description}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -488,6 +514,16 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
           </div></div></div> : null}
 
       <style jsx global>{`
+        [data-contact-page] {
+          --contact-hover-fast: 0.22s;
+          --contact-hover-mid: 0.35s;
+          --contact-hover-ease: cubic-bezier(0.4, 0, 0.2, 1);
+          --contact-lift-sm: -2px;
+          --contact-lift-md: -4px;
+          --contact-lift-lg: -6px;
+          --contact-card-shadow-hover: 0 12px 28px rgba(30, 43, 67, 0.1), 0 28px 56px rgba(30, 43, 67, 0.12);
+        }
+
         [data-contact-page] .contact-fade-up {
           opacity: 0;
           transform: translateY(30px);
@@ -502,7 +538,7 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
         [data-contact-page] .contact-reveal-stagger .contact-stagger-item {
           opacity: 0;
           transform: translateY(24px);
-          transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: opacity 0.7s ease, transform 0.7s ease;
           transition-delay: calc(var(--contact-stagger-index, 0) * 90ms + 40ms);
         }
 
@@ -518,7 +554,7 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
         [data-contact-page] .contact-greensky-wrap .bw-financing-strip-inner {
           opacity: 0;
           transform: translateY(24px);
-          transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: opacity 0.7s ease, transform 0.7s ease;
         }
 
         [data-contact-page] .contact-lead-wrap.contact-fade-up-visible .bw-cta-header,
@@ -542,6 +578,44 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
 
         [data-contact-page] .contact-lead-wrap.contact-fade-up-visible .bw-contact-form-wrap {
           transition-delay: 220ms;
+        }
+
+        [data-contact-page] .contact-page-hero a,
+        [data-contact-page] .contact-page-hero button,
+        [data-contact-page] .contact-lead-wrap a,
+        [data-contact-page] .contact-lead-wrap button,
+        [data-contact-page] .contact-areas-wrap a,
+        [data-contact-page] .contact-areas-wrap button,
+        [data-contact-page] .contact-location-section a,
+        [data-contact-page] .contact-location-section button,
+        [data-contact-page] .contact-trust-strip a,
+        [data-contact-page] .contact-greensky-wrap a,
+        [data-contact-page] .contact-greensky-wrap button,
+        [data-contact-page] .contact-consult-card button,
+        [data-contact-page] .contact-schedule-modal button {
+          transition:
+            color var(--contact-hover-fast) ease,
+            background-color var(--contact-hover-fast) ease,
+            border-color var(--contact-hover-fast) ease,
+            box-shadow var(--contact-hover-mid) var(--contact-hover-ease),
+            transform var(--contact-hover-mid) var(--contact-hover-ease);
+        }
+
+        [data-contact-page] .contact-areas-wrap .bw-areas-note {
+          margin-top: 32px;
+          text-align: center;
+          font-size: 14px;
+          color: #5c677d;
+        }
+
+        [data-contact-page] .contact-areas-wrap .bw-areas-note a {
+          color: #bc9155;
+          font-weight: 600;
+          text-decoration: underline;
+        }
+
+        [data-contact-page] .contact-areas-wrap .bw-areas-note a:hover {
+          color: #9a7340;
         }
 
         [data-contact-page] .contact-location-section {
@@ -606,6 +680,7 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
           justify-content: center;
           color: #bc9155;
           flex-shrink: 0;
+          transition: transform var(--contact-hover-mid) var(--contact-hover-ease), border-color var(--contact-hover-fast) ease, background-color var(--contact-hover-fast) ease;
         }
 
         [data-contact-page] .contact-detail-icon :global(svg) {
@@ -638,7 +713,6 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
         [data-contact-page] .contact-detail-text a {
           color: #fff;
           font-weight: 600;
-          transition: color 0.2s;
         }
 
         [data-contact-page] .contact-detail-text a:hover {
@@ -671,7 +745,35 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
           font-weight: 600;
           margin-top: 8px;
           letter-spacing: 0.3px;
-          color: #d85f5f;
+        }
+
+        [data-contact-page] .hours-status::before {
+          content: "";
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          animation: contact-pulse-dot 2s ease-in-out infinite;
+        }
+
+        [data-contact-page] .hours-status.is-open {
+          color: #5cb85c;
+        }
+
+        [data-contact-page] .hours-status.is-open::before {
+          background: #5cb85c;
+        }
+
+        [data-contact-page] .hours-status.is-closed {
+          color: #e74c3c;
+        }
+
+        [data-contact-page] .hours-status.is-closed::before {
+          background: #e74c3c;
+        }
+
+        @keyframes contact-pulse-dot {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.5; transform: scale(0.8); }
         }
 
         [data-contact-page] .contact-map-col {
@@ -705,6 +807,148 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
         [data-contact-page] .fairfield-note strong {
           color: #bc9155;
           font-weight: 700;
+        }
+
+        [data-contact-page] .contact-consult-card {
+          background: #fff;
+          border-radius: 8px;
+          padding: 32px;
+          border-bottom: 2px solid transparent;
+          box-shadow: 0 2px 12px rgba(30, 43, 67, 0.06), 0 1px 3px rgba(30, 43, 67, 0.04);
+          transition: all var(--contact-hover-mid) var(--contact-hover-ease);
+          display: flex;
+          flex-direction: column;
+        }
+
+        [data-contact-page] .contact-consult-card:hover {
+          transform: translateY(var(--contact-lift-md));
+          border-bottom-color: #bc9155;
+          box-shadow: var(--contact-card-shadow-hover);
+        }
+
+        [data-contact-page] .contact-reveal-stagger.contact-fade-up-visible .contact-stagger-item.contact-consult-card:hover {
+          transform: translateY(var(--contact-lift-md));
+        }
+
+        [data-contact-page] .contact-consult-card-icon {
+          width: 56px;
+          height: 56px;
+          border-radius: 50%;
+          background: rgba(188, 145, 85, 0.12);
+          border: 2px solid #bc9155;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 20px;
+          color: #bc9155;
+          transition: transform var(--contact-hover-mid) var(--contact-hover-ease), box-shadow var(--contact-hover-mid) var(--contact-hover-ease);
+        }
+
+        [data-contact-page] .contact-consult-card:hover .contact-consult-card-icon {
+          transform: translateY(var(--contact-lift-sm));
+          box-shadow: 0 8px 18px rgba(188, 145, 85, 0.22);
+        }
+
+        [data-contact-page] .contact-consult-card h3 {
+          font-size: 20px;
+          margin-bottom: 12px;
+          font-weight: 700;
+        }
+
+        [data-contact-page] .contact-consult-card p {
+          font-size: 15px;
+          color: #5c677d;
+          line-height: 1.7;
+          margin-bottom: 20px;
+        }
+
+        [data-contact-page] .contact-consult-card-btn {
+          margin-top: auto;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 200px;
+          border: none;
+          border-radius: 4px;
+          background: #bc9155;
+          color: #fff;
+          font-size: 14px;
+          font-weight: 600;
+          padding: 14px 32px;
+          transition:
+            background-color var(--contact-hover-fast) ease,
+            transform var(--contact-hover-mid) var(--contact-hover-ease),
+            box-shadow var(--contact-hover-mid) var(--contact-hover-ease);
+          cursor: pointer;
+        }
+
+        [data-contact-page] .contact-consult-card-btn:hover {
+          background: #9a7340;
+          transform: translateY(var(--contact-lift-sm));
+          box-shadow: 0 4px 12px rgba(188, 145, 85, 0.3);
+        }
+
+        [data-contact-page] .contact-expect-step {
+          text-align: center;
+          padding: 28px 16px 32px;
+          background: #fff;
+          border-radius: 8px;
+          border-bottom: 2px solid transparent;
+          box-shadow: 0 2px 12px rgba(30, 43, 67, 0.06);
+          transition: all var(--contact-hover-mid) var(--contact-hover-ease);
+        }
+
+        [data-contact-page] .contact-expect-step:hover {
+          transform: translateY(-6px);
+          border-bottom-color: #bc9155;
+          box-shadow: 0 12px 28px rgba(30, 43, 67, 0.1), 0 28px 56px rgba(30, 43, 67, 0.08);
+        }
+
+        [data-contact-page] .contact-reveal-stagger.contact-fade-up-visible .contact-stagger-item.contact-expect-step:hover {
+          transform: translateY(-6px);
+        }
+
+        [data-contact-page] .contact-expect-step-num {
+          width: 52px;
+          height: 52px;
+          border-radius: 50%;
+          background: rgba(188, 145, 85, 0.12);
+          border: 2px solid #bc9155;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 16px;
+          font-family: "Playfair Display", serif;
+          font-size: 20px;
+          font-weight: 700;
+          color: #bc9155;
+          transition: transform var(--contact-hover-mid) var(--contact-hover-ease), box-shadow var(--contact-hover-mid) var(--contact-hover-ease);
+        }
+
+        [data-contact-page] .contact-expect-step:hover .contact-expect-step-num {
+          transform: translateY(var(--contact-lift-sm));
+          box-shadow: 0 8px 18px rgba(188, 145, 85, 0.22);
+        }
+
+        [data-contact-page] .contact-expect-step h4 {
+          font-size: 17px;
+          margin-bottom: 10px;
+          font-family: "Playfair Display", serif;
+          font-weight: 700;
+          color: #1e2b43;
+        }
+
+        [data-contact-page] .contact-expect-step p {
+          font-size: 14px;
+          color: #5c677d;
+          line-height: 1.65;
+          margin: 0;
+        }
+
+        [data-contact-page] .contact-expect-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 24px;
         }
 
         [data-contact-page] .contact-multiselect-checkbox {
@@ -757,7 +1001,7 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
           position: absolute;
           inset: 0;
           background: url("/hero/builtwell-job-site-aerial-hero-ct.jpg") center/cover no-repeat;
-          opacity: 0.12;
+          opacity: 0.06;
         }
 
         [data-contact-page] .contact-trust-strip-inner {
@@ -783,7 +1027,7 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
           letter-spacing: 0.4px;
           white-space: nowrap;
           text-decoration: none;
-          transition: all 0.3s;
+          transition: all var(--contact-hover-mid) var(--contact-hover-ease);
           padding: 20px 32px;
           flex: 1;
           min-width: 180px;
@@ -792,7 +1036,11 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
 
         [data-contact-page] .contact-trust-strip-item:hover {
           color: #bc9155;
-          transform: translateY(-2px);
+          transform: translateY(var(--contact-lift-sm));
+        }
+
+        [data-contact-page] .contact-reveal-stagger.contact-fade-up-visible .contact-stagger-item.contact-trust-strip-item:hover {
+          transform: translateY(var(--contact-lift-sm));
         }
 
         [data-contact-page] .contact-trust-strip-icon {
@@ -803,6 +1051,7 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
           display: inline-flex;
           justify-content: center;
           align-items: center;
+          transition: transform var(--contact-hover-mid) var(--contact-hover-ease), filter var(--contact-hover-mid) var(--contact-hover-ease);
         }
 
         [data-contact-page] .contact-trust-strip-icon :global(svg) {
@@ -815,6 +1064,57 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
           height: 40px;
           background: rgba(255, 255, 255, 0.1);
           flex-shrink: 0;
+        }
+
+        [data-contact-page] .contact-trust-strip-item:hover .contact-trust-strip-icon {
+          transform: translateY(var(--contact-lift-sm));
+          filter: drop-shadow(0 6px 12px rgba(188, 145, 85, 0.36));
+        }
+
+        [data-contact-page] .contact-detail-item:hover .contact-detail-icon {
+          transform: translateY(var(--contact-lift-sm));
+          background: rgba(188, 145, 85, 0.14);
+          border-color: rgba(188, 145, 85, 0.3);
+        }
+
+        [data-contact-page] .contact-lead-wrap .bw-form-submit:hover,
+        [data-contact-page] .contact-greensky-wrap .bw-financing-strip-cta:hover {
+          transform: translateY(var(--contact-lift-sm));
+        }
+
+        [data-contact-page] .contact-areas-wrap .bw-area-card {
+          transition: all var(--contact-hover-mid) var(--contact-hover-ease);
+        }
+
+        [data-contact-page] .contact-areas-wrap .bw-area-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 16px 40px rgba(30, 43, 67, 0.1), 0 32px 64px rgba(30, 43, 67, 0.08);
+        }
+
+        [data-contact-page] .contact-areas-wrap .bw-area-town,
+        [data-contact-page] .contact-areas-wrap .bw-area-towns-toggle,
+        [data-contact-page] .contact-areas-wrap .bw-area-link,
+        [data-contact-page] .contact-areas-wrap .bw-areas-subtitle-link,
+        [data-contact-page] .contact-lead-wrap .bw-form-consent-link {
+          transition:
+            color var(--contact-hover-fast) ease,
+            background-color var(--contact-hover-fast) ease,
+            border-color var(--contact-hover-fast) ease,
+            gap var(--contact-hover-mid) var(--contact-hover-ease);
+        }
+
+        [data-contact-page] .contact-greensky-wrap .bw-financing-strip-cta {
+          transition:
+            background-color var(--contact-hover-fast) ease,
+            transform var(--contact-hover-mid) var(--contact-hover-ease),
+            box-shadow var(--contact-hover-mid) var(--contact-hover-ease);
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+          [data-contact-page] .contact-lead-wrap .bw-form-submit:hover,
+          [data-contact-page] .contact-greensky-wrap .bw-financing-strip-cta:hover {
+            transform: translateY(var(--contact-lift-sm));
+          }
         }
 
         [data-contact-page] .contact-schedule-title {
@@ -830,6 +1130,11 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
         }
 
         @media (max-width: 1024px) {
+          [data-contact-page] .contact-expect-grid {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+          }
+
           [data-contact-page] .contact-location-grid {
             grid-template-columns: 1fr;
             gap: 24px;
@@ -883,6 +1188,11 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
 
           [data-contact-page] .contact-trust-strip-divider {
             display: none;
+          }
+
+          [data-contact-page] .contact-expect-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
           }
 
           [data-contact-page] .contact-location-section {
@@ -1001,6 +1311,11 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
             padding-bottom: 32px;
           }
 
+          [data-contact-page] .contact-expect-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+
           [data-contact-page] .contact-location-section {
             padding: 36px 16px 0;
           }
@@ -1051,6 +1366,17 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
             opacity: 1;
             transform: none;
             transition: none;
+          }
+
+          [data-contact-page] .contact-trust-strip-item,
+          [data-contact-page] .contact-trust-strip-item:hover {
+            transform: none;
+            text-shadow: none;
+          }
+
+          [data-contact-page] .contact-trust-strip-item:hover .contact-trust-strip-icon,
+          [data-contact-page] .contact-trust-strip-icon:hover {
+            transform: none;
           }
         }
       `}</style>

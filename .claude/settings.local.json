@@ -35,7 +35,9 @@
       "Bash(cp \"$BASE/hero/builtwell-team-van-consultation-hero-ct.jpg\" \"$DEST/hero/\")",
       "Bash(cp \"$BASE/team/builtwell-owner-handshake-client-ct-02.jpg\" \"$DEST/team/\")",
       "Bash(for file:*)",
-      "Bash(do echo:*)"
+      "Bash(do echo:*)",
+      "Bash(ls -la /c/Users/georg/OneDrive/Documents/GitHub/builtwell-frontend/*.json)",
+      "Bash(node -e \":*)"
     ]
   }
 }

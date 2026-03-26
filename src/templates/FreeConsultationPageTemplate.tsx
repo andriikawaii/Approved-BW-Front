@@ -3,9 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import type { CMSPage } from '@/types/cms';
-import { AreasSection as SharedAreasSection, FinancingStrip as SharedFinancingStrip, LeadFormSection as SharedLeadFormSection } from './template-utils';
 
-// ─── helpers ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type HeroData = {
   title?: string | null;
@@ -16,36 +15,16 @@ type HeroData = {
   cta_primary?: { label?: string; url?: string } | null;
 };
 
-type LeadFormData = {
-  eyebrow?: string | null;
-  title?: string | null;
-  title_highlight?: string | null;
-  subtitle?: string | null;
-  images?: string[] | null;
-  fields?: LeadField[] | null;
-  submit_label?: string | null;
-  consent_text?: string | null;
-};
-
-type LeadField = {
-  name: string;
-  label: string;
-  type: string;
-  required?: boolean;
-  options?: Array<string | { label: string; value: string }>;
-  placeholder?: string;
-};
-
 const getSection = <T,>(page: CMSPage, type: string): T | undefined =>
   page.sections.find((s) => s.is_active && s.type === type)?.data as T | undefined;
 
-// ─── static data ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ static data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const STEPS = [
   {
     num: 1,
     title: 'Contact Us',
-    body: 'Contact us by phone or through the contact form. Tell us what you\'re working on and where you\'re located.',
+    body: 'Call, text, or fill out our form. Tell us what you are working on and where you are located.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="#BC9155" strokeWidth="1.5" width="28" height="28" aria-hidden="true">
         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
@@ -68,7 +47,7 @@ const STEPS = [
   {
     num: 3,
     title: 'We Assess',
-    body: 'We discuss your goals, assess the space, check existing conditions (plumbing, electrical, subfloor, moisture), and answer every question.',
+    body: 'We discuss your goals, assess the space, check existing conditions, and answer every question.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="#BC9155" strokeWidth="1.5" width="28" height="28" aria-hidden="true">
         <circle cx="11" cy="11" r="8" />
@@ -79,7 +58,7 @@ const STEPS = [
   {
     num: 4,
     title: 'Written Estimate',
-    body: 'We prepare a detailed written estimate covering scope, materials, timeline, and cost. Delivered within 3 to 5 business days.',
+    body: 'A detailed written estimate covering scope, materials, timeline, and cost. Delivered within 3 to 5 business days.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="#BC9155" strokeWidth="1.5" width="28" height="28" aria-hidden="true">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -103,15 +82,15 @@ const STEPS = [
   },
 ];
 
-const FAIRFIELD_TOWNS_PRIMARY = ['Greenwich', 'Stamford', 'Norwalk', 'Westport', 'Darien', 'New Canaan', 'Fairfield', 'Ridgefield'];
-const FAIRFIELD_TOWNS_MORE = ['Bethel', 'Bridgeport', 'Brookfield', 'Danbury', 'Easton', 'Monroe', 'New Fairfield', 'Newtown', 'Redding', 'Shelton', 'Sherman', 'Stratford', 'Trumbull', 'Weston', 'Wilton'];
+const FAIRFIELD_TOWNS_PRIMARY = ['Greenwich', 'Stamford', 'Norwalk', 'Westport', 'Darien', 'New Canaan', 'Fairfield', 'Ridgefield', 'Trumbull'];
+const FAIRFIELD_TOWNS_MORE = ['Bethel', 'Bridgeport', 'Brookfield', 'Danbury', 'Easton', 'Monroe', 'New Fairfield', 'Newtown', 'Redding', 'Shelton', 'Sherman', 'Stratford', 'Weston', 'Wilton'];
 const FAIRFIELD_TOWN_LINKS: Record<string, string> = {
   Greenwich: '/fairfield-county/greenwich-ct/', Stamford: '/fairfield-county/stamford-ct/', Norwalk: '/fairfield-county/norwalk-ct/',
   Westport: '/fairfield-county/westport-ct/', Darien: '/fairfield-county/darien-ct/', 'New Canaan': '/fairfield-county/new-canaan-ct/',
-  Fairfield: '/fairfield-county/fairfield-ct/', Ridgefield: '/fairfield-county/ridgefield-ct/',
+  Fairfield: '/fairfield-county/fairfield-ct/', Ridgefield: '/fairfield-county/ridgefield-ct/', Trumbull: '/fairfield-county/',
 };
-const NEW_HAVEN_TOWNS_PRIMARY = ['Orange', 'New Haven', 'Hamden', 'Branford', 'Guilford', 'Madison', 'Woodbridge', 'Milford'];
-const NEW_HAVEN_TOWNS_MORE = ['Ansonia', 'Beacon Falls', 'Bethany', 'Cheshire', 'Derby', 'East Haven', 'Meriden', 'Middlebury', 'Naugatuck', 'North Branford', 'North Haven', 'Oxford', 'Prospect', 'Seymour', 'Southbury', 'Wallingford', 'Waterbury', 'West Haven', 'Wolcott'];
+const NEW_HAVEN_TOWNS_PRIMARY = ['Orange', 'New Haven', 'Hamden', 'Branford', 'Guilford', 'Madison', 'Woodbridge', 'Milford', 'Cheshire'];
+const NEW_HAVEN_TOWNS_MORE = ['Ansonia', 'Beacon Falls', 'Bethany', 'Derby', 'East Haven', 'Meriden', 'Middlebury', 'Naugatuck', 'North Branford', 'North Haven', 'Oxford', 'Prospect', 'Seymour', 'Southbury', 'Wallingford', 'Waterbury', 'West Haven', 'Wolcott'];
 const NEW_HAVEN_TOWN_LINKS: Record<string, string> = {
   Orange: '/new-haven-county/orange-ct/', 'New Haven': '/new-haven-county/new-haven-ct/', Hamden: '/new-haven-county/hamden-ct/',
   Branford: '/new-haven-county/branford-ct/', Guilford: '/new-haven-county/guilford-ct/', Madison: '/new-haven-county/madison-ct/',
@@ -124,17 +103,17 @@ const SERVICES = [
   'Decks & Porches', 'Design & Planning', 'Comfort & Accessibility', 'Other',
 ];
 
-const IN_PERSON_SLOTS = ['8:00 AM – 10:00 AM', '10:00 AM – 12:00 PM', '12:00 PM – 2:00 PM', '2:00 PM – 4:00 PM'];
-const REMOTE_WEEKDAY = ['8:00 AM – 9:00 AM', '9:00 AM – 10:00 AM', '10:00 AM – 11:00 AM', '11:00 AM – 12:00 PM', '12:00 PM – 1:00 PM', '1:00 PM – 2:00 PM', '2:00 PM – 3:00 PM', '3:00 PM – 4:00 PM', '4:00 PM – 5:00 PM', '5:00 PM – 6:00 PM'];
-const REMOTE_SAT = ['9:00 AM – 10:00 AM', '10:00 AM – 11:00 AM', '11:00 AM – 12:00 PM', '12:00 PM – 1:00 PM', '1:00 PM – 2:00 PM', '2:00 PM – 3:00 PM'];
+const IN_PERSON_SLOTS = ['8:00 AM - 10:00 AM', '10:00 AM - 12:00 PM', '12:00 PM - 2:00 PM', '2:00 PM - 4:00 PM'];
+const REMOTE_WEEKDAY = ['8:00 AM - 9:00 AM', '9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '11:00 AM - 12:00 PM', '12:00 PM - 1:00 PM', '1:00 PM - 2:00 PM', '2:00 PM - 3:00 PM', '3:00 PM - 4:00 PM', '4:00 PM - 5:00 PM', '5:00 PM - 6:00 PM'];
+const REMOTE_SAT = ['9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '11:00 AM - 12:00 PM', '12:00 PM - 1:00 PM', '1:00 PM - 2:00 PM', '2:00 PM - 3:00 PM'];
 
 const RELATED = [
-  { href: '/kitchen-remodeling/', img: '/images/services/service-kitchen.jpg', alt: 'Kitchen remodeling by BuiltWell CT', title: 'Kitchen Remodeling', body: 'Full-service kitchen renovations from cabinet and countertop updates to complete gut remodels with layout changes throughout Connecticut.' },
-  { href: '/bathroom-remodeling/', img: '/images/services/bathroom-remodel-new.jpg', alt: 'Bathroom remodeling by BuiltWell CT', title: 'Bathroom Remodeling', body: 'Complete bathroom renovations including tile, vanities, showers, tubs, and plumbing upgrades throughout Connecticut.' },
-  { href: '/basement-finishing/', img: '/images/services/basement-finish-real.jpeg', alt: 'Basement finishing by BuiltWell CT', title: 'Basement Finishing', body: 'Transform your unfinished basement into functional living space with framing, insulation, electrical, flooring, and full finish work.' },
+  { href: '/kitchen-remodeling/', img: '/services/kitchen-remodeling-ct.jpg', alt: 'Kitchen remodeling by BuiltWell CT in Connecticut', title: 'Kitchen Remodeling', body: 'Full-service kitchen renovations from cabinet and countertop updates to complete gut remodels with layout changes throughout Connecticut.' },
+  { href: '/bathroom-remodeling/', img: '/services/bathroom-remodeling-ct.jpg', alt: 'Bathroom remodeling by BuiltWell CT in Connecticut', title: 'Bathroom Remodeling', body: 'Complete bathroom renovations including tile, vanities, showers, tubs, and plumbing upgrades throughout Connecticut.' },
+  { href: '/basement-finishing/', img: '/services/basement-finishing-ct.jpg', alt: 'Basement finishing by BuiltWell CT in Connecticut', title: 'Basement Finishing', body: 'Transform your unfinished basement into functional living space with framing, insulation, electrical, flooring, and full finish work.' },
 ];
 
-// ─── sub-components ───────────────────────────────────────────────────────────
+// â”€â”€â”€ sub-components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -159,48 +138,38 @@ function TownPill({ town, href, secondary }: { town: string; href?: string; seco
   return <span style={base} className={secondary ? 'area-town-secondary' : undefined}>{town}</span>;
 }
 
-function StepCard({ step }: { step: typeof STEPS[0] }) {
-  return (
-    <div className="consultation-step-card" style={{ background: '#fff', borderRadius: 12, padding: '36px 24px 32px', textAlign: 'center', position: 'relative', border: '1px solid rgba(30,43,67,0.07)', borderBottom: '2px solid transparent', boxShadow: '0 2px 12px rgba(30,43,67,0.06)', transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)' }}>
-      <div style={{ position: 'absolute', top: -14, left: '50%', transform: 'translateX(-50%)', width: 28, height: 28, borderRadius: '50%', background: '#BC9155', color: '#fff', fontFamily: 'serif', fontSize: 14, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(188,145,85,0.3)' }}>
-        {step.num}
-      </div>
-      <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(188,145,85,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
-        {step.icon}
-      </div>
-      <h3 style={{ fontSize: 18, marginBottom: 10, fontFamily: 'Inter, sans-serif', fontWeight: 600, color: '#1E2B43' }}>{step.title}</h3>
-      <p style={{ fontSize: 14, color: '#5C677D', lineHeight: 1.65 }}>{step.body}</p>
-    </div>
-  );
-}
-
-function AreaCard({ county, phone, img, alt, desc, primaryTowns, moreTowns, townLinks, countyHref, showTop }: {
-  county: string; phone: string; img: string; alt: string; desc: string;
+function AreaCard({ county, phone, phoneLabel, img, alt, desc, primaryTowns, moreTowns, townLinks, countyHref, showTop }: {
+  county: string; phone: string; phoneLabel?: string; img: string; alt: string; desc: string;
   primaryTowns: string[]; moreTowns: string[]; townLinks: Record<string, string>;
   countyHref: string; showTop?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const tel = phone.replace(/\D/g, '');
+  const visiblePrimaryTowns = primaryTowns.slice(0, 8);
+  const hiddenPrimaryTowns = primaryTowns.slice(8);
+  const extraTowns = [...hiddenPrimaryTowns, ...moreTowns];
   return (
-    <div className="area-card-hover" style={{ borderRadius: 12, background: '#fff', borderBottom: '3px solid transparent', boxShadow: '0 2px 12px rgba(30,43,67,0.06)', transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <div className="area-card-hover" style={{ borderRadius: 12, background: '#fff', borderBottom: '3px solid transparent', boxShadow: '0 2px 12px rgba(30,43,67,0.06)', transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', alignSelf: 'start', height: 'fit-content' }}>
       <div style={{ width: '100%', height: 220, overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, background: 'linear-gradient(to top, rgba(30,43,67,0.4), transparent)', zIndex: 1, pointerEvents: 'none' }} />
         <img src={img} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: showTop ? 'top' : 'center', transition: 'transform 0.5s' }} className="area-card-img-inner" loading="lazy" decoding="async" />
       </div>
-      <div style={{ padding: '28px 28px 32px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+      <div style={{ padding: '28px 28px 32px', display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'center' }}>
         <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, marginBottom: 6, color: '#1E2B43' }}>{county}</h3>
         <p style={{ fontSize: 15, color: '#5C677D', marginBottom: 14 }}>
-          Call: <a href={`tel:${tel}`} style={{ color: '#BC9155', fontWeight: 600, textDecoration: 'none' }}>{phone}</a>
+          Call: <a href={`tel:${tel}`} style={{ color: '#BC9155', fontWeight: 600, textDecoration: 'none' }}>{phoneLabel || phone}</a>
         </p>
         <p style={{ fontSize: 14, lineHeight: 1.7, color: '#5C677D', marginBottom: 18, paddingBottom: 18, borderBottom: '1px solid rgba(30,43,67,0.06)' }}>{desc}</p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: 16 }}>
-          {primaryTowns.map((t) => <TownPill key={t} town={t} href={townLinks[t]} />)}
-          {expanded && moreTowns.map((t) => <TownPill key={t} town={t} href={townLinks[t]} secondary />)}
-          <button onClick={() => setExpanded(!expanded)} style={{ background: 'none', border: 'none', color: '#BC9155', fontSize: 13, fontWeight: 600, cursor: 'pointer', padding: '4px 0', gridColumn: '1 / -1', textAlign: 'center', marginTop: 4, transition: 'color 0.2s' }}>
-            {expanded ? 'Show Less ↑' : 'See All Towns +'}
-          </button>
+          {visiblePrimaryTowns.map((t) => <TownPill key={t} town={t} href={townLinks[t]} />)}
+          {expanded && extraTowns.map((t) => <TownPill key={t} town={t} href={townLinks[t]} secondary />)}
+          {extraTowns.length > 0 && (
+            <button onClick={() => setExpanded(!expanded)} style={{ background: 'none', border: 'none', color: '#BC9155', fontSize: 13, fontWeight: 600, cursor: 'pointer', padding: '4px 0', gridColumn: '1 / -1', textAlign: 'center', marginTop: 4, transition: 'color 0.2s' }}>
+              {expanded ? 'Show Less -' : 'See All Towns +'}
+            </button>
+          )}
         </div>
-        <Link href={countyHref} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 600, color: '#BC9155', textDecoration: 'none', marginTop: 4, transition: 'gap 0.3s' }} className="area-link-hover">
+        <Link href={countyHref} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: 14, fontWeight: 600, color: '#BC9155', textDecoration: 'none', marginTop: 4, transition: 'gap 0.3s' }} className="area-link-hover">
           Learn more about {county} <ArrowIcon />
         </Link>
       </div>
@@ -208,10 +177,10 @@ function AreaCard({ county, phone, img, alt, desc, primaryTowns, moreTowns, town
   );
 }
 
-// ─── scheduling modal ─────────────────────────────────────────────────────────
+// â”€â”€â”€ scheduling modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-function SchedulingModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [type, setType] = useState<'in-person' | 'remote'>('in-person');
+function SchedulingModal({ open, onClose, initialType = 'in-person' }: { open: boolean; onClose: () => void; initialType?: 'in-person' | 'remote' }) {
+  const [type, setType] = useState<'in-person' | 'remote'>(initialType);
   const [county, setCounty] = useState<string | null>(null);
   const [date, setDate] = useState('');
   const [slot, setSlot] = useState<string | null>(null);
@@ -226,7 +195,6 @@ function SchedulingModal({ open, onClose }: { open: boolean; onClose: () => void
 
   const dayOfWeek = date ? new Date(date + 'T12:00:00').getDay() : null;
   const isSat = dayOfWeek === 6;
-  const isSun = dayOfWeek === 0;
 
   const slots = type === 'in-person' ? (isSat ? [] : IN_PERSON_SLOTS) : (isSat ? REMOTE_SAT : REMOTE_WEEKDAY);
 
@@ -270,8 +238,8 @@ function SchedulingModal({ open, onClose }: { open: boolean; onClose: () => void
               <div key={t} onClick={() => { if (t === 'in-person' && isSat) return; setType(t); }}
                 style={{ padding: 16, borderRadius: 8, border: `2px solid ${type === t ? '#BC9155' : 'rgba(30,43,67,0.1)'}`, background: type === t ? 'rgba(188,145,85,0.1)' : '#fff', textAlign: 'center', cursor: t === 'in-person' && isSat ? 'not-allowed' : 'pointer', transition: 'all 0.2s', opacity: t === 'in-person' && isSat ? 0.4 : 1 }}>
                 {t === 'in-person'
-                  ? <><div style={{ marginBottom: 8, color: '#BC9155', display: 'flex', justifyContent: 'center' }}><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg></div><h4 style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, fontWeight: 600, marginBottom: 4 }}>In-Person Visit</h4><p style={{ fontSize: 12, color: '#5C677D', margin: 0 }}>We come to your home<br />Mon–Fri, 8am–4pm</p></>
-                  : <><div style={{ marginBottom: 8, color: '#BC9155', display: 'flex', justifyContent: 'center' }}><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg></div><h4 style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Google Meet</h4><p style={{ fontSize: 12, color: '#5C677D', margin: 0 }}>Video call from anywhere<br />Mon–Sat</p></>
+                  ? <><div style={{ marginBottom: 8, color: '#BC9155', display: 'flex', justifyContent: 'center' }}><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg></div><h4 style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, fontWeight: 600, marginBottom: 4 }}>In-Person Visit</h4><p style={{ fontSize: 12, color: '#5C677D', margin: 0 }}>We come to your home<br />Mon-Fri, 8am-4pm</p></>
+                  : <><div style={{ marginBottom: 8, color: '#BC9155', display: 'flex', justifyContent: 'center' }}><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg></div><h4 style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Google Meet</h4><p style={{ fontSize: 12, color: '#5C677D', margin: 0 }}>Video call from anywhere<br />Mon-Sat</p></>
                 }
               </div>
             ))}
@@ -336,18 +304,17 @@ function SchedulingModal({ open, onClose }: { open: boolean; onClose: () => void
   );
 }
 
-// ─── lead form section ────────────────────────────────────────────────────────
+// â”€â”€â”€ lead form section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-function LeadFormSection({ cmsData }: { cmsData?: LeadFormData }) {
+function LeadFormSection() {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [contactMethod, setContactMethod] = useState<'call' | 'text' | 'email'>('call');
   const [bestTime, setBestTime] = useState('');
   const [message, setMessage] = useState('');
-  const [fileName, setFileName] = useState('');
+  const [consent, setConsent] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
 
   const [formVals, setFormVals] = useState({ name: '', phone: '', email: '', zip: '' });
 
@@ -363,6 +330,10 @@ function LeadFormSection({ cmsData }: { cmsData?: LeadFormData }) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!consent) {
+      window.alert('Please accept the Privacy Policy and Terms before submitting.');
+      return;
+    }
     setSubmitted(true);
   };
 
@@ -387,7 +358,7 @@ function LeadFormSection({ cmsData }: { cmsData?: LeadFormData }) {
     <div style={{ background: '#fff', borderRadius: 10, padding: '32px 36px', border: '1px solid rgba(30,43,67,0.08)', boxShadow: '0 16px 48px rgba(30,43,67,0.1), 0 4px 12px rgba(30,43,67,0.04)' }}>
       <form onSubmit={handleSubmit}>
         {/* row 1: name, phone, email, zip */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginBottom: 0 }}>
+        <div className="fc-form-row" style={{ marginBottom: 0 }}>
           {(['name', 'phone', 'email', 'zip'] as const).map((field) => (
             <div key={field} style={{ marginBottom: 16 }}>
               <label style={labelStyle}>{field === 'name' ? 'Name *' : field === 'phone' ? 'Phone *' : field === 'email' ? 'Email *' : 'Zip Code *'}</label>
@@ -407,7 +378,7 @@ function LeadFormSection({ cmsData }: { cmsData?: LeadFormData }) {
           ))}
         </div>
         {/* row 2: services, best time, contact method */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginBottom: 16 }}>
+        <div className="fc-form-row" style={{ marginBottom: 16 }}>
           {/* multi-select services */}
           <div style={{ marginBottom: 0 }}>
             <label style={labelStyle}>Services Needed *</label>
@@ -436,9 +407,9 @@ function LeadFormSection({ cmsData }: { cmsData?: LeadFormData }) {
                 onFocus={(e) => { (e.target as HTMLSelectElement).style.borderColor = '#BC9155'; }}
                 onBlur={(e) => { (e.target as HTMLSelectElement).style.borderColor = 'rgba(30,43,67,0.15)'; }}>
                 <option value="" disabled>Select a time</option>
-                <option value="Morning (8am - 12pm)">Morning (8am – 12pm)</option>
-                <option value="Afternoon (12pm - 4pm)">Afternoon (12pm – 4pm)</option>
-                <option value="Evening (4pm - 6pm)">Evening (4pm – 6pm)</option>
+                <option value="Morning (8am - 12pm)">Morning (8am - 12pm)</option>
+                <option value="Afternoon (12pm - 4pm)">Afternoon (12pm - 4pm)</option>
+                <option value="Evening (4pm - 6pm)">Evening (4pm - 6pm)</option>
                 <option value="Anytime">Anytime</option>
               </select>
             </div>
@@ -458,31 +429,34 @@ function LeadFormSection({ cmsData }: { cmsData?: LeadFormData }) {
         {/* message */}
         <div style={{ marginBottom: 16 }}>
           <label style={labelStyle}>Tell Us About Your Project</label>
-          <textarea placeholder="Tell us about your project — what rooms, what changes, any timeline or budget considerations..." rows={4} value={message} onChange={(e) => setMessage(e.target.value)} style={{ ...inputStyle, resize: 'vertical', minHeight: 120, lineHeight: 1.6 }}
+          <textarea placeholder="Tell us about your project - what rooms, what changes, any timeline or budget considerations..." rows={4} value={message} onChange={(e) => setMessage(e.target.value)} style={{ ...inputStyle, resize: 'vertical', minHeight: 120, lineHeight: 1.6 }}
             onFocus={(e) => { (e.target as HTMLTextAreaElement).style.borderColor = '#BC9155'; }}
             onBlur={(e) => { (e.target as HTMLTextAreaElement).style.borderColor = 'rgba(30,43,67,0.15)'; }} />
         </div>
-        {/* upload + submit */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 8 }}>
-          <div>
-            <button type="button" onClick={() => fileRef.current?.click()} style={{ width: '100%', height: '100%', minHeight: 52, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '14px 20px', border: '1px solid rgba(30,43,67,0.15)', borderRadius: 8, background: '#fff', fontFamily: 'Inter, sans-serif', fontSize: 15, fontWeight: 600, color: '#1E2B43', cursor: 'pointer', transition: 'border-color 0.2s', letterSpacing: '0.3px', boxSizing: 'border-box' }} onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#BC9155'; }} onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(30,43,67,0.15)'; }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
-              Upload Photos
-            </button>
-            <input ref={fileRef} type="file" multiple accept="image/jpeg,image/png,image/heic,.heic" style={{ display: 'none' }} onChange={(e) => { const names = Array.from(e.target.files || []).map((f) => f.name); setFileName(names.join(', ')); }} />
-            {fileName && <p style={{ fontSize: 12, color: '#5C677D', marginTop: 6 }}>{fileName}</p>}
-          </div>
-          <button type="submit" style={{ width: '100%', minHeight: 52, padding: '14px 20px', background: '#BC9155', color: '#fff', border: 'none', borderRadius: 8, fontFamily: 'Inter, sans-serif', fontSize: 15, fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s', letterSpacing: '0.3px' }} onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = '#a57d48'; }} onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = '#BC9155'; }}>
-            Schedule Consultation
-          </button>
+        <div style={{ marginTop: 10, marginBottom: 8 }}>
+          <label style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 12, lineHeight: 1.5, color: '#6b7280', cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              checked={consent}
+              onChange={(e) => setConsent(e.target.checked)}
+              required
+              style={{ marginTop: 3, accentColor: '#C9A96E', minWidth: 16 }}
+            />
+            <span>
+              I agree to the <Link href="/privacy-policy/" style={{ color: '#C9A96E', textDecoration: 'underline' }}>Privacy Policy</Link> and <Link href="/terms/" style={{ color: '#C9A96E', textDecoration: 'underline' }}>Terms of Service</Link>. I consent to receive calls, texts (SMS), and emails from BuiltWell CT, including automated messages. Msg & data rates may apply. Reply STOP to opt out.
+            </span>
+          </label>
         </div>
+        <button type="submit" style={{ width: '100%', minHeight: 52, marginTop: 8, padding: '14px 20px', background: '#BC9155', color: '#fff', border: 'none', borderRadius: 8, fontFamily: 'Inter, sans-serif', fontSize: 15, fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s, transform 0.2s, box-shadow 0.2s', letterSpacing: '0.3px' }} onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = '#a57d48'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 12px rgba(188,145,85,0.3)'; }} onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = '#BC9155'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none'; }}>
+          Schedule Consultation
+        </button>
         <p style={{ fontSize: 13, color: '#5C677D', textAlign: 'center', marginTop: 16, fontStyle: 'italic' }}>We respond within 24 hours. No spam, no obligation.</p>
       </form>
     </div>
   );
 }
 
-// ─── fade-up animation ────────────────────────────────────────────────────────
+// â”€â”€â”€ fade-up animation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function FadeUp({ children, delay = 0, stretch }: { children: React.ReactNode; delay?: number; stretch?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -501,17 +475,17 @@ function FadeUp({ children, delay = 0, stretch }: { children: React.ReactNode; d
   );
 }
 
-// ─── main template ────────────────────────────────────────────────────────────
+// â”€â”€â”€ main template â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<'in-person' | 'remote'>('in-person');
 
   const heroData = (getSection<HeroData>(page, 'hero') || getSection<HeroData>(page, 'service_hero') || getSection<HeroData>(page, 'page_hero'));
-  const cmsFormData = getSection<LeadFormData>(page, 'lead_form');
 
   const heroTitle = heroData?.title || heroData?.headline || 'Schedule a Free Consultation';
-  const heroSubtitle = heroData?.subtitle || heroData?.subheadline || 'The consultation is where everything starts. It is free, there is no obligation, and it is how we make sure your project begins with a clear shared understanding of what you want and what it will take to deliver it.';
-  const heroBg = heroData?.background_image || '/portfolio/builtwell-contractor-client-consultation-ct.jpeg';
+  const heroSubtitle = heroData?.subtitle || heroData?.subheadline || 'Free, no obligation. We make sure your project starts right.';
+  const heroBg = heroData?.background_image || '/portfolio/builtwell-contractor-handshake-arrival-ct-optimized.jpg';
 
   // Split title on "Consultation" for gold accent
   const accentWord = 'Consultation';
@@ -525,11 +499,6 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
       <style>{`
         @media (prefers-reduced-motion: reduce) {
           .fade-up-inner { opacity: 1 !important; transform: none !important; transition: none !important; }
-        }
-        .consultation-step-card:hover {
-          transform: translateY(-4px);
-          border-bottom-color: #BC9155 !important;
-          box-shadow: 0 12px 28px rgba(30,43,67,0.1), 0 28px 56px rgba(30,43,67,0.08) !important;
         }
         .area-card-hover:hover {
           transform: translateY(-6px);
@@ -548,27 +517,82 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
         }
         .related-card-hover:hover .related-card-img { transform: scale(1.05); }
         .related-link-hover:hover { gap: 10px !important; }
-        .trust-item-hover:hover { background: rgba(188,145,85,0.08) !important; transform: translateY(-3px) !important; }
-        .trust-item-hover:hover .trust-number { color: #d4a95a !important; }
+        .trust-number {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 42px;
+        }
+        .trust-item-hover {
+          transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        .trust-item-hover:hover {
+          background: rgba(188,145,85,0.08) !important;
+          transform: translateY(-3px) !important;
+          box-shadow: inset 0 0 0 1px rgba(188,145,85,0.16);
+        }
+        .trust-item-hover:hover .trust-number {
+          color: #d4a95a !important;
+          text-shadow: 0 0 20px rgba(188,145,85,0.3);
+        }
+        .trust-item-hover:hover .trust-label { color: rgba(255,255,255,0.85) !important; }
         .trust-strip-item-hover:hover { color: #BC9155 !important; transform: translateY(-2px) !important; }
+        .trust-strip-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); flex-shrink: 0; }
+        .cta-img-wrap::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          width: 200px;
+          height: 200px;
+          background: radial-gradient(circle at bottom right, rgba(30,43,67,1) 0%, rgba(30,43,67,0.9) 25%, rgba(30,43,67,0.5) 50%, transparent 75%);
+          pointer-events: none;
+          border-radius: 0 0 8px 0;
+        }
+        .financing-strip-cta:hover {
+          background: #a57d48 !important;
+          transform: translateY(-1px) !important;
+          box-shadow: 0 4px 12px rgba(188,145,85,0.3) !important;
+        }
         .hero-cta-btn:hover { background: rgba(10,18,35,0.62) !important; transform: translateY(-2px) !important; box-shadow: 0 8px 24px rgba(0,0,0,0.3) !important; }
         .hero-cta-primary:hover { background: #d4a95a !important; box-shadow: 0 8px 24px rgba(188,145,85,0.4) !important; }
+        .steps-timeline { display: flex; gap: 0; position: relative; max-width: 1100px; margin: 0 auto; }
+        .step-item { flex: 1; text-align: center; padding: 0 20px; position: relative; }
+        .step-item::before { content: ''; position: absolute; top: 8px; left: 0; right: 0; height: 2px; background: rgba(188,145,85,0.25); z-index: 0; }
+        .step-item:first-child::before { left: 50%; }
+        .step-item:last-child::before { right: 50%; }
+        .step-dot { width: 18px; height: 18px; border-radius: 50%; background: #BC9155; margin: 0 auto 20px; position: relative; z-index: 1; box-shadow: 0 0 0 4px rgba(188,145,85,0.15); }
+        .step-item h3 { font-size: 16px; font-family: Inter, sans-serif; font-weight: 700; color: #1E2B43; margin-bottom: 8px; }
+        .step-item p { font-size: 13px; color: #5C677D; line-height: 1.6; }
+        .fc-form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .fc-form-bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
         @media (max-width: 768px) {
-          .steps-grid { grid-template-columns: 1fr !important; }
           .two-col-grid { grid-template-columns: 1fr !important; }
           .three-col-grid { grid-template-columns: 1fr !important; }
           .four-col-trust { grid-template-columns: repeat(2, 1fr) !important; }
           .trust-strip-inner-grid { flex-wrap: wrap !important; }
-          .trust-strip-item-hover { min-width: 50% !important; }
-          .hero-ctas-wrap { flex-direction: column !important; align-items: stretch !important; }
-          .hero-cta-btn { min-width: unset !important; }
+          .trust-strip-item-hover { min-width: 33.33% !important; }
+          .trust-strip-divider { display: none !important; }
+          .hero-ctas-wrap { flex-direction: column !important; align-items: center !important; }
+          .hero-cta-btn { width: 100%; max-width: 300px; min-height: 44px; justify-content: center; }
+          .steps-timeline { flex-direction: column; gap: 32px; align-items: flex-start; padding-left: 32px; }
+          .step-item { text-align: left; padding: 0; flex: 1 1 auto; }
+          .step-item p { display: none !important; }
+          .step-item::before { top: 0; bottom: 0; left: -24px; right: auto; width: 2px; height: auto; }
+          .step-item:first-child::before { top: 8px; left: -24px; }
+          .step-item:last-child::before { bottom: auto; height: 8px; left: -24px; }
+          .step-dot { position: absolute; left: -32px; top: 0; margin: 0; }
+          .fc-form-row, .fc-form-bottom-row { grid-template-columns: 1fr !important; }
+          .cta-img-wrap + .cta-img-wrap { display: none !important; }
         }
         @media (max-width: 1024px) {
-          .steps-grid { grid-template-columns: repeat(3, 1fr) !important; }
+          .steps-timeline { flex-wrap: wrap; }
+          .step-item { flex: 0 0 33.333%; padding: 12px; }
+          .cta-body-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
 
-      {/* ── HERO ─────────────────────────────────────────────────────────────── */}
+      {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#151E30', padding: '0 40px 48px', paddingTop: 120, color: '#fff', position: 'relative', overflow: 'hidden', minHeight: '50vh', display: 'flex', alignItems: 'stretch', isolation: 'isolate' }}>
         <img src={heroBg} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', opacity: 0.72, zIndex: 0 }} />
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 97% 97%, rgba(21,30,48,1) 0%, rgba(21,30,48,0.9) 8%, transparent 30%), radial-gradient(ellipse at 3% 97%, rgba(21,30,48,0.9) 0%, transparent 25%), linear-gradient(180deg, rgba(21,30,48,0.35) 0%, rgba(21,30,48,0.2) 30%, rgba(21,30,48,0.45) 65%, rgba(21,30,48,0.92) 100%)', zIndex: 1 }} />
@@ -576,51 +600,53 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
           {/* breadcrumb */}
           <ol style={{ display: 'flex', alignItems: 'center', gap: 0, fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.92)', marginBottom: 20, padding: 0, listStyle: 'none', textShadow: '0 1px 6px rgba(0,0,0,0.7)' }}>
             <li><Link href="/" style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none' }}>Home</Link></li>
-            <li style={{ display: 'flex', alignItems: 'center' }}><span style={{ color: '#BC9155', margin: '0 10px', fontSize: 12 }}>›</span><span style={{ color: '#fff', fontWeight: 600 }}>Free Consultation</span></li>
+            <li style={{ display: 'flex', alignItems: 'center' }}><span style={{ color: '#BC9155', margin: '0 10px', fontSize: 12 }}>&gt;</span><span style={{ color: '#fff', fontWeight: 600 }}>Free Consultation</span></li>
           </ol>
           {/* h1 */}
           <h1 style={{ fontSize: 'clamp(40px, 4.5vw, 56px)', lineHeight: 1.08, marginBottom: 12, letterSpacing: '-0.5px', textShadow: '0 2px 20px rgba(0,0,0,0.5)' }}>
             {hasAccent ? <>{titleBefore}<span style={{ color: '#BC9155' }}>{accentWord}</span>{titleAfter}</> : heroTitle}
           </h1>
-          <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.82)', lineHeight: 1.7, maxWidth: 560, margin: '16px auto 0', fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>{heroSubtitle}</p>
+          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.82)', lineHeight: 1.7, maxWidth: 520, margin: '16px auto 0', fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>{heroSubtitle}</p>
           {/* ctas */}
-          <div className="hero-ctas-wrap" style={{ display: 'flex', gap: 16, marginTop: 32, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="tel:2039199616" className="hero-cta-btn" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px 28px', borderRadius: 8, background: 'rgba(10,18,35,0.42)', border: '1px solid rgba(255,255,255,0.18)', borderBottom: '2px solid #BC9155', backdropFilter: 'blur(12px)', color: '#fff', textDecoration: 'none', transition: 'all 0.3s', minWidth: 180, textAlign: 'center' }}>
-              <span style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '1.2px', opacity: 0.7, marginBottom: 4 }}>Fairfield County</span>
-              <span style={{ fontSize: 18, fontWeight: 600, fontFamily: "'Playfair Display', serif" }}>(203) 919-9616</span>
-            </a>
-            <a href="tel:2034669148" className="hero-cta-btn" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px 28px', borderRadius: 8, background: 'rgba(10,18,35,0.42)', border: '1px solid rgba(255,255,255,0.18)', borderBottom: '2px solid #BC9155', backdropFilter: 'blur(12px)', color: '#fff', textDecoration: 'none', transition: 'all 0.3s', minWidth: 180, textAlign: 'center' }}>
-              <span style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '1.2px', opacity: 0.7, marginBottom: 4 }}>New Haven County</span>
-              <span style={{ fontSize: 18, fontWeight: 600, fontFamily: "'Playfair Display', serif" }}>(203) 466-9148</span>
-            </a>
-            <button onClick={() => setModalOpen(true)} className="hero-cta-btn hero-cta-primary" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px 28px', borderRadius: 8, background: '#BC9155', border: '1px solid #BC9155', borderBottom: '2px solid #a57d48', color: '#fff', cursor: 'pointer', transition: 'all 0.3s', minWidth: 180, textAlign: 'center' }}>
-              <span style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '1.2px', opacity: 0.9, marginBottom: 4 }}>Get Started</span>
-              <span style={{ fontSize: 18, fontWeight: 600, fontFamily: "'Playfair Display', serif" }}>Schedule Now</span>
+          <div className="hero-ctas-wrap" style={{ display: 'flex', gap: 14, marginTop: 28, justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
+            <button onClick={() => { setModalType('in-person'); setModalOpen(true); }} className="hero-cta-btn hero-cta-primary" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '14px 32px', borderRadius: 8, background: '#BC9155', border: '1px solid #BC9155', color: '#fff', fontSize: 15, fontWeight: 600, letterSpacing: '0.3px', cursor: 'pointer', transition: 'all 0.3s' }}>
+              Get Your Free Estimate
             </button>
+            <a href="tel:2039199616" className="hero-cta-btn" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '14px 32px', borderRadius: 8, background: 'rgba(10,18,35,0.42)', border: '1px solid rgba(255,255,255,0.22)', color: '#fff', textDecoration: 'none', fontSize: 15, fontWeight: 600, letterSpacing: '0.3px', transition: 'all 0.3s', whiteSpace: 'nowrap' }}>
+              Fairfield: (203) 919-9616
+            </a>
+            <a href="tel:2034669148" className="hero-cta-btn" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '14px 32px', borderRadius: 8, background: 'rgba(10,18,35,0.42)', border: '1px solid rgba(255,255,255,0.22)', color: '#fff', textDecoration: 'none', fontSize: 15, fontWeight: 600, letterSpacing: '0.3px', transition: 'all 0.3s', whiteSpace: 'nowrap' }}>
+              New Haven: (203) 466-9148
+            </a>
           </div>
         </div>
       </section>
 
-      {/* ── TRUST BAR ────────────────────────────────────────────────────────── */}
+      {/* â”€â”€ TRUST BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: 'linear-gradient(135deg, #1E2B43 0%, #151E30 100%)', borderTop: '1px solid rgba(188,145,85,0.2)', borderBottom: '1px solid rgba(188,145,85,0.2)' }}>
         <div className="four-col-trust" style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', textAlign: 'center' }}>
-          {[
-            { num: '15+', label: 'Years of Experience' },
-            { num: '100+', label: 'Completed Projects' },
-            { num: '4.9', label: 'Google Rating' },
-            { num: null, label: 'Fully Bonded & Insured', isShield: true },
-          ].map((item, i) => (
-            <div key={i} className="trust-item-hover" style={{ padding: '36px 20px', borderRight: i < 3 ? '1px solid rgba(188,145,85,0.12)' : 'none', transition: 'background 0.3s, transform 0.3s', cursor: 'default' }}>
-              <div className="trust-number" style={{ fontFamily: "'Playfair Display', serif", fontSize: 42, fontWeight: 700, color: '#BC9155', lineHeight: 1, transition: 'color 0.3s', display: 'flex', alignItems: 'center', justifyContent: 'center', height: 42 }}>
-                {item.isShield ? <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg> : item.num}
-              </div>
-              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 8, textTransform: 'uppercase', letterSpacing: 1, fontWeight: 500, transition: 'color 0.3s' }}>{item.label}</div>
+          <div className="trust-item-hover" style={{ padding: '36px 20px', borderRight: '1px solid rgba(188,145,85,0.12)', cursor: 'default' }}>
+            <div className="trust-number" style={{ fontFamily: "'Playfair Display', serif", fontSize: 42, fontWeight: 700, color: '#BC9155', lineHeight: 1, transition: 'color 0.3s' }}>15+</div>
+            <div className="trust-label" style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 8, textTransform: 'uppercase', letterSpacing: 1, fontWeight: 500, transition: 'color 0.3s' }}>Years of Experience</div>
+          </div>
+          <div className="trust-item-hover" style={{ padding: '36px 20px', borderRight: '1px solid rgba(188,145,85,0.12)', cursor: 'default' }}>
+            <div className="trust-number" style={{ fontFamily: "'Playfair Display', serif", fontSize: 42, fontWeight: 700, color: '#BC9155', lineHeight: 1, transition: 'color 0.3s' }}>100+</div>
+            <div className="trust-label" style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 8, textTransform: 'uppercase', letterSpacing: 1, fontWeight: 500, transition: 'color 0.3s' }}>Completed Projects</div>
+          </div>
+          <a href="https://www.google.com/maps/search/?api=1&query=BuiltWell+CT,+206A+Boston+Post+Road,+Orange,+CT+06477" target="_blank" rel="noopener noreferrer" className="trust-item-hover" style={{ padding: '36px 20px', borderRight: '1px solid rgba(188,145,85,0.12)', textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
+            <div className="trust-number" style={{ fontFamily: "'Playfair Display', serif", fontSize: 42, fontWeight: 700, color: '#BC9155', lineHeight: 1, transition: 'color 0.3s' }}>4.9</div>
+            <div className="trust-label" style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 8, textTransform: 'uppercase', letterSpacing: 1, fontWeight: 500, transition: 'color 0.3s' }}>Google Rating</div>
+          </a>
+          <div className="trust-item-hover" style={{ padding: '36px 20px', cursor: 'default' }}>
+            <div className="trust-number" style={{ fontFamily: "'Playfair Display', serif", fontSize: 42, fontWeight: 700, color: '#BC9155', lineHeight: 1, transition: 'color 0.3s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
             </div>
-          ))}
+            <div className="trust-label" style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 8, textTransform: 'uppercase', letterSpacing: 1, fontWeight: 500, transition: 'color 0.3s' }}>Fully Bonded & Insured</div>
+          </div>
         </div>
       </section>
 
-      {/* ── HOW THE CONSULTATION WORKS ───────────────────────────────────────── */}
+      {/* â”€â”€ HOW THE CONSULTATION WORKS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#fff', padding: '80px 40px', borderBottom: '1px solid rgba(30,43,67,0.06)' }}>
         <div style={{ maxWidth: 1240, margin: '0 auto' }}>
           <FadeUp>
@@ -637,18 +663,24 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      {/* ── 5 CONSULTATION STEPS ─────────────────────────────────────────────── */}
+      {/* â”€â”€ 5 CONSULTATION STEPS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#F5F1E9', padding: '80px 40px' }}>
         <div style={{ maxWidth: 1240, margin: '0 auto' }}>
           <FadeUp>
-            <div className="steps-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 24 }}>
-              {STEPS.map((step) => <StepCard key={step.num} step={step} />)}
+            <div className="steps-timeline">
+              {STEPS.map((step) => (
+                <div key={step.num} className="step-item">
+                  <div className="step-dot" />
+                  <h3>{step.title}</h3>
+                  <p>{step.body}</p>
+                </div>
+              ))}
             </div>
           </FadeUp>
         </div>
       </section>
 
-      {/* ── WHAT TO EXPECT FROM YOUR ESTIMATE ───────────────────────────────── */}
+      {/* â”€â”€ WHAT TO EXPECT FROM YOUR ESTIMATE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#fff', padding: '80px 40px' }}>
         <div style={{ maxWidth: 1240, margin: '0 auto' }}>
           <FadeUp>
@@ -689,7 +721,7 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      {/* ── ON-SITE VS REMOTE ────────────────────────────────────────────────── */}
+      {/* â”€â”€ ON-SITE VS REMOTE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#F5F1E9', padding: '80px 40px' }}>
         <div style={{ maxWidth: 1240, margin: '0 auto' }}>
           <FadeUp>
@@ -705,20 +737,20 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
           </FadeUp>
           <FadeUp delay={100}>
             <div className="two-col-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, maxWidth: 1240, margin: '0 auto' }}>
-              <div className="area-card-hover" style={{ borderRadius: 12, background: '#fff', borderBottom: '3px solid transparent', boxShadow: '0 2px 12px rgba(30,43,67,0.06)', transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <div onClick={() => { setModalType('in-person'); setModalOpen(true); }} className="area-card-hover" style={{ borderRadius: 12, background: '#fff', borderBottom: '3px solid transparent', boxShadow: '0 2px 12px rgba(30,43,67,0.06)', transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', cursor: 'pointer' }}>
                 <div style={{ width: '100%', height: 220, overflow: 'hidden', position: 'relative' }}>
                   <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, background: 'linear-gradient(to top, rgba(30,43,67,0.4), transparent)', zIndex: 1, pointerEvents: 'none' }} />
-                  <img src="/portfolio/builtwell-team-client-arrival-ct.jpeg" alt="BuiltWell CT team approaching Connecticut home for free on-site remodeling consultation" className="area-card-img-inner" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} loading="lazy" decoding="async" />
+                  <img src="/hero/builtwell-team-approaching-home-hero-ct.jpg" alt="BuiltWell CT team approaching Connecticut home for free on-site remodeling consultation" className="area-card-img-inner" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} loading="lazy" decoding="async" />
                 </div>
                 <div style={{ padding: '28px 28px 32px' }}>
                   <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, marginBottom: 6, color: '#1E2B43' }}>On-Site Consultation</h3>
                   <p style={{ fontSize: 14, lineHeight: 1.7, color: '#5C677D' }}>We visit your home, walk the space, measure, and assess existing conditions including plumbing, electrical, subfloor, and moisture levels. On-site consultations are best for projects involving structural changes, layout modifications, or when accurate measurements are critical to the estimate. Available Monday through Friday.</p>
                 </div>
               </div>
-              <div className="area-card-hover" style={{ borderRadius: 12, background: '#fff', borderBottom: '3px solid transparent', boxShadow: '0 2px 12px rgba(30,43,67,0.06)', transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <div onClick={() => { setModalType('remote'); setModalOpen(true); }} className="area-card-hover" style={{ borderRadius: 12, background: '#fff', borderBottom: '3px solid transparent', boxShadow: '0 2px 12px rgba(30,43,67,0.06)', transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', cursor: 'pointer' }}>
                 <div style={{ width: '100%', height: 220, overflow: 'hidden', position: 'relative' }}>
                   <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, background: 'linear-gradient(to top, rgba(30,43,67,0.4), transparent)', zIndex: 1, pointerEvents: 'none' }} />
-                  <img src="/portfolio/builtwell-contractor-sign-consultation-ct-01.jpg" alt="Remote video consultation with BuiltWell CT contractor via Google Meet or Zoom" className="area-card-img-inner" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} loading="lazy" decoding="async" />
+                  <img src="/services/remote-video-consultation-ct.jpg" alt="Remote video consultation with BuiltWell CT contractor via Google Meet or Zoom for Connecticut remodeling" className="area-card-img-inner" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} loading="lazy" decoding="async" />
                 </div>
                 <div style={{ padding: '28px 28px 32px' }}>
                   <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, marginBottom: 6, color: '#1E2B43' }}>Remote Consultation</h3>
@@ -730,44 +762,139 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      {/* ── SERVICE AREAS ────────────────────────────────────────────────────── */}
-      <SharedAreasSection data={{
-        eyebrow: "Where We Work",
-        title: "Serving Homeowners Across Two Counties",
-        highlight_text: "Two Counties",
-        subtitle: "Free consultations are available throughout Fairfield and New Haven Counties, with dedicated teams serving both regions.",
-        counties: [
-          { name: "Fairfield County", phone: "(203) 919-9616", image: "/images/areas/fairfield-county.jpg", description: "Serving all of Fairfield County with dedicated local crews. From Greenwich estates to Ridgefield colonials, we know the housing stock and building departments across the county.", towns: FAIRFIELD_TOWNS_PRIMARY, extra_towns: FAIRFIELD_TOWNS_MORE, town_links: FAIRFIELD_TOWN_LINKS, url: "/fairfield-county/", cta_label: "Learn more about Fairfield County" },
-          { name: "New Haven County", phone: "(203) 466-9148", image: "/images/areas/new-haven-county.jpg", description: "Served from our Orange, CT office. We cover every town in New Haven County from coastal Branford and Madison to inland Woodbridge and Cheshire — delivering expert remodeling across the region.", towns: NEW_HAVEN_TOWNS_PRIMARY, extra_towns: NEW_HAVEN_TOWNS_MORE, town_links: NEW_HAVEN_TOWN_LINKS, url: "/new-haven-county/", cta_label: "Learn more about New Haven County" },
-        ],
-      }} />
+      {/* â”€â”€ SERVICE AREAS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* SERVICE AREAS */}
+      <section style={{ background: '#fff', padding: '100px 40px' }}>
+        <div style={{ maxWidth: 1240, margin: '0 auto' }}>
+          <FadeUp>
+            <div style={{ textAlign: 'center', marginBottom: 64 }}>
+              <SectionLabel>Where We Work</SectionLabel>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 3.5vw, 44px)', marginBottom: 20, letterSpacing: '-0.5px', maxWidth: 780, marginLeft: 'auto', marginRight: 'auto', color: '#1E2B43' }}>
+                Serving Homeowners Across <span style={{ color: '#BC9155' }}>Two Counties</span>
+              </h2>
+              <p style={{ fontSize: 17, color: '#5C677D', maxWidth: 700, margin: '0 auto', lineHeight: 1.75 }}>
+                Free consultations are available throughout Fairfield and New Haven Counties, with dedicated teams serving both regions.
+              </p>
+            </div>
+          </FadeUp>
+          <FadeUp delay={100}>
+            <div className="two-col-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, alignItems: 'start' }}>
+              <AreaCard
+                county="Fairfield County"
+                phone="(203) 919-9616"
+                phoneLabel="Fairfield: (203) 919-9616"
+                img="/images/areas/fairfield-county.jpg"
+                alt="Fairfield County, Connecticut - home remodeling service area for BuiltWell CT"
+                desc="Serving all of Fairfield County with dedicated local crews. From Greenwich estates to Ridgefield colonials, we know the housing stock and building departments across the county."
+                primaryTowns={FAIRFIELD_TOWNS_PRIMARY}
+                moreTowns={FAIRFIELD_TOWNS_MORE}
+                townLinks={FAIRFIELD_TOWN_LINKS}
+                countyHref="/fairfield-county/"
+              />
+              <AreaCard
+                county="New Haven County"
+                phone="(203) 466-9148"
+                phoneLabel="New Haven: (203) 466-9148"
+                img="/images/areas/new-haven-county.jpg"
+                alt="New Haven County, Connecticut - home remodeling service area for BuiltWell CT"
+                desc="Served from our Orange, CT office. We cover every town in New Haven County from coastal Branford and Madison to inland Woodbridge and Cheshire - delivering expert remodeling across the region."
+                primaryTowns={NEW_HAVEN_TOWNS_PRIMARY}
+                moreTowns={NEW_HAVEN_TOWNS_MORE}
+                townLinks={NEW_HAVEN_TOWN_LINKS}
+                countyHref="/new-haven-county/"
+                showTop
+              />
+            </div>
+          </FadeUp>
+          <FadeUp delay={160}>
+            <p style={{ textAlign: 'center', fontSize: 14, color: '#5C677D', marginTop: 32 }}>
+              Not sure if we serve your area? <Link href="/contact/" style={{ color: '#BC9155', fontWeight: 600, textDecoration: 'underline' }}>Contact our Connecticut remodeling team</Link> and we&apos;ll let you know.
+            </p>
+          </FadeUp>
+        </div>
+      </section>
 
-      {/* ── TRUST STRIP ──────────────────────────────────────────────────────── */}
+      {/* TRUST STRIP */}
       <div style={{ background: 'linear-gradient(135deg, #1E2B43 0%, #151E30 100%)', padding: '56px 40px', position: 'relative', overflow: 'hidden' }} role="region" aria-label="Trust indicators">
-        <div style={{ position: 'absolute', inset: 0, background: "url('/portfolio/builtwell-job-site-aerial-ct.jpg') center/cover no-repeat", opacity: 0.12 }} />
+        <div style={{ position: 'absolute', inset: 0, background: "url('/hero/builtwell-job-site-aerial-hero-ct.jpg') center/cover no-repeat", opacity: 0.12 }} />
         <div className="trust-strip-inner-grid" style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', position: 'relative', zIndex: 1 }}>
-          {[
-            { href: 'https://www.google.com/search?q=builtwell+ct+reviews', label: 'Google Rating 4.9', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="#BC9155" stroke="none" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg> },
-            { href: 'https://www.bbb.org/', label: 'BBB A+ Accredited', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg> },
-            { href: 'https://www.houzz.com/', label: 'Trusted on Houzz', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="12" cy="12" r="10" /><path d="M9 12l2 2 4-4" /></svg> },
-            { href: 'https://www.elicense.ct.gov/', label: 'CT HIC License #0668405', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M8 2v4M16 2v4M3 10h18" /></svg> },
-            { href: 'https://www.angi.com/', label: 'Verified on Angi & Thumbtack', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="12" cy="12" r="10" /><path d="M9 12l2 2 4-4" /></svg> },
-          ].map((item, i, arr) => (
-            <a key={i} href={item.href} target="_blank" rel="noopener noreferrer" className="trust-strip-item-hover" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.9)', letterSpacing: '0.4px', whiteSpace: 'nowrap', textDecoration: 'none', transition: 'all 0.3s', padding: '20px 32px', flex: 1, minWidth: 180, textAlign: 'center' }}>
-              <span style={{ color: '#BC9155', filter: 'drop-shadow(0 2px 4px rgba(188,145,85,0.3))' }}>{item.icon}</span>
-              {item.label}
-            </a>
-          ))}
+          <a href="https://www.google.com/search?q=builtwell+ct+reviews" target="_blank" rel="noopener noreferrer" className="trust-strip-item-hover" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.9)', letterSpacing: '0.4px', whiteSpace: 'nowrap', textDecoration: 'none', transition: 'all 0.3s', padding: '20px 32px', flex: 1, minWidth: 180, textAlign: 'center' }}>
+            <span style={{ color: '#BC9155', filter: 'drop-shadow(0 2px 4px rgba(188,145,85,0.3))' }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#BC9155" stroke="none" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+            </span>
+            Google Rating 4.9
+          </a>
+          <div className="trust-strip-divider" />
+          <a href="https://www.houzz.com/professionals/general-contractors/builtwell-ct" target="_blank" rel="noopener noreferrer" className="trust-strip-item-hover" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.9)', letterSpacing: '0.4px', whiteSpace: 'nowrap', textDecoration: 'none', transition: 'all 0.3s', padding: '20px 32px', flex: 1, minWidth: 180, textAlign: 'center' }}>
+            <span style={{ color: '#BC9155', filter: 'drop-shadow(0 2px 4px rgba(188,145,85,0.3))' }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="12" cy="12" r="10" /><path d="M9 12l2 2 4-4" /></svg>
+            </span>
+            Trusted on Houzz
+          </a>
+          <div className="trust-strip-divider" />
+          <a href="https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx" target="_blank" rel="noopener noreferrer" className="trust-strip-item-hover" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.9)', letterSpacing: '0.4px', whiteSpace: 'nowrap', textDecoration: 'none', transition: 'all 0.3s', padding: '20px 32px', flex: 1, minWidth: 180, textAlign: 'center' }}>
+            <span style={{ color: '#BC9155', filter: 'drop-shadow(0 2px 4px rgba(188,145,85,0.3))' }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M8 2v4M16 2v4M3 10h18" /></svg>
+            </span>
+            CT HIC License #0668405
+          </a>
+          <div className="trust-strip-divider" />
+          <a href="https://www.angi.com/companylist/us/ct/orange/builtwell-ct-reviews-" target="_blank" rel="noopener noreferrer" className="trust-strip-item-hover" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.9)', letterSpacing: '0.4px', whiteSpace: 'nowrap', textDecoration: 'none', transition: 'all 0.3s', padding: '20px 32px', flex: 1, minWidth: 180, textAlign: 'center' }}>
+            <span style={{ color: '#BC9155', filter: 'drop-shadow(0 2px 4px rgba(188,145,85,0.3))' }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="12" cy="12" r="10" /><path d="M9 12l2 2 4-4" /></svg>
+            </span>
+            Verified on Angi
+          </a>
         </div>
       </div>
 
-      {/* ── CTA SECTION WITH LEAD FORM ───────────────────────────────────────── */}
-      <SharedLeadFormSection page={page} data={cmsFormData || { eyebrow: "Get Started", title: "Schedule Your Free Consultation", title_highlight: "Consultation", subtitle: "On-site or remote (Google Meet or Zoom). We respond within one business day.", images: [{ image: "/portfolio/builtwell-team-van-exterior-ct-01.jpg", alt: "BuiltWell CT remodeling team arriving at a Connecticut home for a free consultation" }, { image: "/portfolio/builtwell-contractor-handshake-client-ct.jpg", alt: "BuiltWell CT owner meeting with a Connecticut homeowner for a remodeling consultation" }] }} accent="Consultation" />
+      {/* CTA SECTION WITH LEAD FORM */}
+      <section id="contact" style={{ background: '#F5F1E9', padding: '64px 40px 72px', borderTop: '1px solid rgba(30,43,67,0.08)' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <FadeUp>
+            <div style={{ marginBottom: 32, textAlign: 'center' }}>
+              <SectionLabel>Get Started</SectionLabel>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(30px, 3vw, 42px)', marginBottom: 8, color: '#1E2B43' }}>
+                Schedule Your Free <span style={{ color: '#BC9155' }}>Consultation</span>
+              </h2>
+              <p style={{ fontSize: 16, color: '#5C677D', lineHeight: 1.7, maxWidth: 600, margin: '0 auto' }}>
+                On-site or remote (Google Meet or Zoom). We respond within one business day.
+              </p>
+            </div>
+          </FadeUp>
+          <div className="cta-body-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.15fr', gap: 32, alignItems: 'stretch' }}>
+            <FadeUp>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, height: '100%' }}>
+                <div className="cta-img-wrap" style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', minHeight: 260, flex: 1 }}>
+                  <img src="/team/builtwell-owner-handshake-client-ct-02.jpg" alt="BuiltWell CT owner meeting with a Connecticut homeowner for a remodeling consultation" loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                </div>
+                <div className="cta-img-wrap" style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', minHeight: 260, flex: 1 }}>
+                  <img src="/portfolio/builtwell-job-site-aerial-ct.jpg" alt="BuiltWell CT owner meeting homeowner for a free consultation" loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                </div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={80}>
+              <LeadFormSection />
+            </FadeUp>
+          </div>
+        </div>
+      </section>
 
-      {/* ── FINANCING STRIP ──────────────────────────────────────────────────── */}
-      <SharedFinancingStrip data={{ title: "Flexible Financing Available", content: "Get approved in about 60 seconds and start your project today.", cta: { url: "https://www.greensky.com", label: "Check Financing Options" } }} />
-
-      {/* ── RELATED SERVICES ─────────────────────────────────────────────────── */}
+      {/* FINANCING STRIP */}
+      <div style={{ background: '#fff', padding: '56px 40px', borderTop: '1px solid rgba(30,43,67,0.08)' }} role="region" aria-label="Financing options">
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24, textAlign: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+            <span style={{ fontWeight: 700, fontSize: 24, letterSpacing: '-0.3px' }}>
+              <span style={{ color: '#6BBF4E' }}>Green</span><span style={{ color: '#1E2B43' }}>Sky</span>
+            </span>
+            <p style={{ fontSize: 16, color: '#5C677D', lineHeight: 1.6 }}><strong style={{ color: '#1E2B43' }}>Flexible Financing Available.</strong> Get approved in about 60 seconds and start your project today.</p>
+          </div>
+          <a href="https://www.greensky.com" target="_blank" rel="noopener noreferrer" className="financing-strip-cta" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, minWidth: 280, minHeight: 52, padding: '14px 32px', borderRadius: 8, fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 15, background: '#BC9155', color: '#fff', letterSpacing: '0.3px', whiteSpace: 'nowrap', textDecoration: 'none', transition: 'background 0.2s, transform 0.2s, box-shadow 0.2s', border: 'none' }}>
+            Check Financing Options <ArrowIcon />
+          </a>
+        </div>
+      </div>
+      {/* â”€â”€ RELATED SERVICES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#F5F1E9', padding: '100px 40px' }}>
         <div style={{ maxWidth: 1240, margin: '0 auto' }}>
           <FadeUp>
@@ -804,8 +931,8 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      {/* ── SCHEDULING MODAL ─────────────────────────────────────────────────── */}
-      <SchedulingModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      {/* â”€â”€ SCHEDULING MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      <SchedulingModal key={`${modalOpen}-${modalType}`} open={modalOpen} initialType={modalType} onClose={() => setModalOpen(false)} />
     </>
   );
 }
