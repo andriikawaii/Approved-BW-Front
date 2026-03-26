@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
-import { AreasSection, DarkTrustStrip, FinancingStrip, HeroTrustBar, LeadFormSection, cls, label, linkNode, media, parts, section, sections, trustIcon } from "./template-utils";
+import { AreasSection, FinancingStrip, HeroTrustBar, LeadFormSection, cls, label, linkNode, media, parts, section, sections } from "./template-utils";
 
 type RichTextData = {
   eyebrow?: string | null;
@@ -16,8 +16,6 @@ type RichTextData = {
 };
 
 const FALLBACK_MEDIA: Record<string, string> = {
-  "/hero/builtwell-job-site-aerial-hero-ct.jpg": "/portfolio/builtwell-job-site-aerial-ct.jpg",
-  "/hero/builtwell-team-van-consultation-hero-ct.jpg": "/portfolio/builtwell-team-client-arrival-ct.jpeg",
   "/team/builtwell-owner-handshake-client-ct-02.jpg": "/portfolio/builtwell-contractor-sign-consultation-ct-01.jpg",
   "/services/bathroom-remodeling-ct.jpg": "/images/services/bathroom-remodel-new.jpg",
   "/services/kitchen-remodeling-ct.jpg": "/images/services/service-kitchen.jpg",
@@ -85,11 +83,144 @@ const fadeUpStyle: React.CSSProperties = {
 /* ── trust strip fallback data ── */
 const defaultTrustStrip = [
   { icon: "star", label: "Google Rating", value: "4.9", url: "https://www.google.com/search?q=builtwell+ct+reviews" },
-  { icon: "shield", label: "BBB A+ Accredited", url: "https://www.bbb.org/search?find_country=USA&find_text=builtwell+ct&find_loc=Orange%2C+CT" },
-  { icon: "check", label: "Trusted on Houzz", url: "https://www.houzz.com/professionals/general-contractors/builtwell-ct" },
+  { icon: "check-circle", label: "Trusted on Houzz", url: "#houzz" },
   { icon: "calendar", label: "CT HIC License #0668405", url: "https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx" },
-  { icon: "check", label: "Verified on Angi & Thumbtack", url: "https://www.angi.com/companylist/us/ct/orange/builtwell-ct-reviews-" },
+  { icon: "check-circle", label: "Verified on Angi", url: "#angi" },
 ];
+
+function ServicesTrustIcon({ icon }: { icon?: string | null }) {
+  const key = (icon || "").toLowerCase();
+  if (key === "star") {
+    return (
+      <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+      </svg>
+    );
+  }
+  if (key === "calendar" || key === "clock") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="16" rx="2" />
+        <path d="M8 2v4M16 2v4M3 10h18" />
+      </svg>
+    );
+  }
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M9 12l2 2 4-4" />
+    </svg>
+  );
+}
+
+function ServicesTrustStrip({ items }: { items?: any[] }) {
+  const list = items || [];
+  return (
+    <>
+      <div className="services-trust-strip" role="region" aria-label="Trust indicators">
+        <div className="services-trust-strip-inner">
+          {list.map((item: any, index: number) => {
+            const text = [item?.label, item?.value].filter(Boolean).join(" ").trim();
+            const href = item?.url || "#";
+            const isExternal = /^https?:\/\//i.test(href);
+            return (
+              <div key={`${text || "trust"}-${index}`} className="contents">
+                <a
+                  href={href}
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noreferrer noopener" : undefined}
+                  className="services-trust-strip-item"
+                  aria-label={text || "Trust item"}
+                >
+                  <ServicesTrustIcon icon={item?.icon} />
+                  {text}
+                </a>
+                {index < list.length - 1 ? <div className="services-trust-strip-divider" /> : null}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <style jsx global>{`
+        .services-trust-strip {
+          background: linear-gradient(135deg, #1e2b43 0%, #151e30 100%);
+          padding: 56px 40px;
+          position: relative;
+          overflow: hidden;
+        }
+        .services-trust-strip::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: url('/hero/builtwell-job-site-aerial-hero-ct.jpg') center/cover no-repeat;
+          opacity: 0.06;
+        }
+        .services-trust-strip-inner {
+          max-width: 1200px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0;
+          flex-wrap: wrap;
+          position: relative;
+          z-index: 1;
+        }
+        .services-trust-strip-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          font-size: 13px;
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.9);
+          letter-spacing: 0.4px;
+          text-decoration: none;
+          transition: all 0.3s;
+          padding: 20px 32px;
+          flex: 1;
+          min-width: 180px;
+          text-align: center;
+          white-space: nowrap;
+        }
+        .services-trust-strip-item:hover {
+          color: #bc9155;
+          transform: translateY(-2px);
+        }
+        .services-trust-strip-item svg {
+          color: #bc9155;
+          flex-shrink: 0;
+          width: 22px;
+          height: 22px;
+          filter: drop-shadow(0 2px 4px rgba(188, 145, 85, 0.3));
+        }
+        .services-trust-strip-divider {
+          width: 1px;
+          height: 40px;
+          background: rgba(255, 255, 255, 0.1);
+          flex-shrink: 0;
+        }
+        @media (max-width: 1024px) {
+          .services-trust-strip-inner { gap: 20px; }
+          .services-trust-strip-divider { display: none; }
+        }
+        @media (max-width: 768px) {
+          .services-trust-strip-divider { display: none; }
+          .services-trust-strip-item {
+            padding: 16px 12px;
+            min-width: 33.33%;
+            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+          }
+        }
+      `}</style>
+    </>
+  );
+}
 
 export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
   const hero = section<any>(page, "hero");
@@ -108,7 +239,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
   const areasParts = parts(areas?.title, areas?.highlight_text || "Work");
 
   const [countyOpen, setCountyOpen] = useState<Record<number, boolean>>({});
-  const [activeProcessStep, setActiveProcessStep] = useState(0);
+  const [activeProcessStep, setActiveProcessStep] = useState(-1);
   const fadeRef = useFadeUp();
 
   const trustStripItems = trustBars[1]?.items || defaultTrustStrip;
@@ -117,8 +248,8 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
     <div ref={fadeRef} className="bg-[#f5f1e9] text-[#1e2b43]">
 
       {/* ══════ HERO ══════ */}
-      <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pt-[120px] text-white md:px-10">
-        <div className="absolute inset-0 bg-cover bg-center opacity-[0.78]" style={{ backgroundImage: `url(${localMedia(hero?.background_image, "/portfolio/builtwell-job-site-aerial-ct.jpg")})` }} />
+      <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pb-8 pt-[60px] text-white md:px-10">
+        <div className="absolute inset-0 bg-cover bg-[center_15%] opacity-[0.72]" style={{ backgroundImage: `url(${localMedia(hero?.background_image, "/hero/builtwell-job-site-aerial-hero-ct.jpg")})` }} />
         <div className="absolute inset-0" style={{
           background: [
             "radial-gradient(ellipse at 97% 97%, rgba(21,30,48,1) 0%, rgba(21,30,48,0.9) 8%, transparent 30%)",
@@ -126,7 +257,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
             "linear-gradient(180deg, rgba(21,30,48,0.35) 0%, rgba(21,30,48,0.2) 30%, rgba(21,30,48,0.45) 65%, rgba(21,30,48,0.92) 100%)",
           ].join(", "),
         }} />
-        <div className="relative z-10 mx-auto flex min-h-[50vh] max-w-[1240px] flex-col items-center justify-center pb-12 text-center">
+        <div className="relative z-10 mx-auto flex min-h-[40vh] max-w-[1240px] flex-col items-center justify-center text-center">
           <ol className="fade-up mb-5 flex list-none items-center gap-0 text-[13px] font-medium text-white/[0.92] [text-shadow:0_1px_6px_rgba(0,0,0,0.7)]" style={fadeUpStyle}>
             <li>{linkNode("/", "Home", "text-white/85 transition-colors hover:text-[#bc9155]")}</li>
             <li className="before:mx-2.5 before:text-[12px] before:text-[#bc9155] before:content-['›']">
@@ -214,7 +345,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
 
       {/* ══════ OUR PROCESS ══════ */}
       <section className="relative overflow-hidden px-5 py-16 text-white md:px-10 md:py-20 lg:py-[100px]">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/portfolio/builtwell-team-contractors-ct-04.png')" }} aria-hidden="true" />
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/portfolio/builtwell-team-contractors-ct-03.png')" }} aria-hidden="true" />
         <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(10,18,34,0.90)_0%,rgba(30,43,67,0.85)_100%)]" />
         <div className="relative z-10 mx-auto max-w-[1240px]">
           <div className="fade-up mb-16 text-center" style={fadeUpStyle}>
@@ -250,7 +381,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
                 <h3 className="mb-3 text-[17px] font-semibold text-white md:text-lg">{item.title}</h3>
                 {item.description ? (
                   <p className={cls(
-                    "text-[14px] leading-[1.65] text-white/80 transition-all duration-[400ms]",
+                    "hidden text-[14px] leading-[1.65] text-white/80 transition-all duration-[400ms] lg:block",
                     activeProcessStep === index ? "mt-2 max-h-[200px] opacity-100" : "max-h-0 overflow-hidden opacity-0",
                   )}>
                     {item.description}
@@ -300,7 +431,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
       <AreasSection data={areas} />
 
       {/* ══════ TRUST STRIP (Google rating section) ══════ */}
-      <DarkTrustStrip items={trustStripItems} />
+      <ServicesTrustStrip items={trustStripItems} />
 
       {/* ══════ LEAD FORM ══════ */}
       <LeadFormSection page={page} data={lead} accent="Project" />

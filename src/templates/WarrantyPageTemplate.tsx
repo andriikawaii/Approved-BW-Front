@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import type { CMSPage } from "@/types/cms";
-import { parts, section, sections, HeroTrustBar, DarkTrustStrip, FinancingStrip, LeadFormSection } from "./template-utils";
+import { parts, section, sections, LeadFormSection } from "./template-utils";
 import { usePageData } from "@/src/context/PageDataContext";
 
 interface PolicySection {
@@ -21,6 +21,28 @@ interface StepCard {
   description: string;
 }
 
+interface TrustItem {
+  icon?: string;
+  label: string;
+  value?: string | null;
+  url?: string;
+}
+
+function stripIcon(icon?: string): React.JSX.Element {
+  switch ((icon || "").toLowerCase()) {
+    case "star":
+      return <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>;
+    case "calendar":
+    case "license":
+      return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M8 2v4M16 2v4M3 10h18" /></svg>;
+    case "verified":
+    case "check":
+      return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M9 12l2 2 4-4" /></svg>;
+    default:
+      return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M9 12l2 2 4-4" /></svg>;
+  }
+}
+
 export function WarrantyPageTemplate({ page }: { page: CMSPage }) {
   const { phones } = usePageData();
   const phoneItems = phones ?? [];
@@ -31,10 +53,10 @@ export function WarrantyPageTemplate({ page }: { page: CMSPage }) {
   useEffect(() => {
     const root = wrapRef.current;
     if (!root) return;
-    const els = root.querySelectorAll<HTMLElement>(".wt-fade");
+    const els = root.querySelectorAll<HTMLElement>(".fade-up");
     const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) { (e.target as HTMLElement).classList.add("wt-visible"); io.unobserve(e.target); } }),
-      { threshold: 0.15 }
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { (e.target as HTMLElement).classList.add("visible"); io.unobserve(e.target); } }),
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
@@ -50,7 +72,9 @@ export function WarrantyPageTemplate({ page }: { page: CMSPage }) {
   const financingData = richTexts.find((r: any) => r.style_variant === "financing_strip");
   const leadForm = section<any>(page, "lead_form");
 
-  const hp = parts(hero?.title || "Warranty Policy for Connecticut Remodeling", hero?.title_highlight || "Connecticut");
+  const heroTitle = hero?.title || hero?.headline || "Warranty Policy for Connecticut Remodeling";
+  const heroHighlight = hero?.title_highlight || hero?.highlight_text || "Connecticut";
+  const hp = parts(heroTitle, heroHighlight);
 
   const defaultPolicySections: PolicySection[] = [
     {
@@ -131,6 +155,21 @@ export function WarrantyPageTemplate({ page }: { page: CMSPage }) {
 
   const activePolicies = policySections.length > 0 ? policySections : defaultPolicySections;
 
+  const defaultHeroTrustItems: TrustItem[] = [
+    { label: "Years of Experience", value: "15+" },
+    { label: "Completed Projects", value: "100+" },
+    { label: "Google Rating", value: "4.9", url: "https://www.google.com/maps/search/?api=1&query=BuiltWell+CT,+206A+Boston+Post+Road,+Orange,+CT+06477" },
+    { icon: "shield", label: "Fully Bonded & Insured", value: null },
+  ];
+  const defaultTrustStripItems: TrustItem[] = [
+    { icon: "star", label: "Google Rating 4.9", url: "https://www.google.com/search?q=builtwell+ct+reviews" },
+    { icon: "verified", label: "Trusted on Houzz", url: "https://www.houzz.com/professionals/general-contractors/builtwell-ct" },
+    { icon: "calendar", label: "CT HIC License #0668405", url: "https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx" },
+    { icon: "verified", label: "Verified on Angi", url: "https://www.angi.com/companylist/us/ct/orange/builtwell-ct-reviews-" },
+  ];
+  const heroTrustItems: TrustItem[] = heroTrust?.items?.length ? heroTrust.items : defaultHeroTrustItems;
+  const trustStripItems: TrustItem[] = darkTrust?.items?.length ? darkTrust.items : defaultTrustStripItems;
+
   const defaultSteps: StepCard[] = [
     { number: "1", icon: "phone", title: "Contact Us", description: 'Call us, text us, or use the <a href="/contact/">contact form</a>. Describe what you\'re seeing and where in the project area.' },
     { number: "2", icon: "clock", title: "We Schedule a Visit", description: "We confirm receipt and schedule an on-site inspection within 15 business days to assess the condition firsthand." },
@@ -139,6 +178,15 @@ export function WarrantyPageTemplate({ page }: { page: CMSPage }) {
   ];
 
   const steps = requestData?.cards || defaultSteps;
+  const heroSubtitle = hero?.subtitle || hero?.subheadline || "We stand behind the work we complete. This page explains exactly what is covered, for how long, and what to do if something needs attention after your project is done.";
+  const heroPrimaryLabel = hero?.cta_primary?.label || "Get Your Free Estimate";
+  const heroPrimaryUrl = hero?.cta_primary?.url || "/free-consultation/";
+  const financingTitle = financingData?.title || "Flexible Financing Available";
+  const financingText = typeof financingData?.content === "string"
+    ? financingData.content.replace(/<[^>]+>/g, "")
+    : "Get approved in about 60 seconds and start your project today.";
+  const financingCtaLabel = financingData?.cta?.label || "Check Financing Options";
+  const financingCtaUrl = financingData?.cta?.url || "https://www.greensky.com";
 
   const stepIcons: Record<string, React.JSX.Element> = {
     phone: <svg viewBox="0 0 24 24" fill="none" stroke="#BC9155" strokeWidth="1.5" width="28" height="28"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>,
@@ -150,8 +198,8 @@ export function WarrantyPageTemplate({ page }: { page: CMSPage }) {
   return (
     <div ref={wrapRef}>
       <style>{`
-        .wt-fade{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease}
-        .wt-fade.wt-visible{opacity:1;transform:translateY(0)}
+        .fade-up{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease}
+        .fade-up.visible{opacity:1;transform:translateY(0)}
 
         /* HERO */
         .wt-hero{background:#151E30;padding:0 40px 48px;padding-top:120px;color:#fff;position:relative;overflow:hidden;min-height:50vh;display:flex;align-items:stretch;isolation:isolate}
@@ -167,13 +215,42 @@ export function WarrantyPageTemplate({ page }: { page: CMSPage }) {
         .wt-hero h1{font-size:clamp(40px,4.5vw,56px);line-height:1.08;margin-bottom:12px;letter-spacing:-0.5px;text-shadow:0 2px 20px rgba(0,0,0,0.5)}
         .wt-hero .subtitle{font-size:17px;color:rgba(255,255,255,0.82);line-height:1.7;max-width:560px;margin:16px auto 0;font-family:Inter,sans-serif;font-weight:400}
         .wt-hero-ctas{display:flex;gap:16px;margin-top:32px;flex-wrap:wrap;justify-content:center}
-        .wt-cta-btn{display:flex;flex-direction:column;align-items:center;padding:16px 28px;border-radius:8px;background:rgba(10,18,35,0.42);border:1px solid rgba(255,255,255,0.18);border-bottom:2px solid #BC9155;backdrop-filter:blur(12px);color:#fff;text-decoration:none;transition:background 0.3s,border-color 0.3s,transform 0.3s,box-shadow 0.3s;min-width:180px;text-align:center}
-        .wt-cta-btn:hover{background:rgba(10,18,35,0.62);border-color:rgba(255,255,255,0.28);border-bottom-color:#BC9155;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3),0 0 0 1px rgba(188,145,85,0.2)}
-        .wt-cta-btn.wt-cta-primary{background:#BC9155;border:1px solid #BC9155;border-bottom:2px solid #a57d48;backdrop-filter:none}
-        .wt-cta-btn.wt-cta-primary:hover{background:#d4a95a;border-color:#d4a95a;border-bottom-color:#a57d48;box-shadow:0 8px 24px rgba(188,145,85,0.4)}
-        .wt-cta-label{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;opacity:0.7;margin-bottom:4px}
-        .wt-cta-primary .wt-cta-label{opacity:0.9}
-        .wt-cta-phone{font-size:18px;font-weight:600;font-family:'Playfair Display',serif}
+        .wt-cta-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 32px;border-radius:8px;background:rgba(10,18,35,0.42);border:1px solid rgba(255,255,255,0.22);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;text-decoration:none;font-size:15px;font-weight:600;letter-spacing:0.3px;white-space:nowrap;transition:background 0.3s,border-color 0.3s,transform 0.3s,box-shadow 0.3s}
+        .wt-cta-btn:hover{background:rgba(10,18,35,0.62);border-color:rgba(255,255,255,0.35);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+        .wt-cta-btn.wt-cta-primary{background:#BC9155;border:1px solid #BC9155;backdrop-filter:none}
+        .wt-cta-btn.wt-cta-primary:hover{background:#d4a95a;border-color:#d4a95a;box-shadow:0 8px 24px rgba(188,145,85,0.4)}
+
+        /* TRUST BAR */
+        .wt-trust-bar{background:linear-gradient(135deg,#1E2B43 0%,#151E30 100%);border-top:1px solid rgba(188,145,85,0.2);border-bottom:1px solid rgba(188,145,85,0.2)}
+        .wt-trust-bar-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);text-align:center}
+        .wt-trust-item{padding:36px 20px;border-right:1px solid rgba(188,145,85,0.12);transition:background 0.3s,transform 0.3s;cursor:default}
+        .wt-trust-item:hover{background:rgba(188,145,85,0.08);transform:translateY(-3px)}
+        .wt-trust-item:hover .wt-trust-number{color:#d4a95a;text-shadow:0 0 20px rgba(188,145,85,0.3)}
+        .wt-trust-item:hover .wt-trust-label{color:rgba(255,255,255,0.85)}
+        .wt-trust-item:last-child{border-right:none}
+        .wt-trust-number{font-family:'Playfair Display',serif;font-size:42px;font-weight:700;color:#BC9155;line-height:1;min-height:42px;display:flex;align-items:center;justify-content:center;transition:color 0.3s,text-shadow 0.3s}
+        .wt-trust-label{font-size:13px;color:rgba(255,255,255,0.6);margin-top:8px;text-transform:uppercase;letter-spacing:1px;font-weight:500;transition:color 0.3s}
+
+        /* DARK TRUST STRIP */
+        .wt-trust-strip{background:linear-gradient(135deg,#1E2B43 0%,#151E30 100%);padding:56px 40px;position:relative;overflow:hidden}
+        .wt-trust-strip::before{content:'';position:absolute;inset:0;background:url('/hero/builtwell-job-site-aerial-hero-ct.jpg') center/cover no-repeat;opacity:0.12}
+        .wt-trust-strip-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;position:relative;z-index:1}
+        .wt-trust-strip-item{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);letter-spacing:0.4px;white-space:nowrap;text-decoration:none;transition:all 0.3s;padding:20px 32px;flex:1;min-width:180px;text-align:center}
+        .wt-trust-strip-item:hover{color:#BC9155;transform:translateY(-2px)}
+        .wt-trust-strip-item svg{color:#BC9155;flex-shrink:0;width:22px;height:22px;filter:drop-shadow(0 2px 4px rgba(188,145,85,0.3))}
+        .wt-trust-divider{width:1px;height:40px;background:rgba(255,255,255,0.1);flex-shrink:0}
+
+        /* FINANCING STRIP */
+        .wt-financing-strip{background:#fff;padding:56px 40px;border-top:1px solid rgba(30,43,67,0.08)}
+        .wt-financing-inner{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center}
+        .wt-financing-left{display:flex;flex-direction:column;align-items:center;gap:16px}
+        .wt-greensky-logo{font-weight:700;font-size:24px;letter-spacing:-0.3px;flex-shrink:0}
+        .wt-gs-green{color:#6BBF4E}
+        .wt-gs-dark{color:#1E2B43}
+        .wt-financing-text{font-size:16px;color:#5C677D;line-height:1.6}
+        .wt-financing-text strong{font-weight:700;color:#1E2B43}
+        .wt-financing-cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-width:280px;min-height:52px;padding:14px 32px;border-radius:8px;font-family:Inter,sans-serif;font-weight:600;font-size:15px;background:#BC9155;color:#fff;letter-spacing:0.3px;white-space:nowrap;text-decoration:none;transition:background 0.2s,transform 0.2s,box-shadow 0.2s;cursor:pointer;border:none}
+        .wt-financing-cta:hover{background:#a57d48;transform:translateY(-1px);box-shadow:0 4px 12px rgba(188,145,85,0.3)}
 
         /* POLICY SECTIONS */
         .wt-policy{padding:80px 40px}
@@ -219,12 +296,33 @@ export function WarrantyPageTemplate({ page }: { page: CMSPage }) {
           .wt-steps-grid{grid-template-columns:repeat(2,1fr)}
           .wt-step-card{padding:32px 20px 28px}
         }
+        @media(max-width:1024px){
+          .wt-financing-strip{padding:36px 32px}
+          .wt-financing-inner{gap:20px}
+          .wt-financing-left{gap:16px}
+          .wt-trust-strip{padding:40px 24px}
+          .wt-trust-strip-item{padding:16px 20px;min-width:140px;font-size:12px}
+          .wt-trust-divider{display:none}
+        }
         @media(max-width:768px){
           .wt-hero{padding:110px 20px 40px;min-height:auto}
           .wt-hero h1{font-size:clamp(32px,7vw,44px)}
           .wt-hero .subtitle{font-size:15px}
           .wt-hero-ctas{flex-direction:column;align-items:center}
-          .wt-cta-btn{min-width:100%;max-width:320px}
+          .wt-cta-btn{width:100%;max-width:320px}
+          .wt-trust-bar-inner{grid-template-columns:repeat(2,1fr)}
+          .wt-trust-item{padding:24px 12px;border-bottom:1px solid rgba(188,145,85,0.12)}
+          .wt-trust-item:nth-child(2n){border-right:none}
+          .wt-trust-item:nth-last-child(-n+2){border-bottom:none}
+          .wt-trust-number{font-size:30px;min-height:34px}
+          .wt-trust-label{font-size:11px;margin-top:6px;letter-spacing:0.8px}
+          .wt-trust-strip{padding:32px 20px}
+          .wt-trust-strip-item{padding:16px 12px;min-width:33.33%;font-size:11px}
+          .wt-trust-strip-item svg{width:18px;height:18px}
+          .wt-financing-strip{padding:28px 20px}
+          .wt-financing-inner{gap:16px}
+          .wt-financing-left{gap:12px}
+          .wt-financing-text{font-size:14px}
           .wt-policy{padding:60px 20px}
           .wt-request{padding:60px 20px}
         }
@@ -251,31 +349,59 @@ export function WarrantyPageTemplate({ page }: { page: CMSPage }) {
             {hp.before}<span className="text-[#bc9155]">{hp.accent}</span>{hp.after}
           </h1>
           <p className="subtitle">
-            {hero?.subtitle || "We stand behind the work we complete. This page explains exactly what is covered, for how long, and what to do if something needs attention after your project is done."}
+            {heroSubtitle}
           </p>
           <div className="wt-hero-ctas">
+            {/^(https?:|tel:|#)/i.test(heroPrimaryUrl) ? (
+              <a href={heroPrimaryUrl} className="wt-cta-btn wt-cta-primary">{heroPrimaryLabel}</a>
+            ) : (
+              <Link href={heroPrimaryUrl} className="wt-cta-btn wt-cta-primary">{heroPrimaryLabel}</Link>
+            )}
             {fairfieldPhone && (
               <a href={`tel:${fairfieldPhone.number.replace(/\D/g, "")}`} className="wt-cta-btn">
-                <span className="wt-cta-label">Fairfield County</span>
-                <span className="wt-cta-phone">{fairfieldPhone.number}</span>
+                Fairfield: {fairfieldPhone.number}
               </a>
             )}
             {newHavenPhone && (
               <a href={`tel:${newHavenPhone.number.replace(/\D/g, "")}`} className="wt-cta-btn">
-                <span className="wt-cta-label">New Haven County</span>
-                <span className="wt-cta-phone">{newHavenPhone.number}</span>
+                New Haven: {newHavenPhone.number}
               </a>
             )}
-            <a href="#contact" className="wt-cta-btn wt-cta-primary">
-              <span className="wt-cta-label">Warranty Service</span>
-              <span className="wt-cta-phone">Contact Us</span>
-            </a>
           </div>
         </div>
       </section>
 
       {/* TRUST BAR */}
-      <HeroTrustBar items={heroTrust?.items} />
+      <section className="wt-trust-bar">
+        <div className="wt-trust-bar-inner">
+          {heroTrustItems.map((item, index) => {
+            const node = (
+              <>
+                <div className="wt-trust-number">
+                  {item.value ? (
+                    item.value
+                  ) : (
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                  )}
+                </div>
+                <div className="wt-trust-label">{item.label}</div>
+              </>
+            );
+
+            return item.url ? (
+              <a key={`${item.label}-${index}`} href={item.url} target="_blank" rel="noopener noreferrer" className="wt-trust-item" style={{ textDecoration: "none", color: "inherit", cursor: "pointer" }}>
+                {node}
+              </a>
+            ) : (
+              <div key={`${item.label}-${index}`} className="wt-trust-item">
+                {node}
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
       {/* POLICY SECTIONS */}
       {activePolicies.map((ps, i) => {
@@ -283,7 +409,7 @@ export function WarrantyPageTemplate({ page }: { page: CMSPage }) {
         return (
           <section key={i} className={`wt-policy ${ps.bg === "cream" ? "wt-policy-cream" : "wt-policy-white"}`}>
             <div className="wt-policy-inner">
-              <div className="wt-content wt-fade">
+              <div className="wt-content fade-up">
                 <div className="wt-section-header">
                   <span className="wt-label">{ps.eyebrow}</span>
                   <h2 className="font-serif font-bold">{pp.before}<span className="text-[#bc9155]">{pp.accent}</span>{pp.after}</h2>
@@ -298,7 +424,7 @@ export function WarrantyPageTemplate({ page }: { page: CMSPage }) {
       {/* HOW TO REQUEST WARRANTY SERVICE */}
       <section className="wt-request">
         <div className="wt-request-inner">
-          <div className="wt-section-header wt-fade">
+          <div className="wt-section-header fade-up">
             <span className="wt-label">{requestData?.eyebrow || "Warranty Service"}</span>
             {(() => {
               const rp = parts(requestData?.title || "How to Request Warranty Service", requestData?.title_highlight || "Warranty Service");
@@ -306,7 +432,7 @@ export function WarrantyPageTemplate({ page }: { page: CMSPage }) {
             })()}
             <p>{requestData?.subtitle || "If you believe something we installed needs attention under warranty, contact us directly. We respond within one business day."}</p>
           </div>
-          <div className="wt-steps-grid wt-fade">
+          <div className="wt-steps-grid fade-up">
             {steps.map((step: any, i: number) => (
               <div key={i} className="wt-step-card">
                 <div className="wt-step-num">{step.number || i + 1}</div>
@@ -318,8 +444,8 @@ export function WarrantyPageTemplate({ page }: { page: CMSPage }) {
               </div>
             ))}
           </div>
-          <p className="wt-bottom-text wt-fade">{requestData?.bottom_text || "There's no complicated claim process. You call or write, we look at it, and we handle it if it's ours to handle."}</p>
-          <div className="wt-phone-pills wt-fade">
+          <p className="wt-bottom-text fade-up">{requestData?.bottom_text || "There's no complicated claim process. You call or write, we look at it, and we handle it if it's ours to handle."}</p>
+          <div className="wt-phone-pills fade-up">
             {fairfieldPhone && (
               <a href={`tel:${fairfieldPhone.number.replace(/\D/g, "")}`} className="wt-phone-pill">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -337,13 +463,49 @@ export function WarrantyPageTemplate({ page }: { page: CMSPage }) {
       </section>
 
       {/* TRUST STRIP */}
-      <DarkTrustStrip items={darkTrust?.items} />
+      <div className="wt-trust-strip" role="region" aria-label="Trust indicators">
+        <div className="wt-trust-strip-inner">
+          {trustStripItems.map((item, index) => {
+            const label = [item.label, item.value].filter(Boolean).join(" ");
+            return (
+              <div key={`${item.label}-${index}`} style={{ display: "contents" }}>
+                {item.url ? (
+                  <a href={item.url} target="_blank" rel="noopener noreferrer" className="wt-trust-strip-item">
+                    {stripIcon(item.icon)}
+                    {label}
+                  </a>
+                ) : (
+                  <div className="wt-trust-strip-item">
+                    {stripIcon(item.icon)}
+                    {label}
+                  </div>
+                )}
+                {index < trustStripItems.length - 1 ? <div className="wt-trust-divider" /> : null}
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
       {/* LEAD FORM */}
       <LeadFormSection page={page} data={leadForm} accent="Warranty Service" />
 
       {/* FINANCING STRIP */}
-      <FinancingStrip data={financingData} />
+      <div className="wt-financing-strip" role="region" aria-label="Financing options">
+        <div className="wt-financing-inner">
+          <div className="wt-financing-left">
+            <span className="wt-greensky-logo">
+              <span className="wt-gs-green">Green</span>
+              <span className="wt-gs-dark">Sky</span>
+            </span>
+            <p className="wt-financing-text"><strong>{financingTitle}.</strong> {financingText}</p>
+          </div>
+          <a href={financingCtaUrl} target="_blank" rel="noopener noreferrer" className="wt-financing-cta">
+            {financingCtaLabel}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
     </div>
   );
 }

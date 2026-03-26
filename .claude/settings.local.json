@@ -37,7 +37,11 @@
       "Bash(for file:*)",
       "Bash(do echo:*)",
       "Bash(ls -la /c/Users/georg/OneDrive/Documents/GitHub/builtwell-frontend/*.json)",
-      "Bash(node -e \":*)"
+      "Bash(node -e \":*)",
+      "Bash(find /c/Users/georg/Downloads/builtwell-frontend -type f -name *routing* -o -name *route* -o -name *.config*)",
+      "Bash(find /c/Users/georg/Downloads/builtwell-frontend -path *node_modules -prune -o -type f -name *.ts -print)",
+      "Bash(find /c/Users/georg/Downloads/builtwell-frontend -type f \\\\\\(-name *seed* -o -name *fixture* -o -name *migration* -o -name *factory* \\\\\\))",
+      "Bash(ls -la src/templates/Warranty*)"
     ]
   }
 }

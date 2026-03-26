@@ -274,6 +274,13 @@ const trustStripText = (item: any) => {
   if (label === "CT HIC License") return [label, value].filter(Boolean).join(" ");
   return [label, value].filter(Boolean).join(" ");
 };
+const trustStripIconType = (item: any) => {
+  const icon = String(item?.icon || "").toLowerCase();
+  const label = String(item?.label || "").toLowerCase();
+  if (icon.includes("star") || label.includes("google")) return "star";
+  if (icon.includes("calendar") || icon.includes("clock") || label.includes("license")) return "calendar";
+  return "check";
+};
 
 function AccentTitle({
   text,
@@ -563,7 +570,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
   return (
     <div className="bg-white text-[#1E2B43]">
       <main id="main">
-        <section className="relative isolate overflow-hidden bg-[#151E30] px-5 pb-10 pt-[80px] text-white sm:pb-10 sm:pt-[92px] md:px-10 md:pb-12 md:pt-[120px]">
+        <section className="relative isolate overflow-hidden bg-[#151E30] px-5 pb-8 pt-[72px] text-white sm:pb-8 sm:pt-[84px] md:px-10 md:pb-10 md:pt-[104px]">
           <div
             className="absolute inset-0 bg-cover bg-[position:center_30%] opacity-[0.72]"
             style={{
@@ -574,7 +581,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             }}
           />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_97%_97%,rgba(21,30,48,1)_0%,rgba(21,30,48,0.9)_8%,transparent_30%),radial-gradient(ellipse_at_3%_97%,rgba(21,30,48,0.9)_0%,transparent_25%),linear-gradient(180deg,rgba(21,30,48,0.35)_0%,rgba(21,30,48,0.2)_30%,rgba(21,30,48,0.45)_65%,rgba(21,30,48,0.92)_100%)]" />
-          <div className="relative mx-auto flex min-h-[35vh] max-w-[1240px] flex-col items-center justify-center text-center sm:min-h-[40vh] lg:min-h-[50vh]">
+          <div className="relative mx-auto flex min-h-[30vh] max-w-[1240px] flex-col items-center justify-center text-center sm:min-h-[34vh] lg:min-h-[40vh]">
             <ol className="mb-5 flex list-none items-center text-[13px] font-medium text-white/90 [text-shadow:0_1px_6px_rgba(0,0,0,0.7)]">
               <li>
                 {linkNode("/", "Home", "text-white/85 hover:text-[#BC9155]")}
@@ -667,23 +674,25 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
           </div>
         </section>
         <section className="border-b border-b-[#1E2B43]/6 bg-white px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
-          <div className="mx-auto max-w-[820px] text-center">
-            <span className="mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#9A7340] before:relative before:-left-5 before:top-[-3px] before:inline-block before:h-[2px] before:w-[10px] before:bg-[#BC9155]">
-              {overview?.eyebrow || "Connecticut Remodeling Contractor"}
-            </span>
-            <h2 className="mx-auto mb-6 max-w-[780px] font-serif text-[clamp(28px,3.5vw,44px)] font-bold leading-[1.2] tracking-[-0.5px]">
-              <AccentTitle
-                text={
-                  overview?.title ||
-                  "Full-Service Remodeling Across Connecticut"
-                }
-                accent={overview?.highlight_text || "Across Connecticut"}
-              />
-            </h2>
+          <div className="mx-auto max-w-[820px]">
+            <div className="mb-[28px] text-center">
+              <span className="mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#9A7340] before:relative before:-left-5 before:top-[-3px] before:inline-block before:h-[2px] before:w-[10px] before:bg-[#BC9155]">
+                {overview?.eyebrow || "Connecticut Remodeling Contractor"}
+              </span>
+              <h2 className="font-serif text-[clamp(32px,3.5vw,44px)] font-bold leading-[1.2] tracking-[-0.5px] text-[#1E2B43]">
+                <AccentTitle
+                  text={
+                    overview?.title ||
+                    "Full-Service Remodeling Across Connecticut"
+                  }
+                  accent={overview?.highlight_text || "Across Connecticut"}
+                />
+              </h2>
+            </div>
             {overviewParagraphs.map((paragraph) => (
               <p
                 key={paragraph.slice(0, 24)}
-                className="mb-5 text-[16px] leading-[1.85] text-[#5C677D] last:mb-0"
+                className="mb-5 text-left text-[16px] leading-[1.85] text-[#5C677D] last:mb-0"
               >
                 {paragraph}
               </p>
@@ -741,7 +750,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
               {(intro?.bullet_points || []).map((item: any, index: number) => (
                 <article
                   key={`${item.text}-${index}`}
-                  className="kitchen-fade-up rounded-[12px] border-b-2 border-b-transparent bg-white px-6 py-8 text-center shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-b-[#BC9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
+                  className="kitchen-fade-up rounded-[12px] border-b-2 border-b-transparent bg-white px-6 py-8 text-center shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] hover:border-b-[#BC9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
                   style={{ transitionDelay: `${Math.min(index * 50, 250)}ms` }}
                 >
                   <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#BC9155]/10">
@@ -1098,9 +1107,8 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             </div>
           </div>
         </section>
-        <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] px-5 py-14 md:px-10 md:py-[56px]">
-          <div className="absolute inset-0 bg-[url('/portfolio/builtwell-job-site-aerial-ct.jpg')] bg-cover bg-center opacity-[0.12]" />
-          <div className="relative mx-auto flex max-w-[1200px] flex-wrap items-center justify-center">
+        <div className="kitchen-trust-strip" role="region" aria-label="Trust indicators">
+          <div className="kitchen-trust-strip-inner">
             {(trustStrip?.items || []).map((item: any, index: number) => (
               <div key={`${item.label}-${index}`} className="contents">
                 <a
@@ -1111,11 +1119,10 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                       ? "noreferrer noopener"
                       : undefined
                   }
-                  className="kitchen-fade-up flex min-w-[50%] flex-1 flex-col items-center gap-[10px] px-4 py-3 text-center text-[11px] font-semibold tracking-[0.4px] text-white/90 transition-all duration-300 hover:-translate-y-[2px] hover:text-[#BC9155] md:min-w-[180px] md:px-8 md:py-5 md:text-[13px]"
-                  style={{ transitionDelay: `${Math.min(index * 70, 280)}ms` }}
+                  className="kitchen-trust-strip-item"
                 >
-                  <span className="text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))]">
-                    {item.label === "Google" ? (
+                  <span className="kitchen-trust-strip-icon">
+                    {trustStripIconType(item) === "star" ? (
                       <svg
                         width="22"
                         height="22"
@@ -1124,7 +1131,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                       >
                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                       </svg>
-                    ) : item.label === "CT HIC License" ? (
+                    ) : trustStripIconType(item) === "calendar" ? (
                       <svg
                         width="22"
                         height="22"
@@ -1153,7 +1160,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                   <span>{trustStripText(item)}</span>
                 </a>
                 {index < (trustStrip?.items || []).length - 1 ? (
-                  <div className="hidden h-10 w-px bg-white/10 lg:block" />
+                  <div className="kitchen-trust-strip-divider" />
                 ) : null}
               </div>
             ))}
@@ -1391,7 +1398,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
           text-align: center;
         }
         .kitchen-process-step.is-active p {
-          max-height: 200px;
+          max-height: 520px;
           opacity: 1;
           margin-top: 8px;
         }
@@ -1400,6 +1407,64 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
           margin-top: 28px;
           font-size: 13px;
           color: rgba(255, 255, 255, 0.4);
+        }
+        .kitchen-trust-strip {
+          background: linear-gradient(135deg, #1e2b43 0%, #151e30 100%);
+          padding: 56px 40px;
+          position: relative;
+          overflow: hidden;
+        }
+        .kitchen-trust-strip::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: url('/hero/builtwell-job-site-aerial-hero-ct.jpg') center/cover no-repeat;
+          opacity: 0.06;
+        }
+        .kitchen-trust-strip-inner {
+          max-width: 1200px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0;
+          flex-wrap: wrap;
+          position: relative;
+          z-index: 1;
+        }
+        .kitchen-trust-strip-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          font-size: 13px;
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.9);
+          letter-spacing: 0.4px;
+          white-space: nowrap;
+          text-decoration: none;
+          transition: all 0.3s;
+          padding: 20px 32px;
+          flex: 1;
+          min-width: 180px;
+          text-align: center;
+        }
+        .kitchen-trust-strip-item:hover {
+          color: #bc9155;
+          transform: translateY(-2px);
+        }
+        .kitchen-trust-strip-icon {
+          color: #bc9155;
+          flex-shrink: 0;
+          width: 22px;
+          height: 22px;
+          filter: drop-shadow(0 2px 4px rgba(188, 145, 85, 0.3));
+        }
+        .kitchen-trust-strip-divider {
+          width: 1px;
+          height: 40px;
+          background: rgba(255, 255, 255, 0.1);
+          flex-shrink: 0;
         }
         .brand-mask {
           -webkit-mask-image: linear-gradient(
@@ -1478,6 +1543,12 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
           }
         }
         @media (max-width: 1024px) {
+          .kitchen-trust-strip-inner {
+            gap: 20px;
+          }
+          .kitchen-trust-strip-divider {
+            display: none;
+          }
           .kitchen-process-timeline {
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 24px;
@@ -1504,6 +1575,19 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
           }
         }
         @media (max-width: 768px) {
+          .kitchen-trust-strip-divider {
+            display: none;
+          }
+          .kitchen-trust-strip-item {
+            padding: 16px 12px;
+            min-width: 33.33%;
+            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+          }
           .kitchen-process-header {
             margin-bottom: 36px;
           }

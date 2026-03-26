@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Check, CheckCircle, ChevronDown, CreditCard, Shield, Star } from "lucide-react";
+import { ArrowRight, CalendarDays, Check, CheckCircle, ChevronDown, CreditCard, Shield } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
 
 export const cls = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ");
@@ -42,7 +42,7 @@ export function linkNode(href: string, children: React.ReactNode, className?: st
 
 export function trustIcon(icon?: string | null) {
   switch ((icon || "").toLowerCase()) {
-    case "star": return <Star className="h-5 w-5" />;
+    case "star": return <svg className="h-[22px] w-[22px]" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>;
     case "shield": return <Shield className="h-5 w-5" />;
     case "calendar":
     case "clock": return <CalendarDays className="h-5 w-5" />;
@@ -61,25 +61,34 @@ export function HeroTrustBar({ items }: { items?: any[] }) {
   return (
     <section className="border-y border-y-[#BC9155]/20 bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)]">
       <div className="mx-auto grid max-w-[1280px] grid-cols-2 text-center lg:grid-cols-4">
-        {list.map((item: any, index: number) => (
-          <div
-            key={`${item.label || "trust"}-${index}`}
-            className={cls(
-              "group cursor-default bg-[#BC9155]/[0.08] px-4 py-6 transition-all duration-300 md:bg-transparent md:px-5 md:py-9 md:hover:-translate-y-[3px] md:hover:bg-[#BC9155]/8",
-              index % 2 === 0 ? "border-r border-[#BC9155]/12" : "",
-              index < 2 ? "border-b border-[#BC9155]/12" : "",
-              "lg:border-b-0",
-              index < list.length - 1 ? "lg:border-r lg:border-[#BC9155]/12" : "lg:border-r-0",
-            )}
-          >
-            <div className="flex min-h-[42px] items-center justify-center font-serif text-[32px] font-bold leading-none text-[#BC9155] transition-all duration-300 md:text-[42px] md:group-hover:text-[#D4A95A] md:group-hover:[text-shadow:0_0_20px_rgba(188,145,85,0.3)]">
-              {item.value ? item.value : <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>}
+        {list.map((item: any, index: number) => {
+          const cellClass = cls(
+            "group cursor-default bg-[#BC9155]/[0.08] px-4 py-6 transition-all duration-300 md:bg-transparent md:px-5 md:py-9 md:hover:-translate-y-[3px] md:hover:bg-[#BC9155]/8",
+            index % 2 === 0 ? "border-r border-[#BC9155]/12" : "",
+            index < 2 ? "border-b border-[#BC9155]/12" : "",
+            "lg:border-b-0",
+            index < list.length - 1 ? "lg:border-r lg:border-[#BC9155]/12" : "lg:border-r-0",
+          );
+          const inner = (
+            <>
+              <div className="flex min-h-[42px] items-center justify-center font-serif text-[32px] font-bold leading-none text-[#BC9155] transition-all duration-300 md:text-[42px] md:group-hover:text-[#D4A95A] md:group-hover:[text-shadow:0_0_20px_rgba(188,145,85,0.3)]">
+                {item.value ? item.value : <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>}
+              </div>
+              <div className="mt-1.5 text-[11px] font-medium uppercase tracking-[0.8px] text-white/85 transition-colors duration-300 md:mt-2 md:text-[13px] md:tracking-[1px] md:text-white/60 md:group-hover:text-white/85">
+                {item.label}
+              </div>
+            </>
+          );
+          return item.url ? (
+            <a key={`${item.label || "trust"}-${index}`} href={item.url} target="_blank" rel="noopener noreferrer" className={cellClass} style={{ textDecoration: "none", color: "inherit" }}>
+              {inner}
+            </a>
+          ) : (
+            <div key={`${item.label || "trust"}-${index}`} className={cellClass}>
+              {inner}
             </div>
-            <div className="mt-1.5 text-[11px] font-medium uppercase tracking-[0.8px] text-white/85 transition-colors duration-300 md:mt-2 md:text-[13px] md:tracking-[1px] md:text-white/60 md:group-hover:text-white/85">
-              {item.label}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
@@ -155,10 +164,21 @@ export function AreasSection({ data }: { data: any }) {
                 county.towns_expanded ||
                 (featuredTownsRaw.length === 0 ? extraFromLinks : []) ||
                 [];
+              const MAX_VISIBLE_TOWNS = 8;
               const normalizeTown = (town: string) => String(town || "").trim().toLowerCase();
-              const featuredTownSet = new Set(featuredTownsRaw.map(normalizeTown));
-              const featuredTowns: string[] = featuredTownsRaw.filter(Boolean);
-              const extraTowns: string[] = extraTownsRaw.filter((town: string) => Boolean(town) && !featuredTownSet.has(normalizeTown(town)));
+              const featuredTownsLimited = featuredTownsRaw.filter(Boolean).slice(0, MAX_VISIBLE_TOWNS);
+              const overflowFeaturedTowns = featuredTownsRaw.filter(Boolean).slice(MAX_VISIBLE_TOWNS);
+              const featuredTownSet = new Set(featuredTownsLimited.map(normalizeTown));
+              const featuredTowns: string[] = featuredTownsLimited;
+              const mergedExtraTowns = [...overflowFeaturedTowns, ...extraTownsRaw];
+              const seenExtra = new Set<string>();
+              const extraTowns: string[] = mergedExtraTowns.filter((town: string) => {
+                if (!town) return false;
+                const normalized = normalizeTown(town);
+                if (!normalized || featuredTownSet.has(normalized) || seenExtra.has(normalized)) return false;
+                seenExtra.add(normalized);
+                return true;
+              });
               const countyKey = String(county.slug || county.url || county.name || county.phone || `county-${index}`);
               const featuredTownKeyCounts: Record<string, number> = {};
               const extraTownKeyCounts: Record<string, number> = {};
@@ -274,7 +294,7 @@ export function FinancingStrip({ data }: { data: any }) {
             <span className="bw-greensky-logo"><span className="bw-gs-green">Green</span><span className="bw-gs-dark">Sky</span></span>
             <p className="bw-financing-strip-text"><strong>{data.title}.</strong> {typeof data.content === "string" ? data.content.replace(/<[^>]+>/g, "") : data.content}</p>
           </div>
-          {data.cta?.url ? linkNode(data.cta.url, <span>{data.cta.label || "Check Financing Options"}</span>, "bw-financing-strip-cta") : null}
+          {data.cta?.url ? linkNode(data.cta.url, <><span>{data.cta.label || "Check Financing Options"}</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></>, "bw-financing-strip-cta") : null}
         </div>
       </div>
       <style jsx global>{`

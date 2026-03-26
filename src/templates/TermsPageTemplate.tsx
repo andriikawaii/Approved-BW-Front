@@ -17,31 +17,7 @@ type LegalBlock = {
   legal_updated?: string;
 };
 
-type PhoneItem = {
-  label?: string;
-  number?: string;
-};
-
-function HeroCta({
-  label,
-  value,
-  href,
-  primary = false,
-}: {
-  label: string;
-  value: string;
-  href: string;
-  primary?: boolean;
-}) {
-  return linkNode(
-    href,
-    <>
-      <span className={primary ? "terms-hero-cta-label terms-hero-cta-label--primary" : "terms-hero-cta-label"}>{label}</span>
-      <span className="terms-hero-cta-phone">{value}</span>
-    </>,
-    primary ? "terms-hero-cta-btn terms-hero-cta-btn--primary" : "terms-hero-cta-btn",
-  );
-}
+type PhoneItem = { label?: string; number?: string };
 
 export function TermsPageTemplate({ page }: { page: CMSPage }) {
   const hero = section<HeroData>(page, "hero");
@@ -50,6 +26,8 @@ export function TermsPageTemplate({ page }: { page: CMSPage }) {
   const phones = (((page as unknown as { phones?: { items?: PhoneItem[] } }).phones?.items) || []) as PhoneItem[];
   const fairfieldPhone = phones.find((item) => (item.label || "").toLowerCase().includes("fairfield"))?.number || "(203) 919-9616";
   const newHavenPhone = phones.find((item) => (item.label || "").toLowerCase().includes("new haven"))?.number || "(203) 466-9148";
+  const heroPrimaryLabel = "Get Your Free Estimate";
+  const heroPrimaryUrl = hero?.cta_primary?.url || "/free-consultation/";
 
   return (
     <div className="terms-page bg-white text-[#1e2b43]">
@@ -57,7 +35,7 @@ export function TermsPageTemplate({ page }: { page: CMSPage }) {
         <div
           className="absolute inset-0 bg-cover bg-[center_30%]"
           style={{
-            backgroundImage: `url(${media(hero?.background_image, "/images/headers/kitchen-remodeling-header.jpg")})`,
+            backgroundImage: `url(${media(hero?.background_image, "/hero/builtwell-team-van-consultation-hero-ct.jpg")})`,
             opacity: 0.72,
           }}
         />
@@ -80,9 +58,9 @@ export function TermsPageTemplate({ page }: { page: CMSPage }) {
           {hero?.subheadline ? <p className="terms-subtitle">{hero.subheadline}</p> : null}
 
           <div className="terms-hero-ctas">
-            <HeroCta label="Fairfield County" value={fairfieldPhone} href={`tel:${fairfieldPhone.replace(/\D/g, "")}`} />
-            <HeroCta label="New Haven County" value={newHavenPhone} href={`tel:${newHavenPhone.replace(/\D/g, "")}`} />
-            <HeroCta label="Free Estimate" value="Schedule Now" href="#contact" primary />
+            {linkNode(heroPrimaryUrl, heroPrimaryLabel, "terms-hero-cta-btn terms-hero-cta-btn--primary")}
+            {linkNode(`tel:${fairfieldPhone.replace(/\D/g, "")}`, `Fairfield: ${fairfieldPhone}`, "terms-hero-cta-btn")}
+            {linkNode(`tel:${newHavenPhone.replace(/\D/g, "")}`, `New Haven: ${newHavenPhone}`, "terms-hero-cta-btn")}
           </div>
         </div>
       </section>
@@ -140,60 +118,47 @@ export function TermsPageTemplate({ page }: { page: CMSPage }) {
         }
         .terms-page .terms-hero-ctas {
           display: flex;
-          gap: 16px;
-          margin-top: 32px;
+          gap: 14px;
+          margin-top: 28px;
           justify-content: center;
+          align-items: center;
           flex-wrap: wrap;
         }
         .terms-page .terms-hero-cta-btn {
-          display: flex;
-          flex-direction: column;
+          display: inline-flex;
           align-items: center;
-          padding: 16px 28px;
+          justify-content: center;
+          gap: 8px;
+          padding: 14px 32px;
           border-radius: 8px;
           background: rgba(10, 18, 35, 0.42);
-          border: 1px solid rgba(255, 255, 255, 0.18);
-          border-bottom: 2px solid #bc9155;
+          border: 1px solid rgba(255, 255, 255, 0.22);
           backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
           color: #fff;
           text-decoration: none;
+          font-size: 15px;
+          font-weight: 600;
+          letter-spacing: 0.3px;
+          white-space: nowrap;
           transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-          min-width: 180px;
-          text-align: center;
         }
         .terms-page .terms-hero-cta-btn:hover {
           background: rgba(10, 18, 35, 0.62);
-          border-color: rgba(255, 255, 255, 0.28);
-          border-bottom-color: #bc9155;
+          border-color: rgba(255, 255, 255, 0.35);
           transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(188, 145, 85, 0.2);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
         .terms-page .terms-hero-cta-btn--primary {
           background: #bc9155;
           border: 1px solid #bc9155;
-          border-bottom: 2px solid #a57d48;
           backdrop-filter: none;
+          -webkit-backdrop-filter: none;
         }
         .terms-page .terms-hero-cta-btn--primary:hover {
           background: #d4a95a;
           border-color: #d4a95a;
-          border-bottom-color: #a57d48;
           box-shadow: 0 8px 24px rgba(188, 145, 85, 0.4);
-        }
-        .terms-page .terms-hero-cta-label {
-          font-size: 11px;
-          text-transform: uppercase;
-          letter-spacing: 1.2px;
-          opacity: 0.7;
-          margin-bottom: 4px;
-        }
-        .terms-page .terms-hero-cta-label--primary {
-          opacity: 0.9;
-        }
-        .terms-page .terms-hero-cta-phone {
-          font-size: 18px;
-          font-weight: 600;
-          font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
         }
         .terms-page .terms-legal-section {
           padding: 80px 40px 100px;
@@ -267,7 +232,15 @@ export function TermsPageTemplate({ page }: { page: CMSPage }) {
           }
           .terms-page .terms-hero-ctas {
             flex-direction: column;
-            align-items: stretch;
+            align-items: center;
+          }
+          .terms-page .terms-hero-cta-btn {
+            min-height: 44px;
+            width: 100%;
+            max-width: 300px;
+            justify-content: center;
+            font-size: 14px;
+            padding: 12px 24px;
           }
           .terms-page .terms-legal-section {
             padding: 60px 32px 80px;
@@ -298,6 +271,9 @@ export function TermsPageTemplate({ page }: { page: CMSPage }) {
           }
           .terms-page .terms-title {
             font-size: clamp(26px, 7vw, 36px);
+          }
+          .terms-page .terms-hero-cta-btn {
+            min-width: 0;
           }
           .terms-page .terms-legal-section {
             padding: 40px 16px 56px;

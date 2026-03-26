@@ -278,7 +278,6 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
   };
   const lead = section<any>(page, "lead_form");
   const financing = rich.find((item) => item.style_variant === "financing_strip");
-  const introParts = parts(referenceIntro.title, referenceIntro.highlight);
   const heroParts = parts(hero?.headline, "Connecticut");
   const valuesParts = parts(values?.title, values?.highlight_text);
   const [openSteps, setOpenSteps] = useState<Record<number, boolean>>({});
@@ -376,9 +375,7 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
             <div className="mb-7">
               {label(referenceIntro.eyebrow)}
               <h2 className="font-serif text-[clamp(30px,3.5vw,44px)] font-bold tracking-[-0.5px]">
-                {introParts.before}
-                {introParts.accent ? <span className="text-[#bc9155]">{introParts.accent}</span> : null}
-                {introParts.after}
+                A Process Built on <span className="text-[#bc9155]">Clear Communication</span>
               </h2>
             </div>
             <p className="text-[16px] leading-[1.8] text-[#5c677d]">{referenceIntro.content}</p>
