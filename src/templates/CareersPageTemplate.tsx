@@ -292,7 +292,6 @@ export function CareersPageTemplate({ page }: { page: CMSPage }) {
   const benefitsSection = rich[0]; // "Why Work With Us"
   const rolesSection = rich[1];    // "Who We Work With"
   const wizardSection = rich[2];   // "Submit Your Application" — wizard config
-  const questionsSection = rich[3]; // "Have Questions?"
 
   const heroParts = parts(hero?.headline, hero?.highlight_text || "BuiltWell CT");
   const fadeRef = useFadeUp();
@@ -419,23 +418,26 @@ export function CareersPageTemplate({ page }: { page: CMSPage }) {
             {hero?.subheadline ? (
               <p className="fade-up mx-auto mt-4 max-w-[560px] text-center text-[17px] font-normal leading-[1.7] text-white/[0.82]" style={{ ...fu, transitionDelay: "0.2s" }}>{hero.subheadline}</p>
             ) : null}
-            <div className="fade-up mt-8 flex flex-wrap items-stretch justify-center gap-4" style={{ ...fu, transitionDelay: "0.3s" }}>
+            <div className="fade-up mt-8 flex flex-wrap items-center justify-center gap-4" style={{ ...fu, transitionDelay: "0.3s" }}>
               {(hero?.badges || []).map((badge: any, i: number) => {
                 const isPrimary = !!badge.is_primary;
-                return (
-                  <div key={`${badge.label || "b"}-${i}`}>
-                    {linkNode(badge.url || "#",
-                      <div className={cls(
-                        "flex min-w-[180px] flex-col items-center rounded-[8px] border px-7 py-4 text-center transition-all duration-300 hover:-translate-y-[2px]",
-                        isPrimary
-                          ? "border-[#bc9155] border-b-2 border-b-[#a57d48] bg-[#bc9155] text-white hover:border-[#d4a95a] hover:border-b-[#a57d48] hover:bg-[#d4a95a] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
-                          : "border-b-2 border-b-[#bc9155] border-white/[0.18] bg-[rgba(10,18,35,0.42)] text-white backdrop-blur-[12px] hover:border-white/[0.28] hover:border-b-[#bc9155] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3),0_0_0_1px_rgba(188,145,85,0.2)]",
-                      )}>
-                        <div className={cls("text-[11px] uppercase tracking-[1.2px]", isPrimary ? "opacity-90" : "opacity-70")}>{badge.label}</div>
-                        {badge.value ? <div className="mt-1 text-[18px] font-semibold" style={{ fontFamily: "'Playfair Display', serif" }}>{badge.value}</div> : null}
-                      </div>,
-                    )}
-                  </div>
+                const btnText = badge.value ? `${badge.label}: ${badge.value}` : badge.label;
+                return isPrimary ? (
+                  <a
+                    key={`badge-${i}`}
+                    href={badge.url || "#"}
+                    className="inline-flex min-h-[48px] items-center justify-center rounded-[8px] bg-[#bc9155] px-7 py-3 text-[14px] font-semibold text-white transition-all duration-200 hover:bg-[#a57d48] hover:-translate-y-[1px]"
+                  >
+                    {badge.label}
+                  </a>
+                ) : (
+                  <a
+                    key={`badge-${i}`}
+                    href={badge.url || "#"}
+                    className="inline-flex min-h-[48px] items-center justify-center rounded-[8px] border border-white/[0.18] bg-[rgba(10,18,35,0.55)] px-7 py-3 text-[14px] font-semibold text-white backdrop-blur-[8px] transition-all duration-200 hover:bg-[rgba(10,18,35,0.72)] hover:border-white/[0.3] hover:-translate-y-[1px]"
+                  >
+                    {btnText}
+                  </a>
                 );
               })}
             </div>
@@ -448,7 +450,7 @@ export function CareersPageTemplate({ page }: { page: CMSPage }) {
         {/* ══════ WHY WORK WITH US ══════ */}
         <section className="bg-[#f5f1e9] px-5 py-[100px] md:px-10">
           <div className="mx-auto max-w-[1240px]">
-            <div className="fade-up mb-16 text-center" style={fu}>
+            <div className="fade-up mb-12 text-center" style={fu}>
               {label(benefitsSection?.eyebrow || "Why BuiltWell")}
               {(() => { const p = parts(benefitsSection?.title, benefitsSection?.highlight_text); return (
                 <h2 className="mx-auto mb-5 max-w-[780px] font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px]">
@@ -472,7 +474,7 @@ export function CareersPageTemplate({ page }: { page: CMSPage }) {
         {/* ══════ WHO WE WORK WITH ══════ */}
         <section className="bg-white px-5 py-[100px] md:px-10">
           <div className="mx-auto max-w-[1240px]">
-            <div className="fade-up mb-16 text-center" style={fu}>
+            <div className="fade-up mb-12 text-center" style={fu}>
               {label(rolesSection?.eyebrow || "Open Roles")}
               {(() => { const p = parts(rolesSection?.title, rolesSection?.highlight_text); return (
                 <h2 className="mx-auto mb-5 max-w-[780px] font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px]">
@@ -508,35 +510,6 @@ export function CareersPageTemplate({ page }: { page: CMSPage }) {
           </div>
         </section>
 
-        {/* ══════ QUESTIONS / CTA DARK ══════ */}
-        <section className="relative overflow-hidden bg-[#1e2b43] px-5 py-20 md:px-10">
-          <div className="absolute inset-0 bg-cover bg-center opacity-[0.18]" style={{ backgroundImage: "url('/portfolio/builtwell-team-van-exterior-ct-01.jpg')" }} />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(21,30,48,0.85) 0%, rgba(30,43,67,0.75) 100%)" }} />
-          <div className="relative z-[1] mx-auto max-w-[1240px]">
-            <div className="fade-up text-center" style={fu}>
-              {label(questionsSection?.eyebrow || "Contact", true)}
-              {(() => { const p = parts(questionsSection?.title, questionsSection?.highlight_text); return (
-                <h2 className="mb-3 font-serif text-[clamp(28px,3.5vw,40px)] font-bold" style={{ color: "#ffffff" }}>
-                  {p.before}{p.accent ? <span style={{ color: "#BC9155" }}>{p.accent}</span> : null}{p.after}
-                </h2>
-              ); })()}
-              {questionsSection?.content ? <p className="mx-auto mb-8 max-w-[560px] text-[16px] leading-[1.7] text-white/80">{questionsSection.content}</p> : null}
-              <div className="mb-8 flex flex-wrap justify-center gap-5">
-                <a href="tel:2039199616" className="flex min-w-[200px] flex-col items-center rounded-[10px] border border-white/[0.12] border-b-2 border-b-[#bc9155] bg-white/[0.08] px-9 py-5 text-white backdrop-blur-[8px] transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/[0.12]">
-                  <span className="mb-1.5 text-[11px] uppercase tracking-[1.2px] opacity-60">Fairfield County</span>
-                  <span className="text-[20px] font-semibold" style={{ fontFamily: "'Playfair Display', serif" }}>(203) 919-9616</span>
-                </a>
-                <a href="tel:2034669148" className="flex min-w-[200px] flex-col items-center rounded-[10px] border border-white/[0.12] border-b-2 border-b-[#bc9155] bg-white/[0.08] px-9 py-5 text-white backdrop-blur-[8px] transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/[0.12]">
-                  <span className="mb-1.5 text-[11px] uppercase tracking-[1.2px] opacity-60">New Haven County</span>
-                  <span className="text-[20px] font-semibold" style={{ fontFamily: "'Playfair Display', serif" }}>(203) 466-9148</span>
-                </a>
-              </div>
-              {questionsSection?.cta?.url ? linkNode(questionsSection.cta.url, <><span>{questionsSection.cta.label || "Visit our contact page"}</span><ArrowRight className="h-3.5 w-3.5" /></>, "inline-flex items-center gap-2 text-[15px] font-semibold text-[#bc9155] transition-all hover:gap-3") : (
-                <a href="/contact/" className="inline-flex items-center gap-2 text-[15px] font-semibold text-[#bc9155] transition-all hover:gap-3">Visit our contact page <ArrowRight className="h-3.5 w-3.5" /></a>
-              )}
-            </div>
-          </div>
-        </section>
       </div>
     </div>
   );

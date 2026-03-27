@@ -333,7 +333,7 @@ export function FinancingStrip({ data }: { data: any }) {
   );
 }
 
-export function LeadFormSection({ page, data, accent }: { page: CMSPage; data: any; accent?: string }) {
+export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage; data: any; accent?: string; phones?: { fairfield?: string; newHaven?: string } }) {
   const [pickedServices, setPickedServices] = useState<string[]>([]);
   const [serviceOpen, setServiceOpen] = useState(false);
   const [formValues, setFormValues] = useState<Record<string, string>>({ contact_method: "call" });
@@ -365,7 +365,24 @@ export function LeadFormSection({ page, data, accent }: { page: CMSPage; data: a
           <div className="bw-cta-header">
             {label(data?.eyebrow || "Get In Touch")}
             <h2>{titleParts.before}{titleParts.accent ? <span className="bw-gold">{titleParts.accent}</span> : null}{titleParts.after}</h2>
-            {data?.subtitle ? <p className="bw-cta-sub">{data.subtitle}</p> : null}
+            {data?.subtitle ? (
+              <p className="bw-cta-sub">
+                {(data.subtitle as string).split(/(\(\d{3}\) \d{3}-\d{4})/).map((part: string, i: number) =>
+                  /^\(\d{3}\) \d{3}-\d{4}$/.test(part) ? (
+                    <a key={i} href={`tel:${part.replace(/\D/g, "")}`} style={{ color: "var(--bw-gold, #bc9155)", fontWeight: 600 }}>{part}</a>
+                  ) : (
+                    <span key={i}>{part}</span>
+                  )
+                )}
+              </p>
+            ) : null}
+            {phones ? (
+              <p className="bw-cta-phones">
+                {phones.fairfield ? <><span>Fairfield County: </span><a href={`tel:${phones.fairfield.replace(/\D/g, "")}`}>{phones.fairfield}</a></> : null}
+                {phones.fairfield && phones.newHaven ? <span className="bw-cta-phones-sep"> | </span> : null}
+                {phones.newHaven ? <><span>New Haven County: </span><a href={`tel:${phones.newHaven.replace(/\D/g, "")}`}>{phones.newHaven}</a></> : null}
+              </p>
+            ) : null}
           </div>
           <div className="bw-cta-body">
             <div className="bw-cta-left">
@@ -464,6 +481,10 @@ export function LeadFormSection({ page, data, accent }: { page: CMSPage; data: a
         .bw-cta-header { text-align:center; margin-bottom:32px; }
         .bw-cta-header h2 { margin-bottom:8px; font:700 clamp(30px,3vw,42px)/1.2 "Playfair Display",serif; color:#1e2b43; letter-spacing:-.5px; }
         .bw-cta-header .bw-cta-sub { max-width:600px; margin:0 auto; font-size:16px; line-height:1.7; color:#5c677d; }
+        .bw-cta-header .bw-cta-phones { max-width:600px; margin:8px auto 0; font-size:15px; line-height:1.7; color:#5c677d; text-align:center; }
+        .bw-cta-header .bw-cta-phones a { color:#BC9155; font-weight:600; text-decoration:none; }
+        .bw-cta-header .bw-cta-phones a:hover { text-decoration:underline; }
+        .bw-cta-header .bw-cta-phones-sep { color:#5c677d; }
         .bw-cta-body { display:grid; grid-template-columns:1fr 1.15fr; gap:32px; align-items:stretch; }
         .bw-cta-left { display:flex; flex-direction:column; gap:16px; }
         .bw-cta-images { display:flex; flex-direction:column; gap:12px; flex:1; }

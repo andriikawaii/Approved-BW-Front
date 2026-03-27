@@ -424,6 +424,14 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
       q: 'Does BuiltWell serve both Fairfield County and New Haven County?',
       a: 'Yes. We serve all of Fairfield County through our Fairfield County Service Area Team, and all of New Haven County through our team based in Orange, CT. Greenwich and the other Fairfield County towns (Westport, Darien, New Canaan, Stamford, Norwalk, Fairfield, and Ridgefield) are served by the Fairfield County team at (203) 919-9616. New Haven County towns including Orange, New Haven, Hamden, Branford, Guilford, Madison, Woodbridge, and Milford are served by the New Haven County team. For the full list of towns we serve across both counties, visit /areas-we-serve/.',
     },
+    {
+      q: "Does homeowner's insurance cover reconstruction after fire or water damage in Greenwich, CT?",
+      a: "Yes, most homeowner's insurance policies cover reconstruction after fire or water damage, though the scope of coverage depends on your specific policy and the cause of the loss. We work directly with carriers including State Farm, Liberty Mutual, Travelers, Aetna, and others that commonly insure Greenwich properties. The process starts with filing your claim and getting an adjuster assigned. From there, we coordinate directly with your insurance company on scope documentation, pricing, and supplemental requests. We handle the rebuild from demo through final inspection, and we bill the carrier directly so you are not managing payments between us and your insurer. On fire damage projects in Greenwich, reconstruction timelines typically run 3 to 6 months depending on the extent of structural damage. We hold CT HIC License #0668405 and carry the insurance requirements that carriers expect from reconstruction contractors.",
+    },
+    {
+      q: 'What is the best flooring for homes in Greenwich, CT?',
+      a: 'The best flooring for Greenwich homes depends on the age of the house, the room, and how you use the space. Hardwood remains the most popular choice in Greenwich and typically runs $12 to $25 per square foot installed for solid oak or maple, and $15 to $35 for wider plank white oak or walnut. In pre-war homes with existing hardwood, refinishing the original floors costs $4 to $8 per square foot and preserves the character of the home. For kitchens, mudrooms, and bathrooms, large-format porcelain tile or luxury vinyl plank offers better moisture resistance than hardwood. In below-grade spaces like finished basements, we recommend engineered hardwood or luxury vinyl plank because solid hardwood can warp with the moisture conditions common in Greenwich\'s high water table areas near Cos Cob and Old Greenwich.',
+    },
   ];
 
   const primaryTowns = [
@@ -465,17 +473,11 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
               Home Remodeling in <span className="gwch-gold">Greenwich, CT</span>
             </h1>
             <p className="gwch-hero-sub">
-              Kitchen, bathroom, basement, and flooring remodeling in Greenwich, Connecticut. Served by our Fairfield County team. Licensed, insured, and built for Greenwich homes.
+              Home remodeling in Greenwich, CT from kitchens and bathrooms to full renovations. Licensed Fairfield County contractor with 15+ years experience serving Greenwich homeowners.
             </p>
             <div className="gwch-hero-ctas">
-              <a href="tel:2039199616" className="gwch-cta-btn">
-                <span className="gwch-cta-label">Fairfield County</span>
-                <span className="gwch-cta-phone-val">(203) 919-9616</span>
-              </a>
-              <Link href="#contact" className="gwch-cta-btn gwch-cta-primary">
-                <span className="gwch-cta-label">Free Estimate</span>
-                <span className="gwch-cta-phone-val">Schedule Now</span>
-              </Link>
+              <Link href="#contact" className="gwch-cta-btn gwch-cta-primary">Get Your Free Estimate</Link>
+              <a href="tel:2039199616" className="gwch-cta-btn">Call (203) 919-9616</a>
             </div>
           </div>
         </section>
@@ -522,18 +524,11 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
             </FadeUp>
 
             <FadeUp delay={100}>
-              <div className="gwch-form-block">
-                <div className="gwch-form-block-header">
-                  <SectionLabel text="Get Started" />
-                  <h3 className="gwch-form-h3">
-                    Schedule Your Free <strong>Consultation</strong>
-                  </h3>
-                  <p className="gwch-form-subtext">
-                    In-home visit or remote via Google Meet or Zoom.<br />
-                    Fairfield County: <a href="tel:2039199616" className="gwch-inline-link">(203) 919-9616</a>
-                  </p>
-                </div>
-                <LeadForm showConsultationType formId="inline" submitLabel="Schedule Free Consultation" />
+              <div style={{ marginTop: 36, padding: 28, background: 'rgba(188,145,85,0.06)', borderRadius: 10, textAlign: 'center' }}>
+                <p style={{ fontSize: 17, fontWeight: 600, color: '#1E2B43', margin: '0 0 8px' }}>Ready to discuss your Greenwich renovation?</p>
+                <p style={{ fontSize: 14, color: '#5C677D', margin: '0 0 16px' }}>In-home visit or remote via Google Meet or Zoom. No obligation.</p>
+                <Link href="#contact" className="gwch-cta-btn gwch-cta-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', fontSize: 15 }}>Get Your Free Estimate</Link>
+                <p style={{ fontSize: 13, color: '#5C677D', margin: '12px 0 0' }}>Or call Fairfield County: <a href="tel:2039199616" className="gwch-inline-link">(203) 919-9616</a></p>
               </div>
             </FadeUp>
           </div>
@@ -567,12 +562,12 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
                   <img src="/images/areas/greenwich-colonial-home.jpg" alt="Greenwich colonial home with balloon framing" />
                 </div>
                 <div className="gwch-alt-content">
-                  <h3 className="gwch-h3">Balloon Framing and Plaster Walls</h3>
+                  <h3 className="gwch-h3">Pre-War Construction and What It Means for Your Renovation</h3>
                   <p className="gwch-body-text">
-                    Approximately 35% of Greenwich's housing units predate 1940. Homes built before 1930 frequently use balloon framing, where continuous studs run from the foundation sill to the roof ridge without a fire block at the floor line. When we open these walls for any reason, fire blocking installation is required before we close them back up.
+                    Approximately 35 percent of Greenwich's housing stock predates 1940, concentrated in neighborhoods like Old Greenwich, Cos Cob, and central Greenwich. These homes were built with construction methods that predate modern building code, including wall framing that lacks the horizontal fire stops now required between floors. Any renovation that opens a wall in these homes triggers code-mandated upgrades before the wall is closed again.
                   </p>
                   <p className="gwch-body-text">
-                    Interior walls are almost universally plaster-on-lath rather than drywall. Plaster cracks and fails differently, and it requires a different approach to repair. In a full gut renovation we remove it entirely. In a partial renovation we assess what is in good condition versus what is compromised.
+                    The interior finish in most pre-war Greenwich homes is three-coat lime plaster over wood lath, not drywall. Matching existing plaster in a partial renovation is a skilled trade that most general contractors outsource or skip. We handle it in-house because in Greenwich, the details are what the homeowner notices first.
                   </p>
                 </div>
               </div>
@@ -582,12 +577,12 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
             <FadeUp delay={60}>
               <div className="gwch-alt-block">
                 <div className="gwch-alt-content">
-                  <h3 className="gwch-h3">Stone Foundations and Water Infiltration</h3>
+                  <h3 className="gwch-h3">Fieldstone Foundations and Coastal Moisture</h3>
                   <p className="gwch-body-text">
-                    Stone foundations are common in homes built before 1920 throughout Greenwich, typically fieldstone and cut granite assemblies laid without footings by modern standards. These foundations settle over time and are subject to water infiltration, particularly near the Mianus River in Cos Cob and along the coastal zones near Old Greenwich and Riverside.
+                    Greenwich sits on a mix of bedrock and glacial till, and homes built before 1920 typically rest on fieldstone and cut granite foundations that predate modern footing standards. Along the Mianus River corridor in Cos Cob and the shoreline in Old Greenwich and Riverside, elevated water tables create hydrostatic pressure that pushes moisture through these porous walls year-round.
                   </p>
                   <p className="gwch-body-text">
-                    Hydrostatic pressure is a real factor in those locations, and basement work in any of these zones starts with a moisture assessment before framing begins.
+                    Before we frame a single wall in a Greenwich basement, we complete a moisture assessment and address drainage. Interior perimeter systems, vapor barriers, and sump installations are standard scope here, not optional add-ons. The foundation dictates the project plan, not the other way around.
                   </p>
                 </div>
                 <div className="gwch-alt-img">
@@ -694,7 +689,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
               <div className="gwch-section-header">
                 <SectionLabel text="Investment" />
                 <h2 className="gwch-h2">
-                  Remodeling Costs in <strong>Greenwich, CT</strong>
+                  What Remodeling Costs in <strong>Greenwich, CT</strong>
                 </h2>
               </div>
               <p className="gwch-body-text">
@@ -939,7 +934,21 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
           </div>
         </section>
 
-        {/* ── 10. WHAT TO EXPECT ──────────────────────────────────────── */}
+        {/* ── 10. MID-PAGE CTA ──────────────────────────────────────── */}
+        <div style={{ position: 'relative', overflow: 'hidden', padding: '64px 0' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #1E2B43 0%, #151E30 100%)' }} />
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/portfolio/builtwell-contractor-client-consultation-ct.jpeg')", backgroundPosition: 'center 15%', backgroundSize: 'cover', opacity: 0.25 }} />
+          <div style={{ position: 'relative', zIndex: 1, maxWidth: 700, margin: '0 auto', textAlign: 'center', padding: '0 32px' }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 3.5vw, 40px)', color: '#fff', marginBottom: 12 }}>
+              Ready to Remodel in <span style={{ color: '#BC9155' }}>Greenwich</span>?
+            </h2>
+            <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', marginBottom: 28 }}>Greenwich homes demand precision — from Belle Haven estates to downtown condos, we deliver craftsmanship that matches the standard.</p>
+            <Link href="#contact" style={{ display: 'inline-block', background: '#BC9155', color: '#fff', padding: '16px 48px', borderRadius: 8, fontWeight: 600, fontSize: 16, textDecoration: 'none' }}>Get Your Free Estimate</Link>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginTop: 16, fontStyle: 'italic' }}>On-site or remote via Google Meet. No charge, no obligation.</p>
+          </div>
+        </div>
+
+        {/* ── 11. WHAT TO EXPECT ──────────────────────────────────────── */}
         <section className="gwch-expect-section">
           <div className="gwch-section-inner gwch-section-narrow">
             <FadeUp>
@@ -1279,20 +1288,20 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
           justify-content: center;
         }
         .gwch-cta-btn {
-          display: flex;
-          flex-direction: column;
+          display: inline-flex;
           align-items: center;
-          min-width: 180px;
-          padding: 16px 28px;
+          justify-content: center;
+          padding: 15px 32px;
           border-radius: 8px;
           background: rgba(10,18,35,0.42);
           border: 1px solid rgba(255,255,255,0.18);
-          border-bottom: 2px solid var(--gwch-gold);
           backdrop-filter: blur(12px);
           -webkit-backdrop-filter: blur(12px);
           color: #fff;
           text-decoration: none;
           text-align: center;
+          font-size: 15px;
+          font-weight: 600;
           transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
         }
         .gwch-cta-btn:hover {
@@ -1305,29 +1314,13 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
         .gwch-cta-btn.gwch-cta-primary {
           background: var(--gwch-gold);
           border: 1px solid var(--gwch-gold);
-          border-bottom: 2px solid #a57d48;
           color: #fff;
           backdrop-filter: none;
         }
         .gwch-cta-btn.gwch-cta-primary:hover {
           background: #d4a95a;
           border-color: #d4a95a;
-          border-bottom-color: #a57d48;
           box-shadow: 0 8px 24px rgba(188,145,85,0.4);
-        }
-        .gwch-cta-label {
-          font-size: 11px;
-          font-weight: 500;
-          letter-spacing: 1.2px;
-          text-transform: uppercase;
-          opacity: 0.7;
-          margin-bottom: 4px;
-        }
-        .gwch-cta-btn.gwch-cta-primary .gwch-cta-label { opacity: 0.9; }
-        .gwch-cta-phone-val {
-          font-family: Georgia, serif;
-          font-size: 18px;
-          font-weight: 600;
         }
 
         @media (max-width: 768px) {

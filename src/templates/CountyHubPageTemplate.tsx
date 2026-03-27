@@ -38,7 +38,13 @@ const COUNTY_PAGE_COPY: Record<string, {
   heroSubtitle: string;
   overviewTitle: string;
   overviewEyebrow: string;
-  overviewParagraphs: string[];
+  overviewParagraphsBefore: string[];
+  overviewPhoneHref: string;
+  overviewPhoneLabel: string;
+  overviewPhoneTrailing: string;
+  midCtaTitle: string;
+  midCtaAccent: string;
+  midCtaBody: string;
   servicesTitle: string;
   servicesSubtitle: string;
   townsTitle: string;
@@ -49,14 +55,20 @@ const COUNTY_PAGE_COPY: Record<string, {
   leadSubtitle: string;
 }> = {
   "fairfield-county": {
-    heroSubtitle: "Full-service home remodeling across Fairfield County, Connecticut. Kitchens, bathrooms, basements, flooring, additions, and more - built right by a licensed CT contractor.",
+    heroSubtitle: "From Greenwich estates to Stamford condos — renovation that matches the standard.",
     overviewTitle: "Full-Service Home Remodeling in Fairfield County",
     overviewEyebrow: "Fairfield County's Remodeling Contractor",
-    overviewParagraphs: [
+    overviewParagraphsBefore: [
       "Fairfield County is one of the most demanding residential remodeling markets in the Northeast. The housing stock ranges from pre-war colonials and Tudor estates in Greenwich to mid-century moderns in New Canaan, 1960s ranches in Fairfield, and Victorian-era homes in South Norwalk. Each town has its own building department, zoning requirements, and historic district regulations. Working here requires a contractor who understands the specific construction conditions, permitting processes, and material demands of each municipality.",
-      "BuiltWell CT provides full-scope home remodeling across Fairfield County - kitchens, bathrooms, basements, flooring, additions, interior carpentry, painting, decks, attic conversions, and accessibility modifications. Every project is managed by our in-house team, not subcontracted out. We hold Connecticut Home Improvement Contractor license #0668405 and carry full liability and workers' compensation insurance.",
-      "Whether you are renovating a coastal home in Westport dealing with salt air and FEMA flood zone requirements, or updating a colonial on a wooded lot in Ridgefield with ledge rock and well water, we have the local experience to anticipate site conditions, navigate the permitting process, and deliver work that holds up over time. Call (203) 919-9616 for a free consultation.",
+      "BuiltWell CT provides full-scope home remodeling across Fairfield County — kitchens, bathrooms, basements, flooring, additions, interior carpentry, painting, decks, attic conversions, and accessibility modifications. Every project is managed by our in-house team, not subcontracted out. We hold Connecticut Home Improvement Contractor license #0668405 and carry full liability and workers' compensation insurance.",
+      "Whether you are renovating a coastal home in Westport dealing with salt air and FEMA flood zone requirements, or updating a colonial on a wooded lot in Ridgefield with ledge rock and well water, we have the local experience to anticipate site conditions, navigate the permitting process, and deliver work that holds up over time. Call ",
     ],
+    overviewPhoneHref: "tel:2039199616",
+    overviewPhoneLabel: "(203) 919-9616",
+    overviewPhoneTrailing: " for a free consultation.",
+    midCtaTitle: "Remodeling in",
+    midCtaAccent: "Fairfield County",
+    midCtaBody: "From Greenwich estates to Ridgefield colonials — we know the homes, the codes, and the craftsmanship your neighborhood expects.",
     servicesTitle: "Remodeling Services in Fairfield County",
     servicesSubtitle: "We provide a full range of residential remodeling services across every town in Fairfield County. Each project is managed by our in-house team from consultation through final walkthrough.",
     townsTitle: "Towns We Serve in Fairfield County",
@@ -67,14 +79,20 @@ const COUNTY_PAGE_COPY: Record<string, {
     leadSubtitle: "Tell us about your project. We respond within one business day. Call (203) 919-9616 or fill out the form below.",
   },
   "new-haven-county": {
-    heroSubtitle: "Full-service home remodeling across New Haven County, Connecticut. Kitchens, bathrooms, basements, flooring, additions, and more - built right by a licensed CT contractor.",
+    heroSubtitle: "From the shoreline to the suburbs — built by the team next door.",
     overviewTitle: "Full-Service Home Remodeling in New Haven County",
     overviewEyebrow: "New Haven County's Remodeling Contractor",
-    overviewParagraphs: [
-      "New Haven County offers a broad mix of architecture, from 1920s city row homes and brick Victorians in New Haven to 1950s-1970s split-levels and capes in Hamden and Orange. Shoreline homes in Branford, Guilford, and Madison deal with salt air and moisture, while inland homes in Woodbridge and Bethany face site drainage, well water, septic, and ledge rock conditions. Remodeling here requires a contractor who understands the local construction realities and permitting process in each town.",
-      "BuiltWell CT provides full-scope home remodeling across New Haven County - kitchens, bathrooms, basements, flooring, additions, interior carpentry, painting, decks, attic conversions, and accessibility modifications. Every project is managed by our in-house team from our Orange, CT office and backed by Connecticut Home Improvement Contractor license #0668405, full liability insurance, and workers' compensation coverage.",
-      "Whether you are renovating a beach-adjacent home in Branford dealing with salt air and flood zone requirements, or updating a colonial in Woodbridge with well water and ledge rock site conditions, we have the local experience to anticipate project challenges, navigate building departments, and deliver work that holds up over time.",
+    overviewParagraphsBefore: [
+      "New Haven County's housing stock spans a wide range, from 1950s through 1980s colonials and split-levels in Hamden and Orange, Victorian-era homes in downtown New Haven, coastal cottages and capes in Branford and Guilford, and newer construction throughout Milford and Woodbridge. Each town has its own building department, zoning requirements, and permitting process. Working here requires a contractor who understands the specific construction conditions and regulatory landscape of each municipality.",
+      "BuiltWell CT provides full-scope home remodeling across New Haven County, including kitchens, bathrooms, basements, flooring, additions, interior carpentry, painting, decks, attic conversions, and accessibility modifications. Every project is managed by our in-house team from our Orange, CT office, not subcontracted out. We hold Connecticut Home Improvement Contractor license #0668405 and carry full liability and workers' compensation insurance.",
+      "Whether you are renovating a coastal home in Madison dealing with salt air and elevated humidity, or updating a colonial in Woodbridge with well water and ledge rock, we have the local experience to anticipate site conditions, navigate the permitting process, and deliver work that holds up over time. Call ",
     ],
+    overviewPhoneHref: "tel:2034669148",
+    overviewPhoneLabel: "(203) 466-9148",
+    overviewPhoneTrailing: " for a free consultation.",
+    midCtaTitle: "Remodeling in",
+    midCtaAccent: "New Haven County",
+    midCtaBody: "From our Orange headquarters, we serve every town in New Haven County with crews who know the housing stock and building departments.",
     servicesTitle: "Remodeling Services in New Haven County",
     servicesSubtitle: "We provide a full range of residential remodeling services across every town in New Haven County. Each project is managed by our in-house team from consultation through final walkthrough.",
     townsTitle: "Towns We Serve in New Haven County",
@@ -86,40 +104,55 @@ const COUNTY_PAGE_COPY: Record<string, {
   },
 };
 
-const COUNTY_SERVICE_OVERRIDES: Record<string, { summary: string; price: string; timeline: string }> = {
-  "Kitchen Remodeling": { summary: "Full kitchen renovations including cabinetry, countertops, tile, electrical, plumbing, and permits.", price: "$25K-$150K+", timeline: "6-12 weeks" },
-  "Bathroom Remodeling": { summary: "Complete bathroom renovations - tile, vanities, showers, tubs, and plumbing upgrades.", price: "$15K-$120K+", timeline: "3-6 weeks" },
-  "Basement Finishing": { summary: "Convert unfinished basements into living space with proper waterproofing and egress.", price: "$25K-$100K+", timeline: "4-8 weeks" },
-  Flooring: { summary: "Hardwood, LVP, tile, and engineered wood with expert subfloor preparation.", price: "$4-$25/sq ft", timeline: "2-5 days" },
-  "Home Additions": { summary: "Single-story and second-story additions, sunrooms, garage conversions, and bump-outs with full structural and finish work.", price: "$150-$400/sq ft", timeline: "8-16 weeks" },
-  "Interior Painting": { summary: "Walls, ceilings, trim, doors, and built-ins. Professional-grade paints with proper surface preparation on every project.", price: "$3-$6/sq ft", timeline: "2-5 days" },
-  "Interior Carpentry": { summary: "Custom millwork, built-in cabinetry, wainscoting, crown molding, coffered ceilings, closet systems, and finish trim.", price: "$75-$150/hr", timeline: "Varies" },
-  "Attic Conversions": { summary: "Converting unfinished attics into bedrooms, offices, or playrooms - structural assessment through final finish.", price: "$50K-$150K", timeline: "6-12 weeks" },
-  "Decks & Porches": { summary: "Pressure-treated lumber, composite, and hardwood. Covered porches, screened-in structures, pergolas, and multi-level decks.", price: "$15K-$75K", timeline: "2-4 weeks" },
-  "Design & Planning": { summary: "Space planning, material selection, finish coordination, and project documentation before construction begins.", price: "$2.5K-$15K", timeline: "2-6 weeks" },
-  "Comfort & Accessibility": { summary: "Grab bars, roll-in showers, wider doorways, ramp installation, and first-floor adaptations for all ages and abilities.", price: "$5K-$50K", timeline: "1-4 weeks" },
+const COUNTY_SERVICE_OVERRIDES: Record<string, Record<string, { summary: string; price: string; timeline: string }>> = {
+  "fairfield-county": {
+    "Kitchen Remodeling": { summary: "Full kitchen renovations including cabinetry, countertops, tile, electrical, plumbing, and permits.", price: "$25K-$150K+", timeline: "6-12 weeks" },
+    "Bathroom Remodeling": { summary: "Complete bathroom renovations — tile, vanities, showers, tubs, and plumbing upgrades.", price: "$15K-$120K+", timeline: "3-6 weeks" },
+    "Basement Finishing": { summary: "Convert unfinished basements into living space with proper waterproofing and egress.", price: "$25K-$100K+", timeline: "4-8 weeks" },
+    Flooring: { summary: "Hardwood, LVP, tile, and engineered wood with expert subfloor preparation.", price: "$4-$25/sq ft", timeline: "2-5 days" },
+    "Home Additions": { summary: "Single-story and second-story additions, sunrooms, garage conversions, and bump-outs with full structural and finish work.", price: "$150-$400/sq ft", timeline: "8-16 weeks" },
+    "Interior Painting": { summary: "Walls, ceilings, trim, doors, and built-ins. Professional-grade paints with proper surface preparation on every project.", price: "$3-$6/sq ft", timeline: "2-5 days" },
+    "Interior Carpentry": { summary: "Custom millwork, built-in cabinetry, wainscoting, crown molding, coffered ceilings, closet systems, and finish trim.", price: "$75-$150/hr", timeline: "Varies" },
+    "Attic Conversions": { summary: "Converting unfinished attics into bedrooms, offices, or playrooms — structural assessment through final finish.", price: "$50K-$150K", timeline: "6-12 weeks" },
+    "Decks & Porches": { summary: "Pressure-treated lumber, composite, and hardwood. Covered porches, screened-in structures, pergolas, and multi-level decks.", price: "$15K-$75K", timeline: "2-4 weeks" },
+    "Design & Planning": { summary: "Space planning, material selection, finish coordination, and project documentation before construction begins.", price: "$2.5K-$15K", timeline: "2-6 weeks" },
+    "Comfort & Accessibility": { summary: "Grab bars, roll-in showers, wider doorways, ramp installation, and first-floor adaptations for all ages and abilities.", price: "$5K-$50K", timeline: "1-4 weeks" },
+  },
+  "new-haven-county": {
+    "Kitchen Remodeling": { summary: "Full kitchen renovations including cabinetry, countertops, tile, electrical, plumbing, and permits.", price: "$25K-$150K+", timeline: "6-12 weeks" },
+    "Bathroom Remodeling": { summary: "Complete bathroom renovations including tile, vanities, showers, tubs, and plumbing upgrades.", price: "$15K-$120K+", timeline: "3-6 weeks" },
+    "Basement Finishing": { summary: "Convert unfinished basements into living space with proper waterproofing and egress.", price: "$25K-$100K+", timeline: "4-8 weeks" },
+    Flooring: { summary: "Hardwood, LVP, tile, and engineered wood with expert subfloor preparation.", price: "$4-$25/sq ft", timeline: "2-5 days" },
+    "Home Additions": { summary: "Room additions, bump-outs, and second-story additions with full structural engineering and permitting.", price: "$150-$400/sq ft", timeline: "8-16 weeks" },
+    "Interior Painting": { summary: "Professional interior painting with proper prep, premium paints, and clean lines throughout.", price: "$3-$6/sq ft", timeline: "2-5 days" },
+    "Interior Carpentry": { summary: "Custom trim, built-ins, wainscoting, crown molding, and finish carpentry throughout your home.", price: "$75-$150/hr", timeline: "Varies" },
+    "Attic Conversions": { summary: "Transform unused attic space into bedrooms, offices, or bonus rooms with proper insulation and egress.", price: "$50K-$150K", timeline: "6-12 weeks" },
+    "Decks & Porches": { summary: "New deck construction, porch builds, and repairs using composite and pressure-treated materials.", price: "$15K-$75K", timeline: "2-4 weeks" },
+    "Design & Planning": { summary: "Professional design consultation, 3D renderings, material selection, and project planning.", price: "$2.5K-$15K", timeline: "2-6 weeks" },
+    "Comfort & Accessibility": { summary: "Aging-in-place modifications, grab bars, walk-in showers, ramps, and wider doorways.", price: "$5K-$50K", timeline: "1-4 weeks" },
+  },
 };
 
 const COUNTY_TOWN_OVERRIDES: Record<string, Record<string, { style: string; description: string; linked?: boolean }>> = {
   "fairfield-county": {
     Greenwich: { style: "Colonial, Tudor, French Provincial", description: "Pre-1940 housing stock with strict setbacks and historic district requirements. High-end renovations on large lots with mature landscaping and estate-level finishes.", linked: true },
     Westport: { style: "1940s-1970s Colonials & Ranches", description: "Coastal town with salt air exposure and FEMA flood zone considerations. Many homes are colonials and ranches from the 1940s through 1970s undergoing modern updates.", linked: true },
-    Darien: { style: "Colonials on Wooded Lots", description: "Colonial homes on wooded lots with high water tables and ledge rock. Basement waterproofing and foundation work are common project components here." },
-    "New Canaan": { style: "Mid-Century Modern & Colonial", description: "A mix of mid-century modern and colonial architecture with a historic commission and strict zoning. Renovations often require additional design review approvals." },
-    Stamford: { style: "Urban/Suburban Mix", description: "An urban-suburban mix of condos and single-family homes across diverse ages. Projects range from condo kitchen updates to full single-family renovations." },
-    Norwalk: { style: "Victorian-Era & Newer", description: "Victorian-era homes in South Norwalk alongside newer construction. Coastal salt air conditions require careful material selection for long-term durability." },
-    Fairfield: { style: "1940s-1970s Colonial Homes", description: "A family-oriented town with colonial homes from the 1940s through 1970s. Proximity to the coast means moisture management is a consistent consideration." },
-    Ridgefield: { style: "Colonial & Cape on Large Lots", description: "Rural character with larger lots, rock ledge, and colonial and cape architecture. Well water systems and septic considerations factor into project planning." },
+    Darien: { style: "Colonials on Wooded Lots", description: "Colonial homes on wooded lots with high water tables and ledge rock conditions throughout. Basement waterproofing and foundation work are common project components here. Families expect quality craftsmanship and clear timelines on every renovation." },
+    "New Canaan": { style: "Mid-Century Modern and Colonial", description: "A mix of mid-century modern and colonial architecture with a historic commission and strict zoning. Renovations often require additional design review approvals. Homeowners here have typically renovated before and value precision and communication." },
+    Stamford: { style: "Urban/Suburban Mix", description: "An urban-suburban mix of condos and single-family homes across diverse ages. Projects range from condo kitchen updates to full single-family renovations. Reliable communication and on-time arrivals set us apart in a market where homeowners have options." },
+    Norwalk: { style: "Victorian-Era and Newer", description: "Victorian-era homes in South Norwalk alongside newer construction throughout the town. Coastal salt air conditions require careful material selection for long-term durability. Bathroom and kitchen remodels are common as homeowners update older layouts to match current living standards." },
+    Fairfield: { style: "1940s-1970s Colonial Homes", description: "A family-oriented town with colonial homes from the 1940s through 1970s. Proximity to the coast means moisture management is a consistent consideration. Kitchen and bathroom remodels are the most common projects as families update aging layouts." },
+    Ridgefield: { style: "Colonial and Cape on Large Lots", description: "Rural character with larger lots, rock ledge conditions, and colonial and cape architecture throughout. Well water systems and septic considerations factor into project planning. Homeowners here value thorough site assessments and clear communication before any work begins." },
   },
   "new-haven-county": {
-    Orange: { style: "1960s-1980s Colonials & Ranches", description: "Our home base. Orange has well-maintained colonials and ranches from the 1960s through 1980s on generous lots. Many homeowners here are updating kitchens and bathrooms that haven't been touched in decades.", linked: true },
-    "New Haven": { style: "Victorian, Colonial & Multi-Family", description: "A mix of Victorian-era homes, colonials, and multi-family properties. Older construction often involves plaster walls, balloon framing, and outdated electrical that require experienced handling.", linked: true },
-    Hamden: { style: "1950s-1970s Split-Levels & Capes", description: "Split-levels, capes, and colonials from the 1950s through 1970s. Basement finishing and whole-home renovations are common as families modernize these well-built mid-century homes." },
-    Branford: { style: "Coastal Colonials & Capes", description: "A coastal town with salt air exposure and FEMA flood zone considerations in shoreline neighborhoods. Material selection for moisture resistance is a key factor in every project here." },
-    Guilford: { style: "Historic & Coastal", description: "One of the oldest towns in Connecticut with a significant historic district. Renovations here often require design review approval and careful attention to period-appropriate details." },
-    Madison: { style: "Coastal & Suburban", description: "Shoreline town with a mix of beach cottages and larger suburban homes. Elevated humidity and salt air require careful material choices for kitchens, bathrooms, and exterior work.", linked: true },
-    Woodbridge: { style: "Colonials on Wooded Lots", description: "Rural character with larger lots, well water systems, and septic considerations. Colonials and contemporaries on wooded lots where site access and ledge rock factor into project planning." },
-    Milford: { style: "Mixed Suburban & Coastal", description: "A diverse housing stock from beach cottages to newer subdivisions. Coastal areas deal with moisture management while inland neighborhoods feature 1960s-1980s colonials and ranches." },
+    Orange: { style: "1960s-1980s Colonials & Ranches", description: "Our home base. Well-maintained colonials and ranches from the 1960s through 1980s on generous lots. Split-levels and raised ranches are the most common renovation candidates, with kitchens and bathrooms that haven't been touched in decades.", linked: true },
+    "New Haven": { style: "Victorian, Colonial & Multi-Family", description: "A mix of Victorian-era homes, colonials, and multi-family properties. Over 40% of homes predate 1940 with plaster walls, balloon framing, and knob-and-tube wiring that require experienced handling.", linked: true },
+    Hamden: { style: "1950s-1970s Split-Levels and Capes", description: "Split-levels, capes, and colonials from the 1950s through 1970s. Basement finishing and whole-home renovations are common as families modernize these well-built mid-century homes with outdated electrical and original plumbing." },
+    Branford: { style: "Coastal Colonials and Capes", description: "A coastal town where salt air exposure and FEMA flood zone considerations shape every renovation decision. Material selection for moisture resistance is a key factor in shoreline neighborhoods." },
+    Guilford: { style: "Historic and Coastal", description: "One of the oldest towns in Connecticut with a significant historic district and pre-Revolutionary housing stock. Renovations here often require design review approval and careful attention to period-appropriate details." },
+    Madison: { style: "Coastal & Suburban", description: "A shoreline town with a mix of beach cottages and larger suburban homes along the Long Island Sound. Elevated humidity and salt air require careful material choices for kitchens, bathrooms, and exterior work.", linked: true },
+    Woodbridge: { style: "Colonials on Wooded Lots", description: "Rural character with larger lots, well water systems, and septic considerations that affect renovation planning. Colonials and contemporaries sit on wooded lots where site access and ledge rock conditions factor into every project." },
+    Milford: { style: "Mixed Suburban and Coastal", description: "A diverse housing stock ranging from beach cottages along the Long Island Sound to newer inland subdivisions. Coastal areas require moisture management while inland neighborhoods feature 1960s-1980s colonials and ranches." },
   },
 };
 
@@ -127,11 +160,11 @@ const COUNTY_FEATURED_OVERRIDES: Record<string, Array<{ title: string; body: str
   "fairfield-county": [
     { title: "Basement Finishing in Darien", body: "A Darien homeowner needed a finished basement with a home office, guest suite, and full bathroom. The site had a high water table - we installed an interior drainage system and sump pump before framing, then built out 1,200 square feet of finished living space with LVP flooring and recessed lighting.", quote: "\"The basement is the most-used room in the house now. We use the office every day.\"", cite: "The Andersons, Darien" },
     { title: "Bathroom Remodeling in Westport", body: "A Westport couple wanted to update two bathrooms in their 1960s colonial. We replaced dated tile with large-format porcelain, installed a frameless glass shower enclosure, upgraded the plumbing to PEX, and added radiant floor heating throughout both bathrooms.", quote: "\"The heated floors were the best decision we made. BuiltWell guided us through every choice.\"", cite: "The Brennans, Westport" },
-    { title: "Kitchen Remodeling in New Canaan", body: "A New Canaan family wanted to open up a kitchen closed off by a load-bearing wall. We engineered a beam solution, installed white shaker cabinets with a quartz island, and extended hardwood flooring into the new open layout.", quote: "\"BuiltWell made it straightforward. Now we can't imagine how we lived before.\"", cite: "The Chens, New Canaan" },
+    { title: "Kitchen Remodeling in New Canaan", body: "A New Canaan family wanted to open up a kitchen closed off by a load-bearing wall. We engineered a beam solution, installed white shaker cabinets with a quartz island, and extended hardwood flooring into the new open layout.", quote: "\"BuiltWell made it straightforward. Now we can't imagine how we lived before.\"", cite: "Homeowner, New Canaan" },
   ],
   "new-haven-county": [
     { title: "Whole-Home Renovation in Hamden", body: "A Hamden family purchased a 1960s split-level and wanted to modernize the entire home. We renovated the kitchen with new cabinetry and quartz countertops, updated both bathrooms, refinished hardwood floors throughout, and finished the basement as a family room with an egress window.", quote: "\"BuiltWell transformed this house into exactly what we envisioned. The basement alone was worth it.\"", cite: "The Patels, Hamden" },
-    { title: "Kitchen Remodeling in Milford", body: "A Milford homeowner needed to replace dated 1990s oak cabinets and laminate countertops. We removed the peninsula, installed soft-close cabinetry with quartz countertops and subway tile, and extended LVP flooring into the dining room.", quote: "\"They showed up when they said they would, cleaned up every day, and the kitchen turned out better than I imagined.\"", cite: "Ivana P., Milford" },
+    { title: "Kitchen Remodeling in Milford", body: "A Milford homeowner needed to replace dated 1990s oak cabinets and laminate countertops. We removed the peninsula, installed soft-close cabinetry with quartz countertops and subway tile, and extended LVP flooring into the dining room.", quote: "\"They showed up when they said they would, cleaned up every day, and the kitchen turned out better than I imagined.\"", cite: "Homeowner, Milford" },
     { title: "Bathroom Remodeling in Branford", body: "A Branford homeowner in a 1970s coastal colonial needed both bathrooms updated. Salt air exposure had damaged the existing tile grout and fixtures. We installed porcelain tile with Schluter waterproofing, new vanities, low-profile shower pans, and updated all plumbing to PEX throughout both spaces.", quote: "\"We had put this off for years. BuiltWell handled everything and the result is exactly what we needed.\"", cite: "The Garcias, Branford" },
   ],
 };
@@ -219,7 +252,8 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
   const featuredParts = parts(countyCopy.featuredTitle, countyName);
   const leadParts = parts(countyCopy.leadTitle, countyName);
   const visibleCount = services?.initial_visible_count || 6;
-  const serviceCards = (services?.items || []).map((item: any) => ({ ...item, ...(COUNTY_SERVICE_OVERRIDES[item.title] || {}) }));
+  const countyServiceOverrides = COUNTY_SERVICE_OVERRIDES[slug] || COUNTY_SERVICE_OVERRIDES["fairfield-county"];
+  const serviceCards = (services?.items || []).map((item: any) => ({ ...item, ...(countyServiceOverrides[item.title] || {}) }));
   const visibleServices = showAllServices ? serviceCards : serviceCards.slice(0, visibleCount);
   const fields = lead?.fields || [];
   const topFields = fields.filter((field: any) => !["checkbox_group", "radio_group", "textarea", "file"].includes(field.type));
@@ -246,24 +280,24 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
             {heroParts.after}
           </h1>
           <p className="mt-5 max-w-[700px] text-[14px] leading-[1.7] text-white/92 md:text-[15px]">{countyCopy.heroSubtitle}</p>
-          <div className="mt-8 flex flex-wrap items-stretch justify-center gap-4">
-            {(hero?.badges || []).map((badge: any, index: number) => {
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+            {[...(hero?.badges || [])].sort((a: any, b: any) => (b.is_primary ? 1 : 0) - (a.is_primary ? 1 : 0)).map((badge: any, index: number) => {
               const isPrimary = !!badge.is_primary;
+              const btnText = isPrimary ? (badge.value || badge.label) : `Call ${badge.value || badge.label}`;
               return (
                 <div key={`${badge.label || "badge"}-${index}`}>
                   {linkNode(
                     badge.url || "#",
-                    <div
+                    <span
                       className={cls(
-                        "flex min-w-[180px] flex-col items-center rounded-[8px] border px-7 py-4 text-center transition-all duration-300 hover:-translate-y-[2px]",
+                        "inline-flex items-center justify-center rounded-[6px] px-8 py-[14px] text-[15px] font-semibold leading-none transition-all duration-300 hover:-translate-y-[2px]",
                         isPrimary
-                          ? "border-[#bc9155] border-b-2 border-b-[#a57d48] bg-[#bc9155] text-white hover:bg-[#d4a95a] hover:border-[#d4a95a] hover:border-b-[#a57d48] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
-                          : "border-white/[0.18] border-b-2 border-b-[#bc9155] bg-[rgba(10,18,35,0.42)] text-white backdrop-blur-[12px] hover:bg-[rgba(10,18,35,0.62)] hover:border-white/[0.28] hover:border-b-[#bc9155] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3),0_0_0_1px_rgba(188,145,85,0.2)]",
+                          ? "bg-[#bc9155] text-white shadow-[0_4px_16px_rgba(188,145,85,0.35)] hover:bg-[#d4a95a] hover:shadow-[0_8px_24px_rgba(188,145,85,0.45)]"
+                          : "border border-white/30 bg-white/10 text-white backdrop-blur-[8px] hover:bg-white/20 hover:border-white/50",
                       )}
                     >
-                      <div className={cls("text-[11px] uppercase tracking-[1.2px]", isPrimary ? "opacity-90" : "opacity-70")}>{badge.label}</div>
-                      {badge.value ? <div className="mt-1 text-[18px] font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>{badge.value}</div> : null}
-                    </div>,
+                      {btnText}
+                    </span>,
                   )}
                 </div>
               );
@@ -307,9 +341,19 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
               {overviewParts.after}
             </h2>
             <div className="mx-auto mt-6 max-w-[690px] space-y-5 text-left text-[15px] leading-[1.75] text-[#5c677d]">
-              {countyCopy.overviewParagraphs.map((paragraph, index) => (
-                <p key={`overview-${index}`}>{paragraph}</p>
-              ))}
+              {countyCopy.overviewParagraphsBefore.map((paragraph, index) => {
+                const isLast = index === countyCopy.overviewParagraphsBefore.length - 1;
+                if (isLast) {
+                  return (
+                    <p key={`overview-${index}`}>
+                      {paragraph}
+                      <a href={countyCopy.overviewPhoneHref} style={{ color: "#bc9155", fontWeight: 600 }}>{countyCopy.overviewPhoneLabel}</a>
+                      {countyCopy.overviewPhoneTrailing}
+                    </p>
+                  );
+                }
+                return <p key={`overview-${index}`}>{paragraph}</p>;
+              })}
             </div>
           </div>
         </FadeUp>
@@ -335,14 +379,14 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
                   <div className="h-[228px] overflow-hidden">
                     <img src={media(item.image, "/services/kitchen-remodeling-ct.jpg")} alt={item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105" />
                   </div>
-                  <div className="flex flex-1 flex-col p-5">
+                  <div className="flex flex-1 flex-col p-5 text-center">
                     <h3 className="font-serif text-[22px] font-bold leading-[1.22]">{item.title}</h3>
                     <p className="mt-3 flex-1 text-[15px] leading-[1.72] text-[#5c677d]">{item.summary}</p>
-                    <div className="mt-4 flex flex-wrap gap-2">
+                    <div className="mt-4 flex flex-wrap justify-center gap-2">
                       {item.price ? <span className="rounded-full bg-[#bc915512] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#bc9155]">{item.price}</span> : null}
-                      {item.timeline ? <span className="rounded-full bg-[#f5f1e9] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#1e2b43]">{item.timeline}</span> : null}
+                      {item.timeline ? <span className="rounded-full bg-[#bc915512] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#bc9155]">{item.timeline}</span> : null}
                     </div>
-                    {item.url ? linkNode(item.url, <><span>{item.cta_label || "Learn More"}</span><ArrowRight className="h-4 w-4" /></>, "mt-5 inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.12em] text-[#bc9155] transition-all duration-300 hover:gap-3") : null}
+                    {item.url ? linkNode(item.url, <><span>Get Started</span><ArrowRight className="h-4 w-4" /></>, "mt-5 inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.12em] text-[#bc9155] transition-all duration-300 hover:gap-3 justify-center") : null}
                   </div>
                 </article>
               </FadeUp>
@@ -373,6 +417,20 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
           ) : null}
         </div>
       </section>
+
+      {/* MID-PAGE CTA */}
+      <div className="relative overflow-hidden" style={{ padding: "64px 0" }}>
+        <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #1E2B43 0%, #151E30 100%)" }} />
+        <div className="absolute inset-0" style={{ backgroundImage: "url('/portfolio/builtwell-contractor-client-consultation-ct.jpeg')", backgroundPosition: "center 15%", backgroundSize: "cover", opacity: 0.25 }} />
+        <div className="relative z-[1] mx-auto max-w-[700px] px-8 text-center">
+          <h2 className="mb-3 font-serif text-[clamp(28px,3.5vw,40px)] font-bold">
+            <span style={{ color: "#ffffff" }}>{countyCopy.midCtaTitle} </span><span style={{ color: "#BC9155" }}>{countyCopy.midCtaAccent}</span><span style={{ color: "#ffffff" }}>?</span>
+          </h2>
+          <p className="mb-7 text-[16px] leading-[1.7] text-white/70">{countyCopy.midCtaBody}</p>
+          <a href="#contact" className="inline-block rounded-[8px] bg-[#BC9155] px-12 py-4 font-['Inter'] text-[16px] font-semibold text-white transition-colors hover:bg-[#a57d48]" style={{ cursor: "pointer" }}>Get Your Free Estimate</a>
+          <p className="mt-4 text-[14px] italic text-white/50">On-site or remote via Google Meet. No charge, no obligation.</p>
+        </div>
+      </div>
 
       {/* TOWNS WE SERVE */}
       <section className="bg-[#f5f1e9] px-5 pt-10 pb-20 md:px-10">

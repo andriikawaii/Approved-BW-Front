@@ -253,7 +253,7 @@ const splitTitle = (text?: string | null, accent?: string | null) => {
 };
 const splitQuote = (value?: string | null) => {
   const compact = (value || "").trim().replace(/^"+|"+$/g, "");
-  const match = compact.match(/^(.*?)(?:\s+-\s+)([^-].*)$/);
+  const match = compact.match(/^(.*?)(?:\s+[-\u2014]\s+)([^-\u2014].*)$/);
   return match
     ? { quote: match[1].replace(/^"+|"+$/g, "").trim(), cite: match[2].trim() }
     : { quote: compact, cite: "" };
@@ -477,6 +477,213 @@ function IncludedCardIcon({ label }: { label: string }) {
     );
   }
   if (label === "Permits & Finish") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <path d="M3 21h18" />
+        <path d="M3 21V8l9-5 9 5v13" />
+        <rect x="9" y="13" width="6" height="8" />
+      </svg>
+    );
+  }
+  // Attic conversion icons
+  if (label === "Structural Assessment" || label === "Ramp Installation" || label === "Framing" || label === "Trim and Door Painting") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <path d="M3 21h18" />
+        <path d="M3 21V8l9-5 9 5v13" />
+        <rect x="9" y="13" width="6" height="8" />
+      </svg>
+    );
+  }
+  if (label === "Joist Reinforcement" || label === "Staining and Sealing" || label === "Stair Railings" || label === "Surface Prep") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+      </svg>
+    );
+  }
+  if (label === "Insulation & Air Sealing" || label === "Roofing (Porches)" || label === "Trim and Casing" || label === "Furniture Protection") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <rect x="2" y="7" width="20" height="14" rx="2" />
+        <path d="M16 7V5a4 4 0 0 0-8 0v2" />
+        <line x1="12" y1="12" x2="12" y2="16" />
+      </svg>
+    );
+  }
+  if (label === "Egress & Dormers" || label === "Railings and Stairs" || label === "Wall Painting" || label === "Insulation and Drywall" || label === "First-Floor Living" || label === "Coffered Ceilings") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <line x1="2" y1="10" x2="22" y2="10" />
+      </svg>
+    );
+  }
+  if (label === "HVAC & Mini-Split" || label === "Footings and Foundation" || label === "Window Seats" || label === "Walk-In Showers" || label === "Plumbing and HVAC") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <path d="M12 2v6l3-3" />
+        <path d="M12 2v6l-3-3" />
+        <path d="M20 12a8 8 0 1 1-16 0" />
+        <path d="M20 12h2" />
+        <path d="M2 12h2" />
+      </svg>
+    );
+  }
+  if (label === "Flooring & Drywall" || label === "Decking and Boards" || label === "Wall Treatments") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <rect x="1" y="6" width="22" height="4" rx="1" />
+        <rect x="3" y="10" width="18" height="10" rx="1" />
+      </svg>
+    );
+  }
+  if (label === "Grab Bars and Rails" || label === "Floor Covering") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      </svg>
+    );
+  }
+  if (label === "Wider Doorways" || label === "Siding and Windows" || label === "Priming") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <path d="M9 3v18" />
+      </svg>
+    );
+  }
+  if (label === "Lever Hardware" || label === "Electrical and Lighting" || label === "Custom Built-Ins" || label === "Daily Cleanup") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <path d="M9 18l6-6-6-6" />
+        <circle cx="12" cy="12" r="10" />
+      </svg>
+    );
+  }
+  if (label === "Lighting Upgrades") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="5" />
+        <line x1="12" y1="1" x2="12" y2="3" />
+        <line x1="12" y1="21" x2="12" y2="23" />
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+        <line x1="1" y1="12" x2="3" y2="12" />
+        <line x1="21" y1="12" x2="23" y2="12" />
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+      </svg>
+    );
+  }
+  if (label === "Foundation") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <rect x="2" y="12" width="20" height="10" rx="1" />
+        <path d="M4 12V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4" />
+      </svg>
+    );
+  }
+  if (label === "Roofing") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <path d="M3 21l9-9 9 9" />
+        <path d="M3 21h18" />
+      </svg>
+    );
+  }
+  if (label === "Fireplace Surrounds") {
     return (
       <svg
         viewBox="0 0 24 24"
@@ -827,7 +1034,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                 {paras(intro?.content).map((paragraph, index) => (
                   <p
                     key={paragraph.slice(0, 24)}
-                    className={`mb-[18px] text-[16px] leading-[1.8] text-[#5C677D] ${index === 0 ? "border-b border-b-[#1E2B43]/8 pb-[18px] text-[17px] font-medium leading-[1.7] text-[#1E2B43]" : ""} last:mb-0`}
+                    className={`mb-[18px] text-[16px] leading-[1.8] text-[#5C677D] ${index === 0 ? "border-b border-b-[#1E2B43]/8 pb-[18px] text-[17px] font-bold leading-[1.7] text-[#0F1A2E]" : ""} last:mb-0`}
                   >
                     {paragraph}
                   </p>
@@ -844,12 +1051,20 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                   <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#BC9155]/10">
                     <IncludedCardIcon label={item.text} />
                   </div>
-                  <h3 className="mb-[10px] text-[18px] font-semibold">
+                  <h3 className="mb-[10px] text-[18px] font-bold text-[#1E2B43]">
                     {item.text}
                   </h3>
                   <p className="text-[14px] leading-[1.65] text-[#5C677D]">
-                    {item.description || INCLUDED_COPY[item.text] ||
-                      "Included as part of a full-scope remodeling project."}
+                    {(() => {
+                      const text = item.description || INCLUDED_COPY[item.text] || "Included as part of a full-scope remodeling project.";
+                      const parts = text.split(/(energizect\.com)/i);
+                      if (parts.length === 1) return text;
+                      return parts.map((part: string, i: number) =>
+                        /^energizect\.com$/i.test(part)
+                          ? <a key={i} href="https://energizect.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-[#BC9155] hover:text-[#9A7340]">{part}</a>
+                          : part
+                      );
+                    })()}
                   </p>
                 </article>
               ))}
@@ -987,8 +1202,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                 </tbody>
               </table>
               <p className="mt-5 text-[14px] italic text-[#5C677D]">
-                All prices include labor and materials. Final cost depends on
-                scope, selections, and site conditions.
+                {pricing?.below_table_note || "All prices include labor and materials. Final cost depends on scope, selections, and site conditions."}
               </p>
               {isKitchenService && (
               <p className="mt-3 text-[14px] leading-[1.7] text-[#5C677D]">
@@ -1023,7 +1237,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
               <h2 className="font-serif text-[clamp(28px,3.5vw,40px)] font-bold tracking-[-0.5px]">
                 <AccentTitle
                   text={midPageCta.title || "Ready to Begin Your Kitchen Remodel?"}
-                  accent="Kitchen Remodel"
+                  accent={midPageCta.title_highlight || "Kitchen Remodel"}
                 />
               </h2>
               {midPageCta.subtitle ? (
@@ -1063,14 +1277,25 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                 </p>
               ) : null}
             </div>
-            {localExpertiseBody.map((paragraph) => (
-              <p
-                key={paragraph.slice(0, 24)}
-                className="mb-5 text-[16px] leading-[1.8] text-[#5C677D] last:mb-0"
-              >
-                {paragraph}
-              </p>
-            ))}
+            {localExpertiseBody.map((paragraph) => {
+              const energizeMatch = paragraph.match(/^(.*?)(energizect\.com)(.*)$/s);
+              if (energizeMatch) {
+                return (
+                  <p key={paragraph.slice(0, 24)} className="mb-5 text-[16px] leading-[1.8] text-[#5C677D] last:mb-0">
+                    {energizeMatch[1]}
+                    <a href="https://energizect.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-[#BC9155] hover:text-[#9A7340]">
+                      energizect.com
+                    </a>
+                    {energizeMatch[3]}
+                  </p>
+                );
+              }
+              return (
+                <p key={paragraph.slice(0, 24)} className="mb-5 text-[16px] leading-[1.8] text-[#5C677D] last:mb-0">
+                  {paragraph}
+                </p>
+              );
+            })}
           </div>
         </section>
         <section className="kitchen-process px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
@@ -1083,7 +1308,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
               <h2>
                 <AccentTitle
                   text={process?.title || "Our Remodeling Process"}
-                  accent="Remodeling Process"
+                  accent={process?.title_highlight || "Basement Finishing Process"}
                 />
               </h2>
               <p>{process?.subtitle}</p>
@@ -1193,8 +1418,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
               })}
             </div>
             <p className="mt-6 text-center text-[14px] italic text-[#5C677D]">
-              Timelines vary based on project scope, material lead times, and
-              permit requirements.
+              {timeline?.footer_note || "Timelines vary based on project scope, material lead times, and permit requirements."}
             </p>
           </div>
         </section>

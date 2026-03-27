@@ -326,7 +326,7 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
       </section>
 
       {/* LEAD FORM */}
-      <LeadFormSection page={page} data={leadForm} accent="Consultation" />
+      <LeadFormSection page={page} data={leadForm} accent="Consultation" phones={{ fairfield: fairfieldNumber, newHaven: newHavenNumber }} />
 
       {/* TRUST STRIP */}
       <DarkTrustStrip items={darkTrust?.items} />

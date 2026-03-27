@@ -344,54 +344,208 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
       </section>
 
       {/* ══════ OUR PROCESS ══════ */}
-      <section className="relative overflow-hidden px-5 py-16 text-white md:px-10 md:py-20 lg:py-[100px]">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/portfolio/builtwell-team-contractors-ct-03.png')" }} aria-hidden="true" />
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(10,18,34,0.90)_0%,rgba(30,43,67,0.85)_100%)]" />
-        <div className="relative z-10 mx-auto max-w-[1240px]">
-          <div className="fade-up mb-16 text-center" style={fadeUpStyle}>
-            {label(process?.eyebrow || "Our Process", true)}
-            <h2 className="mx-auto max-w-[780px] font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px]">
+      <section className="svc-process scroll-mt-28 px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
+        <div className="svc-process-bg" aria-hidden="true" />
+        <div className="svc-process-inner">
+          <div className="fade-up svc-process-header" style={fadeUpStyle}>
+            <span className="svc-process-label">{process?.eyebrow || "Our Process"}</span>
+            <h2>
               {processParts.before || "Our Remodeling "}
               <span className="text-[#bc9155]">{processParts.accent || "Process"}</span>
               {processParts.after}
             </h2>
-            {process?.subtitle ? <p className="mx-auto mt-5 max-w-[700px] text-[17px] leading-[1.75] text-white/[0.65]">{process.subtitle}</p> : null}
+            <p>{process?.subtitle || "We follow the same five-step process on every project, whether it's a single bathroom or a whole-home renovation. It keeps projects on schedule and keeps you informed at every stage."}</p>
           </div>
 
-          <div className="fade-up relative mx-auto grid grid-cols-1 gap-5 md:grid-cols-3 lg:grid-cols-5 lg:gap-0" style={{ ...fadeUpStyle, transitionDelay: "0.15s" }}>
-            {/* Connecting line — horizontal on desktop */}
-            <div className="absolute left-[10%] right-[10%] top-[34px] hidden h-0.5 bg-[#bc9155]/[0.35] lg:block" />
+          <div className="fade-up svc-process-timeline" style={{ ...fadeUpStyle, transitionDelay: "0.15s" }}>
             {(process?.steps || []).map((item: any, index: number) => (
               <button
                 type="button"
                 key={`${item.title}-${index}`}
                 onClick={() => setActiveProcessStep(activeProcessStep === index ? -1 : index)}
-                className={cls(
-                  "relative cursor-pointer rounded-lg border-0 bg-transparent px-4 pb-5 pt-4 text-center transition-[background] duration-300 hover:bg-[#bc9155]/[0.08]",
-                  activeProcessStep === index && "bg-[#bc9155]/[0.14]",
-                )}
+                className={cls("svc-process-step", activeProcessStep === index ? "is-active" : "")}
                 aria-expanded={activeProcessStep === index}
               >
-                <div className={cls(
-                  "relative z-[2] mx-auto mb-5 flex h-[56px] w-[56px] items-center justify-center rounded-full border-[2.5px] border-[#bc9155] bg-[#bc9155]/[0.42] font-serif text-[20px] font-bold text-[#f5e0c0] shadow-[0_0_0_4px_rgba(188,145,85,0.12)] transition-all duration-[250ms] md:h-[68px] md:w-[68px] md:text-2xl",
-                  (activeProcessStep === index) && "scale-105 bg-[#bc9155]/[0.65]",
-                )}>
-                  {index + 1}
-                </div>
-                <h3 className="mb-3 text-[17px] font-semibold text-white md:text-lg">{item.title}</h3>
-                {item.description ? (
-                  <p className={cls(
-                    "hidden text-[14px] leading-[1.65] text-white/80 transition-all duration-[400ms] lg:block",
-                    activeProcessStep === index ? "mt-2 max-h-[200px] opacity-100" : "max-h-0 overflow-hidden opacity-0",
-                  )}>
-                    {item.description}
-                  </p>
-                ) : null}
+                <div className="svc-process-step-num">{index + 1}</div>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
               </button>
             ))}
           </div>
-          <p className="mt-7 hidden text-center text-[13px] tracking-[0.5px] text-white/40 lg:block">Click any step to learn more</p>
+          <p className="svc-process-hint">Click any step to learn more</p>
         </div>
+        <style jsx>{`
+          .svc-process {
+            position: relative;
+            overflow: hidden;
+            color: #fff;
+          }
+          .svc-process-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(10,18,34,0.9) 0%, rgba(30,43,67,0.85) 100%);
+            z-index: 0;
+          }
+          .svc-process-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 1280px;
+            margin: 0 auto;
+          }
+          .svc-process-header {
+            text-align: center;
+            margin-bottom: 64px;
+          }
+          .svc-process-label {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #9a7340;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+            position: relative;
+            padding-left: 20px;
+          }
+          .svc-process-label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 2px;
+            background: #bc9155;
+          }
+          .svc-process-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(32px, 3.5vw, 48px);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #fff;
+            margin-bottom: 20px;
+          }
+          .svc-process-header p {
+            font-size: 17px;
+            color: rgba(255,255,255,0.6);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.75;
+          }
+          .svc-process-timeline {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 0;
+            position: relative;
+          }
+          .svc-process-timeline::before {
+            content: '';
+            position: absolute;
+            top: 34px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: rgba(188,145,85,0.25);
+          }
+          .svc-process-step {
+            text-align: center;
+            padding: 16px 16px 20px;
+            position: relative;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.3s;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            outline: none;
+          }
+          .svc-process-step:focus,
+          .svc-process-step:focus-visible {
+            outline: none;
+            box-shadow: none;
+          }
+          .svc-process-step:hover { background: rgba(188,145,85,0.08); }
+          .svc-process-step.is-active {
+            background: rgba(188,145,85,0.14);
+            z-index: 2;
+            position: relative;
+          }
+          .svc-process-step-num {
+            width: 68px;
+            height: 68px;
+            border-radius: 9999px;
+            background: rgba(188,145,85,0.42);
+            border: 2.5px solid #bc9155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: -8px auto 20px;
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #f5e0c0;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 0 0 4px rgba(188,145,85,0.12);
+            flex-shrink: 0;
+          }
+          .svc-process-step h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            margin: 0 0 12px;
+            color: #fff;
+            font-weight: 700;
+            line-height: 1.25;
+            text-align: center;
+          }
+          .svc-process-step p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.65;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            margin: 0;
+            transition: max-height 0.4s ease, opacity 0.35s ease, margin-top 0.35s ease;
+            text-align: center;
+          }
+          .svc-process-step.is-active p {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 8px;
+          }
+          .svc-process-hint {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+          }
+          @media (max-width: 1024px) {
+            .svc-process-timeline {
+              grid-template-columns: repeat(3, minmax(0, 1fr));
+              gap: 24px;
+              max-width: 700px;
+              margin: 0 auto;
+            }
+            .svc-process-timeline::before { display: none; }
+            .svc-process-step { padding: 16px 8px; gap: 0; }
+            .svc-process-step-num { margin: 0 0 10px; }
+            .svc-process-step h3 { font-size: 15px; margin: 0; text-align: center; }
+            .svc-process-step p { display: none !important; }
+          }
+          @media (max-width: 768px) {
+            .svc-process-header { margin-bottom: 36px; }
+            .svc-process-header h2 { font-size: 24px; margin-bottom: 14px; }
+            .svc-process-header p { font-size: 15px; line-height: 1.7; }
+            .svc-process-timeline { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; max-width: 600px; }
+            .svc-process-step { padding: 14px 8px; }
+            .svc-process-step-num { width: 48px; height: 48px; font-size: 17px; margin: 0 0 8px; }
+          }
+        `}</style>
       </section>
 
       {/* ══════ TRUSTED BRANDS ══════ */}

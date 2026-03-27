@@ -31,6 +31,8 @@ import { ReviewsPageTemplate } from './ReviewsPageTemplate';
 import { SitemapPageTemplate } from './SitemapPageTemplate';
 import { WarrantyPageTemplate } from './WarrantyPageTemplate';
 import { TownHubPageTemplate } from './TownHubPageTemplate';
+import { GreenwichCTPageTemplate } from './GreenwichCTPageTemplate';
+import { WestportCTPageTemplate } from './WestportCTPageTemplate';
 
 type TemplateComponent = (props: { page: CMSPage }) => React.JSX.Element;
 
@@ -63,8 +65,6 @@ function normalizePageSlug(slug: string): string {
 
 const TOWN_HUB_SLUGS = new Set([
   'new-haven-county/madison-ct',
-  'fairfield-county/westport-ct',
-  'fairfield-county/greenwich-ct',
   'new-haven-county/new-haven-ct',
 ]);
 
@@ -96,6 +96,14 @@ function resolveTemplateComponent(template: string): TemplateComponent {
 }
 
 export function renderTemplate(page: CMSPage) {
+  if (normalizePageSlug(page.slug) === 'fairfield-county/greenwich-ct') {
+    return createElement(GreenwichCTPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'fairfield-county/westport-ct') {
+    return createElement(WestportCTPageTemplate, { page });
+  }
+
   if (TOWN_HUB_SLUGS.has(normalizePageSlug(page.slug))) {
     return createElement(TownHubPageTemplate, { page });
   }
