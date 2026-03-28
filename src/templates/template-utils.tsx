@@ -195,7 +195,7 @@ export function AreasSection({ data }: { data: any }) {
                   </div>
                   <div className="bw-area-card-body">
                     <h3>{county.name}</h3>
-                    {county.phone ? <div className="bw-area-card-phone">Call: <a href={`tel:${county.phone.replace(/\D/g, "")}`}>{county.phone}</a></div> : null}
+                    {county.phone ? <div className="bw-area-card-phone">Call: {county.name ? <span style={{color:"#bc9155",fontWeight:600}}>{county.name.replace(/ County$/, "")}: </span> : null}<a href={`tel:${county.phone.replace(/\D/g, "")}`}>{county.phone}</a></div> : null}
                     {county.description ? <p className="bw-area-card-desc">{county.description}</p> : null}
                     <div className="bw-area-towns">
                       {featuredTowns.map((town: string) => {
@@ -239,7 +239,23 @@ export function AreasSection({ data }: { data: any }) {
             })}
           </div>
           {data?.note_html ? <p className="bw-areas-note" dangerouslySetInnerHTML={{ __html: data.note_html }} /> : null}
-          {!data?.note_html && data?.note ? <p className="bw-areas-note">{data.note}</p> : null}
+          {!data?.note_html && data?.note ? (
+            <p className="bw-areas-note">
+              {(() => {
+                const note: string = data.note;
+                const LINK_TEXT = "Contact our Connecticut remodeling team";
+                const idx = note.indexOf(LINK_TEXT);
+                if (idx === -1) return note;
+                return (
+                  <>
+                    {note.slice(0, idx)}
+                    {linkNode("/contact/", LINK_TEXT, "bw-areas-note-link")}
+                    {note.slice(idx + LINK_TEXT.length)}
+                  </>
+                );
+              })()}
+            </p>
+          ) : null}
         </div>
       </section>
       <style jsx global>{`
@@ -278,8 +294,8 @@ export function AreasSection({ data }: { data: any }) {
         .bw-area-link:hover { gap:10px; }
         .bw-area-link-arrow { width:14px; height:14px; }
         .bw-areas-note { margin:20px auto 0; text-align:center; font-size:14px; line-height:1.7; color:#5c677d; }
-        .bw-areas-note a { color:#bc9155; font-weight:600; text-decoration:none; }
-        .bw-areas-note a:hover { text-decoration:underline; }
+        .bw-areas-note a, .bw-areas-note-link { color:#bc9155; font-weight:600; text-decoration:none; }
+        .bw-areas-note a:hover, .bw-areas-note-link:hover { text-decoration:underline; }
         @media (max-width:1024px) {
           .bw-areas-section { padding:60px 32px; }
           .bw-areas-grid { grid-template-columns:1fr; max-width:640px; margin:0 auto; }
@@ -375,6 +391,9 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
                   )
                 )}
               </p>
+            ) : null}
+            {data?.subtitle2 ? (
+              <p className="bw-cta-sub" style={{ fontSize: 14, marginTop: 8 }}>{data.subtitle2 as string}</p>
             ) : null}
             {phones ? (
               <p className="bw-cta-phones">

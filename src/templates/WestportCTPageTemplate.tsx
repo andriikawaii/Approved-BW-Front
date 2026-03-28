@@ -50,7 +50,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
   const primaryServices = [
     {
       title: 'Kitchen Remodeling',
-      href: '/kitchen-remodeling/',
+      href: '/kitchen-remodeling/westport-ct/',
       img: '/images/services/service-kitchen.jpg',
       desc: 'Full kitchen renovations in Westport including cabinetry, countertops, tile, electrical, plumbing, and permits. Custom cabinet lead times run 8 to 12 weeks in this market.',
       price: '$40K–$250K+',
@@ -58,7 +58,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
     },
     {
       title: 'Bathroom Remodeling',
-      href: '/bathroom-remodeling/',
+      href: '/bathroom-remodeling/westport-ct/',
       img: '/images/services/bathroom-remodel-new.jpg',
       desc: 'Primary suite renovations, hall bath updates, and full gut remodels for Westport homeowners.',
       price: '$25K–$120K+',
@@ -66,7 +66,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
     },
     {
       title: 'Basement Finishing',
-      href: '/basement-finishing/',
+      href: '/basement-finishing/westport-ct/',
       img: '/images/services/basement-finish-real.jpeg',
       desc: 'Flood zone awareness before anything else. In Westport, we confirm existing floor elevation relative to Base Flood Elevation before framing begins.',
       price: '$25K–$100K+',
@@ -74,7 +74,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
     },
     {
       title: 'Flooring Installation',
-      href: '/flooring/',
+      href: '/flooring/westport-ct/',
       img: '/images/services/service-flooring.png',
       desc: 'Hardwood, LVP, tile, and engineered wood. Original hardwood in Westport\'s 1950s colonials is often intact under carpet and worth refinishing.',
       price: '$6–$25/sqft',
@@ -629,7 +629,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
                   Our Remodeling Services in <strong>Westport, CT</strong>
                 </h2>
                 <p className="gwch-section-subtitle">
-                  BuiltWell CT provides a full range of remodeling services in Westport including kitchen renovation, bathroom remodeling, basement finishing, flooring, home additions, interior painting, carpentry, attic conversions, decks, design, and accessibility modifications, all permitted and backed by CT HIC License #0668405.
+                  BuiltWell CT provides a full range of remodeling services in Westport including kitchen renovation, bathroom remodeling, basement finishing, flooring, home additions, interior painting, carpentry, attic conversions, decks, design, and accessibility modifications, all permitted and backed by CT HIC License #0668405. Westport's 1940s-1970s colonials, coastal properties, and flood zone considerations shape how we approach every project.
                 </p>
               </div>
             </FadeUp>
@@ -651,7 +651,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
                         <span className="gwch-badge">{svc.time}</span>
                       </div>
                       <Link href={svc.href} className="gwch-learn-more">
-                        Learn More
+                        Get Started
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
@@ -680,7 +680,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
                           <span className="gwch-badge">{svc.time}</span>
                         </div>
                         <Link href={svc.href} className="gwch-learn-more">
-                          Learn More
+                          Get Started
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M5 12h14M12 5l7 7-7 7" />
                           </svg>
@@ -794,7 +794,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
           eyebrow: "Nearby Towns",
           title: "Fairfield County Towns We Also Serve",
           highlight_text: "We Also Serve",
-          subtitle: "BuiltWell CT serves all 23 towns in Fairfield County through our dedicated Fairfield County Service Area Team, including Greenwich, Darien, New Canaan, Stamford, Norwalk, Fairfield, and Ridgefield, reachable at (203) 919-9616.",
+          subtitle: "Beyond Westport, we serve homeowners throughout Fairfield County. Our team handles remodeling projects in Darien, Fairfield, Norwalk, Ridgefield, New Canaan, Stamford, and Greenwich, as well as additional towns across the county.",
           counties: [{
             name: "Fairfield County",
             phone: "(203) 919-9616",
@@ -815,8 +815,8 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
             {[
               {
                 icon: (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                   </svg>
                 ),
                 label: 'Google Rating',
@@ -877,7 +877,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
         </section>
 
         {/* ── 15. CTA FORM ────────────────────────────────────────────── */}
-        <SharedLeadFormSection page={_page} data={{ eyebrow: "Get Started", title: "Schedule Your Free Consultation", title_highlight: "Consultation", subtitle: "On-site or remote (Google Meet or Zoom). We respond within one business day.", images: [{ src: "/hero/builtwell-team-van-consultation-hero-ct.jpg", alt: "BuiltWell team van arriving for consultation" }, { src: "/team/builtwell-owner-handshake-client-ct-02.jpg", alt: "BuiltWell owner handshake with client" }] }} accent="Consultation" />
+        <SharedLeadFormSection page={_page} data={{ eyebrow: "Get Started", title: "Schedule Your Free Consultation", title_highlight: "Consultation", subtitle: "On-site or remote (Google Meet or Zoom). Call (203) 919-9616 or fill out the form below.", subtitle2: "We will confirm your appointment details and the name of your team member within one business day.", images: [{ src: "/team/builtwell-owner-handshake-client-ct-02.jpg", alt: "BuiltWell CT meeting with a Westport homeowner for a remodeling consultation" }, { src: "/portfolio/builtwell-job-site-aerial-ct.jpg", alt: "BuiltWell CT owner meeting homeowner for a free consultation" }] }} accent="Consultation" />
 
         {/* ── 16. FINANCING STRIP ─────────────────────────────────────── */}
         <SharedFinancingStrip data={{ title: "Flexible Financing Available", content: "Get approved in about 60 seconds and start your project today.", cta: { url: "/financing/", label: "Check Financing Options" } }} />

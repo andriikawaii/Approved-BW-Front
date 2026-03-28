@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Check, ChevronDown, Shield, Star, Upload } from "lucide-react";
+import { ArrowRight, CalendarDays, Check, ChevronDown, Shield, Upload } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
 import { FinancingStrip as SharedFinancingStrip, LeadFormSection as SharedLeadFormSection } from "./template-utils";
 
@@ -212,7 +212,7 @@ function linkNode(href: string, children: React.ReactNode, className?: string) {
 function trustIcon(icon?: string | null) {
   switch ((icon || "").toLowerCase()) {
     case "star":
-      return <Star className="h-5 w-5" />;
+      return <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>;
     case "shield":
       return <Shield className="h-5 w-5" />;
     case "calendar":
@@ -290,10 +290,10 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
                     badge.url || "#",
                     <span
                       className={cls(
-                        "inline-flex items-center justify-center rounded-[6px] px-8 py-[14px] text-[15px] font-semibold leading-none transition-all duration-300 hover:-translate-y-[2px]",
+                        "inline-flex items-center justify-center rounded-[8px] px-8 py-[14px] text-[15px] font-semibold leading-none transition-all duration-300 hover:-translate-y-[2px]",
                         isPrimary
                           ? "bg-[#bc9155] text-white shadow-[0_4px_16px_rgba(188,145,85,0.35)] hover:bg-[#d4a95a] hover:shadow-[0_8px_24px_rgba(188,145,85,0.45)]"
-                          : "border border-white/30 bg-white/10 text-white backdrop-blur-[8px] hover:bg-white/20 hover:border-white/50",
+                          : "border border-white/[0.22] bg-[rgba(10,18,35,0.42)] text-white backdrop-blur-[12px] hover:bg-[rgba(10,18,35,0.62)] hover:border-white/[0.35] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]",
                       )}
                     >
                       {btnText}

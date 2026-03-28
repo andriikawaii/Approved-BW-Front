@@ -492,6 +492,123 @@ function IncludedCardIcon({ label }: { label: string }) {
       </svg>
     );
   }
+  // Remodeling design & planning icons
+  if (label === "Space Assessment") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={iconClass} aria-hidden="true">
+        <path d="M3 21h18" />
+        <path d="M3 21V8l9-5 9 5v13" />
+        <rect x="9" y="13" width="6" height="8" />
+      </svg>
+    );
+  }
+  if (label === "Layout Planning") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={iconClass} aria-hidden="true">
+        <rect x="3" y="3" width="7" height="7" />
+        <rect x="14" y="3" width="7" height="7" />
+        <rect x="3" y="14" width="7" height="7" />
+        <rect x="14" y="14" width="7" height="7" />
+      </svg>
+    );
+  }
+  if (label === "Material Selection") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={iconClass} aria-hidden="true">
+        <rect x="1" y="6" width="22" height="4" rx="1" />
+        <rect x="3" y="10" width="18" height="10" rx="1" />
+      </svg>
+    );
+  }
+  if (label === "Budget Development") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={iconClass} aria-hidden="true">
+        <path d="M12 2v6l3-3" />
+        <path d="M12 2v6l-3-3" />
+        <path d="M20 12a8 8 0 1 1-16 0" />
+        <path d="M20 12h2" />
+        <path d="M2 12h2" />
+      </svg>
+    );
+  }
+  if (label === "Permit Research") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={iconClass} aria-hidden="true">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <line x1="2" y1="10" x2="22" y2="10" />
+      </svg>
+    );
+  }
+  if (label === "Timeline Planning") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={iconClass} aria-hidden="true">
+        <path d="M9 18l6-6-6-6" />
+        <circle cx="12" cy="12" r="10" />
+      </svg>
+    );
+  }
+  if (label === "Contractor Coordination") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={iconClass} aria-hidden="true">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+      </svg>
+    );
+  }
+  if (label === "Design Documentation") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={iconClass} aria-hidden="true">
+        <rect x="2" y="7" width="20" height="14" rx="2" />
+        <path d="M16 7V5a4 4 0 0 0-8 0v2" />
+        <line x1="12" y1="12" x2="12" y2="16" />
+      </svg>
+    );
+  }
+  // Basement finishing icons
+  if (label === "Moisture Assessment") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      </svg>
+    );
+  }
+  if (label === "Egress Windows") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <rect x="2" y="7" width="20" height="14" rx="2" />
+        <path d="M16 7V5a4 4 0 0 0-8 0v2" />
+        <line x1="12" y1="12" x2="12" y2="16" />
+      </svg>
+    );
+  }
+  if (label === "Drywall and Ceiling") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className={iconClass}
+        aria-hidden="true"
+      >
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <line x1="2" y1="10" x2="22" y2="10" />
+      </svg>
+    );
+  }
   // Attic conversion icons
   if (label === "Structural Assessment" || label === "Ramp Installation" || label === "Framing" || label === "Trim and Door Painting") {
     return (
@@ -879,7 +996,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                 </span>
               </li>
             </ol>
-            <h1 className="whitespace-nowrap font-serif text-[clamp(28px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.5px] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]">
+            <h1 className="text-balance whitespace-normal font-serif text-[clamp(28px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.5px] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)] sm:whitespace-nowrap">
               <AccentTitle
                 text={hero?.title || "Kitchen Remodeling in Connecticut"}
                 accent="Connecticut"
@@ -1000,7 +1117,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
               <span className="mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#9A7340] before:relative before:-left-5 before:top-[-3px] before:inline-block before:h-[2px] before:w-[10px] before:bg-[#BC9155]">
                 Scope of Work
               </span>
-              <h2 className="font-serif text-[clamp(28px,3.5vw,44px)] font-bold leading-[1.2] tracking-[-0.5px]">
+              <h2 className="font-serif text-[clamp(28px,3.5vw,44px)] font-bold leading-[1.2] tracking-[-0.5px] text-[#1E2B43]">
                 <AccentTitle
                   text={intro?.title || "What Is Included in This Remodel"}
                   accent={intro?.highlight_text || ""}
@@ -1034,7 +1151,9 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                 {paras(intro?.content).map((paragraph, index) => (
                   <p
                     key={paragraph.slice(0, 24)}
-                    className={`mb-[18px] text-[16px] leading-[1.8] text-[#5C677D] ${index === 0 ? "border-b border-b-[#1E2B43]/8 pb-[18px] text-[17px] font-bold leading-[1.7] text-[#0F1A2E]" : ""} last:mb-0`}
+                    className={index === 0
+                      ? "mb-[18px] border-b border-b-[#1E2B43]/8 pb-[18px] text-[17px] font-medium leading-[1.7] text-[#1E2B43] last:mb-0"
+                      : "mb-[18px] text-[16px] leading-[1.8] text-[#5C677D] last:mb-0"}
                   >
                     {paragraph}
                   </p>
@@ -1194,9 +1313,11 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                       <td className="border-b border-b-[#1E2B43]/6 px-6 py-4 text-[15px]">
                         {row.price}
                       </td>
+                      {(pricing?.columns?.length ?? 0) > 2 && (
                       <td className="border-b border-b-[#1E2B43]/6 px-6 py-4 font-serif text-[16px] font-semibold text-[#BC9155]">
                         {row.notes}
                       </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>
@@ -1204,6 +1325,9 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
               <p className="mt-5 text-[14px] italic text-[#5C677D]">
                 {pricing?.below_table_note || "All prices include labor and materials. Final cost depends on scope, selections, and site conditions."}
               </p>
+              {pricing?.energize_note_html ? (
+                <p className="mt-3 text-[14px] leading-[1.7] text-[#5C677D] [&_a]:font-semibold [&_a]:text-[#BC9155] [&_a:hover]:text-[#9A7340]" dangerouslySetInnerHTML={{ __html: pricing.energize_note_html }} />
+              ) : null}
               {isKitchenService && (
               <p className="mt-3 text-[14px] leading-[1.7] text-[#5C677D]">
                 Worth noting: Connecticut homeowners may qualify for energy
@@ -1429,7 +1553,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
               <span className="mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#9A7340] before:relative before:-left-5 before:top-[-3px] before:inline-block before:h-[2px] before:w-[10px] before:bg-[#BC9155]">
                 FAQ
               </span>
-              <h2 className="font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px]">
+              <h2 className="font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px] text-[#1E2B43]">
                 <AccentTitle
                   text={faq?.title || `${serviceLabel || "Service"} Questions`}
                   accent="Questions"

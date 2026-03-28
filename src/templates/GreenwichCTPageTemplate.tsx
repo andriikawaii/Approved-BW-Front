@@ -277,51 +277,51 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
   const primaryServices = [
     {
       title: 'Kitchen Remodeling',
-      href: '/kitchen-remodeling/',
+      href: '/kitchen-remodeling/greenwich-ct/',
       img: '/images/services/service-kitchen.jpg',
-      desc: 'Full kitchen renovations including cabinetry, countertops, tile, electrical, plumbing, and permits.',
-      price: '$40K–$400K',
-      time: '4–12 weeks',
+      desc: 'Full kitchen renovations in Greenwich including cabinetry, countertops, tile, electrical, plumbing, and permits.',
+      price: '$40K-$400K+',
+      time: '6-12 weeks',
     },
     {
       title: 'Bathroom Remodeling',
-      href: '/bathroom-remodeling/',
+      href: '/bathroom-remodeling/greenwich-ct/',
       img: '/images/services/bathroom-remodel-new.jpg',
-      desc: 'Complete bathroom renovations — tile, vanities, showers, tubs, and plumbing upgrades.',
-      price: '$15K–$120K+',
-      time: '2–6 weeks',
+      desc: 'Complete bathroom renovations in Greenwich — tile, vanities, showers, tubs, and plumbing upgrades.',
+      price: '$15K-$120K+',
+      time: '3-6 weeks',
     },
     {
       title: 'Basement Finishing',
-      href: '/basement-finishing/',
+      href: '/basement-finishing/greenwich-ct/',
       img: '/images/services/basement-finish-real.jpeg',
-      desc: 'Convert unfinished basements into living space with proper waterproofing and egress.',
-      price: '$25K–$100K+',
-      time: '4–10 weeks',
+      desc: 'Convert unfinished basements into living space in Greenwich with proper waterproofing and egress.',
+      price: '$25K-$100K+',
+      time: '4-8 weeks',
     },
     {
-      title: 'Flooring Installation',
-      href: '/flooring/',
+      title: 'Flooring',
+      href: '/flooring/greenwich-ct/',
       img: '/images/services/service-flooring.png',
-      desc: 'Hardwood, LVP, tile, and engineered wood with expert subfloor preparation.',
-      price: '$6–$25/sqft',
-      time: '1–3 weeks',
+      desc: 'Hardwood, LVP, tile, and engineered wood flooring for Greenwich homes with expert subfloor preparation.',
+      price: '$6-$25/sq ft',
+      time: '2-5 days',
     },
     {
       title: 'Home Additions',
       href: '/home-additions/',
       img: '/images/services/living-room-real.jpeg',
-      desc: 'Single-story and second-story additions, sunrooms, and bump-outs with full structural work.',
-      price: '$150–$400/sqft',
-      time: '8–20 weeks',
+      desc: 'Single-story and second-story additions, sunrooms, and bump-outs for Greenwich homeowners with full structural work.',
+      price: '$150-$400/sq ft',
+      time: '8-16 weeks',
     },
     {
       title: 'Interior Painting',
       href: '/interior-painting/',
       img: '/images/services/interior-painting-new.jpg',
-      desc: 'Walls, ceilings, trim, doors, and built-ins with professional-grade paints and proper prep.',
-      price: '$3–$6/sqft',
-      time: '1–3 weeks',
+      desc: 'Walls, ceilings, trim, doors, and built-ins for Greenwich homes with professional-grade paints and proper prep.',
+      price: '$3-$6/sq ft',
+      time: '2-5 days',
     },
   ];
 
@@ -330,41 +330,49 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
       title: 'Interior Carpentry',
       href: '/interior-carpentry/',
       img: '/images/services/service-kitchen.jpg',
-      desc: 'Custom millwork, built-in cabinetry, wainscoting, crown molding, coffered ceilings, closet systems, and finish trim.',
-      price: '$75–$150/hr',
+      desc: 'Custom millwork, built-in cabinetry, wainscoting, crown molding, coffered ceilings, closet systems, and finish trim for Greenwich properties.',
+      price: '$75-$150/hr',
       time: 'Varies',
     },
     {
       title: 'Attic Conversions',
       href: '/attic-conversions/',
       img: '/images/services/basement-finish-real.jpeg',
-      desc: 'Converting unfinished attics into bedrooms, offices, or playrooms — structural assessment through final finish.',
-      price: '$40K–$100K+',
-      time: '4–10 weeks',
+      desc: 'Converting unfinished attics in Greenwich into bedrooms, offices, or playrooms — structural assessment through final finish.',
+      price: '$50K-$150K',
+      time: '6-12 weeks',
     },
     {
       title: 'Decks & Porches',
       href: '/decks-porches/',
       img: '/images/services/living-room-real.jpeg',
-      desc: 'Pressure-treated lumber, composite, and hardwood. Covered porches, screened-in structures, pergolas, and multi-level decks.',
-      price: '$15K–$80K+',
-      time: '2–6 weeks',
+      desc: 'Pressure-treated lumber, composite, and hardwood decks for Greenwich homes. Covered porches, screened-in structures, pergolas, and multi-level decks.',
+      price: '$15K-$75K',
+      time: '2-4 weeks',
     },
     {
       title: 'Design & Planning',
       href: '/remodeling-design-planning/',
       img: '/images/services/service-kitchen.jpg',
-      desc: 'Space planning, material selection, finish coordination, and project documentation before construction begins.',
-      price: 'Varies',
-      time: '2–6 weeks',
+      desc: 'Space planning, material selection, finish coordination, and project documentation for Greenwich remodels before construction begins.',
+      price: '$2.5K-$15K',
+      time: '2-6 weeks',
     },
     {
       title: 'Comfort & Accessibility',
       href: '/comfort-accessibility-remodeling/',
       img: '/images/services/bathroom-remodel-new.jpg',
-      desc: 'Grab bars, roll-in showers, wider doorways, ramp installation, and first-floor adaptations for all ages and abilities.',
-      price: '$5K–$50K+',
-      time: '1–4 weeks',
+      desc: 'Grab bars, roll-in showers, wider doorways, ramp installation, and first-floor adaptations for Greenwich residents of all ages and abilities.',
+      price: '$5K-$50K',
+      time: '1-4 weeks',
+    },
+    {
+      title: 'Insurance Reconstruction',
+      href: '/insurance-restoration/',
+      img: '/portfolio/builtwell-contractor-handshake-arrival-ct-optimized.jpg',
+      desc: 'Rebuilding Greenwich homes after fire, water, and storm damage. Full reconstruction once cleanup is complete, working directly with your insurance carrier.',
+      price: '$25K-$250K+',
+      time: '4-16 weeks',
     },
   ];
 
@@ -708,9 +716,9 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
                   <tr><th>Tier</th><th>Scope</th><th>Typical Range</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td>Minor Refresh</td><td>New cabinets, countertops, hardware, appliances, tile backsplash</td><td className="gwch-td-price">$40,000 – $80,000</td></tr>
-                  <tr><td>Major Mid-Range</td><td>Layout changes, custom cabinetry, premium appliances, new plumbing/electrical</td><td className="gwch-td-price">$90,000 – $140,000</td></tr>
-                  <tr><td>Full Custom</td><td>Complete gut renovation, custom millwork, Sub-Zero/Wolf, Waterworks fixtures, structural changes</td><td className="gwch-td-price">$200,000 – $400,000</td></tr>
+                  <tr><td>Minor Refresh</td><td>Cabinet doors, countertops, appliances, paint</td><td className="gwch-td-price">$40,000 – $80,000</td></tr>
+                  <tr><td>Major Mid-Range</td><td>New cabinets, floors, all appliances, layout update</td><td className="gwch-td-price">$90,000 – $140,000</td></tr>
+                  <tr><td>Full Custom</td><td>Full custom, structural changes, premium materials</td><td className="gwch-td-price">$200,000 – $400,000</td></tr>
                 </tbody>
               </table></div>
             </FadeUp>
@@ -723,9 +731,9 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
                   <tr><th>Tier</th><th>Scope</th><th>Typical Range</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td>Basic</td><td>Tile, vanity, fixtures, toilet replacement</td><td className="gwch-td-price">$15,000 – $25,000</td></tr>
-                  <tr><td>Mid-Range</td><td>Custom tile, frameless shower, soaking tub, heated floor</td><td className="gwch-td-price">$25,000 – $55,000</td></tr>
-                  <tr><td>High-End</td><td>Full gut, custom steam shower, radiant heat, premium stone, custom vanity</td><td className="gwch-td-price">$55,000 – $120,000+</td></tr>
+                  <tr><td>Basic</td><td>Fixtures, vanity, flooring, paint</td><td className="gwch-td-price">$15,000 – $25,000</td></tr>
+                  <tr><td>Mid-Range</td><td>Full gut, new tile, walk-in shower or tub, vanity</td><td className="gwch-td-price">$25,000 – $55,000</td></tr>
+                  <tr><td>High-End</td><td>Layout changes, premium fixtures, spa features</td><td className="gwch-td-price">$55,000 – $120,000+</td></tr>
                 </tbody>
               </table></div>
             </FadeUp>
@@ -738,9 +746,9 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
                   <tr><th>Tier</th><th>Scope</th><th>Typical Range</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td>Basic</td><td>Framing, drywall, flooring, basic lighting and electrical</td><td className="gwch-td-price">$25,000 – $45,000</td></tr>
-                  <tr><td>Mid-Range</td><td>Full finish, bathroom, egress window, HVAC extension</td><td className="gwch-td-price">$45,000 – $70,000</td></tr>
-                  <tr><td>High-End</td><td>Home theater, wet bar, full bath, custom millwork, waterproofing system</td><td className="gwch-td-price">$70,000 – $100,000+</td></tr>
+                  <tr><td>Basic</td><td>Framing, drywall, basic flooring, lighting, paint</td><td className="gwch-td-price">$25,000 – $45,000</td></tr>
+                  <tr><td>Mid-Range</td><td>Multiple rooms, upgraded flooring, bathroom rough-in</td><td className="gwch-td-price">$45,000 – $70,000</td></tr>
+                  <tr><td>High-End</td><td>Full bathroom, wet bar, custom built-ins, home theater</td><td className="gwch-td-price">$70,000 – $100,000+</td></tr>
                 </tbody>
               </table></div>
               <p className="gwch-cost-note">
@@ -870,7 +878,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
                         <span className="gwch-badge">{svc.time}</span>
                       </div>
                       <Link href={svc.href} className="gwch-learn-more">
-                        Learn More
+                        Get Started
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
@@ -899,7 +907,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
                           <span className="gwch-badge">{svc.time}</span>
                         </div>
                         <Link href={svc.href} className="gwch-learn-more">
-                          Learn More
+                          Get Started
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M5 12h14M12 5l7 7-7 7" />
                           </svg>
@@ -917,7 +925,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
                 className="gwch-services-toggle"
                 onClick={() => setServicesOpen((v) => !v)}
               >
-                {servicesOpen ? 'Show Less' : 'Show 5 More Services'}
+                {servicesOpen ? 'Show Less' : 'Show 6 More Services'}
                 <svg
                   width="16"
                   height="16"
@@ -1034,8 +1042,8 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
             {[
               {
                 icon: (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                   </svg>
                 ),
                 label: 'Google Rating',
@@ -1096,7 +1104,7 @@ export function GreenwichCTPageTemplate({ page: _page }: { page: CMSPage }) {
         </section>
 
         {/* ── 14. CTA FORM ────────────────────────────────────────────── */}
-        <SharedLeadFormSection page={_page} data={{ eyebrow: "Get Started", title: "Schedule Your Free Consultation", title_highlight: "Consultation", subtitle: "On-site or remote (Google Meet or Zoom). We respond within one business day.", images: [{ src: "/hero/builtwell-team-van-consultation-hero-ct.jpg", alt: "BuiltWell team van arriving for consultation" }, { src: "/team/builtwell-owner-handshake-client-ct-02.jpg", alt: "BuiltWell owner handshake with client" }] }} accent="Consultation" />
+        <SharedLeadFormSection page={_page} data={{ eyebrow: "Get Started", title: "Schedule Your Free Consultation", title_highlight: "Consultation", subtitle: "On-site or remote (Google Meet or Zoom). Call (203) 919-9616 or fill out the form below.", subtitle2: "We'll confirm your appointment details and the name of the team member visiting within one business day.", images: [{ src: "/hero/builtwell-team-van-consultation-hero-ct.jpg", alt: "BuiltWell team van arriving for consultation" }, { src: "/team/builtwell-owner-handshake-client-ct-02.jpg", alt: "BuiltWell owner handshake with client" }] }} accent="Consultation" />
 
         {/* ── 15. FINANCING STRIP ─────────────────────────────────────── */}
         <SharedFinancingStrip data={{ title: "Flexible Financing Available", content: "Get approved in about 60 seconds and start your project today.", cta: { url: "/financing/", label: "Check Financing Options" } }} />
