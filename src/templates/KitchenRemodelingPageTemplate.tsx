@@ -1402,7 +1402,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
               ) : null}
             </div>
             {localExpertiseBody.map((paragraph) => {
-              const energizeMatch = paragraph.match(/^(.*?)(energizect\.com)(.*)$/s);
+              const energizeMatch = paragraph.match(/^(.*?)(energizect\.com)([\s\S]*)$/);
               if (energizeMatch) {
                 return (
                   <p key={paragraph.slice(0, 24)} className="mb-5 text-[16px] leading-[1.8] text-[#5C677D] last:mb-0">
