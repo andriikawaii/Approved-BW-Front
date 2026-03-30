@@ -145,7 +145,7 @@ function ApplicationWizard({ data }: { data: any }) {
                   className={cls("careers-trade-card", trades.includes(trade) ? "selected" : "")}
                   onClick={() => setTrades((prev) => prev.includes(trade) ? prev.filter((t) => t !== trade) : [...prev, trade])}
                 >
-                  <span className="mb-2 block leading-none">{getTradeIcon(trade)}</span>
+                  <span className="mb-2 flex h-[28px] w-[28px] items-center justify-center leading-none">{getTradeIcon(trade)}</span>
                   <span className="text-[13px] font-semibold text-[#1e2b43]">{trade}</span>
                 </div>
               ))}
@@ -325,7 +325,8 @@ export function CareersPageTemplate({ page }: { page: CMSPage }) {
         @keyframes carWizFadeIn { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
 
         .careers-trade-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
-        .careers-trade-card { padding:20px 12px; border-radius:8px; border:2px solid rgba(30,43,67,0.1); text-align:center; cursor:pointer; transition:all 0.2s; background:#fff; user-select:none; }
+        .careers-trade-card { padding:20px 12px; border-radius:8px; border:2px solid rgba(30,43,67,0.1); text-align:center; cursor:pointer; transition:all 0.2s; background:#fff; user-select:none; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+        .careers-trade-card svg { display:block; margin:0; }
         .careers-trade-card:hover { border-color:#bc9155; }
         .careers-trade-card.selected { border-color:#bc9155; background:rgba(188,145,85,0.1); }
 
