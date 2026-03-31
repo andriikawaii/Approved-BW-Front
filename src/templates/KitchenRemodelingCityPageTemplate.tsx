@@ -38,7 +38,9 @@ type ServiceIntroData = {
   title?: string | null;
   content?: string | null;
   image_main?: string | null;
+  image_main_alt?: string | null;
   image_secondary?: string | null;
+  image_secondary_alt?: string | null;
   bullet_points?: Array<{ text?: string | null }>;
 };
 
@@ -48,7 +50,9 @@ type BeforeAfterData = {
   items?: Array<{
     title?: string | null;
     before_image?: string | null;
+    before_image_alt?: string | null;
     after_image?: string | null;
+    after_image_alt?: string | null;
     before_text?: string | null;
     quote?: { text?: string | null; author?: string | null; location?: string | null } | null;
   }>;
