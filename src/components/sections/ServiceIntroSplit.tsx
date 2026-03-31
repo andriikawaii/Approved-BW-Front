@@ -9,8 +9,10 @@ type Props = {
     title: string;
     content: string;
     image_main?: string | null;
+    image_main_alt?: string | null;
     bullet_points?: BulletPoint[];
     image_secondary?: string | null;
+    image_secondary_alt?: string | null;
   };
 };
 
@@ -38,7 +40,7 @@ export default function ServiceIntroSplit({ data }: Props) {
             <div className="aspect-[4/5] bg-gray-100 rounded-lg overflow-hidden">
               <img
                 src={mainImage}
-                alt={data.title}
+                alt={data.image_main_alt || data.title}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -46,7 +48,7 @@ export default function ServiceIntroSplit({ data }: Props) {
             <div className="absolute -bottom-8 -right-8 w-2/3 aspect-video bg-white p-2 shadow-xl rounded-lg transform rotate-3 hidden md:block">
               <img
                 src={secondaryImage}
-                alt=""
+                alt={data.image_secondary_alt || ''}
                 className="w-full h-full object-cover rounded"
               />
             </div>

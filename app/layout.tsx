@@ -14,12 +14,49 @@ const inter = Inter({
   display: 'swap',
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://builtwellct.com';
+
 export const metadata: Metadata = {
   title: {
-    default: 'BuiltWell',
-    template: '%s | BuiltWell',
+    default: 'BuiltWell CT | Home Remodeling Contractor in Connecticut',
+    template: '%s | BuiltWell CT',
   },
-  description: "The Last Contractor You'll Hire",
+  description: "Connecticut's trusted home remodeling contractor. Kitchens, bathrooms, basements & more. The last contractor you'll hire.",
+  metadataBase: new URL(SITE_URL),
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+
+  openGraph: {
+    siteName: 'BuiltWell CT',
+    type: 'website',
+    locale: 'en_US',
+    images: [
+      {
+        url: '/og-default.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'BuiltWell CT — Home Remodeling Contractor in Connecticut',
+      },
+    ],
+  },
+
+  twitter: {
+    card: 'summary_large_image',
+    site: '@builtwellct',
+    creator: '@builtwellct',
+    images: ['/og-default.jpg'],
+  },
+
+  authors: [{ name: 'BuiltWell CT' }],
+
+  other: {
+    'geo.region': 'US-CT',
+    'geo.placename': 'Connecticut',
+  },
 };
 
 const isDevelopment = process.env.NODE_ENV === 'development';

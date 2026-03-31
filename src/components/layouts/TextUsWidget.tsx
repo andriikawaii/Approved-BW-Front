@@ -48,60 +48,62 @@ export default function TextUsWidget() {
   return (
     <>
     <div ref={rootRef} className="fixed bottom-4 left-4 z-[70] md:bottom-6 md:left-5">
-      <div
-        className={`mb-3 w-[320px] max-w-[calc(100vw-32px)] overflow-hidden rounded-[14px] border border-[#dfe3ea] bg-white shadow-[0_18px_48px_rgba(15,25,45,0.24)] transition-all duration-200 ${open ? 'pointer-events-auto translate-y-0 opacity-100' : 'pointer-events-none translate-y-2 opacity-0'}`}
-        aria-hidden={!open}
-      >
-        <div className="flex flex-col items-center px-6 pb-5 pt-9">
-          <Image
-            src="/logos/builtwell-logo-colored.png"
-            alt="BuiltWell"
-            width={130}
-            height={36}
-            className="h-auto w-[130px]"
-          />
-          <h3 className="mt-12 text-[18px] font-semibold text-[#1E2B43]">Text Us</h3>
-          <p className="mt-1 text-center text-[14px] leading-[1.5] text-[#68758d]">
-            We reply quickly during business hours.
-          </p>
-        </div>
+      {open ? (
+        <div
+          className="mb-3 w-[320px] max-w-[calc(100vw-32px)] overflow-hidden rounded-[14px] border border-[#dfe3ea] bg-white shadow-[0_18px_48px_rgba(15,25,45,0.24)]"
+          aria-hidden={!open}
+        >
+          <div className="flex flex-col items-center px-6 pb-5 pt-9">
+            <Image
+              src="/logos/builtwell-logo-colored.png"
+              alt="BuiltWell"
+              width={130}
+              height={36}
+              className="h-auto w-[130px]"
+            />
+            <h3 className="mt-12 text-[18px] font-semibold text-[#1E2B43]">Text Us</h3>
+            <p className="mt-1 text-center text-[14px] leading-[1.5] text-[#68758d]">
+              We reply quickly during business hours.
+            </p>
+          </div>
 
-        <div className="border-t border-[#e7eaf0] px-5 py-5">
-          <div className="space-y-3">
-            {fairfieldPhone ? (
-              <a
-                href={`sms:${fairfieldPhone.number.replace(/\D/g, '')}`}
-                className="block rounded-[8px] bg-[#f3eee6] px-5 py-4 transition-colors hover:bg-[#ede5d7]"
-              >
-                <div className="text-[12px] font-bold uppercase tracking-[1px] text-[#6a7590]">
-                  Fairfield County
-                </div>
-                <div className="mt-1 text-[16px] font-semibold text-[#2a3957]">
-                  {fairfieldPhone.number}
-                </div>
-              </a>
-            ) : null}
+          <div className="border-t border-[#e7eaf0] px-5 py-5">
+            <div className="space-y-3">
+              {fairfieldPhone ? (
+                <a
+                  href={`sms:${fairfieldPhone.number.replace(/\D/g, '')}`}
+                  className="block rounded-[8px] bg-[#f3eee6] px-5 py-4 transition-colors hover:bg-[#ede5d7]"
+                >
+                  <div className="text-[12px] font-bold uppercase tracking-[1px] text-[#6a7590]">
+                    Fairfield County
+                  </div>
+                  <div className="mt-1 text-[16px] font-semibold text-[#2a3957]">
+                    {fairfieldPhone.number}
+                  </div>
+                </a>
+              ) : null}
 
-            {newHavenPhone ? (
-              <a
-                href={`sms:${newHavenPhone.number.replace(/\D/g, '')}`}
-                className="block rounded-[8px] bg-[#f3eee6] px-5 py-4 transition-colors hover:bg-[#ede5d7]"
-              >
-                <div className="text-[12px] font-bold uppercase tracking-[1px] text-[#6a7590]">
-                  New Haven County
-                </div>
-                <div className="mt-1 text-[16px] font-semibold text-[#2a3957]">
-                  {newHavenPhone.number}
-                </div>
-              </a>
-            ) : null}
+              {newHavenPhone ? (
+                <a
+                  href={`sms:${newHavenPhone.number.replace(/\D/g, '')}`}
+                  className="block rounded-[8px] bg-[#f3eee6] px-5 py-4 transition-colors hover:bg-[#ede5d7]"
+                >
+                  <div className="text-[12px] font-bold uppercase tracking-[1px] text-[#6a7590]">
+                    New Haven County
+                  </div>
+                  <div className="mt-1 text-[16px] font-semibold text-[#2a3957]">
+                    {newHavenPhone.number}
+                  </div>
+                </a>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="border-t border-[#e7eaf0] bg-[#f3f4f7] px-5 py-3 text-center text-[13px] text-[#6f7c93]">
+            Available Mon-Fri 8am-5pm, Sat 8am-3pm
           </div>
         </div>
-
-        <div className="border-t border-[#e7eaf0] bg-[#f3f4f7] px-5 py-3 text-center text-[13px] text-[#6f7c93]">
-          Available Mon-Fri 8am-5pm, Sat 8am-3pm
-        </div>
-      </div>
+      ) : null}
 
       <button
         type="button"
@@ -116,36 +118,38 @@ export default function TextUsWidget() {
 
     {/* Mobile-only Call button */}
     <div ref={phoneRef} className="fixed bottom-4 right-4 z-[70] md:hidden">
-      <div
-        className={`mb-3 w-[280px] max-w-[calc(100vw-32px)] overflow-hidden rounded-[14px] border border-[#2a3957] bg-[#1E2B43] shadow-[0_18px_48px_rgba(15,25,45,0.4)] transition-all duration-200 ${phoneOpen ? 'pointer-events-auto translate-y-0 opacity-100' : 'pointer-events-none translate-y-2 opacity-0'}`}
-        aria-hidden={!phoneOpen}
-      >
-        <div className="px-5 py-4">
-          <div className="space-y-3">
-            {fairfieldPhone ? (
-              <a
-                href={`tel:${fairfieldPhone.number.replace(/\D/g, '')}`}
-                className="block rounded-[8px] border border-white/10 bg-white/5 px-5 py-4 transition-colors hover:bg-white/10"
-              >
-                <div className="text-[12px] font-bold uppercase tracking-[1px] text-white/60">
-                  Fairfield: {fairfieldPhone.number}
-                </div>
-              </a>
-            ) : null}
+      {phoneOpen ? (
+        <div
+          className="mb-3 w-[280px] max-w-[calc(100vw-32px)] overflow-hidden rounded-[14px] border border-[#2a3957] bg-[#1E2B43] shadow-[0_18px_48px_rgba(15,25,45,0.4)]"
+          aria-hidden={!phoneOpen}
+        >
+          <div className="px-5 py-4">
+            <div className="space-y-3">
+              {fairfieldPhone ? (
+                <a
+                  href={`tel:${fairfieldPhone.number.replace(/\D/g, '')}`}
+                  className="block rounded-[8px] border border-white/10 bg-white/5 px-5 py-4 transition-colors hover:bg-white/10"
+                >
+                  <div className="text-[12px] font-bold uppercase tracking-[1px] text-white/60">
+                    Fairfield: {fairfieldPhone.number}
+                  </div>
+                </a>
+              ) : null}
 
-            {newHavenPhone ? (
-              <a
-                href={`tel:${newHavenPhone.number.replace(/\D/g, '')}`}
-                className="block rounded-[8px] border border-white/10 bg-white/5 px-5 py-4 transition-colors hover:bg-white/10"
-              >
-                <div className="text-[12px] font-bold uppercase tracking-[1px] text-white/60">
-                  New Haven: {newHavenPhone.number}
-                </div>
-              </a>
-            ) : null}
+              {newHavenPhone ? (
+                <a
+                  href={`tel:${newHavenPhone.number.replace(/\D/g, '')}`}
+                  className="block rounded-[8px] border border-white/10 bg-white/5 px-5 py-4 transition-colors hover:bg-white/10"
+                >
+                  <div className="text-[12px] font-bold uppercase tracking-[1px] text-white/60">
+                    New Haven: {newHavenPhone.number}
+                  </div>
+                </a>
+              ) : null}
+            </div>
           </div>
         </div>
-      </div>
+      ) : null}
 
       <button
         type="button"

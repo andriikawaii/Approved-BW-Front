@@ -1073,7 +1073,7 @@ function HomeAreasSection({
                   <div className="relative h-[180px] overflow-hidden md:h-[200px]">
                     <img
                       src={county.image}
-                      alt={`${countyName}, Connecticut home remodeling service area`}
+                      alt={county.image_alt || `${countyName}, Connecticut home remodeling service area`}
                       className={joinClasses(
                         'h-full w-full object-cover transition-transform duration-500 md:group-hover:scale-105',
                         normalizeTitle(countyName) === 'new haven county' && 'object-[center_15%]'

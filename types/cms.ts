@@ -3,6 +3,9 @@ export type CMSData = Record<string, unknown>;
 export type CMSSeo = {
   title: string;
   description: string;
+  canonical?: string | null;
+  og_image_alt?: string | null;
+  robots?: string | null;
 };
 
 export type CMSPhone = {

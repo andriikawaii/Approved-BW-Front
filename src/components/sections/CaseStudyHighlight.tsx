@@ -9,6 +9,7 @@ type ProjectDetails = {
 type Props = {
   data: {
     image?: string | null;
+    image_alt?: string | null;
     outcome?: string;
     headline?: string;
     solution?: string;
@@ -58,7 +59,7 @@ export default function CaseStudyHighlight({ data }: Props) {
 
           <aside className="overflow-hidden rounded-2xl border border-[#e7decd] bg-[#f7f4ed] shadow-[0_12px_30px_rgba(30,47,74,0.09)]">
             {data.image ? (
-              <img src={data.image} alt={data.headline || 'Featured project'} className="h-60 w-full object-cover" />
+              <img src={data.image} alt={data.image_alt || data.headline || 'Featured project'} className="h-60 w-full object-cover" />
             ) : (
               <div className="relative h-60 bg-gradient-to-br from-[#445f86] to-[#263850]">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.18),transparent_45%)]" />

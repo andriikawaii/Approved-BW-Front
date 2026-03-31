@@ -54,17 +54,42 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!page) return {};
 
   const normalizedPath = path.replace(/^\/+|\/+$/g, '');
-  const canonical = normalizedPath ? `${SITE_URL}/${normalizedPath}/` : `${SITE_URL}/`;
+  const canonical = page.seo.canonical
+    ?? (normalizedPath ? `${SITE_URL}/${normalizedPath}/` : `${SITE_URL}/`);
+
+  const ogImageAlt = page.seo.og_image_alt ?? page.seo.title;
+
+  const robotsValue = page.seo.robots;
+  const robots: Metadata['robots'] = robotsValue
+    ? { index: !robotsValue.includes('noindex'), follow: !robotsValue.includes('nofollow') }
+    : undefined;
 
   return {
     title: page.seo.title,
     description: page.seo.description,
     alternates: { canonical },
+    ...(robots && { robots }),
+
     openGraph: {
       title: page.seo.title,
       description: page.seo.description,
       url: canonical,
       type: 'website',
+      images: [
+        {
+          url: '/og-default.jpg',
+          width: 1200,
+          height: 630,
+          alt: ogImageAlt,
+        },
+      ],
+    },
+
+    twitter: {
+      card: 'summary_large_image',
+      title: page.seo.title,
+      description: page.seo.description,
+      images: [{ url: '/og-default.jpg', alt: ogImageAlt }],
     },
   };
 }
@@ -85,6 +110,12 @@ export default async function DynamicPage({ params }: Props) {
 
   return (
     <PageDataProvider footerVariant={footerVariant} phones={phones}>
+      {page.schema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(page.schema) }}
+        />
+      )}
       <Layout>
         {renderTemplate(page)}
       </Layout>

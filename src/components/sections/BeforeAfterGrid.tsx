@@ -4,7 +4,9 @@ type Project = {
   location: string;
   description: string;
   before_image?: string | null;
+  before_image_alt?: string | null;
   after_image?: string | null;
+  after_image_alt?: string | null;
   testimonial_quote?: string | null;
 };
 
@@ -109,7 +111,7 @@ export default function BeforeAfterGrid({ data }: Props) {
                       </span>
                       <img
                         src={getBeforeImage(project, index)}
-                        alt={`Before ${project.location}`}
+                        alt={project.before_image_alt || `Before ${project.location}`}
                         className="h-full min-h-[220px] w-full rounded-lg object-cover shadow-md"
                       />
                       <figcaption className="mt-2 text-[12px] font-medium text-[#5b6780]">
@@ -124,7 +126,7 @@ export default function BeforeAfterGrid({ data }: Props) {
                       </span>
                       <img
                         src={getAfterImage(project, index)}
-                        alt={`After ${project.location}`}
+                        alt={project.after_image_alt || `After ${project.location}`}
                         className="h-full min-h-[220px] w-full rounded-lg object-cover shadow-md"
                       />
                       <figcaption className="mt-2 text-[12px] font-medium text-[#5b6780]">

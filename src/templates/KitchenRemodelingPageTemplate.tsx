@@ -1132,7 +1132,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                       intro?.image_main,
                       "/services/kitchen-remodeling-ct.jpg",
                     )}
-                    alt={`${serviceLabel || "Remodeling"} project`}
+                    alt={intro?.image_main_alt || `${serviceLabel || "Remodeling"} project`}
                     className="h-[280px] w-full object-cover md:h-[320px]"
                   />
                 </div>
@@ -1142,7 +1142,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                       intro?.image_secondary,
                       "/portfolio/builtwell-contractor-sign-consultation-ct-01.jpg",
                     )}
-                    alt={`${serviceLabel || "Remodeling"} consultation`}
+                    alt={intro?.image_secondary_alt || `${serviceLabel || "Remodeling"} consultation`}
                     className="h-[280px] w-full object-cover md:h-[320px]"
                   />
                 </div>
@@ -1222,7 +1222,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                               project.before_image,
                               "/images/before-after/kitchen-before-after-1.jpg",
                             )}
-                            alt={`${project.location} before`}
+                            alt={project.before_image_alt || `${project.location} before`}
                             className="h-full w-full object-cover"
                           />
                           <img
@@ -1230,7 +1230,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                               project.after_image,
                               "/images/before-after/kitchen-before-after-1.png",
                             )}
-                            alt={`${project.location} after`}
+                            alt={project.after_image_alt || `${project.location} after`}
                             className="h-full w-full object-cover"
                           />
                         </div>

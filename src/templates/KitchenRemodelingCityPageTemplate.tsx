@@ -369,10 +369,10 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
             <div className="grid gap-12 lg:grid-cols-2">
               <div className="grid gap-3">
                 <div className="overflow-hidden rounded-[12px] shadow-[0_10px_34px_rgba(30,43,67,0.1)]">
-                  <img src={media(intro?.image_main, "/services/kitchen-remodeling-ct.jpg")} alt="Finished kitchen remodel" className="h-[280px] w-full object-cover md:h-[320px]" />
+                  <img src={media(intro?.image_main, "/services/kitchen-remodeling-ct.jpg")} alt={intro?.image_main_alt || "Finished kitchen remodel"} className="h-[280px] w-full object-cover md:h-[320px]" />
                 </div>
                 <div className="overflow-hidden rounded-[12px] shadow-[0_10px_34px_rgba(30,43,67,0.1)]">
-                  <img src={media(intro?.image_secondary, "/services/kitchen-remodeling-ct.jpg")} alt="Kitchen remodeling consultation" className="h-[280px] w-full object-cover md:h-[320px]" />
+                  <img src={media(intro?.image_secondary, "/services/kitchen-remodeling-ct.jpg")} alt={intro?.image_secondary_alt || "Kitchen remodeling consultation"} className="h-[280px] w-full object-cover md:h-[320px]" />
                 </div>
               </div>
               <div className="rounded-[12px] border border-[#1e2b4312] bg-white px-6 py-7 shadow-[0_2px_12px_rgba(30,43,67,0.05)] md:px-9">
@@ -439,8 +439,8 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
                 <article key={`${item.title}-${index}`} className="overflow-hidden rounded-[12px] border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
                   <div className="relative h-[280px] overflow-hidden">
                     <div className="grid h-full grid-cols-2">
-                      <img src={media(item.before_image, "/images/before-after/kitchen-before-after-1.jpg")} alt={`${item.title || "Kitchen project"} before`} className="h-full w-full object-cover" />
-                      <img src={media(item.after_image, "/images/before-after/kitchen-before-after-1.png")} alt={`${item.title || "Kitchen project"} after`} className="h-full w-full object-cover" />
+                      <img src={media(item.before_image, "/images/before-after/kitchen-before-after-1.jpg")} alt={item.before_image_alt || `${item.title || "Kitchen project"} before`} className="h-full w-full object-cover" />
+                      <img src={media(item.after_image, "/images/before-after/kitchen-before-after-1.png")} alt={item.after_image_alt || `${item.title || "Kitchen project"} after`} className="h-full w-full object-cover" />
                     </div>
                     <div className="absolute inset-x-0 bottom-0 h-[76px] bg-[linear-gradient(to_bottom,transparent_0%,rgba(0,0,0,0.92)_55%,rgba(0,0,0,0.96)_100%)]" />
                     <div className="absolute bottom-0 left-0 flex h-[76px] w-1/2 items-end px-[14px] pb-[13px]"><span className="text-[13px] font-extrabold uppercase tracking-[2.5px] text-white">Before</span></div>
