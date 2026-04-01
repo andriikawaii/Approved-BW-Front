@@ -191,7 +191,7 @@ export function AreasSection({ data }: { data: any }) {
               return (
                 <article key={countyKey} className="bw-area-card">
                   <div className="bw-area-card-img">
-                    <img src={media(county.image, index === 0 ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")} alt={county.name || "BuiltWell CT service area"} className={(county.name || "").toLowerCase().includes("new haven") ? "bw-show-top" : undefined} />
+                    <img src={media(county.image, index === 0 ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")} alt={county.image_alt || county.name || "BuiltWell CT service area"} className={(county.name || "").toLowerCase().includes("new haven") ? "bw-show-top" : undefined} />
                   </div>
                   <div className="bw-area-card-body">
                     <h3>{county.name}</h3>

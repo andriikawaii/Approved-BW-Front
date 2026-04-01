@@ -10,7 +10,8 @@ type Testimonial = {
   quote?: string;
   text?: string;
   avatar?: string | null;
-  rating?: number; // nije obavezno u Manus varijanti, ali ostavljamo
+  avatar_alt?: string | null;
+  rating?: number;
 };
 
 type Props = {
@@ -99,7 +100,7 @@ export default function Testimonials({ data }: Props) {
                     <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#1A2B45]/20 sepia-[.5] grayscale-[.3]">
                       {item.avatar ? (
                         <img
-                          alt={item.name}
+                          alt={item.avatar_alt || item.name}
                           className="w-full h-full object-cover"
                           src={item.avatar}
                         />

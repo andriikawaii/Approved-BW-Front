@@ -377,7 +377,7 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
               <FadeUp key={`${item.title || "service"}-${index}`} delay={index % 3 * 100} className="h-full">
                 <article className="group/card flex h-full flex-col overflow-hidden rounded-[10px] border border-[#e6dccd] border-b-[3px] border-b-transparent bg-white shadow-[0_16px_34px_rgba(30,43,67,0.06)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
                   <div className="h-[228px] overflow-hidden">
-                    <img src={media(item.image, "/services/kitchen-remodeling-ct.jpg")} alt={item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105" />
+                    <img src={media(item.image, "/services/kitchen-remodeling-ct.jpg")} alt={item.image_alt || item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105" />
                   </div>
                   <div className="flex flex-1 flex-col p-5 text-center">
                     <h3 className="font-serif text-[22px] font-bold leading-[1.22]">{item.title}</h3>

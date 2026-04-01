@@ -8,6 +8,7 @@ type Props = {
       highlight: string;
     };
     image: string;
+    image_alt?: string | null;
     paragraphs: string[];
     quote?: string;
   };
@@ -21,7 +22,7 @@ export default function StorySplitSection({ data }: Props) {
       <div className="mx-auto max-w-7xl px-6">
         <div className="grid items-center gap-14 lg:grid-cols-2">
           <div className="overflow-hidden rounded-xl shadow-[0_18px_40px_rgba(30,47,74,0.2)]">
-            <img src={image} alt={title.normal} className="h-full w-full object-cover" />
+            <img src={image} alt={data.image_alt || title.normal} className="h-full w-full object-cover" />
           </div>
 
           <div>

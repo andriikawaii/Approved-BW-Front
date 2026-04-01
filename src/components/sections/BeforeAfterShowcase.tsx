@@ -6,7 +6,9 @@ type Props = {
     headline: string;
     description?: string;
     before_image?: string | null;
+    before_image_alt?: string | null;
     after_image?: string | null;
+    after_image_alt?: string | null;
   };
 };
 
@@ -32,7 +34,7 @@ export default function BeforeAfterShowcase({ data }: Props) {
             <p className="text-xl font-bold text-[#1E2F4A]">Before</p>
             <img
               src={beforeImage}
-              alt="Before bathroom remodel"
+              alt={data.before_image_alt || "Before bathroom remodel"}
               className="mt-3 w-full rounded-lg border border-[#e6ded1] object-cover shadow-md"
             />
             <p className="mt-2 text-sm text-[#5c677d]">Before condition</p>
@@ -42,7 +44,7 @@ export default function BeforeAfterShowcase({ data }: Props) {
             <p className="text-xl font-bold text-[#1E2F4A]">After</p>
             <img
               src={afterImage}
-              alt="After bathroom remodel"
+              alt={data.after_image_alt || "After bathroom remodel"}
               className="mt-3 w-full rounded-lg border border-[#e6ded1] object-cover shadow-md"
             />
             <p className="mt-2 text-sm text-[#5c677d]">Completed result</p>

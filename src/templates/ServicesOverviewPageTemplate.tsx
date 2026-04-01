@@ -326,7 +326,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
             {(servicesGrid?.items || []).map((item: any, index: number) => (
               <article key={`${item.title}-${index}`} className="group flex flex-col overflow-hidden rounded-[8px] border-b-2 border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
                 <div className="h-[280px] overflow-hidden">
-                  <img src={localMedia(item.image, "/images/services/service-kitchen.jpg")} alt={item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <img src={localMedia(item.image, "/images/services/service-kitchen.jpg")} alt={item.image_alt || item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                 </div>
                 <div className="flex flex-1 flex-col items-center px-7 pb-8 pt-7 text-center">
                   <h3 className="mb-3 text-[22px] font-bold leading-[1.2]">{item.url ? linkNode(item.url, item.title, "transition-colors group-hover:text-[#bc9155]") : item.title}</h3>
@@ -570,7 +570,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
               {[...(brands?.items || []), ...(brands?.items || [])].map((item: any, index: number) => (
                 <a key={`${item.name}-${index}`} href={item.url || "#"} target="_blank" rel="noreferrer" className="flex h-[44px] shrink-0 items-center justify-center px-[18px] opacity-[0.55] transition-opacity duration-200 hover:opacity-100">
                   {item.logo ? (
-                    <img src={localMedia(item.logo, "/logos/builtwell-logo-text-only.png")} alt={item.name} className="h-8 w-auto max-w-[140px] object-contain" />
+                    <img src={localMedia(item.logo, "/logos/builtwell-logo-text-only.png")} alt={item.logo_alt || item.name} className="h-8 w-auto max-w-[140px] object-contain" />
                   ) : (
                     <span className="whitespace-nowrap text-[16px] font-bold uppercase tracking-[1px] text-[#1e2b43]">{item.name}</span>
                   )}
@@ -644,7 +644,7 @@ function ServicesAreasSection({
                 <div className="group relative h-[220px] overflow-hidden">
                   <img
                     src={localMedia(county.image, index === 0 ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")}
-                    alt={county.name || "BuiltWell CT service area"}
+                    alt={county.image_alt || county.name || "BuiltWell CT service area"}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[rgba(30,43,67,0.4)] to-transparent" />

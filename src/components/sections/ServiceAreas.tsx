@@ -8,6 +8,7 @@ type County = {
   county_name?: string
   title?: string
   image?: string | null
+  image_alt?: string | null
   url?: string
   towns?: TownValue[]
   cities?: TownValue[]
@@ -99,7 +100,7 @@ export default function ServiceAreas({ data }: Props) {
                 <div className="relative h-64 w-full overflow-hidden">
                   <img
                     src={imageSrc}
-                    alt={countyName}
+                    alt={county.image_alt || countyName}
                     className="absolute inset-0 h-full w-full object-cover"
                   />
 

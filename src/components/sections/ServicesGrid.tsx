@@ -6,6 +6,7 @@ type ServiceItem = {
   summary?: string;
   description?: string;
   image?: string | null;
+  image_alt?: string | null;
   url?: string;
   cta_label?: string;
   price?: string;
@@ -85,7 +86,7 @@ export default function ServicesGrid({ data }: Props) {
                 <>
                   <img
                     src={item.image}
-                    alt={item.title || 'Service'}
+                    alt={item.image_alt || item.title || 'Service'}
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </>

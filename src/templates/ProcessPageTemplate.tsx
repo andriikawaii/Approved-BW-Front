@@ -401,7 +401,7 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
                       <span className="step-number-badge">{`${index + 1}`.padStart(2, "0")}</span>
                     <img
                       src={media(item.image, stepImageFallbacks[index] || stepImageFallbacks[0])}
-                      alt={item.title}
+                      alt={item.image_alt || item.title}
                       className="h-full w-full object-cover"
                     />
                     </div>
@@ -575,7 +575,7 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
                 <div className="h-[220px] overflow-hidden">
                   <img
                     src={media(item.image, "/services/kitchen-remodeling-ct.jpg")}
-                    alt={item.title}
+                    alt={item.image_alt || item.title}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
@@ -846,7 +846,7 @@ function ProcessAreasSection({
                 <div className="group relative h-[220px] overflow-hidden">
                   <img
                     src={media(county.image, index === 0 ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")}
-                    alt={county.name || "BuiltWell CT service area"}
+                    alt={county.image_alt || county.name || "BuiltWell CT service area"}
                     className={cls("h-full w-full object-cover transition-transform duration-500 group-hover:scale-105", index === 1 && "object-top")}
                   />
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[rgba(30,43,67,0.4)] to-transparent" />

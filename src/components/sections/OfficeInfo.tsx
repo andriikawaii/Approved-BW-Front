@@ -10,6 +10,7 @@ type Props = {
     phone: string;
     email: string;
     office_image?: string | null;
+    office_image_alt?: string | null;
     directions_url?: string;
   };
 };
@@ -59,7 +60,7 @@ export default function OfficeInfo({ data }: Props) {
           <div>
             <img
               src={imageSrc}
-              alt={title}
+              alt={data.office_image_alt || title}
               className="w-full rounded-lg border border-[#e4ddcf] object-cover shadow-[0_10px_24px_rgba(30,47,74,0.1)]"
             />
           </div>

@@ -606,7 +606,7 @@ function RelatedSection({ currentSlug }: { currentSlug: string }) {
           {shown.map(cs => (
             <Link key={cs.slug} href={cs.slug} className="group flex flex-col overflow-hidden rounded-[14px] border-b-[3px] border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-[6px] hover:border-b-[#BC9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.1)]">
               <div className="relative h-[210px] overflow-hidden">
-                <img src={cs.image} alt={cs.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <img src={cs.image} alt={cs.image_alt || cs.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                 <span className="absolute bottom-3.5 left-3.5 rounded-full bg-[rgba(10,18,35,0.65)] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.8px] text-white backdrop-blur-[8px]">{cs.badge}</span>
               </div>

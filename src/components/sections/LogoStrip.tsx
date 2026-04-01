@@ -5,6 +5,7 @@ import Link from 'next/link';
 type LogoItem = {
   name: string;
   logo?: string | null;
+  logo_alt?: string | null;
   url?: string | null;
 };
 
@@ -18,7 +19,7 @@ type Props = {
 
 function LogoMark({ item }: { item: LogoItem }) {
   if (item.logo) {
-    return <img src={item.logo} alt={item.name} className="h-8 w-auto object-contain" />;
+    return <img src={item.logo} alt={item.logo_alt || item.name} className="h-8 w-auto object-contain" />;
   }
 
   return <span className="text-sm font-medium text-[#6B7280]">{item.name}</span>;

@@ -83,6 +83,7 @@ type ServiceItem = {
   title?: string;
   summary?: string;
   image?: string | null;
+  image_alt?: string | null;
   url?: string;
   cta_label?: string;
   price?: string;
@@ -721,7 +722,7 @@ function ServiceCard({ item }: { item: ServiceItem }) {
   return (
     <article className="service-card">
       <div className="service-card-img">
-        <img src={imageSrc} alt={item.title || "Service"} />
+        <img src={imageSrc} alt={item.image_alt || item.title || "Service"} />
       </div>
 
       <div className="service-card-body">

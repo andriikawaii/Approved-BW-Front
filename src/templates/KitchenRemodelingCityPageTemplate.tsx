@@ -85,13 +85,13 @@ type FaqData = {
 type LogoStripData = {
   title?: string | null;
   subtitle?: string | null;
-  items?: Array<{ name?: string | null; logo?: string | null; url?: string | null }>;
+  items?: Array<{ name?: string | null; logo?: string | null; logo_alt?: string | null; url?: string | null }>;
 };
 
 type ProjectHighlightsData = {
   eyebrow?: string | null;
   title?: string | null;
-  items?: Array<{ title?: string | null; description?: string | null; image?: string | null; url?: string | null }>;
+  items?: Array<{ title?: string | null; description?: string | null; image?: string | null; image_alt?: string | null; url?: string | null }>;
 };
 
 type PhoneItem = { label?: string; number?: string };
@@ -612,7 +612,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
               <div className="brand-track flex w-max items-center gap-12">
                 {repeatedBrands.map((item, index) => (
                   <a key={`${item.name}-${index}`} href={item.url || "#"} target="_blank" rel="noreferrer noopener" className="flex h-[72px] shrink-0 items-center justify-center px-8 opacity-[0.55] transition-opacity hover:opacity-100">
-                    <img src={media(item.logo, "/images/brands/kraftmaid.svg")} alt={item.name || "Brand"} className="max-h-[52px] max-w-[200px] w-auto object-contain" />
+                    <img src={media(item.logo, "/images/brands/kraftmaid.svg")} alt={item.logo_alt || item.name || "Brand"} className="max-h-[52px] max-w-[200px] w-auto object-contain" />
                   </a>
                 ))}
               </div>
@@ -636,7 +636,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
               {(related?.items || []).map((item, index) => (
                 <article key={`${item.title}-${index}`} className="group flex flex-col overflow-hidden rounded-[8px] border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
                   <div className="h-[220px] overflow-hidden">
-                    <img src={media(item.image, "/services/bathroom-remodeling-ct.jpg")} alt={item.title || "Related service"} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <img src={media(item.image, "/services/bathroom-remodeling-ct.jpg")} alt={item.image_alt || item.title || "Related service"} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   </div>
                   <div className="flex flex-1 flex-col px-7 pb-8 pt-7">
                     <h3 className="mb-3 text-[22px] font-bold text-[#1e2b43]">{item.url ? linkNode(item.url, item.title, "text-[#1e2b43] hover:text-[#bc9155]") : item.title}</h3>

@@ -302,7 +302,7 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
                   <div className="faq-related-media h-[220px] overflow-hidden">
                     <img
                       src={media(item.image, fallbackImage)}
-                      alt={item.title}
+                      alt={item.image_alt || item.title}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       onError={(event) => {
                         if (event.currentTarget.src.includes(fallbackImage)) return;

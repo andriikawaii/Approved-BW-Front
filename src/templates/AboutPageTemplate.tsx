@@ -215,7 +215,7 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
               return (
                 <article key={`${member.name || "member"}-${index}`} className="flex flex-col overflow-hidden rounded-[8px] border-b-2 border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
                   <div className="h-[420px] overflow-hidden md:h-[520px]">
-                    <img src={image} alt={member.name || "BuiltWell CT team"} className="h-full w-full object-cover object-[center_20%]" />
+                    <img src={image} alt={member.image_alt || member.name || "BuiltWell CT team"} className="h-full w-full object-cover object-[center_20%]" />
                   </div>
                   <div className="flex flex-1 flex-col p-8">
                     <h3 className="text-[24px] font-bold">{member.name}</h3>

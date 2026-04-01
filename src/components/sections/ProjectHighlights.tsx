@@ -7,6 +7,7 @@ type Project = {
   title: string;
   description: string;
   image?: string | null;
+  image_alt?: string | null;
   url?: string;
   tag?: string;
   cta_label?: string;
@@ -79,7 +80,7 @@ export default function Portfolio({ data }: Props) {
                       {project.image ? (
                         <img
                           src={project.image}
-                          alt={project.title}
+                          alt={project.image_alt || project.title}
                           className="h-[300px] w-full object-cover transition-transform duration-500 hover:scale-[1.02] lg:h-full"
                         />
                       ) : (
@@ -168,7 +169,7 @@ export default function Portfolio({ data }: Props) {
                     {project.image ? (
                       <img
                         src={project.image}
-                        alt={project.title}
+                        alt={project.image_alt || project.title}
                         className="h-[220px] w-full object-cover transition-transform duration-500 hover:scale-[1.03]"
                       />
                     ) : (

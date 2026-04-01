@@ -93,6 +93,7 @@ type ServiceItem = {
   summary?: string | null;
   description?: string | null;
   image?: string | null;
+  image_alt?: string | null;
   url?: string;
   cta_label?: string;
 };
@@ -148,6 +149,7 @@ type ProjectItem = {
   title?: string;
   description?: string;
   image?: string | null;
+  image_alt?: string | null;
   url?: string;
   tag?: string;
   quote?: string;
@@ -211,6 +213,7 @@ type MergedService = {
   url: string;
   ctaLabel: string;
   image: string | null;
+  image_alt?: string | null;
 };
 
 function joinClasses(...classes: Array<string | false | null | undefined>) {
@@ -403,6 +406,7 @@ function mergeServices(
       url: item.url || '#',
       ctaLabel: item.cta_label || 'Learn More',
       image: item.image || getServiceFallbackImage(item.title || ''),
+      image_alt: item.image_alt,
     }));
   }
 
@@ -426,6 +430,7 @@ function mergeServices(
       url: matchedItem?.url || '#',
       ctaLabel: matchedItem?.cta_label || 'Learn More',
       image: matchedItem?.image || getServiceFallbackImage(matchedItem?.title || block.heading),
+      image_alt: matchedItem?.image_alt,
     });
 
     return services;
@@ -664,7 +669,7 @@ function HomeServicesSection({
                   {service.image ? (
                     <img
                       src={service.image}
-                      alt={service.title}
+                      alt={service.image_alt || service.title}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
                     />
@@ -1317,7 +1322,7 @@ function HomeProjectsSection({
                 {project.image ? (
                   <img
                     src={project.image}
-                    alt={project.title || ''}
+                    alt={project.image_alt || project.title || ''}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                     loading="lazy"
                   />

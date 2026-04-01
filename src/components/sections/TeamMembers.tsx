@@ -4,6 +4,7 @@ type Member = {
   name: string;
   position: string;
   image?: string | null;
+  image_alt?: string | null;
   bio: string;
 };
 
@@ -42,7 +43,7 @@ export default function TeamMembers({ data }: Props) {
             >
               <img
                 src={member.image || fallbackMemberImage(i)}
-                alt={member.name}
+                alt={member.image_alt || member.name}
                 className="h-72 w-full object-cover"
               />
               <div className="p-5">

@@ -5,6 +5,7 @@ import { MapPin } from 'lucide-react';
 
 type ProjectItem = {
   image?: string | null;
+  image_alt?: string | null;
   title: string;
   location?: string;
   description?: string;
@@ -66,7 +67,7 @@ export default function ProjectsMasonryGrid({ data }: Props) {
                 {project.image ? (
                   <img
                     src={project.image}
-                    alt={project.title}
+                    alt={project.image_alt || project.title}
                     className="h-56 w-full object-cover"
                   />
                 ) : (

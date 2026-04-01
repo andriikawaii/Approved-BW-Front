@@ -423,7 +423,7 @@ function PricingAreasSection({ data }: { data: any }) {
                 <div className="group relative h-[220px] overflow-hidden">
                   <img
                     src={media(county.image, index === 0 ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")}
-                    alt={county.name || "BuiltWell CT service area"}
+                    alt={county.image_alt || county.name || "BuiltWell CT service area"}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[rgba(30,43,67,0.4)] to-transparent" />
@@ -538,14 +538,14 @@ function BrandsMarquee({ items }: { items: any[] }) {
               <a href={item.url} target="_blank" rel="noopener noreferrer" title={item.name}>
                 <img
                   src={media(item.logo)}
-                  alt={item.name || "Brand logo"}
+                  alt={item.logo_alt || item.name || "Brand logo"}
                   className="h-[52px] w-auto max-w-[200px] object-contain"
                 />
               </a>
             ) : (
               <img
                 src={media(item.logo)}
-                alt={item.name || "Brand logo"}
+                alt={item.logo_alt || item.name || "Brand logo"}
                 className="h-[52px] w-auto max-w-[200px] object-contain"
               />
             )}

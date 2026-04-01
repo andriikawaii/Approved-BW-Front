@@ -1665,7 +1665,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                   >
                     <img
                       src={media(item.logo, "/images/brands/kraftmaid.svg")}
-                      alt={item.name}
+                      alt={item.logo_alt || item.name}
                       className="max-h-[52px] max-w-[200px] w-auto object-contain"
                     />
                   </a>
@@ -1706,7 +1706,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                             item.image,
                             "/services/bathroom-remodeling-ct.jpg",
                           )}
-                          alt={item.title}
+                          alt={item.image_alt || item.title}
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />,
                         "absolute inset-0 block",

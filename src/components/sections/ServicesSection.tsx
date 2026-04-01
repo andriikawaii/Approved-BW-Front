@@ -7,6 +7,7 @@ type ServiceItem = {
   title: string;
   description: string;
   image: string;
+  image_alt?: string | null;
   url?: string;
   cta_label?: string;
 };
@@ -48,7 +49,7 @@ export default function ServicesSection({ data }: ServicesSectionProps) {
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#1E2F4A]/10">
                   <img
                     src={item.image}
-                    alt={item.title}
+                    alt={item.image_alt || item.title}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                   />
                 </div>
