@@ -83,12 +83,12 @@ type HighlightData = {
 
 /* ─────────────────────── constants ─────────────────────── */
 
-const RELATED = [
-  { title: "Whole-Home Restoration", location: "Hamden, CT", slug: "/case-studies/whole-home-restoration-hamden", badge: "Full Home", image: "/portfolio/builtwell-team-interior-inspection-ct.jpg" },
-  { title: "Basement Finishing", location: "Darien, CT", slug: "/case-studies/basement-finishing-darien", badge: "Basement", image: "/images/headers/basement-finishing-header.jpg" },
-  { title: "Bathroom Remodeling", location: "Westport, CT", slug: "/case-studies/bathroom-remodeling-westport", badge: "Bathroom", image: "/images/headers/bathroom-remodeling-header.jpg" },
-  { title: "Kitchen Remodeling", location: "New Canaan, CT", slug: "/case-studies/kitchen-remodeling-new-canaan", badge: "Kitchen", image: "/images/headers/kitchen-remodeling-header.jpg" },
-  { title: "Kitchen + Flooring", location: "Milford, CT", slug: "/case-studies/kitchen-remodeling-milford", badge: "Kitchen", image: "/portfolio/builtwell-team-completed-interior-ct.png" },
+const RELATED: { title: string; location: string; slug: string; badge: string; image: string; image_alt?: string }[] = [
+  { title: "Whole-Home Restoration", location: "Hamden, CT", slug: "/case-studies/whole-home-restoration-hamden", badge: "Full Home", image: "/portfolio/builtwell-team-interior-inspection-ct.jpg", image_alt: "Whole-home restoration project in Hamden, CT" },
+  { title: "Basement Finishing", location: "Darien, CT", slug: "/case-studies/basement-finishing-darien", badge: "Basement", image: "/images/headers/basement-finishing-header.jpg", image_alt: "Finished basement project in Darien, CT" },
+  { title: "Bathroom Remodeling", location: "Westport, CT", slug: "/case-studies/bathroom-remodeling-westport", badge: "Bathroom", image: "/images/headers/bathroom-remodeling-header.jpg", image_alt: "Bathroom remodeling project in Westport, CT" },
+  { title: "Kitchen Remodeling", location: "New Canaan, CT", slug: "/case-studies/kitchen-remodeling-new-canaan", badge: "Kitchen", image: "/images/headers/kitchen-remodeling-header.jpg", image_alt: "Kitchen remodeling project in New Canaan, CT" },
+  { title: "Kitchen + Flooring", location: "Milford, CT", slug: "/case-studies/kitchen-remodeling-milford", badge: "Kitchen", image: "/portfolio/builtwell-team-completed-interior-ct.png", image_alt: "Kitchen and flooring project in Milford, CT" },
 ];
 
 function metaIcon(label: string) {

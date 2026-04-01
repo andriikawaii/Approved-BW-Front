@@ -2,7 +2,7 @@
 
 const REDIRECT_PREFIXES = ['/legacy/', '/old/'];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   if (
