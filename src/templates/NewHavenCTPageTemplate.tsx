@@ -37,6 +37,8 @@ type RichTextData = {
   title?: string | null;
   highlight_text?: string | null;
   content?: string | null;
+  image?: string | null;
+  image_alt?: string | null;
   cta?: { label?: string; url?: string };
   anchor_id?: string | null;
   style_variant?: string | null;

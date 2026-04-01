@@ -91,7 +91,16 @@ type LogoStripData = {
 type ProjectHighlightsData = {
   eyebrow?: string | null;
   title?: string | null;
-  items?: Array<{ title?: string | null; description?: string | null; image?: string | null; image_alt?: string | null; url?: string | null }>;
+  items?: Array<{
+    title?: string | null;
+    description?: string | null;
+    image?: string | null;
+    image_alt?: string | null;
+    url?: string | null;
+    link?: string | null;
+    href?: string | null;
+    cta_url?: string | null;
+  }>;
 };
 
 type PhoneItem = { label?: string; number?: string };
