@@ -37,11 +37,11 @@ export default function ServiceIntroSplit({ data }: Props) {
           
           {/* LEFT IMAGE STACK */}
           <div className="relative">
-            <div className="aspect-[4/5] bg-gray-100 rounded-lg overflow-hidden">
+            <div className="aspect-[16/10] bg-[#F3EFE7] rounded-lg overflow-hidden">
               <img
                 src={mainImage}
                 alt={data.image_main_alt || data.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-center"
               />
             </div>
 
@@ -49,7 +49,7 @@ export default function ServiceIntroSplit({ data }: Props) {
               <img
                 src={secondaryImage}
                 alt={data.image_secondary_alt || ''}
-                className="w-full h-full object-cover rounded"
+                className="w-full h-full object-cover object-center rounded bg-[#F3EFE7]"
               />
             </div>
           </div>

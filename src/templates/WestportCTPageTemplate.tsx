@@ -647,8 +647,8 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
                       </h3>
                       <p className="gwch-service-desc">{svc.desc}</p>
                       <div className="gwch-service-badges">
-                        <span className="gwch-badge">{svc.price}</span>
-                        <span className="gwch-badge">{svc.time}</span>
+                        <span className="gwch-badge"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" /></svg>{svc.price}</span>
+                        <span className="gwch-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>{svc.time}</span>
                       </div>
                       <Link href={svc.href} className="gwch-learn-more">
                         Get Started
@@ -724,7 +724,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
               Ready to Remodel in <span style={{ color: '#BC9155' }}>Westport</span>?
             </h2>
             <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', marginBottom: 28 }}>From Compo Beach colonials to Greens Farms estates — Westport remodeling that respects the character of your home.</p>
-            <Link href="#contact" style={{ display: 'inline-block', background: '#BC9155', color: '#fff', padding: '16px 48px', borderRadius: 8, fontWeight: 600, fontSize: 16, textDecoration: 'none' }}>Get Your Free Estimate</Link>
+            <Link href="#contact" className="gwch-mid-cta-btn">Get Your Free Estimate</Link>
             <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginTop: 16, fontStyle: 'italic' }}>On-site or remote via Google Meet. No charge, no obligation.</p>
           </div>
         </div>
@@ -790,23 +790,25 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
         </section>
 
         {/* ── 13. NEARBY AREAS ────────────────────────────────────────── */}
-        <SharedAreasSection data={{
-          eyebrow: "Nearby Towns",
-          title: "Fairfield County Towns We Also Serve",
-          highlight_text: "We Also Serve",
-          subtitle: "Beyond Westport, we serve homeowners throughout Fairfield County. Our team handles remodeling projects in Darien, Fairfield, Norwalk, Ridgefield, New Canaan, Stamford, and Greenwich, as well as additional towns across the county.",
-          counties: [{
-            name: "Fairfield County",
-            phone: "(203) 919-9616",
-            image: "/images/areas/fairfield-county.jpg",
-            description: "Served by our Fairfield County Service Area Team. We cover every town in the county with dedicated local crews who know the housing stock and building departments.",
-            towns: primaryTowns.map((t) => t.name),
-            extra_towns: moreTowns,
-            town_links: Object.fromEntries(primaryTowns.filter((t) => t.href).map((t) => [t.name, t.href as string])),
-            url: "/fairfield-county/",
-            cta_label: "Learn more about Fairfield County",
-          }],
-        }} />
+        <div className="gwch-areas-center">
+          <SharedAreasSection data={{
+            eyebrow: "Nearby Towns",
+            title: "Fairfield County Towns We Also Serve",
+            highlight_text: "We Also Serve",
+            subtitle: "Beyond Westport, we serve homeowners throughout Fairfield County. Our team handles remodeling projects in Darien, Fairfield, Norwalk, Ridgefield, New Canaan, Stamford, and Greenwich, as well as additional towns across the county.",
+            counties: [{
+              name: "Fairfield County",
+              phone: "(203) 919-9616",
+              image: "/images/areas/fairfield-county.jpg",
+              description: "Served by our Fairfield County Service Area Team. We cover every town in the county with dedicated local crews who know the housing stock and building departments.",
+              towns: primaryTowns.map((t) => t.name),
+              extra_towns: moreTowns,
+              town_links: Object.fromEntries(primaryTowns.filter((t) => t.href).map((t) => [t.name, t.href as string])),
+              url: "/fairfield-county/",
+              cta_label: "Learn more about Fairfield County",
+            }],
+          }} />
+        </div>
 
         {/* ── 14. TRUST STRIP ─────────────────────────────────────────── */}
         <section className="gwch-trust-strip">
@@ -821,55 +823,52 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
                 ),
                 label: 'Google Rating',
                 value: '4.9',
+                url: 'https://www.google.com/maps/place/BuiltWell',
               },
               {
                 icon: (
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="3" width="18" height="18" rx="2" />
-                    <path d="M3 9h18" />
-                    <path d="M9 21V9" />
-                  </svg>
-                ),
-                label: 'BBB',
-                value: 'A+ Accredited',
-              },
-              {
-                icon: (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                    <polyline points="9 22 9 12 15 12 15 22" />
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
                   </svg>
                 ),
                 label: 'Trusted on',
                 value: 'Houzz',
+                url: 'https://www.houzz.com/professionals/general-contractors/builtwell-ct-pfvwus-pf~820498730',
               },
               {
                 icon: (
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
                   </svg>
                 ),
                 label: 'CT HIC License',
                 value: '#0668405',
+                url: 'https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx',
               },
               {
                 icon: (
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="20 6 9 17 4 12" />
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
                   </svg>
                 ),
                 label: 'Verified on',
-                value: 'Angi & Thumbtack',
+                value: 'Angi',
+                url: 'https://www.angi.com/companylist/us/ct/fairfield/builtwell-ct-reviews-10768',
               },
             ].map((item, i, arr) => (
               <div key={i} className="gwch-trust-strip-item-wrap">
-                <div className="gwch-trust-strip-item">
+                <a href={item.url} target="_blank" rel="noopener noreferrer" className="gwch-trust-strip-item">
                   <span className="gwch-trust-strip-icon">{item.icon}</span>
                   <span className="gwch-trust-strip-text">
                     <span className="gwch-trust-strip-label">{item.label}</span>
                     <span className="gwch-trust-strip-value">{item.value}</span>
                   </span>
-                </div>
+                </a>
                 {i < arr.length - 1 && <div className="gwch-trust-divider" />}
               </div>
             ))}
@@ -877,7 +876,52 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
         </section>
 
         {/* ── 15. CTA FORM ────────────────────────────────────────────── */}
-        <SharedLeadFormSection page={_page} data={{ eyebrow: "Get Started", title: "Schedule Your Free Consultation", title_highlight: "Consultation", subtitle: "On-site or remote (Google Meet or Zoom). Call (203) 919-9616 or fill out the form below.", subtitle2: "We will confirm your appointment details and the name of your team member within one business day.", images: [{ src: "/team/builtwell-owner-handshake-client-ct-02.jpg", alt: "BuiltWell CT meeting with a Westport homeowner for a remodeling consultation" }, { src: "/portfolio/builtwell-job-site-aerial-ct.jpg", alt: "BuiltWell CT owner meeting homeowner for a free consultation" }] }} accent="Consultation" />
+        <SharedLeadFormSection page={_page} data={{
+          eyebrow: "Get Started",
+          title: "Schedule Your Free Consultation",
+          title_highlight: "Consultation",
+          subtitle: "On-site or remote (Google Meet or Zoom). Call (203) 919-9616 or fill out the form below.",
+          subtitle2: "We will confirm your appointment details and the name of your team member within one business day.",
+          images: [
+            { src: "/team/builtwell-owner-handshake-client-ct-02.jpg", alt: "BuiltWell CT meeting with a Westport homeowner for a remodeling consultation" },
+            { src: "/portfolio/builtwell-job-site-aerial-ct.jpg", alt: "BuiltWell CT owner meeting homeowner for a free consultation" },
+          ],
+          fields: [
+            { name: "full_name", label: "Name", type: "text", required: true, placeholder: "Full Name" },
+            { name: "phone", label: "Phone", type: "tel", required: true, placeholder: "(203) 000-0000" },
+            { name: "email", label: "Email", type: "email", required: true, placeholder: "you@email.com" },
+            { name: "zip", label: "Zip Code", type: "text", required: true, placeholder: "06880" },
+            { name: "services_needed", label: "Services Needed", type: "checkbox_group", required: true, options: [
+              { label: "Kitchen Remodeling", value: "Kitchen Remodeling" },
+              { label: "Bathroom Remodeling", value: "Bathroom Remodeling" },
+              { label: "Basement Finishing", value: "Basement Finishing" },
+              { label: "Flooring", value: "Flooring" },
+              { label: "Interior Painting", value: "Interior Painting" },
+              { label: "Exterior Painting", value: "Exterior Painting" },
+              { label: "Roofing", value: "Roofing" },
+              { label: "Siding", value: "Siding" },
+              { label: "Windows & Doors", value: "Windows & Doors" },
+              { label: "Decks & Patios", value: "Decks & Patios" },
+              { label: "Additions", value: "Additions" },
+              { label: "Other", value: "Other" },
+            ]},
+            { name: "best_time", label: "Best Time to Contact", type: "select", required: true, options: [
+              { label: "Morning (8am - 12pm)", value: "Morning (8am - 12pm)" },
+              { label: "Afternoon (12pm - 4pm)", value: "Afternoon (12pm - 4pm)" },
+              { label: "Evening (4pm - 6pm)", value: "Evening (4pm - 6pm)" },
+              { label: "Anytime", value: "Anytime" },
+            ]},
+            { name: "contact_method", label: "Preferred Contact Method", type: "radio_group", required: true, options: [
+              { label: "Call", value: "call" },
+              { label: "Text", value: "text" },
+              { label: "Email", value: "email" },
+            ]},
+            { name: "project_details", label: "Tell Us About Your Project", type: "textarea", required: false, placeholder: "Describe your project..." },
+            { name: "photos", label: "Upload Photos", type: "file", required: false },
+          ],
+          submit_label: "Get Your Free Estimate",
+          consent_text: "We respond within 24 hours. No spam, no obligation.",
+        }} accent="Consultation" />
 
         {/* ── 16. FINANCING STRIP ─────────────────────────────────────── */}
         <SharedFinancingStrip data={{ title: "Flexible Financing Available", content: "Get approved in about 60 seconds and start your project today.", cta: { url: "/financing/", label: "Check Financing Options" } }} />
@@ -896,24 +940,24 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
           --gwch-cream: #f5f1e9;
           --gwch-border: rgba(30,43,67,0.09);
         }
-        .gwch-page { background: #fff; color: var(--gwch-navy); }
+        .gwch-page { background: #fff; color: var(--gwch-navy); font-family: "Inter", sans-serif; }
         .gwch-label { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #9a7340; margin-bottom: 12px; }
         .gwch-label-dark { color: #c89b5b; }
         .gwch-label-line { display: inline-block; width: 10px; height: 2px; background: var(--gwch-gold); }
         .gwch-label-dark .gwch-label-line { background: #c89b5b; }
-        .gwch-h2 { font-family: Georgia, serif; font-size: clamp(30px, 3.6vw, 46px); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: var(--gwch-navy); margin: 0 0 16px; }
+        .gwch-h2 { font-family: "Playfair Display", serif; font-size: clamp(28px, 3.5vw, 44px); font-weight: 700; line-height: 1.2; letter-spacing: -0.5px; color: var(--gwch-navy); margin: 0 0 20px; }
         .gwch-h2 strong { font-weight: 700; color: var(--gwch-gold); font-style: normal; }
         .gwch-text-white { color: #fff !important; }
         .gwch-text-white strong { color: var(--gwch-gold-light) !important; }
-        .gwch-h3 { font-family: Georgia, serif; font-size: clamp(20px, 2.2vw, 26px); font-weight: 700; line-height: 1.25; color: var(--gwch-navy); margin: 0 0 12px; }
+        .gwch-h3 { font-family: "Playfair Display", serif; font-size: 22px; font-weight: 700; line-height: 1.25; color: var(--gwch-navy); margin: 0 0 14px; }
         .gwch-h3 strong { color: var(--gwch-gold); }
         .gwch-body-text { font-size: 16px; line-height: 1.85; color: var(--gwch-muted); margin: 0 0 16px; }
-        .gwch-section-header { text-align: center; margin-bottom: 48px; }
+        .gwch-section-header { text-align: center; margin-bottom: 64px; }
         .gwch-section-header .gwch-h2 { margin-bottom: 16px; }
-        .gwch-section-subtitle { font-size: 17px; line-height: 1.75; color: var(--gwch-muted); max-width: 760px; margin: 0 auto; }
-        .gwch-section-inner { max-width: 1240px; margin: 0 auto; padding: 80px 40px; }
-        .gwch-section-narrow { max-width: 860px; }
-        @media (max-width: 768px) { .gwch-section-inner { padding: 60px 20px; } }
+        .gwch-section-subtitle { font-size: 17px; line-height: 1.75; color: var(--gwch-muted); max-width: 700px; margin: 0 auto; }
+        .gwch-section-inner { max-width: 1240px; margin: 0 auto; padding: 100px 40px; }
+        .gwch-section-narrow { max-width: 820px; }
+        @media (max-width: 768px) { .gwch-section-inner { padding: 72px 20px; } .gwch-section-header { margin-bottom: 48px; } }
 
         /* ── HERO ── */
         .gwch-page-hero { position: relative; isolation: isolate; overflow: hidden; background: var(--gwch-oxford); padding: 0 40px 48px; padding-top: 120px; color: #fff; min-height: 50vh; display: flex; align-items: stretch; }
@@ -927,9 +971,9 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
         .gwch-breadcrumb a { color: rgba(255,255,255,0.85); text-decoration: none; transition: color 0.2s; }
         .gwch-breadcrumb a:hover { color: var(--gwch-gold); }
         .gwch-bc-current { color: #fff; font-weight: 600; }
-        .gwch-hero-h1 { font-family: Georgia, serif; font-size: clamp(40px, 4.5vw, 56px); font-weight: 700; line-height: 1.08; letter-spacing: -0.5px; color: #fff; max-width: 920px; margin: 0 0 12px; text-shadow: 0 2px 20px rgba(0,0,0,0.5); }
+        .gwch-hero-h1 { font-family: "Playfair Display", serif; font-size: clamp(40px, 4.5vw, 56px); font-weight: 700; line-height: 1.08; letter-spacing: -0.5px; color: #fff; max-width: 920px; margin: 0 0 12px; text-shadow: 0 2px 20px rgba(0,0,0,0.5); }
         .gwch-gold { color: var(--gwch-gold); }
-        .gwch-hero-sub { max-width: 560px; font-size: 17px; line-height: 1.7; color: rgba(255,255,255,0.82); margin: 16px auto 0; }
+        .gwch-hero-sub { max-width: 560px; font-size: 17px; line-height: 1.7; color: rgba(255,255,255,0.82); margin: 16px auto 0; font-family: "Inter", sans-serif; font-weight: 400; }
         .gwch-hero-ctas { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 32px; justify-content: center; }
         .gwch-cta-btn { display: inline-flex; align-items: center; justify-content: center; padding: 15px 32px; border-radius: 8px; background: rgba(10,18,35,0.42); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: #fff; text-decoration: none; text-align: center; font-size: 15px; font-weight: 600; transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s; }
         .gwch-cta-btn:hover { background: rgba(10,18,35,0.62); border-color: rgba(255,255,255,0.28); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3), 0 0 0 1px rgba(188,145,85,0.2); }
@@ -944,7 +988,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
         .gwch-trust-item { padding: 36px 20px; text-align: center; cursor: default; border-right: 1px solid rgba(188,145,85,0.12); transition: background 0.3s, transform 0.3s; }
         .gwch-trust-item:last-child { border-right: none; }
         .gwch-trust-item:hover { background: rgba(188,145,85,0.08); transform: translateY(-3px); }
-        .gwch-trust-val { font-family: Georgia, serif; font-size: 42px; font-weight: 700; line-height: 1; color: var(--gwch-gold); min-height: 52px; display: flex; align-items: center; justify-content: center; transition: color 0.3s, text-shadow 0.3s; }
+        .gwch-trust-val { font-family: "Playfair Display", serif; font-size: 42px; font-weight: 700; line-height: 1; color: var(--gwch-gold); min-height: 52px; display: flex; align-items: center; justify-content: center; transition: color 0.3s, text-shadow 0.3s; }
         .gwch-trust-item:hover .gwch-trust-val { color: var(--gwch-gold-light); text-shadow: 0 0 20px rgba(188,145,85,0.3); }
         .gwch-trust-lbl { margin-top: 8px; font-size: 13px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.6); transition: color 0.3s; }
         .gwch-trust-item:hover .gwch-trust-lbl { color: rgba(255,255,255,0.85); }
@@ -978,60 +1022,83 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
 
         /* ── NEIGHBORHOODS ── */
         .gwch-neighborhoods-section { background: #fff; }
-        .gwch-neighborhoods-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .gwch-neighborhoods-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 900px; margin: 0 auto; }
         @media (max-width: 768px) { .gwch-neighborhoods-grid { grid-template-columns: 1fr; } }
-        .gwch-neighborhood-card { border: 1px solid var(--gwch-border); border-radius: 8px; overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; background: #fff; }
-        .gwch-neighborhood-card:hover { box-shadow: 0 4px 16px rgba(30,43,67,0.08); transform: translateY(-2px); }
-        .gwch-neighborhood-card[open] { border-color: var(--gwch-gold); }
-        .gwch-neighborhood-summary { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; font-size: 15px; font-weight: 600; color: var(--gwch-navy); cursor: pointer; list-style: none; user-select: none; }
+        .gwch-neighborhood-card { background: #fff; border-radius: 12px; padding: 0; box-shadow: 0 2px 12px rgba(30,43,67,0.06), 0 1px 3px rgba(30,43,67,0.04); border: none; border-bottom: 2px solid transparent; overflow: hidden; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+        .gwch-neighborhood-card:hover { transform: translateY(-4px); border-bottom-color: var(--gwch-gold); box-shadow: 0 12px 28px rgba(30,43,67,0.1), 0 28px 56px rgba(30,43,67,0.12); }
+        .gwch-neighborhood-card[open] { border-bottom-color: var(--gwch-gold); }
+        .gwch-neighborhood-summary { display: flex; align-items: center; justify-content: space-between; padding: 24px 28px; font-size: 20px; font-weight: 700; font-family: "Playfair Display", serif; color: var(--gwch-navy); cursor: pointer; list-style: none; user-select: none; transition: background 0.2s; }
         .gwch-neighborhood-summary::-webkit-details-marker { display: none; }
+        .gwch-neighborhood-summary:hover { background: rgba(188,145,85,0.04); }
         .gwch-summary-icon { color: var(--gwch-gold); flex-shrink: 0; transition: transform 0.2s; }
         .gwch-neighborhood-card[open] .gwch-summary-icon { transform: rotate(45deg); }
-        .gwch-neighborhood-body { padding: 0 20px 20px; font-size: 15px; line-height: 1.78; color: var(--gwch-muted); margin: 0; }
+        .gwch-neighborhood-body { padding: 0 28px 24px; font-size: 15px; line-height: 1.75; color: var(--gwch-muted); margin: 0; }
 
         /* ── PERMITTING ── */
         .gwch-permitting-section { background: var(--gwch-cream); }
 
         /* ── COSTS ── */
         .gwch-costs-section { background: #fff; }
-        .gwch-cost-h3 { font-family: Georgia, serif; font-size: 22px; font-weight: 700; color: var(--gwch-navy); margin: 48px 0 16px; padding-top: 32px; border-top: 1px solid var(--gwch-border); }
+        .gwch-cost-h3 { font-family: "Playfair Display", serif; font-size: 22px; font-weight: 700; color: var(--gwch-navy); margin: 48px 0 16px; padding-top: 32px; border-top: 1px solid var(--gwch-border); }
         .gwch-cost-h3:first-of-type { border-top: none; padding-top: 0; margin-top: 32px; }
         .gwch-cost-table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        .gwch-cost-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 15px; margin-bottom: 12px; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 12px rgba(30,43,67,0.07); border: 1px solid var(--gwch-border); }
-        .gwch-cost-table th { background: var(--gwch-navy); text-align: left; padding: 13px 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
-        .gwch-cost-table td { padding: 14px 20px; border-bottom: 1px solid var(--gwch-border); color: var(--gwch-muted); transition: background 0.15s; }
-        .gwch-cost-table tbody tr:hover td { background: rgba(188,145,85,0.05); }
+        .gwch-cost-table { width: 100%; border-collapse: collapse; font-size: 15px; margin-bottom: 0; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(30,43,67,0.06); table-layout: fixed; }
+        .gwch-cost-table th { background: var(--gwch-navy); text-align: left; padding: 16px 24px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #fff; }
+        .gwch-cost-table td { padding: 16px 24px; border-bottom: 1px solid var(--gwch-border); color: var(--gwch-muted); transition: background 0.15s; }
+        .gwch-cost-table tbody tr:nth-child(even) td { background: rgba(30,43,67,0.02); }
+        .gwch-cost-table tbody tr:hover td { background: rgba(188,145,85,0.06); }
         .gwch-cost-table tr:last-child td { border-bottom: none; }
         .gwch-cost-table td:first-child { font-weight: 600; color: var(--gwch-navy); }
-        .gwch-td-price { color: var(--gwch-gold) !important; font-weight: 600; white-space: nowrap; }
+        .gwch-td-price { color: var(--gwch-gold) !important; font-weight: 600; white-space: nowrap; font-family: "Playfair Display", serif; font-size: 16px; }
         .gwch-cost-note { font-size: 14px; line-height: 1.7; color: var(--gwch-muted); background: var(--gwch-cream); border-left: 3px solid var(--gwch-gold); padding: 12px 16px; border-radius: 0 6px 6px 0; margin: 12px 0 0; }
         @media (max-width: 900px) { .gwch-cost-table { min-width: 640px; } }
         @media (max-width: 600px) { .gwch-cost-table { font-size: 13px; } .gwch-cost-table th, .gwch-cost-table td { padding: 10px 12px; } }
 
         /* ── SERVICES ── */
         .gwch-services-section { background: var(--gwch-cream); }
-        .gwch-services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px; }
+        .gwch-services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-bottom: 24px; }
         @media (max-width: 900px) { .gwch-services-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 600px) { .gwch-services-grid { grid-template-columns: 1fr; } }
         .gwch-services-more { display: none; }
         .gwch-services-more.show { display: block; }
-        .gwch-services-toggle-wrap { text-align: center; margin-top: 24px; }
-        .gwch-services-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; border: 2px solid var(--gwch-gold); border-radius: 8px; background: transparent; color: var(--gwch-gold); font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.25s; }
+        .gwch-services-toggle-wrap { text-align: center; margin-top: 48px; }
+        .gwch-services-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 12px 32px; border: 2px solid var(--gwch-gold); border-radius: 6px; background: transparent; color: var(--gwch-gold); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; letter-spacing: 0.3px; }
         .gwch-services-toggle:hover { background: var(--gwch-gold); color: #fff; }
-        .gwch-service-card { display: flex; flex-direction: column; background: #fff; border-radius: 12px; overflow: hidden; border-bottom: 2px solid transparent; box-shadow: 0 2px 12px rgba(30,43,67,0.06), 0 1px 3px rgba(30,43,67,0.04); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); }
+        .gwch-service-card { display: flex; height: 100%; flex-direction: column; background: #fff; border-radius: 8px; overflow: hidden; border-bottom: 2px solid transparent; box-shadow: 0 2px 12px rgba(30,43,67,0.06), 0 1px 3px rgba(30,43,67,0.04); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); }
         .gwch-service-card:hover { transform: translateY(-4px); border-bottom-color: var(--gwch-gold); box-shadow: 0 12px 28px rgba(30,43,67,0.1), 0 28px 56px rgba(30,43,67,0.12); }
-        .gwch-service-img { height: 200px; overflow: hidden; }
+        .gwch-service-img { height: 180px; overflow: hidden; }
         .gwch-service-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
         .gwch-service-card:hover .gwch-service-img img { transform: scale(1.05); }
-        .gwch-service-body { flex: 1; display: flex; flex-direction: column; padding: 24px; }
-        .gwch-service-title { font-size: 20px; font-weight: 700; color: var(--gwch-navy); margin: 0 0 8px; }
+        .gwch-service-body { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 28px 28px 32px; }
+        .gwch-service-title { font-size: 22px; font-weight: 700; color: var(--gwch-navy); margin: 0 0 12px; font-family: "Playfair Display", serif; }
         .gwch-service-title a { color: inherit; text-decoration: none; transition: color 0.2s; }
         .gwch-service-title a:hover { color: var(--gwch-gold); }
-        .gwch-service-desc { font-size: 14px; line-height: 1.7; color: var(--gwch-muted); flex: 1; margin: 0 0 16px; }
-        .gwch-service-badges { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-        .gwch-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; background: var(--gwch-cream); font-size: 12px; font-weight: 600; color: var(--gwch-navy); border: 1px solid var(--gwch-border); }
-        .gwch-learn-more { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--gwch-gold); text-decoration: none; transition: gap 0.3s; margin-top: auto; }
+        .gwch-service-card:hover .gwch-service-title a { color: var(--gwch-gold); }
+        .gwch-service-desc { font-size: 15px; line-height: 1.7; color: var(--gwch-muted); flex: 1; margin: 0 0 20px; }
+        .gwch-service-badges { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+        .gwch-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background: rgba(188,145,85,0.1); font-size: 12px; font-weight: 600; color: #9a7340; letter-spacing: 0.3px; }
+        .gwch-badge svg { width: 14px; height: 14px; stroke: var(--gwch-gold); fill: none; stroke-width: 2; flex-shrink: 0; }
+        .gwch-learn-more { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--gwch-gold); text-decoration: none; transition: gap 0.3s; margin-top: auto; }
         .gwch-learn-more:hover { gap: 10px; }
+
+        /* ── MID CTA ── */
+        .gwch-mid-cta-btn {
+          display: inline-block;
+          background: #bc9155;
+          color: #fff;
+          padding: 16px 48px;
+          border-radius: 8px;
+          font-family: "Inter", sans-serif;
+          font-weight: 600;
+          font-size: 16px;
+          text-decoration: none;
+          transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+        .gwch-mid-cta-btn:hover {
+          background: #a57d48;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(188,145,85,0.3);
+        }
 
         /* ── WHAT TO EXPECT / FAQ ── */
         .gwch-expect-section { background: #fff; border-top: 1px solid var(--gwch-border); }
@@ -1046,12 +1113,17 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
         .gwch-faq-item[open] .gwch-faq-icon { transform: rotate(180deg); }
         .gwch-faq-answer { padding: 0 24px 18px; font-size: 15px; line-height: 1.78; color: var(--gwch-muted); margin: 0; }
 
+        /* ── AREAS CENTER ── */
+        .gwch-areas-center [class*="areas"] [class*="grid"],
+        .gwch-areas-center [class*="areas"] [class*="cards"],
+        .gwch-areas-center [class*="county-card"] { max-width: 820px; margin-left: auto; margin-right: auto; }
+
         /* ── TRUST STRIP ── */
         .gwch-trust-strip { position: relative; overflow: hidden; background: linear-gradient(135deg, #1e2b43 0%, #151e30 100%); padding: 56px 40px; }
         .gwch-trust-strip-bg { position: absolute; inset: 0; background: url('/hero/builtwell-job-site-aerial-hero-ct.jpg') center/cover; opacity: 0.12; }
         .gwch-trust-strip-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0; }
         .gwch-trust-strip-item-wrap { display: contents; }
-        .gwch-trust-strip-item { display: flex; align-items: center; gap: 10px; padding: 20px 32px; min-width: 180px; flex: 1; flex-direction: column; text-align: center; color: rgba(255,255,255,0.9); transition: all 0.3s; cursor: default; }
+        .gwch-trust-strip-item { display: flex; align-items: center; gap: 10px; padding: 20px 32px; min-width: 180px; flex: 1; flex-direction: column; text-align: center; color: rgba(255,255,255,0.9); transition: all 0.3s; cursor: pointer; text-decoration: none; }
         .gwch-trust-strip-item:hover { transform: translateY(-2px); color: var(--gwch-gold); }
         .gwch-trust-strip-icon { color: var(--gwch-gold); }
         .gwch-trust-strip-text { display: flex; flex-direction: column; gap: 2px; }

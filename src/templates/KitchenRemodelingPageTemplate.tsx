@@ -1124,30 +1124,30 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                 />
               </h2>
             </div>
-            <div className="grid gap-12 lg:grid-cols-2">
-              <div className="grid gap-3 kitchen-fade-up">
-                <div className="overflow-hidden rounded-[12px] shadow-[0_8px_32px_rgba(30,43,67,0.1)]">
+            <div className="grid gap-12 lg:grid-cols-2 lg:items-stretch">
+              <div className="grid gap-3 kitchen-fade-up lg:h-full lg:grid-rows-2">
+                <div className="aspect-[16/10] overflow-hidden rounded-[12px] bg-[#F3EFE7] shadow-[0_8px_32px_rgba(30,43,67,0.1)] lg:aspect-auto lg:h-full">
                   <img
                     src={media(
                       intro?.image_main,
                       "/services/kitchen-remodeling-ct.jpg",
                     )}
                     alt={intro?.image_main_alt || `${serviceLabel || "Remodeling"} project`}
-                    className="h-[280px] w-full object-cover md:h-[320px]"
+                    className="h-full w-full object-cover object-center"
                   />
                 </div>
-                <div className="overflow-hidden rounded-[12px] shadow-[0_8px_32px_rgba(30,43,67,0.1)]">
+                <div className="aspect-[16/10] overflow-hidden rounded-[12px] bg-[#F3EFE7] shadow-[0_8px_32px_rgba(30,43,67,0.1)] lg:aspect-auto lg:h-full">
                   <img
                     src={media(
                       intro?.image_secondary,
                       "/portfolio/builtwell-contractor-sign-consultation-ct-01.jpg",
                     )}
                     alt={intro?.image_secondary_alt || `${serviceLabel || "Remodeling"} consultation`}
-                    className="h-[280px] w-full object-cover md:h-[320px]"
+                    className="h-full w-full object-cover object-center"
                   />
                 </div>
               </div>
-              <div className="kitchen-fade-up rounded-[12px] border border-[#1E2B43]/7 bg-white px-5 py-7 shadow-[0_2px_12px_rgba(30,43,67,0.05)] md:px-9">
+              <div className="kitchen-fade-up h-full rounded-[12px] border border-[#1E2B43]/7 bg-white px-5 py-7 shadow-[0_2px_12px_rgba(30,43,67,0.05)] md:px-9">
                 {paras(intro?.content).map((paragraph, index) => (
                   <p
                     key={paragraph.slice(0, 24)}
@@ -1216,35 +1216,14 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                       className="rounded-[12px] border-b-2 border-b-transparent bg-white px-7 py-7 shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#BC9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
                     >
                       <div className="relative mb-5 h-[280px] overflow-hidden rounded-[8px]">
-                        <div className="grid h-full grid-cols-2">
-                          <img
-                            src={media(
-                              project.before_image,
-                              "/images/before-after/kitchen-before-after-1.jpg",
-                            )}
-                            alt={project.before_image_alt || `${project.location} before`}
-                            className="h-full w-full object-cover"
-                          />
-                          <img
-                            src={media(
-                              project.after_image,
-                              "/images/before-after/kitchen-before-after-1.png",
-                            )}
-                            alt={project.after_image_alt || `${project.location} after`}
-                            className="h-full w-full object-cover"
-                          />
-                        </div>
-                        <div className="absolute inset-x-0 bottom-0 h-[76px] bg-[linear-gradient(to_bottom,transparent_0%,rgba(0,0,0,0.92)_55%,rgba(0,0,0,0.96)_100%)]" />
-                        <div className="absolute bottom-0 left-0 flex h-[76px] w-1/2 items-end px-[14px] pb-[13px]">
-                          <span className="text-[13px] font-extrabold uppercase tracking-[2.5px] text-white">
-                            Before
-                          </span>
-                        </div>
-                        <div className="absolute bottom-0 right-0 flex h-[76px] w-1/2 items-end justify-end px-[14px] pb-[13px]">
-                          <span className="text-[13px] font-extrabold uppercase tracking-[2.5px] text-white">
-                            After
-                          </span>
-                        </div>
+                        <img
+                          src={media(
+                            project.image || project.before_image,
+                            "/images/before-after/kitchen-before-after-1.jpg",
+                          )}
+                          alt={project.image_alt || project.before_image_alt || project.location}
+                          className="h-full w-full object-cover"
+                        />
                       </div>
                       <h3 className="mb-3 text-[20px] font-bold">
                         {project.location}

@@ -252,6 +252,8 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
   const hero = section<any>(page, "hero");
   const trustBars = sections<any>(page, "trust_bar");
   const rich = sections<any>(page, "rich_text");
+  const process = section<any>(page, "process_steps");
+  const related = section<any>(page, "services_grid");
   const values = {
     eyebrow: referenceWhy.eyebrow,
     title: referenceWhy.title,
@@ -280,6 +282,11 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
   const financing = rich.find((item) => item.style_variant === "financing_strip");
   const heroParts = parts(hero?.headline, "Connecticut");
   const valuesParts = parts(values?.title, values?.highlight_text);
+  const processTitleParts = parts(
+    process?.title || referenceIntro.title,
+    process?.highlight_text || referenceIntro.highlight,
+  );
+  const relatedTitleParts = parts(related?.title || "Our Most Popular Services", related?.highlight_text || "Services");
   const [openSteps, setOpenSteps] = useState<Record<number, boolean>>({});
   const [showAllFaq, setShowAllFaq] = useState(false);
   const [countyOpen, setCountyOpen] = useState<Record<number, boolean>>({});
@@ -287,10 +294,13 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
   const fadeRef = useFadeUp();
 
   const trustStripItems = defaultTrustStrip;
-  const relatedItems = relatedFallback;
-  const stepItems = referenceSteps.map((step, index) => ({
+  const relatedItems = (related?.items && related.items.length > 0) ? related.items : relatedFallback;
+  const stepItems = ((process?.steps || []).length ? process.steps : referenceSteps).map((step: any, index: number) => ({
     ...step,
-    image: stepImageFallbacks[index] || stepImageFallbacks[0],
+    image: step?.image || stepImageFallbacks[index] || stepImageFallbacks[0],
+    image_alt: step?.image_alt || step?.imageAlt || null,
+    summary: step?.summary || step?.description || "",
+    more: Array.isArray(step?.more) ? step.more : [],
   }));
   const leadData = {
     ...(lead || {}),
@@ -373,12 +383,14 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
         <div className="mx-auto max-w-[1240px]">
           <div className="fade-up mx-auto max-w-[720px] text-center" style={fadeUpStyle}>
             <div className="mb-7">
-              {label(referenceIntro.eyebrow)}
+              {label(process?.eyebrow || referenceIntro.eyebrow)}
               <h2 className="font-serif text-[clamp(30px,3.5vw,44px)] font-bold tracking-[-0.5px]">
-                A Process Built on <span className="text-[#bc9155]">Clear Communication</span>
+                {processTitleParts.before}
+                {processTitleParts.accent ? <span className="text-[#bc9155]">{processTitleParts.accent}</span> : null}
+                {processTitleParts.after}
               </h2>
             </div>
-            <p className="text-[16px] leading-[1.8] text-[#5c677d]">{referenceIntro.content}</p>
+            <p className="text-[16px] leading-[1.8] text-[#5c677d]">{process?.subtitle || referenceIntro.content}</p>
           </div>
         </div>
       </section>
@@ -401,7 +413,7 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
                       <span className="step-number-badge">{`${index + 1}`.padStart(2, "0")}</span>
                     <img
                       src={media(item.image, stepImageFallbacks[index] || stepImageFallbacks[0])}
-                      alt={item.image_alt || item.title}
+                      alt={item.image_alt || item.imageAlt || item.title}
                       className="h-full w-full object-cover"
                     />
                     </div>
@@ -560,11 +572,15 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
       <section className="bg-[#f5f1e9] px-5 py-24 md:px-10">
         <div className="mx-auto max-w-[1240px]">
           <div className="fade-up mb-16 text-center" style={fadeUpStyle}>
-            {label("Related Services")}
+            {label(related?.eyebrow || "Related Services")}
             <h2 className="font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px]">
-              Our Most Popular <span className="text-[#bc9155]">Services</span>
+              {relatedTitleParts.before}
+              {relatedTitleParts.accent ? <span className="text-[#bc9155]">{relatedTitleParts.accent}</span> : null}
+              {relatedTitleParts.after}
             </h2>
-            <p className="mx-auto mt-5 max-w-[700px] text-[17px] leading-[1.75] text-[#5c677d]">This same five-step process applies to every service we offer.</p>
+            <p className="mx-auto mt-5 max-w-[700px] text-[17px] leading-[1.75] text-[#5c677d]">
+              {related?.subtitle || "This same five-step process applies to every service we offer."}
+            </p>
           </div>
           <div className="fade-up grid gap-8 lg:grid-cols-3" style={{ ...fadeUpStyle, transitionDelay: "0.15s" }}>
             {relatedItems.map((item: any, index: number) => (
@@ -575,7 +591,7 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
                 <div className="h-[220px] overflow-hidden">
                   <img
                     src={media(item.image, "/services/kitchen-remodeling-ct.jpg")}
-                    alt={item.image_alt || item.title}
+                    alt={item.image_alt || item.imageAlt || item.title}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>

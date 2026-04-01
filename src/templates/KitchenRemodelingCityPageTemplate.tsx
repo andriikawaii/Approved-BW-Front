@@ -372,11 +372,11 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
             </div>
             <div className="grid gap-12 lg:grid-cols-2">
               <div className="grid gap-3">
-                <div className="overflow-hidden rounded-[12px] shadow-[0_10px_34px_rgba(30,43,67,0.1)]">
-                  <img src={media(intro?.image_main, "/services/kitchen-remodeling-ct.jpg")} alt={intro?.image_main_alt || "Finished kitchen remodel"} className="h-[280px] w-full object-cover md:h-[320px]" />
+                <div className="aspect-[16/10] overflow-hidden rounded-[12px] bg-[#F3EFE7] shadow-[0_10px_34px_rgba(30,43,67,0.1)]">
+                  <img src={media(intro?.image_main, "/services/kitchen-remodeling-ct.jpg")} alt={intro?.image_main_alt || "Finished kitchen remodel"} className="h-full w-full object-cover object-center" />
                 </div>
-                <div className="overflow-hidden rounded-[12px] shadow-[0_10px_34px_rgba(30,43,67,0.1)]">
-                  <img src={media(intro?.image_secondary, "/services/kitchen-remodeling-ct.jpg")} alt={intro?.image_secondary_alt || "Kitchen remodeling consultation"} className="h-[280px] w-full object-cover md:h-[320px]" />
+                <div className="aspect-[16/10] overflow-hidden rounded-[12px] bg-[#F3EFE7] shadow-[0_10px_34px_rgba(30,43,67,0.1)]">
+                  <img src={media(intro?.image_secondary, "/services/kitchen-remodeling-ct.jpg")} alt={intro?.image_secondary_alt || "Kitchen remodeling consultation"} className="h-full w-full object-cover object-center" />
                 </div>
               </div>
               <div className="rounded-[12px] border border-[#1e2b4312] bg-white px-6 py-7 shadow-[0_2px_12px_rgba(30,43,67,0.05)] md:px-9">
@@ -633,18 +633,21 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
               <p className="mx-auto mt-3 max-w-[760px] text-[17px] leading-[1.75] text-[#5c677d]">{config.relatedFooter}</p>
             </div>
             <div className="grid gap-8 lg:grid-cols-3">
-              {(related?.items || []).map((item, index) => (
+              {(related?.items || []).map((item, index) => {
+                const href = item.url || item.link || item.href || item.cta_url || "";
+                return (
                 <article key={`${item.title}-${index}`} className="group flex flex-col overflow-hidden rounded-[8px] border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
                   <div className="h-[220px] overflow-hidden">
                     <img src={media(item.image, "/services/bathroom-remodeling-ct.jpg")} alt={item.image_alt || item.title || "Related service"} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   </div>
                   <div className="flex flex-1 flex-col px-7 pb-8 pt-7">
-                    <h3 className="mb-3 text-[22px] font-bold text-[#1e2b43]">{item.url ? linkNode(item.url, item.title, "text-[#1e2b43] hover:text-[#bc9155]") : item.title}</h3>
+                    <h3 className="mb-3 text-[22px] font-bold text-[#1e2b43]">{href ? linkNode(href, item.title, "text-[#1e2b43] hover:text-[#bc9155]") : item.title}</h3>
                     <p className="mb-5 flex-1 text-[15px] leading-[1.7] text-[#5c677d]">{item.description}</p>
-                    {item.url ? linkNode(item.url, <span className="inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#bc9155] transition-[gap] duration-300 hover:gap-[10px]">Learn More<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></span>) : null}
+                    {href ? linkNode(href, <span className="inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#bc9155] transition-[gap] duration-300 hover:gap-[10px]">Learn More<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></span>) : null}
                   </div>
                 </article>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>

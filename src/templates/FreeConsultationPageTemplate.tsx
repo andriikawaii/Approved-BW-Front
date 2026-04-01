@@ -15,6 +15,19 @@ type HeroData = {
   cta_primary?: { label?: string; url?: string } | null;
 };
 
+type ConsultationCardsSplitData = {
+  eyebrow?: string | null;
+  title?: string | null;
+  highlight_text?: string | null;
+  subtitle?: string | null;
+  cards?: Array<{
+    title?: string | null;
+    description?: string | null;
+    image?: string | null;
+    image_alt?: string | null;
+  }>;
+};
+
 const getSection = <T,>(page: CMSPage, type: string): T | undefined =>
   page.sections.find((s) => s.is_active && s.type === type)?.data as T | undefined;
 
@@ -482,10 +495,53 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
   const [modalType, setModalType] = useState<'in-person' | 'remote'>('in-person');
 
   const heroData = (getSection<HeroData>(page, 'hero') || getSection<HeroData>(page, 'service_hero') || getSection<HeroData>(page, 'page_hero'));
+  const cardsData = getSection<ConsultationCardsSplitData>(page, 'consultation_cards_split');
 
   const heroTitle = heroData?.title || heroData?.headline || 'Schedule a Free Consultation';
   const heroSubtitle = heroData?.subtitle || heroData?.subheadline || 'Free, no obligation. We make sure your project starts right.';
   const heroBg = heroData?.background_image || '/portfolio/builtwell-contractor-handshake-arrival-ct-optimized.jpg';
+
+  const fallbackConsultationCards = [
+    {
+      title: 'On-Site Consultation',
+      description:
+        'We visit your home, walk the space, measure, and assess existing conditions including plumbing, electrical, subfloor, and moisture levels. On-site consultations are best for projects involving structural changes, layout modifications, or when accurate measurements are critical to the estimate. Available Monday through Friday.',
+      image: '/hero/builtwell-team-approaching-home-hero-ct.jpg',
+      image_alt: 'BuiltWell CT team approaching Connecticut home for free on-site remodeling consultation',
+    },
+    {
+      title: 'Remote Consultation',
+      description:
+        'Meet via Google Meet or Zoom from anywhere. Share photos, walk us through the space on camera, and discuss your goals. Remote consultations are effective for kitchen, bathroom, flooring, and finish-level projects where you want to start the conversation before committing to an on-site visit. Available Monday through Saturday.',
+      image: '/services/remote-video-consultation-ct.jpg',
+      image_alt: 'Remote video consultation with BuiltWell CT contractor via Google Meet or Zoom for Connecticut remodeling',
+    },
+  ];
+
+  const consultationEyebrow = cardsData?.eyebrow || 'Your Choice';
+  const consultationTitle = cardsData?.title || 'On-Site vs. Remote Consultations';
+  const consultationSubtitle =
+    cardsData?.subtitle ||
+    'BuiltWell CT offers both in-person home visits and remote video consultations via Google Meet or Zoom, with on-site visits recommended for projects involving structural, plumbing, or layout changes.';
+  const consultationHighlight =
+    cardsData?.highlight_text && consultationTitle.includes(cardsData.highlight_text)
+      ? cardsData.highlight_text
+      : consultationTitle.includes('Consultations')
+      ? 'Consultations'
+      : '';
+  const consultationCards =
+    cardsData?.cards && cardsData.cards.length === 2
+      ? cardsData.cards.map((card, index) => ({
+          title: card.title || fallbackConsultationCards[index].title,
+          description: card.description || fallbackConsultationCards[index].description,
+          image: card.image || fallbackConsultationCards[index].image,
+          image_alt: card.image_alt || fallbackConsultationCards[index].image_alt,
+        }))
+      : fallbackConsultationCards;
+  const consultationTitleIndex = consultationHighlight ? consultationTitle.indexOf(consultationHighlight) : -1;
+  const consultationTitleBefore = consultationTitleIndex >= 0 ? consultationTitle.slice(0, consultationTitleIndex) : consultationTitle;
+  const consultationTitleAfter =
+    consultationTitleIndex >= 0 ? consultationTitle.slice(consultationTitleIndex + consultationHighlight.length) : '';
 
   // Split title on "Consultation" for gold accent
   const accentWord = 'Consultation';
@@ -726,37 +782,60 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
         <div style={{ maxWidth: 1240, margin: '0 auto' }}>
           <FadeUp>
             <div style={{ textAlign: 'center', marginBottom: 48 }}>
-              <SectionLabel>Your Choice</SectionLabel>
+              <SectionLabel>{consultationEyebrow}</SectionLabel>
               <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 3.5vw, 44px)', marginBottom: 20, letterSpacing: '-0.5px', maxWidth: 780, marginLeft: 'auto', marginRight: 'auto', color: '#1E2B43' }}>
-                On-Site vs. Remote <span style={{ color: '#BC9155' }}>Consultations</span>
+                {consultationTitleBefore}
+                {consultationTitleIndex >= 0 ? <span style={{ color: '#BC9155' }}>{consultationHighlight}</span> : null}
+                {consultationTitleAfter}
               </h2>
               <p style={{ fontSize: 17, color: '#5C677D', maxWidth: 700, margin: '0 auto', lineHeight: 1.75 }}>
-                BuiltWell CT offers both in-person home visits and remote video consultations via Google Meet or Zoom, with on-site visits recommended for projects involving structural, plumbing, or layout changes.
+                {consultationSubtitle}
               </p>
             </div>
           </FadeUp>
           <FadeUp delay={100}>
             <div className="two-col-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, maxWidth: 1240, margin: '0 auto' }}>
-              <div onClick={() => { setModalType('in-person'); setModalOpen(true); }} className="area-card-hover" style={{ borderRadius: 12, background: '#fff', borderBottom: '3px solid transparent', boxShadow: '0 2px 12px rgba(30,43,67,0.06)', transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', cursor: 'pointer' }}>
-                <div style={{ width: '100%', height: 220, overflow: 'hidden', position: 'relative' }}>
-                  <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, background: 'linear-gradient(to top, rgba(30,43,67,0.4), transparent)', zIndex: 1, pointerEvents: 'none' }} />
-                  <img src="/hero/builtwell-team-approaching-home-hero-ct.jpg" alt="BuiltWell CT team approaching Connecticut home for free on-site remodeling consultation" className="area-card-img-inner" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} loading="lazy" decoding="async" />
+              {consultationCards.map((card, index) => (
+                <div
+                  key={`${card.title}-${index}`}
+                  onClick={() => {
+                    setModalType('in-person');
+                    setModalOpen(true);
+                  }}
+                  className="area-card-hover"
+                  style={{
+                    borderRadius: 12,
+                    background: '#fff',
+                    borderBottom: '3px solid transparent',
+                    boxShadow: '0 2px 12px rgba(30,43,67,0.06)',
+                    transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <div style={{ width: '100%', height: 220, overflow: 'hidden', position: 'relative' }}>
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, background: 'linear-gradient(to top, rgba(30,43,67,0.4), transparent)', zIndex: 1, pointerEvents: 'none' }} />
+                    <img
+                      src={card.image || fallbackConsultationCards[index].image}
+                      alt={card.image_alt || card.title || `Consultation card ${index + 1}`}
+                      className="area-card-img-inner"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                  <div style={{ padding: '28px 28px 32px' }}>
+                    <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, marginBottom: 6, color: '#1E2B43' }}>
+                      {card.title}
+                    </h3>
+                    <p style={{ fontSize: 14, lineHeight: 1.7, color: '#5C677D' }}>
+                      {card.description}
+                    </p>
+                  </div>
                 </div>
-                <div style={{ padding: '28px 28px 32px' }}>
-                  <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, marginBottom: 6, color: '#1E2B43' }}>On-Site Consultation</h3>
-                  <p style={{ fontSize: 14, lineHeight: 1.7, color: '#5C677D' }}>We visit your home, walk the space, measure, and assess existing conditions including plumbing, electrical, subfloor, and moisture levels. On-site consultations are best for projects involving structural changes, layout modifications, or when accurate measurements are critical to the estimate. Available Monday through Friday.</p>
-                </div>
-              </div>
-              <div onClick={() => { setModalType('remote'); setModalOpen(true); }} className="area-card-hover" style={{ borderRadius: 12, background: '#fff', borderBottom: '3px solid transparent', boxShadow: '0 2px 12px rgba(30,43,67,0.06)', transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', cursor: 'pointer' }}>
-                <div style={{ width: '100%', height: 220, overflow: 'hidden', position: 'relative' }}>
-                  <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, background: 'linear-gradient(to top, rgba(30,43,67,0.4), transparent)', zIndex: 1, pointerEvents: 'none' }} />
-                  <img src="/services/remote-video-consultation-ct.jpg" alt="Remote video consultation with BuiltWell CT contractor via Google Meet or Zoom for Connecticut remodeling" className="area-card-img-inner" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} loading="lazy" decoding="async" />
-                </div>
-                <div style={{ padding: '28px 28px 32px' }}>
-                  <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, marginBottom: 6, color: '#1E2B43' }}>Remote Consultation</h3>
-                  <p style={{ fontSize: 14, lineHeight: 1.7, color: '#5C677D' }}>Meet via Google Meet or Zoom from anywhere. Share photos, walk us through the space on camera, and discuss your goals. Remote consultations are effective for kitchen, bathroom, flooring, and finish-level projects where you want to start the conversation before committing to an on-site visit. Available Monday through Saturday.</p>
-                </div>
-              </div>
+              ))}
             </div>
           </FadeUp>
         </div>

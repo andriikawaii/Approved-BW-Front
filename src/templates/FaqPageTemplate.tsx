@@ -292,6 +292,7 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
           </div>
           <div className="grid gap-7 lg:grid-cols-3">
             {(related?.items || []).map((item: any, index: number) => {
+              const href = item.url || item.link || item.href || item.cta_url || "";
               const fallbackImage = index === 0
                 ? "/images/headers/kitchen-remodeling-header.jpg"
                 : index === 1
@@ -313,7 +314,7 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
                   <div className="faq-related-body p-6">
                     <h3 className="text-[24px] font-bold">{item.title}</h3>
                     <p className="mt-3 text-[14px] leading-[1.76] text-[#5c677d]">{item.description}</p>
-                    {item.url ? linkNode(item.url, <><span>Learn More</span><ArrowRight className="h-4 w-4" /></>, "faq-related-link mt-5 inline-flex items-center gap-2 text-[14px] font-semibold text-[#bc9155] transition-all") : null}
+                    {href ? linkNode(href, <><span>Learn More</span><ArrowRight className="h-4 w-4" /></>, "faq-related-link mt-5 inline-flex items-center gap-2 text-[14px] font-semibold text-[#bc9155] transition-all") : null}
                   </div>
                 </article>
               );

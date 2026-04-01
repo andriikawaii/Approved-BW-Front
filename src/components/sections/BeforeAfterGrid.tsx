@@ -3,10 +3,10 @@
 type Project = {
   location: string;
   description: string;
+  image?: string | null;
+  image_alt?: string | null;
   before_image?: string | null;
   before_image_alt?: string | null;
-  after_image?: string | null;
-  after_image_alt?: string | null;
   testimonial_quote?: string | null;
 };
 
@@ -24,18 +24,8 @@ const BEFORE_FALLBACKS = [
   '/images/services/hero-carousel-1.jpg',
 ];
 
-const AFTER_FALLBACKS = [
-  '/images/services/service-kitchen.jpg',
-  '/images/services/remodeling-design.png',
-  '/images/services/bathroom-remodel-new.jpg',
-];
-
 function getBeforeImage(project: Project, index: number) {
-  return project.before_image || BEFORE_FALLBACKS[index % BEFORE_FALLBACKS.length];
-}
-
-function getAfterImage(project: Project, index: number) {
-  return project.after_image || AFTER_FALLBACKS[index % AFTER_FALLBACKS.length];
+  return project.image || project.before_image || BEFORE_FALLBACKS[index % BEFORE_FALLBACKS.length];
 }
 
 export default function BeforeAfterGrid({ data }: Props) {
@@ -70,19 +60,10 @@ export default function BeforeAfterGrid({ data }: Props) {
                 <div className={`space-y-8 ${isReversed ? 'order-2 md:order-1' : ''}`}>
                   <div>
                     <h3 className="font-serif text-2xl font-bold text-[#1A2B45] mb-3">
-                      Before
+                      Project Overview
                     </h3>
                     <p className="text-gray-600 leading-relaxed">
                       {project.description}
-                    </p>
-                  </div>
-
-                  <div>
-                    <h3 className="font-serif text-2xl font-bold text-[#1A2B45] mb-3">
-                      After
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed">
-                      {project.testimonial_quote || project.description}
                     </p>
                   </div>
 
@@ -102,39 +83,16 @@ export default function BeforeAfterGrid({ data }: Props) {
                     isReversed ? 'order-1 md:order-2' : ''
                   }`}
                 >
-                  <div className="grid h-full grid-cols-1 gap-4 sm:grid-cols-2">
-                    
-                    {/* BEFORE */}
-                    <figure className="relative h-full">
-                      <span className="absolute top-4 left-4 bg-black/70 text-white text-xs font-bold px-3 py-1.5 rounded z-10 tracking-wider">
-                        BEFORE
-                      </span>
-                      <img
-                        src={getBeforeImage(project, index)}
-                        alt={project.before_image_alt || `Before ${project.location}`}
-                        className="h-full min-h-[220px] w-full rounded-lg object-cover shadow-md"
-                      />
-                      <figcaption className="mt-2 text-[12px] font-medium text-[#5b6780]">
-                        Before: {project.location}
-                      </figcaption>
-                    </figure>
-
-                    {/* AFTER */}
-                    <figure className="relative h-full">
-                      <span className="absolute top-4 left-4 bg-[#C68E4D] text-white text-xs font-bold px-3 py-1.5 rounded z-10 tracking-wider">
-                        AFTER
-                      </span>
-                      <img
-                        src={getAfterImage(project, index)}
-                        alt={project.after_image_alt || `After ${project.location}`}
-                        className="h-full min-h-[220px] w-full rounded-lg object-cover shadow-md"
-                      />
-                      <figcaption className="mt-2 text-[12px] font-medium text-[#5b6780]">
-                        After: {project.location}
-                      </figcaption>
-                    </figure>
-
-                  </div>
+                  <figure className="relative h-full">
+                    <img
+                      src={getBeforeImage(project, index)}
+                      alt={project.image_alt || project.before_image_alt || project.location}
+                      className="h-full min-h-[220px] w-full rounded-lg object-cover shadow-md"
+                    />
+                    <figcaption className="mt-2 text-[12px] font-medium text-[#5b6780]">
+                      {project.location}
+                    </figcaption>
+                  </figure>
                 </div>
               </div>
             );

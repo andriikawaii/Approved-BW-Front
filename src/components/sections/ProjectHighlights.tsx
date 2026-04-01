@@ -9,6 +9,9 @@ type Project = {
   image?: string | null;
   image_alt?: string | null;
   url?: string;
+  link?: string;
+  href?: string;
+  cta_url?: string;
   tag?: string;
   cta_label?: string;
 };
@@ -45,6 +48,9 @@ function renderHighlightedTitle(title: string, highlight?: string) {
 }
 
 export default function Portfolio({ data }: Props) {
+  const projectHref = (project: Project) =>
+    project.url || project.link || project.href || project.cta_url || '#';
+
   if (data.layout === 'alternating') {
     return (
       <section className="bg-[#f7f2e8] py-20 md:py-24">
@@ -68,7 +74,7 @@ export default function Portfolio({ data }: Props) {
 
           <div className="space-y-8 md:space-y-12">
             {data.items.map((project, i) => {
-              const href = project.url || '#';
+              const href = projectHref(project);
               const imageOnRight = i % 2 === 1;
               return (
                 <article
@@ -157,7 +163,7 @@ export default function Portfolio({ data }: Props) {
 
         <div className="grid gap-8 lg:grid-cols-3">
           {data.items.map((project, i) => {
-            const href = project.url || '#';
+            const href = projectHref(project);
 
             return (
               <article

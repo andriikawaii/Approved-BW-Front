@@ -95,8 +95,7 @@ const defaultSections: CMSSection[] = [
           location: "Primary Bathroom in Westport",
           description:
             "Full gut renovation with walk-in shower, frameless glass, floor-to-ceiling tile, and 48-inch vanity with stone countertop. Completed in four weeks.",
-          before_image: "/images/before-after/bathroom-renovation-1.jpg",
-          after_image: "/images/before-after/bathroom-renovation-1.jpg",
+          image: "/images/before-after/bathroom-renovation-1.jpg",
           testimonial_quote:
             "Four weeks of construction, and now I have the bathroom I have been wanting for years. - Westport Homeowner",
         },
@@ -104,8 +103,7 @@ const defaultSections: CMSSection[] = [
           location: "Hall Bathroom in Hamden",
           description:
             "Tub-to-shower conversion with custom tile, new vanity, GFCI outlets, and properly ducted exhaust fan. Subfloor repairs addressed during demo.",
-          before_image: "/images/before-after/bathroom-renovation-2.jpg",
-          after_image: "/images/before-after/bathroom-renovation-2.jpg",
+          image: "/images/before-after/bathroom-renovation-2.jpg",
           testimonial_quote:
             "They found issues behind the walls and fixed them properly before finishing. That is what a professional contractor does. - Hamden Homeowner",
         },
@@ -113,8 +111,7 @@ const defaultSections: CMSSection[] = [
           location: "Guest Bathroom in Fairfield",
           description:
             "Complete refresh with new tile floors, updated vanity, modern lighting, and fresh paint. Clean, straightforward three-week project.",
-          before_image: "/images/before-after/bathroom-renovation-3.jpg",
-          after_image: "/images/before-after/bathroom-renovation-3.jpg",
+          image: "/images/before-after/bathroom-renovation-3.jpg",
           testimonial_quote:
             "Clean work site every day, finished ahead of schedule. Exactly what we were looking for. - Fairfield Homeowner",
         },

@@ -354,14 +354,16 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
   const [serviceOpen, setServiceOpen] = useState(false);
   const [formValues, setFormValues] = useState<Record<string, string>>({ contact_method: "call" });
   const [submitted, setSubmitted] = useState(false);
-  const [contactMethod, setContactMethod] = useState("call");
   const titleParts = parts(data?.title, accent || data?.title_highlight || "Project");
   const fields = data?.fields || [];
   const topFields = fields.filter((field: any) => !["checkbox_group", "radio_group", "textarea", "file", "select"].includes(field.type));
   const servicesField = fields.find((field: any) => field.type === "checkbox_group");
   const timeField = fields.find((field: any) => field.name === "best_time" || field.type === "select");
-  const contactField = fields.find((field: any) => field.type === "radio_group");
+  const radioFields = fields.filter((field: any) => field.type === "radio_group");
+  const consultationField = radioFields.find((field: any) => field.name === "consultation_type");
+  const contactField = radioFields.find((field: any) => field.name !== "consultation_type") || radioFields[0];
   const messageField = fields.find((field: any) => field.type === "textarea");
+  const fileField = fields.find((field: any) => field.type === "file");
   const defaultImages = [
     { src: "/portfolio/builtwell-team-client-arrival-ct.jpeg", alt: "BuiltWell CT consultation" },
     { src: "/portfolio/builtwell-contractor-sign-consultation-ct-01.jpg", alt: "BuiltWell CT team" },
@@ -372,7 +374,10 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
   }));
   const images = cmsImages.length > 0 ? cmsImages : defaultImages;
   const selectedServicesLabel = pickedServices.length === 0 ? "Select services" : `${pickedServices.length} service${pickedServices.length === 1 ? "" : "s"} selected`;
+  const consultationOptions = consultationField ? opts(consultationField.options) : [];
   const methodOptions = contactField ? opts(contactField.options) : [];
+  const selectedConsultation = formValues[consultationField?.name || "consultation_type"] || consultationOptions[0]?.value || "";
+  const selectedContactMethod = formValues[contactField?.name || "contact_method"] || methodOptions[0]?.value || "call";
 
   return (
     <>
@@ -422,6 +427,25 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
                 </div>
               ) : (
                 <form onSubmit={(event) => { event.preventDefault(); setSubmitted(true); }}>
+                  {consultationOptions.length > 0 ? (
+                    <fieldset className="bw-form-group">
+                      <legend>{consultationField.label}{consultationField.required ? " *" : ""}</legend>
+                      <div className="bw-form-radio-group">
+                        {consultationOptions.map((option) => (
+                          <label key={option.value}>
+                            <input
+                              type="radio"
+                              name={consultationField.name}
+                              value={option.value}
+                              checked={selectedConsultation === option.value}
+                              onChange={() => setFormValues((current) => ({ ...current, [consultationField.name]: option.value }))}
+                            />
+                            <span>{option.label}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </fieldset>
+                  ) : null}
                   <div className="bw-form-row">
                     {topFields.map((field: any) => (
                       <div key={field.name} className="bw-form-group">
@@ -465,7 +489,13 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
                         <div className="bw-form-radio-group">
                           {methodOptions.map((option) => (
                             <label key={option.value}>
-                              <input type="radio" name={contactField.name} value={option.value} checked={contactMethod === option.value} onChange={() => setContactMethod(option.value)} />
+                              <input
+                                type="radio"
+                                name={contactField.name}
+                                value={option.value}
+                                checked={selectedContactMethod === option.value}
+                                onChange={() => setFormValues((current) => ({ ...current, [contactField.name]: option.value }))}
+                              />
                               <span>{option.label}</span>
                             </label>
                           ))}
@@ -477,6 +507,12 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
                     <div className="bw-form-group">
                       <label>{messageField.label}</label>
                       <textarea rows={4} value={formValues[messageField.name] || ""} placeholder={messageField.placeholder || ""} onChange={(event) => setFormValues((current) => ({ ...current, [messageField.name]: event.target.value }))} />
+                    </div>
+                  ) : null}
+                  {fileField ? (
+                    <div className="bw-form-group">
+                      <label>{fileField.label}{fileField.required ? " *" : ""}</label>
+                      <input type="file" required={fileField.required} />
                     </div>
                   ) : null}
                   <div className="bw-form-consent">
