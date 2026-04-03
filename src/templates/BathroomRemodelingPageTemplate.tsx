@@ -517,11 +517,28 @@ const defaultSections: CMSSection[] = [
           ],
         },
         {
+          name: "contact_method",
+          label: "Preferred Contact Method",
+          type: "radio_group",
+          required: true,
+          options: [
+            { label: "Call", value: "call" },
+            { label: "Text", value: "text" },
+            { label: "Email", value: "email" },
+          ],
+        },
+        {
           name: "message",
           label: "Tell Us About Your Project",
           type: "textarea",
           placeholder:
             "Describe your project, timeline, budget range, or any questions...",
+        },
+        {
+          name: "files",
+          label: "Upload Photos",
+          type: "file",
+          required: false,
         },
       ],
     },
