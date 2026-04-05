@@ -44,8 +44,15 @@ function SectionLabel({ text, dark = false }: { text: string; dark?: boolean }) 
 }
 
 // ─── Main Template ─────────────────────────────────────────────────────────────
-export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
+export function WestportCTPageTemplate({ page }: { page: CMSPage }) {
   const [servicesOpen, setServicesOpen] = useState(false);
+
+  const heroSection = page.sections.find((s) => s.type === 'hero');
+  const heroBg = (heroSection?.data as { background_image?: string } | undefined)?.background_image || '/images/areas/westport-ct-downtown.jpg';
+
+  const housingSection = page.sections.find((s) => s.type === 'full_width_text_dark');
+  const housingBg = (housingSection?.data as { background_image?: string } | undefined)?.background_image || '/images/areas/westport-ct-saugatuck-river.jpg';
+
 
   const primaryServices = [
     {
@@ -231,7 +238,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
 
         {/* ── 1. HERO ─────────────────────────────────────────────────── */}
         <section className="gwch-page-hero gwch-page-hero-westport">
-          <div className="gwch-hero-bg gwch-hero-bg-westport" />
+          <div className="gwch-hero-bg" style={{ backgroundImage: `url('${heroBg}')`, backgroundPosition: 'center 40%' }} />
           <div className="gwch-hero-gradient" />
           <div className="gwch-hero-inner">
             <ol className="gwch-breadcrumb">
@@ -310,7 +317,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
 
         {/* ── 4. HOUSING STOCK BANNER ───────────────────────────────── */}
         <section className="gwch-housing-banner gwch-housing-banner-westport">
-          <div className="gwch-housing-bg gwch-housing-bg-westport" />
+          <div className="gwch-housing-bg" style={{ backgroundImage: `url('${housingBg}')`, backgroundPosition: 'center 40%' }} />
           <div className="gwch-housing-gradient" />
           <div className="gwch-housing-inner">
             <FadeUp>
