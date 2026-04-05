@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useEffect, useState } from "react";
 import {
@@ -18,7 +19,6 @@ import {
 } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
 import {
-  AreasSection as SharedAreasSection,
   FinancingStrip,
   cls,
   label,
@@ -59,8 +59,8 @@ type LeadField = {
 };
 
 const DEFAULT_PHONES: PhoneItem[] = [
-  { label: "Fairfield County", number: "(203) 919-9616" },
-  { label: "New Haven County", number: "(203) 466-9148" },
+  { label: "Fairfield", number: "(203) 919-9616" },
+  { label: "New Haven", number: "(203) 466-9148" },
 ];
 
 const SECTION_WIDTH = "mx-auto max-w-[1240px] px-5 md:px-8 lg:px-10";
@@ -82,6 +82,14 @@ function normalizeOptions(options?: LeadField["options"]) {
 function toTelHref(value?: string) {
   const digits = (value || "").replace(/\D/g, "");
   return digits ? `tel:${digits}` : "#";
+}
+
+function formatPhoneLabel(label?: string, number?: string) {
+  const cleanLabel = (label || "")
+    .replace(/\s+County$/i, "")
+    .trim();
+
+  return cleanLabel && number ? `${cleanLabel}: ${number}` : number || cleanLabel;
 }
 
 function iconForValue(icon?: string | null) {
@@ -122,32 +130,22 @@ function HeroButtons({
   scheduleUrl?: string;
 }) {
   return (
-    <div className="mt-8 flex flex-wrap justify-center gap-4">
+    <div className="mt-7 flex flex-col items-center gap-[14px] sm:flex-row sm:flex-wrap sm:justify-center">
+      <a
+        href={scheduleUrl || "#contact"}
+        className="hero-cta-btn hero-cta-primary w-full max-w-[300px] sm:w-auto"
+      >
+        {scheduleLabel || "Get Your Free Estimate"}
+      </a>
       {phones.map((phone) => (
         <a
           key={`${phone.label}-${phone.number}`}
           href={toTelHref(phone.number)}
-          className="flex min-w-[180px] flex-col items-center rounded-[8px] border border-white/20 border-b-2 border-b-[#bc9155] bg-[rgba(10,18,35,0.42)] px-7 py-4 text-center text-white backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/30 hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3),0_0_0_1px_rgba(188,145,85,0.2)]"
+          className="hero-cta-btn w-full max-w-[300px] sm:w-auto"
         >
-          <span className="mb-1 block text-[11px] font-semibold uppercase tracking-[1.2px] text-white/70">
-            {phone.label}
-          </span>
-          <span className="font-serif text-[18px] font-semibold">
-            {phone.number}
-          </span>
+          {formatPhoneLabel(phone.label, phone.number)}
         </a>
       ))}
-      <a
-        href={scheduleUrl || "#contact"}
-        className="flex min-w-[180px] flex-col items-center rounded-[8px] border border-[#bc9155] border-b-2 border-b-[#a57d48] bg-[#bc9155] px-7 py-4 text-center text-white transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#d4a95a] hover:bg-[#d4a95a] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
-      >
-        <span className="mb-1 block text-[11px] font-semibold uppercase tracking-[1.2px] text-white/90">
-          Free Estimate
-        </span>
-        <span className="font-serif text-[18px] font-semibold">
-          {scheduleLabel || "Schedule Now"}
-        </span>
-      </a>
     </div>
   );
 }
@@ -158,43 +156,59 @@ function TrustMetricBar({ data }: { data?: any }) {
   if (!items.length) return null;
 
   return (
-    <section className="border-y border-[#bc915533] bg-[linear-gradient(135deg,#1e2b43_0%,#151e30_100%)]">
-      <div className="mx-auto grid max-w-[1280px] grid-cols-2 text-center lg:grid-cols-4">
-        {items.map((item: any, index: number) => (
-          <div
-            key={`${item.label}-${index}`}
-            className={cls(
-              "group flex min-h-[122px] cursor-default flex-col items-center justify-center px-4 py-6 text-center transition-all duration-300 md:px-5 md:py-9 lg:hover:-translate-y-[3px] lg:hover:bg-[#bc91550f]",
-              index % 2 === 0 && "border-r border-[#bc915533]",
-              index < 2 && "border-b border-[#bc915533]",
-              "lg:border-b-0",
-              index < items.length - 1
-                ? "lg:border-r lg:border-[#bc915533]"
-                : "lg:border-r-0",
-            )}
-          >
-            <div className="flex min-h-[42px] items-center justify-center font-serif text-[32px] font-bold leading-none text-[#bc9155] transition-all duration-300 md:text-[42px] lg:group-hover:text-[#d4a95a] lg:group-hover:[text-shadow:0_0_20px_rgba(188,145,85,0.3)]">
-              {item.value ? (
-                item.value
-              ) : (
-                <svg
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  aria-hidden="true"
-                >
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                </svg>
-              )}
+    <section className="insurance-trust-bar">
+      <div className="insurance-trust-bar-inner">
+        {items.map((item: any, index: number) => {
+          const classes = cls(
+            "insurance-trust-item group flex min-h-[122px] flex-col items-center justify-center text-center",
+            item.url ? "cursor-pointer" : "cursor-default",
+            index % 2 === 0 && "border-r border-[#bc915533]",
+            index < 2 && "border-b border-[#bc915533]",
+            "lg:border-b-0",
+            index < items.length - 1 ? "lg:border-r lg:border-[#bc915533]" : "lg:border-r-0",
+          );
+
+          const content = (
+            <>
+              <div className="insurance-trust-number flex min-h-[42px] items-center justify-center font-serif font-bold leading-none text-[#bc9155]">
+                {item.value ? (
+                  item.value
+                ) : (
+                  <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  </svg>
+                )}
+              </div>
+              <div className="insurance-trust-label text-[11px] font-medium uppercase tracking-[0.8px] text-white/85 md:text-[13px] md:tracking-[1px]">
+                {item.label}
+              </div>
+            </>
+          );
+
+          return item.url ? (
+            <a
+              key={`${item.label}-${index}`}
+              href={item.url}
+              target="_blank"
+              rel="noreferrer"
+              className={classes}
+            >
+              {content}
+            </a>
+          ) : (
+            <div key={`${item.label}-${index}`} className={classes}>
+              {content}
             </div>
-            <div className="mt-1.5 text-[11px] font-medium uppercase tracking-[0.8px] text-white/85 transition-colors duration-300 md:mt-2 md:text-[13px] md:tracking-[1px] lg:text-white/60 lg:group-hover:text-white/85">
-              {item.label}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
@@ -243,24 +257,28 @@ function TwoColumnTextSection({
               </p>
             ))}
           </div>
-          <div className="grid gap-4">
+          <div className="flex flex-col gap-4 lg:h-full">
             {(imageItems.length ? imageItems : [{ image: "" }, { image: "" }])
               .slice(0, 2)
               .map((item: any, index: number) => (
                 <div
                   key={`${item.alt || "overview"}-${index}`}
-                  className="overflow-hidden rounded-[12px] shadow-[0_18px_45px_rgba(30,43,67,0.08)]"
+                  className={cls(
+                    "insurance-overview-img-wrap relative flex-1 overflow-hidden rounded-[8px] shadow-[0_18px_45px_rgba(30,43,67,0.08)] min-h-[260px] md:min-h-[300px] lg:min-h-0",
+                    index === 1 && "insurance-overview-img-second",
+                  )}
                 >
                   <img
                     src={media(
                       item.image,
                       index === 0
-                        ? "/portfolio/builtwell-contractor-handshake-arrival-ct-optimized.jpg"
-                        : "/portfolio/builtwell-team-completed-interior-ct.png",
+                        ? "/portfolio/builtwell-contractor-client-consultation-ct.jpeg"
+                        : "/portfolio/builtwell-job-site-aerial-ct.jpg",
                     )}
                     alt={item.alt || "BuiltWell insurance reconstruction"}
-                    className="h-[260px] w-full object-cover md:h-[300px]"
+                    className="absolute inset-0 h-full w-full object-cover"
                   />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[50px] bg-[linear-gradient(to_top,rgba(255,255,255,0.85)_0%,rgba(255,255,255,0.3)_50%,transparent_100%)]" />
                 </div>
               ))}
           </div>
@@ -310,14 +328,14 @@ function RightsSection({
               <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-[#bc915526] text-[#bc9155]">
                 <Shield className="h-7 w-7" />
               </div>
-              <h3 className="font-serif text-[28px] font-bold text-white">
+              <h3 className="font-serif text-[20px] font-bold !text-white">
                 {bullets.title}
               </h3>
               <div className="mt-7 space-y-4 text-left">
                 {(bullets.items || []).map((item: string, index: number) => (
                   <div
                     key={`${item}-${index}`}
-                    className="flex gap-3 text-[14px] leading-[1.8] text-white/82"
+                    className="flex gap-3 text-[14px] leading-[1.8] text-white"
                   >
                     <span className="mt-1.5 text-[#bc9155]">
                       <Check className="h-4 w-4" />
@@ -356,7 +374,7 @@ function RebuildGrid({ data }: { data?: any }) {
           {(data.items || []).map((item: any, index: number) => (
             <article
               key={`${item.title}-${index}`}
-              className="rounded-[14px] border border-[#1e2b4310] bg-white p-8 shadow-[0_12px_30px_rgba(30,43,67,0.06)] transition-transform hover:-translate-y-1"
+              className="rounded-[12px] border border-[#1e2b430f] border-l-[3px] border-l-[#bc9155] bg-white p-8"
             >
               <h3 className="text-[22px] font-bold text-[#1e2b43]">
                 {item.title}
@@ -390,25 +408,37 @@ function WhyChooseSection({ data }: { data?: any }) {
             {titleParts.after}
           </h2>
         </div>
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-5">
+        <div className="insurance-why-grid grid gap-3 md:grid-cols-2 lg:grid-cols-5">
           {(data.items || []).map((item: any, index: number) => (
             <article
               key={`${item.title}-${index}`}
-              className="rounded-[14px] border border-[#d9cdbd] bg-white px-6 py-7 text-center shadow-[0_12px_28px_rgba(30,43,67,0.05)] transition-all hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(30,43,67,0.1)]"
+              className="insurance-why-card rounded-[8px] px-4 py-5 text-center"
             >
-              <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#bc915512] text-[#bc9155]">
+              <div className="insurance-why-icon mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full text-[#bc9155]">
                 {iconForValue(item.icon)}
               </div>
-              <h3 className="text-[21px] font-bold text-[#1e2b43]">
-                {item.title}
-              </h3>
-              <p className="mt-4 text-[14px] leading-[1.78] text-[#5c677d]">
+              <h3 className="text-[16px] font-bold text-[#1e2b43]">{item.title}</h3>
+              <p className="insurance-why-copy text-[13px] leading-[1.6] text-[#5c677d]">
                 {item.description}
               </p>
             </article>
           ))}
+          <a
+            href="#contact"
+            className="insurance-why-card insurance-why-cta hidden rounded-[8px] border-2 border-[#bc9155] bg-white px-4 py-5 text-center lg:hidden"
+          >
+            <div className="insurance-why-icon mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full text-[#bc9155]">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
+            </div>
+            <h3 className="text-[16px] font-bold text-[#bc9155]">Get Started</h3>
+            <p className="insurance-why-copy text-[13px] leading-[1.6] text-[#5c677d]">
+              In-person or Google Meet
+            </p>
+          </a>
         </div>
-        <p className="mt-7 text-center text-[13px] text-[#5c677d]/70">
+        <p className="mt-7 text-center text-[13px] text-[#5c677d]/70 max-lg:hidden">
           Hover over any item to learn more
         </p>
       </div>
@@ -439,19 +469,25 @@ function CarriersSection({ data }: { data?: any }) {
             </p>
           ) : null}
         </div>
-        <div className="mx-auto grid max-w-[760px] gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+        <div className="mx-auto grid max-w-[1100px] gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {(data.items || []).map((item: any, index: number) => (
             <a
               key={`${item.name}-${index}`}
               href={item.url || "#"}
               target="_blank"
               rel="noreferrer"
-              className="rounded-[10px] border border-[#1e2b4310] bg-[#f5f1e9] px-4 py-3 text-center text-[13px] font-semibold text-[#1e2b43] transition-all hover:-translate-y-0.5 hover:border-[#bc915544] hover:bg-[#efe6d8]"
+              className="rounded-[8px] border border-[#1e2b4310] bg-[#f5f1e9] px-2 py-3 text-center text-[13px] font-semibold text-[#1e2b43] transition-all duration-200 hover:-translate-y-[2px] hover:border-[#1e2b43] hover:bg-[#1e2b43] hover:text-white hover:shadow-[0_4px_12px_rgba(30,43,67,0.15)]"
             >
               {item.name}
             </a>
           ))}
         </div>
+        {data.note ? (
+          <p
+            className="mt-6 text-center text-[14px] italic leading-[1.8] text-[#5c677d]"
+            dangerouslySetInnerHTML={{ __html: data.note }}
+          />
+        ) : null}
       </div>
     </section>
   );
@@ -499,10 +535,10 @@ function AdvantageSection({
                   "border-t border-[#bc915533] md:border-l md:border-t-0",
               )}
             >
-              <h3 className="font-serif text-[28px] font-bold text-[#bc9155]">
+              <h3 className="mb-6 font-serif text-[18px] font-bold !text-[#bc9155]">
                 {block.title}
               </h3>
-              <div className="mt-6 space-y-4">
+              <div className="space-y-4">
                 {(block.items || []).map((item: string, itemIndex: number) => (
                   <div
                     key={`${item}-${itemIndex}`}
@@ -529,9 +565,12 @@ function AdvantageSection({
 }
 
 function ProcessSection({ data }: { data?: any }) {
+  const [activeStep, setActiveStep] = useState<number | null>(null);
+
   if (!data) return null;
 
   const titleParts = parts(data.title, "Process");
+  const steps = (data.steps || []).slice(0, 5);
 
   return (
     <section className="relative overflow-hidden bg-[linear-gradient(135deg,#1e2b43_0%,#151e30_100%)] px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
@@ -552,24 +591,32 @@ function ProcessSection({ data }: { data?: any }) {
             {titleParts.after}
           </h2>
         </div>
-        <div className="grid gap-5 lg:grid-cols-4">
-          {(data.steps || []).map((step: any, index: number) => (
-            <article
+        <div className="insurance-process-timeline kitchen-fade-up">
+          {steps.map((step: any, index: number) => (
+            <button
+              type="button"
               key={`${step.title}-${index}`}
-              className="kitchen-fade-up rounded-[12px] border-b-2 border-b-transparent bg-white/5 px-6 py-7 text-white shadow-[0_12px_30px_rgba(0,0,0,0.12)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-b-[#BC9155] hover:bg-white/10 hover:shadow-[0_20px_40px_rgba(0,0,0,0.16)]"
+              onClick={() =>
+                setActiveStep((current) => (current === index ? null : index))
+              }
+              className={cls(
+                "insurance-process-step",
+                activeStep === index && "is-active",
+              )}
+              aria-expanded={activeStep === index}
             >
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#bc9155] text-[18px] font-bold text-white">
+              <div className="insurance-process-step-num">
                 {step.step_number || index + 1}
               </div>
-              <h3 className="text-[22px] font-bold">{step.title}</h3>
-              <p className="mt-4 text-[14px] leading-[1.82] text-white/75">
+              <h3>{step.title}</h3>
+              <p className="insurance-process-copy">
                 {step.description}
               </p>
-            </article>
+            </button>
           ))}
         </div>
-        <p className="mt-6 text-center text-[13px] text-white/45">
-          Hover over any step to learn more
+        <p className="mt-6 text-center text-[13px] text-white/45 max-md:hidden">
+          Click any step to learn more
         </p>
       </div>
     </section>
@@ -582,7 +629,7 @@ function FaqSection({ data }: { data?: any }) {
   const titleParts = parts(data.title, "FAQ");
 
   return (
-    <section className="bg-white py-20 sm:py-24">
+    <section className="border-t border-[#1E2B43]/10 bg-[#f5f1e9] py-20 sm:py-24">
       <div className={SECTION_WIDTH}>
         <div className="mb-12 text-center kitchen-fade-up">
           {label("Common Questions")}
@@ -636,17 +683,17 @@ function CallToActionBand({
       <div
         className="absolute inset-0 bg-cover bg-center opacity-10"
         style={{
-          backgroundImage: `url(${media("/portfolio/builtwell-team-client-arrival-ct.jpeg")})`,
+          backgroundImage: `url(${media("/hero/builtwell-team-approaching-home-hero-ct.jpg")})`,
         }}
       />
       <div className={cls(SECTION_WIDTH, "relative max-w-[760px]")}>
         {label(data.eyebrow || "Get Started", true)}
         <h2 className="text-[clamp(32px,4vw,46px)] font-bold tracking-[-0.02em] text-white">
-          {titleParts.before}
+          <span className="text-white">{titleParts.before}</span>
           {titleParts.accent ? (
             <span className="text-[#bc9155]">{titleParts.accent}</span>
           ) : null}
-          {titleParts.after}
+          <span className="text-white">{titleParts.after}</span>
         </h2>
         {data.subtitle ? (
           <p className="mx-auto mt-5 max-w-[680px] text-[15px] leading-[1.85] text-white/72">
@@ -718,11 +765,11 @@ function AreasSection({ data }: { data?: any }) {
                   <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#1E2B43]/40 to-transparent" />
                 </div>
                 <div className="px-7 py-8">
-                  <h3 className="mb-[6px] text-[24px] font-bold text-[#1E2B43]">
+                  <h3 className="mb-[6px] text-center text-[24px] font-bold text-[#1E2B43]">
                     {county.name}
                   </h3>
                   {county.phone ? (
-                    <p className="mb-[14px] text-[15px] text-[#5C677D]">
+                    <p className="mb-[14px] text-center text-[15px] text-[#5C677D]">
                       Call:{" "}
                       {linkNode(
                         toTelHref(county.phone),
@@ -732,18 +779,24 @@ function AreasSection({ data }: { data?: any }) {
                     </p>
                   ) : null}
                   {county.description ? (
-                    <p className="mb-[18px] border-b border-b-[#1E2B43]/6 pb-[18px] text-[14px] leading-[1.7] text-[#5C677D]">
+                    <p className="mb-[18px] border-b border-b-[#1E2B43]/6 pb-[18px] text-center text-[14px] leading-[1.7] text-[#5C677D]">
                       {county.description}
                     </p>
                   ) : null}
                   <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                     {towns.map((town: string, townIndex: number) => (
                       <div key={`${county.name}-${town}-${townIndex}`}>
-                        {linkNode(
-                          links[town] || county.url || "#",
-                          town,
-                          "flex min-h-[32px] w-full items-center justify-center rounded-full bg-[#DFDBD5] px-[10px] py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] text-[#1E2B43] transition-colors duration-200 hover:bg-[#BC9155] hover:text-white",
-                        )}
+                        {links[town]
+                          ? linkNode(
+                              links[town],
+                              town,
+                              "flex min-h-[32px] w-full items-center justify-center rounded-full bg-[#DFDBD5] px-[10px] py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] text-[#1E2B43] transition-colors duration-200 hover:bg-[#BC9155] hover:text-white",
+                            )
+                          : (
+                            <span className="flex min-h-[32px] w-full items-center justify-center rounded-full bg-[#DFDBD5] px-[10px] py-[7px] text-center text-[11px] font-semibold tracking-[0.2px] text-[#1E2B43]">
+                              {town}
+                            </span>
+                          )}
                       </div>
                     ))}
                   </div>
@@ -756,13 +809,13 @@ function AreasSection({ data }: { data?: any }) {
                           [index]: !current[index],
                         }))
                       }
-                      className="col-span-full mt-1 bg-transparent px-0 py-1 text-center text-[13px] font-semibold text-[#BC9155]"
+                      className="col-span-full mx-auto mt-1 block bg-transparent px-0 py-1 text-center text-[13px] font-semibold text-[#BC9155]"
                     >
                       {expanded ? "Show Less -" : "See All Towns +"}
                     </button>
                   ) : null}
                   {county.url ? (
-                    <div className="mt-5">
+                    <div className="mt-5 text-center">
                       {linkNode(
                         county.url,
                         <>
@@ -796,29 +849,73 @@ function AreasSection({ data }: { data?: any }) {
 }
 
 function TrustStrip({ data }: { data?: any }) {
-  const items = data?.items || [];
+  const items = [
+    {
+      url: data?.items?.[0]?.url || "https://www.google.com/search?q=builtwell+ct+reviews",
+      label: "Google Rating 4.9",
+      ariaLabel: "Google Rating 4.9",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#bc9155" stroke="none" aria-hidden="true">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+        </svg>
+      ),
+    },
+    {
+      url: data?.items?.[1]?.url || "https://www.houzz.com/professionals/general-contractors/builtwell-ct",
+      label: "Trusted on Houzz",
+      ariaLabel: "Trusted on Houzz",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M9 12l2 2 4-4" />
+        </svg>
+      ),
+    },
+    {
+      url: data?.items?.[2]?.url || "https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx",
+      label: "CT HIC License #0668405",
+      ariaLabel: "CT HIC License #0668405",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <path d="M8 2v4M16 2v4M3 10h18" />
+        </svg>
+      ),
+    },
+    {
+      url: data?.items?.[3]?.url || "https://www.angi.com/companylist/us/ct/orange/builtwell-ct-reviews-",
+      label: "Verified on Angi",
+      ariaLabel: "Verified on Angi",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M9 12l2 2 4-4" />
+        </svg>
+      ),
+    },
+  ];
 
   if (!items.length) return null;
 
   return (
-    <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] px-5 py-14 md:px-10 md:py-[56px]">
-      <div className="absolute inset-0 bg-[url('/portfolio/builtwell-job-site-aerial-ct.jpg')] bg-cover bg-center opacity-[0.12]" />
-      <div className="relative mx-auto flex max-w-[1240px] flex-wrap items-center justify-center gap-y-2">
+    <div className="insurance-trust-strip" role="region" aria-label="Trust indicators">
+      <div className="insurance-trust-strip-inner">
         {items.map((item: any, index: number) => (
           <div key={`${item.label}-${index}`} className="contents">
             <a
-              href={item.url || "#"}
-              target={item.url ? "_blank" : undefined}
-              rel={item.url ? "noreferrer" : undefined}
-              className="kitchen-fade-up flex min-w-[50%] flex-1 flex-col items-center gap-[10px] px-4 py-3 text-center text-[11px] font-semibold tracking-[0.4px] text-white/90 transition-all duration-300 hover:-translate-y-[2px] hover:text-[#BC9155] md:min-w-[180px] md:px-8 md:py-5 md:text-[13px]"
+              href={item.url}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={item.ariaLabel}
+              className="insurance-trust-strip-item"
             >
-              <span className="text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))]">
-                {iconForValue(item.icon)}
+              <span className="insurance-trust-strip-icon">
+                {item.icon}
               </span>
-              <span>{[item.label, item.value].filter(Boolean).join(" ")}</span>
+              <span>{item.label}</span>
             </a>
             {index < items.length - 1 ? (
-              <div className="hidden h-10 w-px bg-white/10 lg:block" />
+              <div className="insurance-trust-strip-divider" />
             ) : null}
           </div>
         ))}
@@ -850,6 +947,7 @@ function ContactSection({ page, data }: { page: CMSPage; data?: any }) {
   const serviceOptions = normalizeOptions(servicesField?.options);
   const timeOptions = normalizeOptions(timeField?.options);
   const contactOptions = normalizeOptions(contactField?.options);
+  const privacyConsent = data.privacy_consent_html as string | undefined;
 
   return (
     <section
@@ -885,8 +983,8 @@ function ContactSection({ page, data }: { page: CMSPage; data?: any }) {
                     src={media(
                       image.image,
                       index === 0
-                        ? "/portfolio/builtwell-contractor-handshake-arrival-ct-optimized.jpg"
-                        : "/images/headers/kitchen-remodeling-header.jpg",
+                        ? "/team/builtwell-owner-handshake-client-ct-02.jpg"
+                        : "/portfolio/builtwell-job-site-aerial-ct.jpg",
                     )}
                     alt={image.alt || "BuiltWell reconstruction project"}
                     className="h-full min-h-[260px] w-full object-cover"
@@ -1091,7 +1189,18 @@ function ContactSection({ page, data }: { page: CMSPage; data?: any }) {
                   </div>
                 ) : null}
 
-                <div className="mt-6 grid gap-4 md:grid-cols-2">
+                {privacyConsent ? (
+                  <label className="mt-[10px] mb-2 flex items-start gap-[10px] text-[12px] leading-[1.5] text-[#6b7280]">
+                    <input
+                      type="checkbox"
+                      required
+                      className="mt-[3px] min-h-4 min-w-4 accent-[#C9A96E]"
+                    />
+                    <span dangerouslySetInnerHTML={{ __html: privacyConsent }} />
+                  </label>
+                ) : null}
+
+                <div className="mt-2 grid gap-4 md:grid-cols-2">
                   <div>
                     <label
                       className="flex min-h-[52px] cursor-pointer items-center justify-center gap-2 rounded-[8px] border border-[#1e2b4326] px-5 py-3 text-[15px] font-semibold text-[#1e2b43] transition-colors hover:border-[#bc9155]"
@@ -1124,7 +1233,7 @@ function ContactSection({ page, data }: { page: CMSPage; data?: any }) {
                     type="submit"
                     className="min-h-[52px] rounded-[8px] bg-[#bc9155] px-5 py-3 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48]"
                   >
-                    {data.submit_label || "Send Request"}
+                    {data.submit_label || "Get Your Free Estimate"}
                   </button>
                 </div>
                 <p className="mt-4 text-center text-[13px] text-[#5c677d]">
@@ -1212,12 +1321,16 @@ export function InsuranceRestorationPageTemplate({ page }: { page: CMSPage }) {
   }, []);
 
   return (
-    <div data-template={page.template} data-page-slug={page.slug}>
+    <div
+      className="insurance-restoration-page"
+      data-template={page.template}
+      data-page-slug={page.slug}
+    >
       <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pb-8 pt-[80px] text-white sm:pb-9 sm:pt-[92px] md:px-10 md:pb-12 md:pt-[120px]">
         <div
           className="absolute inset-0 bg-cover bg-[position:center_30%] opacity-[0.72]"
           style={{
-            backgroundImage: `url(${media(hero?.background_image, "/portfolio/builtwell-team-client-arrival-ct.jpeg")})`,
+            backgroundImage: `url(${media(hero?.background_image, "/hero/builtwell-team-approaching-home-hero-ct.jpg")})`,
           }}
         />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(21,30,48,1)_0%,rgba(21,30,48,0.92)_10%,transparent_34%),radial-gradient(ellipse_at_bottom_left,rgba(21,30,48,0.95)_0%,transparent_28%),linear-gradient(180deg,rgba(21,30,48,0.3)_0%,rgba(21,30,48,0.22)_28%,rgba(21,30,48,0.48)_64%,rgba(21,30,48,0.94)_100%)]" />
@@ -1239,7 +1352,7 @@ export function InsuranceRestorationPageTemplate({ page }: { page: CMSPage }) {
             <li className="mx-[10px] text-[#bc9155]" aria-hidden="true">
               &#8250;
             </li>
-            <li className="font-semibold text-white">Insurance Restoration</li>
+            <li className="font-semibold text-white">Insurance Reconstruction</li>
           </ol>
           <h1 className="max-w-[900px] font-serif text-[clamp(40px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.5px] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]">
             {heroTitleParts.before}
@@ -1249,7 +1362,7 @@ export function InsuranceRestorationPageTemplate({ page }: { page: CMSPage }) {
             {heroTitleParts.after}
           </h1>
           {hero?.subtitle ? (
-            <p className="mt-4 max-w-[560px] text-[17px] leading-[1.7] text-white/80">
+            <p className="mt-3 max-w-[520px] text-[14px] leading-[1.7] text-white/80">
               {hero.subtitle}
             </p>
           ) : null}
@@ -1275,24 +1388,389 @@ export function InsuranceRestorationPageTemplate({ page }: { page: CMSPage }) {
       <ProcessSection data={process} />
       <FaqSection data={faq} />
       <CallToActionBand data={cta} phones={phones} />
-      <SharedAreasSection data={areas} />
+      <AreasSection data={areas} />
       <TrustStrip data={trustBars[1]} />
       <ContactSection page={page} data={lead} />
       <FinancingStrip data={financing} />
       <style jsx global>{`
-        .kitchen-fade-up {
+        .insurance-restoration-page .insurance-trust-bar {
+          background: linear-gradient(135deg, #1e2b43 0%, #151e30 100%);
+          border-top: 1px solid rgba(188, 145, 85, 0.2);
+          border-bottom: 1px solid rgba(188, 145, 85, 0.2);
+        }
+        .insurance-restoration-page .insurance-trust-bar-inner {
+          max-width: 1280px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          text-align: center;
+        }
+        .insurance-restoration-page .insurance-trust-item {
+          padding: 36px 20px;
+          transition: background 0.3s, transform 0.3s;
+        }
+        .insurance-restoration-page .insurance-trust-item:hover {
+          background: rgba(188, 145, 85, 0.08);
+          transform: translateY(-3px);
+        }
+        .insurance-restoration-page .insurance-trust-item:hover .insurance-trust-number {
+          color: #d4a95a;
+          text-shadow: 0 0 20px rgba(188, 145, 85, 0.3);
+        }
+        .insurance-restoration-page .insurance-trust-item:hover .insurance-trust-label {
+          color: rgba(255, 255, 255, 0.85);
+        }
+        .insurance-restoration-page .insurance-trust-number {
+          font-size: 32px;
+          transition: color 0.3s, text-shadow 0.3s;
+        }
+        .insurance-restoration-page .insurance-trust-label {
+          margin-top: 8px;
+          transition: color 0.3s;
+        }
+        @media (min-width: 1024px) {
+          .insurance-restoration-page .insurance-trust-bar-inner {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+          }
+          .insurance-restoration-page .insurance-trust-number {
+            font-size: 42px;
+          }
+        }
+        .insurance-restoration-page .insurance-trust-strip {
+          background: linear-gradient(135deg, #1e2b43 0%, #151e30 100%);
+          padding: 56px 40px;
+          position: relative;
+          overflow: hidden;
+        }
+        .insurance-restoration-page .insurance-trust-strip::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: url("/hero/builtwell-job-site-aerial-hero-ct.jpg") center/cover no-repeat;
+          opacity: 0.1;
+        }
+        .insurance-restoration-page .insurance-trust-strip-inner {
+          max-width: 1200px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0;
+          flex-wrap: wrap;
+          position: relative;
+          z-index: 1;
+        }
+        .insurance-restoration-page .insurance-trust-strip-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          font-size: 12px;
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.9);
+          letter-spacing: 0.4px;
+          line-height: 1.35;
+          white-space: nowrap;
+          text-decoration: none;
+          transition: all 0.3s;
+          padding: 20px 32px;
+          flex: 1;
+          min-width: 180px;
+          text-align: center;
+          transform: translateY(0);
+        }
+        .insurance-restoration-page .insurance-trust-strip-item:hover {
+          color: #bc9155;
+          transform: translateY(-2px);
+        }
+        .insurance-restoration-page .insurance-trust-strip-icon {
+          color: #bc9155;
+          flex-shrink: 0;
+          width: 22px;
+          height: 22px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          filter: drop-shadow(0 2px 4px rgba(188, 145, 85, 0.3));
+        }
+        .insurance-restoration-page .insurance-trust-strip-icon svg {
+          width: 22px;
+          height: 22px;
+        }
+        .insurance-restoration-page .insurance-trust-strip-divider {
+          width: 1px;
+          height: 40px;
+          background: rgba(188, 145, 85, 0.3);
+          flex-shrink: 0;
+        }
+        .insurance-restoration-page .hero-cta-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 14px 32px;
+          border-radius: 8px;
+          background: rgba(10, 18, 35, 0.42);
+          border: 1px solid rgba(255, 255, 255, 0.22);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          color: #fff;
+          text-decoration: none;
+          font-size: 15px;
+          font-weight: 600;
+          letter-spacing: 0.3px;
+          white-space: nowrap;
+          transition: background 0.3s, border-color 0.3s, transform 0.3s,
+            box-shadow 0.3s;
+        }
+        .insurance-restoration-page .hero-cta-btn:hover {
+          background: rgba(10, 18, 35, 0.62);
+          border-color: rgba(255, 255, 255, 0.35);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        .insurance-restoration-page .hero-cta-primary {
+          background: #bc9155;
+          border-color: #bc9155;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+        }
+        .insurance-restoration-page .hero-cta-primary:hover {
+          background: #d4a95a;
+          border-color: #d4a95a;
+          box-shadow: 0 8px 24px rgba(188, 145, 85, 0.4);
+        }
+        .insurance-restoration-page .insurance-overview-img-wrap {
+          position: relative;
+        }
+        .insurance-restoration-page .insurance-why-card {
+          cursor: pointer;
+          transition: background 0.3s;
+        }
+        .insurance-restoration-page .insurance-why-card:hover {
+          background: rgba(30, 43, 67, 0.06);
+        }
+        .insurance-restoration-page .insurance-why-icon {
+          background: #fff;
+          border: 2.5px solid #bc9155;
+          box-shadow: 0 0 0 4px rgba(188, 145, 85, 0.12);
+        }
+        .insurance-restoration-page .insurance-why-copy {
+          max-height: 0;
+          opacity: 0;
+          overflow: hidden;
+          margin-top: 0;
+          transition: max-height 0.4s ease, opacity 0.35s ease,
+            margin-top 0.35s ease;
+        }
+        .insurance-restoration-page .insurance-why-card:hover .insurance-why-copy {
+          max-height: 200px;
+          opacity: 1;
+          margin-top: 10px;
+        }
+        .insurance-restoration-page .insurance-process-copy {
+          font-size: 14px;
+          color: rgba(255, 255, 255, 0.7);
+          line-height: 1.65;
+          max-height: 0;
+          opacity: 0;
+          overflow: hidden;
+          margin: 0;
+          transition: max-height 0.4s ease, opacity 0.35s ease,
+            margin-top 0.35s ease;
+          text-align: center;
+        }
+        .insurance-restoration-page .insurance-process-timeline {
+          display: grid;
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          gap: 0;
+          position: relative;
+        }
+        .insurance-restoration-page .insurance-process-timeline::before {
+          content: "";
+          position: absolute;
+          top: 34px;
+          left: 10%;
+          right: 10%;
+          height: 2px;
+          background: rgba(188, 145, 85, 0.25);
+        }
+        .insurance-restoration-page .insurance-process-step {
+          text-align: center;
+          padding: 16px 16px 20px;
+          position: relative;
+          cursor: pointer;
+          border-radius: 8px;
+          transition: background 0.3s;
+          border: 0;
+          background: transparent;
+          color: inherit;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+          outline: none;
+          text-decoration: none;
+        }
+        .insurance-restoration-page .insurance-process-step:focus,
+        .insurance-restoration-page .insurance-process-step:focus-visible {
+          outline: none;
+          box-shadow: none;
+        }
+        .insurance-restoration-page .insurance-process-step.is-active {
+          background: rgba(188, 145, 85, 0.14);
+          z-index: 2;
+          position: relative;
+        }
+        .insurance-restoration-page .insurance-process-step.is-active .insurance-process-copy {
+          max-height: 200px;
+          opacity: 1;
+          margin-top: 8px;
+        }
+        .insurance-restoration-page .insurance-process-step-num {
+          width: 68px;
+          height: 68px;
+          border-radius: 9999px;
+          background: rgba(188, 145, 85, 0.42);
+          border: 2.5px solid #bc9155;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: -8px auto 20px;
+          font-family: "Playfair Display", serif;
+          font-size: 24px;
+          font-weight: 700;
+          color: #f5e0c0;
+          position: relative;
+          z-index: 2;
+          box-shadow: 0 0 0 4px rgba(188, 145, 85, 0.12);
+          flex-shrink: 0;
+        }
+        .insurance-restoration-page .insurance-process-step h3 {
+          font-size: 18px;
+          margin: 0 0 12px;
+          color: #fff;
+          font-weight: 700;
+          font-family: "Playfair Display", serif;
+          line-height: 1.25;
+          text-align: center;
+        }
+        .insurance-restoration-page .kitchen-fade-up {
           opacity: 0;
           transform: translateY(30px);
           transition:
             opacity 0.7s ease,
             transform 0.7s ease;
         }
-        .kitchen-fade-up.is-visible {
+        .insurance-restoration-page .kitchen-fade-up.is-visible {
           opacity: 1;
           transform: translateY(0);
         }
+        @media (max-width: 1024px) {
+          .insurance-restoration-page .insurance-process-timeline {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+            max-width: 700px;
+            margin: 0 auto;
+          }
+          .insurance-restoration-page .insurance-process-timeline::before {
+            display: none;
+          }
+          .insurance-restoration-page .insurance-process-step {
+            padding: 16px 8px;
+            gap: 0;
+          }
+          .insurance-restoration-page .insurance-process-step-num {
+            margin: 0 0 10px;
+          }
+          .insurance-restoration-page .insurance-process-step h3 {
+            text-align: center;
+            font-size: 15px;
+            margin: 0;
+          }
+          .insurance-restoration-page .insurance-process-copy {
+            display: none !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .insurance-restoration-page .insurance-trust-item {
+            padding: 24px 16px;
+            background: rgba(188, 145, 85, 0.08);
+          }
+          .insurance-restoration-page .insurance-trust-item:hover {
+            transform: none;
+          }
+          .insurance-restoration-page .hero-cta-btn {
+            min-height: 44px;
+            width: 100%;
+            max-width: 300px;
+            justify-content: center;
+            font-size: 14px;
+            padding: 12px 24px;
+          }
+          .insurance-restoration-page .insurance-overview-img-second {
+            display: none !important;
+          }
+          .insurance-restoration-page .insurance-why-cta {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+          }
+          .insurance-restoration-page .insurance-why-copy {
+            max-height: none !important;
+            opacity: 1 !important;
+            margin-top: 10px !important;
+          }
+          .insurance-restoration-page .insurance-trust-strip {
+            padding: 32px 20px;
+          }
+          .insurance-restoration-page .insurance-trust-strip-inner {
+            gap: 0;
+            flex-wrap: wrap;
+          }
+          .insurance-restoration-page .insurance-trust-strip-item {
+            padding: 16px 12px;
+            min-width: 33.33%;
+            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+          }
+          .insurance-restoration-page .insurance-trust-strip-icon,
+          .insurance-restoration-page .insurance-trust-strip-icon svg {
+            width: 18px;
+            height: 18px;
+          }
+          .insurance-restoration-page .insurance-trust-strip-divider {
+            display: none;
+          }
+          .insurance-restoration-page .insurance-process-timeline {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            max-width: 600px;
+          }
+          .insurance-restoration-page .insurance-process-step {
+            padding: 14px 8px;
+          }
+          .insurance-restoration-page .insurance-process-step-num {
+            width: 48px;
+            height: 48px;
+            font-size: 17px;
+            margin: 0 0 8px;
+          }
+          .insurance-restoration-page .insurance-process-step h3 {
+            font-size: 14px;
+            margin-bottom: 0;
+          }
+        }
         @media (prefers-reduced-motion: reduce) {
-          .kitchen-fade-up {
+          .insurance-restoration-page .kitchen-fade-up,
+          .insurance-restoration-page .hero-cta-btn,
+          .insurance-restoration-page .insurance-why-card,
+          .insurance-restoration-page .insurance-process-cta {
             opacity: 1;
             transform: none;
             transition: none;

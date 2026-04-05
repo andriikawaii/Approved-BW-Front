@@ -1,7 +1,7 @@
 "use client";
 
 import type { CMSPage } from "@/types/cms";
-import { AreasSection, DarkTrustStrip, FinancingStrip, HeroTrustBar, LeadFormSection, cls, label, linkNode, media, parts, section, sections } from "./template-utils";
+import { AreasSection, FinancingStrip, HeroTrustBar, LeadFormSection, cls, label, linkNode, media, parts, section, sections } from "./template-utils";
 import { useEffect, useRef, useState } from "react";
 
 /* ── fade-up scroll animation hook ── */
@@ -70,22 +70,36 @@ export function PricingPageTemplate({ page }: { page: CMSPage }) {
   const pricing = section<any>(page, "services_grid");
   const financing = rich.find((item) => item.style_variant === "financing_strip");
   const heroParts = parts(hero?.headline, "Connecticut");
+  const rawHeroCtas = (hero?.badges?.length
+    ? hero.badges
+    : [
+        { is_primary: true, label: "Get Your Free Estimate", url: "/free-consultation/" },
+        { label: "Fairfield", value: "(203) 919-9616", url: "tel:2039199616" },
+        { label: "New Haven", value: "(203) 466-9148", url: "tel:2034669148" },
+      ]) as Array<{ is_primary?: boolean; label?: string; value?: string; url?: string }>;
+  const estimateCta =
+    rawHeroCtas.find((badge) => badge.is_primary)
+    || rawHeroCtas.find((badge) => `${badge.label || ""} ${badge.value || ""}`.toLowerCase().includes("estimate"))
+    || { is_primary: true, label: "Get Your Free Estimate", url: "/free-consultation/" };
+  const fairfieldCta =
+    rawHeroCtas.find((badge) => `${badge.label || ""} ${badge.value || ""}`.toLowerCase().includes("fairfield"))
+    || rawHeroCtas.find((badge) => `${badge.label || ""} ${badge.value || ""}`.includes("919"));
+  const newHavenCta =
+    rawHeroCtas.find((badge) => `${badge.label || ""} ${badge.value || ""}`.toLowerCase().includes("new haven"))
+    || rawHeroCtas.find((badge) => `${badge.label || ""} ${badge.value || ""}`.includes("466"));
+  const heroCtas = [
+    { ...estimateCta, is_primary: true, label: "Get Your Free Estimate", value: undefined, url: estimateCta.url || "/free-consultation/" },
+    fairfieldCta ? { ...fairfieldCta, label: "Fairfield", value: fairfieldCta.value || "(203) 919-9616", url: fairfieldCta.url || "tel:2039199616" } : null,
+    newHavenCta ? { ...newHavenCta, label: "New Haven", value: newHavenCta.value || "(203) 466-9148", url: newHavenCta.url || "tel:2034669148" } : null,
+  ].filter(Boolean) as Array<{ is_primary?: boolean; label?: string; value?: string; url?: string }>;
 
   /* trust strip data — try second CMS trust_bar, otherwise use reference defaults */
   const trustStripCms = sections<any>(page, "trust_bar")[1];
-  const defaultTrustStrip = [
-    { icon: "star", label: "Google Rating", value: "4.9", url: "https://www.google.com/search?q=builtwell+ct+reviews" },
-    { icon: "shield", label: "BBB A+ Accredited", url: "https://www.bbb.org/search?find_country=USA&find_text=builtwell+ct&find_loc=Orange%2C+CT" },
-    { icon: "check", label: "Trusted on Houzz", url: "https://www.houzz.com/professionals/general-contractors/builtwell-ct" },
-    { icon: "calendar", label: "CT HIC License #0668405", url: "https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx" },
-    { icon: "check", label: "Verified on Angi & Thumbtack", url: "https://www.angi.com/companylist/us/ct/orange/builtwell-ct-reviews-" },
-  ];
-  const trustStripItems = trustStripCms?.items || defaultTrustStrip;
 
   const fadeRef = useFadeUp();
 
   return (
-    <div ref={fadeRef} className="bg-[#f5f1e9] text-[#1e2b43]">
+    <div ref={fadeRef} className="pricing-page bg-[#f5f1e9] text-[#1e2b43]">
 
       {/* ══════ HERO ══════ */}
       <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pt-[120px] text-white md:px-10">
@@ -120,30 +134,20 @@ export function PricingPageTemplate({ page }: { page: CMSPage }) {
             </p>
           ) : null}
           {/* CTA buttons */}
-          <div className="fade-up mt-8 flex flex-wrap items-stretch justify-center gap-4" style={{ ...fadeUpStyle, transitionDelay: "0.3s" }}>
-            {(hero?.badges || []).map((badge: any, index: number) => {
+          <div className="pricing-hero-ctas fade-up mt-8" style={{ ...fadeUpStyle, transitionDelay: "0.3s" }}>
+            {heroCtas.map((badge, index) => {
               const isPrimary = !!badge.is_primary;
+              const text = isPrimary
+                ? badge.label || badge.value || "Get Your Free Estimate"
+                : badge.label && badge.value
+                  ? `${badge.label}: ${badge.value}`
+                  : badge.value || badge.label || "";
               return (
                 <div key={`${badge.label || "badge"}-${index}`}>
                   {linkNode(
                     badge.url || "#",
-                    <div
-                      className={cls(
-                        "flex min-w-[180px] flex-col items-center rounded-[8px] border px-7 py-4 text-center transition-all duration-300 hover:-translate-y-[2px]",
-                        isPrimary
-                          ? "border-[#bc9155] border-b-2 border-b-[#a57d48] bg-[#bc9155] text-white hover:border-[#d4a95a] hover:border-b-[#a57d48] hover:bg-[#d4a95a] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
-                          : "border-b-2 border-b-[#bc9155] border-white/[0.18] bg-[rgba(10,18,35,0.42)] text-white backdrop-blur-[12px] hover:border-white/[0.28] hover:border-b-[#bc9155] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3),0_0_0_1px_rgba(188,145,85,0.2)]",
-                      )}
-                    >
-                      <div className={cls("text-[11px] uppercase tracking-[1.2px]", isPrimary ? "opacity-90" : "opacity-70")}>
-                        {badge.label}
-                      </div>
-                      {badge.value ? (
-                        <div className="mt-1 text-[18px] font-semibold" style={{ fontFamily: "'Playfair Display', serif" }}>
-                          {badge.value}
-                        </div>
-                      ) : null}
-                    </div>,
+                    text,
+                    cls("pricing-hero-cta-btn", isPrimary && "pricing-hero-cta-primary"),
                   )}
                 </div>
               );
@@ -352,7 +356,7 @@ export function PricingPageTemplate({ page }: { page: CMSPage }) {
       <AreasSection data={areas} />
 
       {/* ══════ TRUST STRIP (below Where We Work) ══════ */}
-      <DarkTrustStrip items={trustStripItems} />
+      <PricingTrustStrip data={trustStripCms} />
 
       {/* ══════ TRUSTED BRANDS — marquee carousel ══════ */}
       <section className="border-t border-[rgba(30,43,67,0.08)] bg-white px-5 py-20 md:px-10">
@@ -377,6 +381,72 @@ export function PricingPageTemplate({ page }: { page: CMSPage }) {
 
       {/* ══════ FINANCING ══════ */}
       <FinancingStrip data={financing} />
+
+      <style jsx global>{`
+        .pricing-page .pricing-hero-ctas {
+          display: flex;
+          gap: 14px;
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+        }
+        .pricing-page .pricing-hero-cta-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 14px 32px;
+          border-radius: 8px;
+          background: rgba(10, 18, 35, 0.42);
+          border: 1px solid rgba(255, 255, 255, 0.22);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          color: #fff;
+          text-decoration: none;
+          font-size: 15px;
+          font-weight: 600;
+          letter-spacing: 0.3px;
+          white-space: nowrap;
+          transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+        .pricing-page .pricing-hero-cta-btn:hover {
+          background: rgba(10, 18, 35, 0.62);
+          border-color: rgba(255, 255, 255, 0.35);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        .pricing-page .pricing-hero-cta-primary {
+          background: #bc9155;
+          border: 1px solid #bc9155;
+          color: #fff;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+        }
+        .pricing-page .pricing-hero-cta-primary:hover {
+          background: #d4a95a;
+          border-color: #d4a95a;
+          box-shadow: 0 8px 24px rgba(188, 145, 85, 0.4);
+        }
+        .pricing-page .pricing-hero-cta-btn:focus-visible {
+          outline: 2px solid #fff;
+          outline-offset: 2px;
+          box-shadow: 0 0 0 4px rgba(188, 145, 85, 0.4);
+        }
+        @media (max-width: 768px) {
+          .pricing-page .pricing-hero-ctas {
+            flex-direction: column;
+            align-items: center;
+          }
+          .pricing-page .pricing-hero-cta-btn {
+            min-height: 44px;
+            width: 100%;
+            max-width: 300px;
+            justify-content: center;
+            font-size: 14px;
+            padding: 12px 24px;
+          }
+        }
+      `}</style>
     </div>
   );
 }
@@ -390,6 +460,10 @@ function PricingAreasSection({ data }: { data: any }) {
   const [countyOpen, setCountyOpen] = useState<Record<number, boolean>>({});
   const titleParts = parts(data?.title, data?.highlight_text);
   const areasFadeRef = useFadeUp();
+  const counties = data?.counties || [];
+  const expandableCount = counties.filter((county: any) => (county.extra_towns || []).length > 0).length;
+  const expandedCount = counties.filter((county: any, index: number) => (county.extra_towns || []).length > 0 && countyOpen[index]).length;
+  const shouldMatchCardHeights = expandedCount === 0 || (expandableCount > 0 && expandedCount === expandableCount);
 
   return (
     <section ref={areasFadeRef} className="bg-[#f5f1e9] px-5 py-20 md:px-10">
@@ -406,8 +480,8 @@ function PricingAreasSection({ data }: { data: any }) {
           ) : null}
         </div>
 
-        <div className="fade-up grid gap-8 lg:grid-cols-2" style={{ ...fadeUpStyle, transitionDelay: "0.15s" }}>
-          {(data?.counties || []).map((county: any, index: number) => {
+        <div className={cls("fade-up grid gap-8 lg:grid-cols-2", shouldMatchCardHeights ? "items-stretch" : "items-start")} style={{ ...fadeUpStyle, transitionDelay: "0.15s" }}>
+          {counties.map((county: any, index: number) => {
             const expanded = !!countyOpen[index];
             const mainTowns = county.towns || [];
             const extraTowns = county.extra_towns || [];
@@ -417,7 +491,10 @@ function PricingAreasSection({ data }: { data: any }) {
             return (
               <article
                 key={`${county.name || "county"}-${index}`}
-                className="flex flex-col overflow-hidden rounded-[12px] border-b-[3px] border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1.5 hover:border-b-[#bc9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]"
+                className={cls(
+                  "flex flex-col overflow-hidden rounded-[12px] border-b-[3px] border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1.5 hover:border-b-[#bc9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]",
+                  shouldMatchCardHeights && "h-full",
+                )}
               >
                 {/* Image with gradient overlay + zoom on hover */}
                 <div className="group relative h-[220px] overflow-hidden">
@@ -513,6 +590,165 @@ function PricingAreasSection({ data }: { data: any }) {
 /* ────────────────────────────────────────────────────────────
    Brands marquee — infinite auto-scrolling carousel
    ──────────────────────────────────────────────────────────── */
+function PricingTrustStrip({ data }: { data?: { items?: Array<{ url?: string }> } }) {
+  const items = [
+    {
+      url: data?.items?.[0]?.url || "https://www.google.com/search?q=builtwell+ct+reviews",
+      label: "Google Rating 4.9",
+      ariaLabel: "Google Rating 4.9",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#bc9155" stroke="none" aria-hidden="true">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+        </svg>
+      ),
+    },
+    {
+      url: data?.items?.[1]?.url || "https://www.houzz.com/professionals/general-contractors/builtwell-ct",
+      label: "Trusted on Houzz",
+      ariaLabel: "Trusted on Houzz",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M9 12l2 2 4-4" />
+        </svg>
+      ),
+    },
+    {
+      url: data?.items?.[2]?.url || "https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx",
+      label: "CT HIC License #0668405",
+      ariaLabel: "CT HIC License #0668405",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <path d="M8 2v4M16 2v4M3 10h18" />
+        </svg>
+      ),
+    },
+    {
+      url: data?.items?.[3]?.url || "https://www.angi.com/companylist/us/ct/orange/builtwell-ct-reviews-",
+      label: "Verified on Angi",
+      ariaLabel: "Verified on Angi",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M9 12l2 2 4-4" />
+        </svg>
+      ),
+    },
+  ];
+
+  return (
+    <div className="pricing-trust-strip" role="region" aria-label="Trust indicators">
+      <div className="pricing-trust-strip-inner">
+        {items.map((item, index) => (
+          <div key={`${item.label}-${index}`} className="contents">
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={item.ariaLabel}
+              className="pricing-trust-strip-item"
+            >
+              <span className="pricing-trust-strip-icon">{item.icon}</span>
+              <span>{item.label}</span>
+            </a>
+            {index < items.length - 1 ? <div className="pricing-trust-strip-divider" /> : null}
+          </div>
+        ))}
+      </div>
+      <style jsx global>{`
+        .pricing-page .pricing-trust-strip {
+          background: linear-gradient(135deg, #1e2b43 0%, #151e30 100%);
+          padding: 56px 40px;
+          position: relative;
+          overflow: hidden;
+        }
+        .pricing-page .pricing-trust-strip::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: url("/hero/builtwell-job-site-aerial-hero-ct.jpg") center/cover no-repeat;
+          opacity: 0.1;
+        }
+        .pricing-page .pricing-trust-strip-inner {
+          max-width: 1200px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0;
+          flex-wrap: wrap;
+          position: relative;
+          z-index: 1;
+        }
+        .pricing-page .pricing-trust-strip-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          font-size: 12px;
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.9);
+          letter-spacing: 0.4px;
+          line-height: 1.35;
+          white-space: nowrap;
+          text-decoration: none;
+          transition: all 0.3s;
+          padding: 20px 32px;
+          flex: 1;
+          min-width: 180px;
+          text-align: center;
+          transform: translateY(0);
+        }
+        .pricing-page .pricing-trust-strip-item:hover {
+          color: #bc9155;
+          transform: translateY(-2px);
+        }
+        .pricing-page .pricing-trust-strip-icon {
+          color: #bc9155;
+          flex-shrink: 0;
+          width: 22px;
+          height: 22px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          filter: drop-shadow(0 2px 4px rgba(188, 145, 85, 0.3));
+        }
+        .pricing-page .pricing-trust-strip-icon svg {
+          width: 22px;
+          height: 22px;
+        }
+        .pricing-page .pricing-trust-strip-divider {
+          width: 1px;
+          height: 40px;
+          background: rgba(188, 145, 85, 0.3);
+          flex-shrink: 0;
+        }
+        @media (max-width: 768px) {
+          .pricing-page .pricing-trust-strip {
+            padding: 40px 20px;
+          }
+          .pricing-page .pricing-trust-strip-inner {
+            gap: 16px 0;
+          }
+          .pricing-page .pricing-trust-strip-item {
+            min-width: calc(50% - 8px);
+            padding: 16px 20px;
+          }
+          .pricing-page .pricing-trust-strip-divider {
+            display: none;
+          }
+        }
+        @media (max-width: 520px) {
+          .pricing-page .pricing-trust-strip-item {
+            min-width: 100%;
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 function BrandsMarquee({ items }: { items: any[] }) {
   if (!items.length) return null;
   // Double the items for seamless loop

@@ -127,6 +127,47 @@ export function AreasSection({ data }: { data: any }) {
     return links[town] || "";
   };
 
+  const getCountyTownGroups = (county: any) => {
+    const townLinks = county.town_links;
+    const featuredFromLinks: string[] = Array.isArray(townLinks) ? townLinks.slice(0, 8).map((entry: any) => entry?.name).filter(Boolean) : [];
+    const extraFromLinks: string[] = Array.isArray(townLinks) ? townLinks.slice(8).map((entry: any) => entry?.name).filter(Boolean) : [];
+    const featuredTownsRaw: string[] = county.towns || county.cities || featuredFromLinks || [];
+    const extraTownsRaw: string[] =
+      county.extra_towns ||
+      county.towns_expanded ||
+      (featuredTownsRaw.length === 0 ? extraFromLinks : []) ||
+      [];
+    const maxVisibleFromData = Number(
+      county.initial_visible_towns ?? data?.initial_visible_towns ?? 8
+    );
+    const maxVisibleTowns =
+      Number.isFinite(maxVisibleFromData) && maxVisibleFromData > 0
+        ? Math.floor(maxVisibleFromData)
+        : 8;
+    const normalizeTown = (town: string) => String(town || "").trim().toLowerCase();
+    const featuredTownsLimited = featuredTownsRaw.filter(Boolean).slice(0, maxVisibleTowns);
+    const overflowFeaturedTowns = featuredTownsRaw.filter(Boolean).slice(maxVisibleTowns);
+    const featuredTownSet = new Set(featuredTownsLimited.map(normalizeTown));
+    const mergedExtraTowns = [...overflowFeaturedTowns, ...extraTownsRaw];
+    const seenExtra = new Set<string>();
+    const extraTowns: string[] = mergedExtraTowns.filter((town: string) => {
+      if (!town) return false;
+      const normalized = normalizeTown(town);
+      if (!normalized || featuredTownSet.has(normalized) || seenExtra.has(normalized)) return false;
+      seenExtra.add(normalized);
+      return true;
+    });
+
+    return {
+      featuredTowns: featuredTownsLimited,
+      extraTowns,
+    };
+  };
+
+  const expandableCount = counties.filter((county) => getCountyTownGroups(county).extraTowns.length > 0).length;
+  const expandedCount = counties.filter((county, index) => getCountyTownGroups(county).extraTowns.length > 0 && expanded[index]).length;
+  const shouldMatchCardHeights = expandedCount === 0 || (expandableCount > 0 && expandedCount === expandableCount);
+
   return (
     <>
       <section className="bw-areas-section">
@@ -152,39 +193,10 @@ export function AreasSection({ data }: { data: any }) {
               </p>
             ) : null}
           </div>
-          <div className="bw-areas-grid">
+          <div className={`bw-areas-grid${shouldMatchCardHeights ? " bw-areas-grid-match" : ""}`}>
             {counties.map((county: any, index: number) => {
               const isExpanded = !!expanded[index];
-              const townLinks = county.town_links;
-              const featuredFromLinks: string[] = Array.isArray(townLinks) ? townLinks.slice(0, 8).map((entry: any) => entry?.name).filter(Boolean) : [];
-              const extraFromLinks: string[] = Array.isArray(townLinks) ? townLinks.slice(8).map((entry: any) => entry?.name).filter(Boolean) : [];
-              const featuredTownsRaw: string[] = county.towns || county.cities || featuredFromLinks || [];
-              const extraTownsRaw: string[] =
-                county.extra_towns ||
-                county.towns_expanded ||
-                (featuredTownsRaw.length === 0 ? extraFromLinks : []) ||
-                [];
-              const maxVisibleFromData = Number(
-                county.initial_visible_towns ?? data?.initial_visible_towns ?? 8
-              );
-              const MAX_VISIBLE_TOWNS =
-                Number.isFinite(maxVisibleFromData) && maxVisibleFromData > 0
-                  ? Math.floor(maxVisibleFromData)
-                  : 8;
-              const normalizeTown = (town: string) => String(town || "").trim().toLowerCase();
-              const featuredTownsLimited = featuredTownsRaw.filter(Boolean).slice(0, MAX_VISIBLE_TOWNS);
-              const overflowFeaturedTowns = featuredTownsRaw.filter(Boolean).slice(MAX_VISIBLE_TOWNS);
-              const featuredTownSet = new Set(featuredTownsLimited.map(normalizeTown));
-              const featuredTowns: string[] = featuredTownsLimited;
-              const mergedExtraTowns = [...overflowFeaturedTowns, ...extraTownsRaw];
-              const seenExtra = new Set<string>();
-              const extraTowns: string[] = mergedExtraTowns.filter((town: string) => {
-                if (!town) return false;
-                const normalized = normalizeTown(town);
-                if (!normalized || featuredTownSet.has(normalized) || seenExtra.has(normalized)) return false;
-                seenExtra.add(normalized);
-                return true;
-              });
+              const { featuredTowns, extraTowns } = getCountyTownGroups(county);
               const countyKey = String(county.slug || county.url || county.name || county.phone || `county-${index}`);
               const featuredTownKeyCounts: Record<string, number> = {};
               const extraTownKeyCounts: Record<string, number> = {};
@@ -268,19 +280,21 @@ export function AreasSection({ data }: { data: any }) {
         .bw-areas-subtitle-link:hover, .bw-areas-subtitle-link:focus-visible { color:#9a7340; text-decoration:none !important; }
         .bw-gold { color:#bc9155; }
         .bw-areas-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:start; }
+        .bw-areas-grid.bw-areas-grid-match { align-items:stretch; }
         .bw-area-card { background:#fff; border-radius:12px; overflow:hidden; border-bottom:3px solid transparent; box-shadow:0 2px 12px rgba(30,43,67,.06),0 1px 3px rgba(30,43,67,.04); transition:all .35s cubic-bezier(.4,0,.2,1); position:relative; display:flex; flex-direction:column; }
+        .bw-areas-grid.bw-areas-grid-match .bw-area-card { height:100%; }
         .bw-area-card:hover { transform:translateY(-6px); border-bottom-color:#bc9155; box-shadow:0 16px 40px rgba(30,43,67,.1),0 32px 64px rgba(30,43,67,.08); }
         .bw-area-card-img { width:100%; height:220px; overflow:hidden; position:relative; }
         .bw-area-card-img::after { content:""; position:absolute; bottom:0; left:0; right:0; height:80px; background:linear-gradient(to top,rgba(30,43,67,.4),transparent); pointer-events:none; }
         .bw-area-card-img img { width:100%; height:100%; object-fit:cover; transition:transform .5s; }
         .bw-area-card-img img.bw-show-top { object-position:top; }
         .bw-area-card:hover .bw-area-card-img img { transform:scale(1.05); }
-        .bw-area-card-body { padding:28px 28px 32px; text-align:center; }
+        .bw-area-card-body { padding:28px 28px 32px; text-align:center; display:flex; flex:1; flex-direction:column; }
         .bw-area-card-body h3 { font:700 24px/1.2 "Playfair Display",serif; color:#1e2b43; margin:0 0 6px; }
         .bw-area-card-phone { font-size:15px; color:#5c677d; margin-bottom:14px; }
         .bw-area-card-phone a { color:#bc9155; font-weight:600; text-decoration:none; }
         .bw-area-card-phone a:hover { text-decoration:underline; }
-        .bw-area-card-desc { font-size:14px; line-height:1.7; color:#5c677d; margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid rgba(30,43,67,.06); flex:1; }
+        .bw-area-card-desc { font-size:14px; line-height:1.7; color:#5c677d; margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid rgba(30,43,67,.06); }
         .bw-area-towns { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
         .bw-area-town { font-size:11px; font-weight:600; color:#1e2b43; background:#f5f1e9; padding:7px 10px; border-radius:50px; text-align:center; letter-spacing:.2px; transition:all .2s; white-space:nowrap; text-decoration:none; }
         .bw-area-town:hover { background:#e8dcc4; color:#9a7340; }
@@ -290,7 +304,7 @@ export function AreasSection({ data }: { data: any }) {
         .bw-area-towns-more.show { display:grid; }
         .bw-area-towns-toggle { grid-column:1 / -1; margin-top:4px; background:none; border:none; color:#bc9155; font-size:13px; font-weight:600; cursor:pointer; padding:4px 0; transition:color .2s; text-align:center; }
         .bw-area-towns-toggle:hover { color:#9a7340; }
-        .bw-area-link { display:inline-flex; align-items:center; gap:6px; margin-top:4px; color:#bc9155; font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; justify-content:center; }
+        .bw-area-link { display:inline-flex; align-items:center; gap:6px; margin-top:auto; padding-top:4px; color:#bc9155; font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; justify-content:center; }
         .bw-area-link:hover { gap:10px; }
         .bw-area-link-arrow { width:14px; height:14px; }
         .bw-areas-note { margin:20px auto 0; text-align:center; font-size:14px; line-height:1.7; color:#5c677d; }

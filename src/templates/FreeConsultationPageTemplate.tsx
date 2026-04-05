@@ -151,18 +151,17 @@ function TownPill({ town, href, secondary }: { town: string; href?: string; seco
   return <span style={base} className={secondary ? 'area-town-secondary' : undefined}>{town}</span>;
 }
 
-function AreaCard({ county, phone, phoneLabel, img, alt, desc, primaryTowns, moreTowns, townLinks, countyHref, showTop }: {
+function AreaCard({ county, phone, phoneLabel, img, alt, desc, primaryTowns, moreTowns, townLinks, countyHref, showTop, expanded, onToggle, stretch }: {
   county: string; phone: string; phoneLabel?: string; img: string; alt: string; desc: string;
   primaryTowns: string[]; moreTowns: string[]; townLinks: Record<string, string>;
-  countyHref: string; showTop?: boolean;
+  countyHref: string; showTop?: boolean; expanded: boolean; onToggle: () => void; stretch: boolean;
 }) {
-  const [expanded, setExpanded] = useState(false);
   const tel = phone.replace(/\D/g, '');
   const visiblePrimaryTowns = primaryTowns.slice(0, 8);
   const hiddenPrimaryTowns = primaryTowns.slice(8);
   const extraTowns = [...hiddenPrimaryTowns, ...moreTowns];
   return (
-    <div className="area-card-hover" style={{ borderRadius: 12, background: '#fff', borderBottom: '3px solid transparent', boxShadow: '0 2px 12px rgba(30,43,67,0.06)', transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', alignSelf: 'start', height: 'fit-content' }}>
+    <div className="area-card-hover" style={{ borderRadius: 12, background: '#fff', borderBottom: '3px solid transparent', boxShadow: '0 2px 12px rgba(30,43,67,0.06)', transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', height: stretch ? '100%' : undefined }}>
       <div style={{ width: '100%', height: 220, overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, background: 'linear-gradient(to top, rgba(30,43,67,0.4), transparent)', zIndex: 1, pointerEvents: 'none' }} />
         <img src={img} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: showTop ? 'top' : 'center', transition: 'transform 0.5s' }} className="area-card-img-inner" loading="lazy" decoding="async" />
@@ -177,12 +176,12 @@ function AreaCard({ county, phone, phoneLabel, img, alt, desc, primaryTowns, mor
           {visiblePrimaryTowns.map((t) => <TownPill key={t} town={t} href={townLinks[t]} />)}
           {expanded && extraTowns.map((t) => <TownPill key={t} town={t} href={townLinks[t]} secondary />)}
           {extraTowns.length > 0 && (
-            <button onClick={() => setExpanded(!expanded)} style={{ background: 'none', border: 'none', color: '#BC9155', fontSize: 13, fontWeight: 600, cursor: 'pointer', padding: '4px 0', gridColumn: '1 / -1', textAlign: 'center', marginTop: 4, transition: 'color 0.2s' }}>
+            <button onClick={onToggle} style={{ background: 'none', border: 'none', color: '#BC9155', fontSize: 13, fontWeight: 600, cursor: 'pointer', padding: '4px 0', gridColumn: '1 / -1', textAlign: 'center', marginTop: 4, transition: 'color 0.2s' }}>
               {expanded ? 'Show Less -' : 'See All Towns +'}
             </button>
           )}
         </div>
-        <Link href={countyHref} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: 14, fontWeight: 600, color: '#BC9155', textDecoration: 'none', marginTop: 4, transition: 'gap 0.3s' }} className="area-link-hover">
+        <Link href={countyHref} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: 14, fontWeight: 600, color: '#BC9155', textDecoration: 'none', marginTop: 'auto', paddingTop: 4, transition: 'gap 0.3s' }} className="area-link-hover">
           Learn more about {county} <ArrowIcon />
         </Link>
       </div>
@@ -493,6 +492,7 @@ function FadeUp({ children, delay = 0, stretch }: { children: React.ReactNode; d
 export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'in-person' | 'remote'>('in-person');
+  const [serviceAreaOpen, setServiceAreaOpen] = useState<Record<string, boolean>>({});
 
   const heroData = (getSection<HeroData>(page, 'hero') || getSection<HeroData>(page, 'service_hero') || getSection<HeroData>(page, 'page_hero'));
   const cardsData = getSection<ConsultationCardsSplitData>(page, 'consultation_cards_split');
@@ -542,6 +542,8 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
   const consultationTitleBefore = consultationTitleIndex >= 0 ? consultationTitle.slice(0, consultationTitleIndex) : consultationTitle;
   const consultationTitleAfter =
     consultationTitleIndex >= 0 ? consultationTitle.slice(consultationTitleIndex + consultationHighlight.length) : '';
+  const serviceAreaExpandedCount = Number(Boolean(serviceAreaOpen.fairfield)) + Number(Boolean(serviceAreaOpen.newHaven));
+  const shouldMatchServiceAreaHeights = serviceAreaExpandedCount === 0 || serviceAreaExpandedCount === 2;
 
   // Split title on "Consultation" for gold accent
   const accentWord = 'Consultation';
@@ -857,7 +859,7 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
             </div>
           </FadeUp>
           <FadeUp delay={100}>
-            <div className="two-col-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, alignItems: 'start' }}>
+            <div className="two-col-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, alignItems: shouldMatchServiceAreaHeights ? 'stretch' : 'start' }}>
               <AreaCard
                 county="Fairfield County"
                 phone="(203) 919-9616"
@@ -869,6 +871,9 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
                 moreTowns={FAIRFIELD_TOWNS_MORE}
                 townLinks={FAIRFIELD_TOWN_LINKS}
                 countyHref="/fairfield-county/"
+                expanded={Boolean(serviceAreaOpen.fairfield)}
+                onToggle={() => setServiceAreaOpen((current) => ({ ...current, fairfield: !current.fairfield }))}
+                stretch={shouldMatchServiceAreaHeights}
               />
               <AreaCard
                 county="New Haven County"
@@ -882,6 +887,9 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
                 townLinks={NEW_HAVEN_TOWN_LINKS}
                 countyHref="/new-haven-county/"
                 showTop
+                expanded={Boolean(serviceAreaOpen.newHaven)}
+                onToggle={() => setServiceAreaOpen((current) => ({ ...current, newHaven: !current.newHaven }))}
+                stretch={shouldMatchServiceAreaHeights}
               />
             </div>
           </FadeUp>

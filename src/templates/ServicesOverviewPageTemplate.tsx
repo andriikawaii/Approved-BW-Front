@@ -611,6 +611,10 @@ function ServicesAreasSection({
   setCountyOpen: React.Dispatch<React.SetStateAction<Record<number, boolean>>>;
 }) {
   const areasFadeRef = useFadeUp();
+  const counties = data?.counties || [];
+  const expandableCount = counties.filter((county: any) => (county.extra_towns || []).length > 0).length;
+  const expandedCount = counties.filter((county: any, index: number) => (county.extra_towns || []).length > 0 && countyOpen[index]).length;
+  const shouldMatchCardHeights = expandedCount === 0 || (expandableCount > 0 && expandedCount === expandableCount);
 
   return (
     <section ref={areasFadeRef} className="bg-[#f5f1e9] px-5 py-24 md:px-10">
@@ -627,8 +631,8 @@ function ServicesAreasSection({
           ) : null}
         </div>
 
-        <div className="fade-up grid gap-8 lg:grid-cols-2" style={{ ...fadeUpStyle, transitionDelay: "0.15s" }}>
-          {(data?.counties || []).map((county: any, index: number) => {
+        <div className={cls("fade-up grid gap-8 lg:grid-cols-2", shouldMatchCardHeights ? "items-stretch" : "items-start")} style={{ ...fadeUpStyle, transitionDelay: "0.15s" }}>
+          {counties.map((county: any, index: number) => {
             const expanded = !!countyOpen[index];
             const mainTowns = county.towns || [];
             const extraTowns = county.extra_towns || [];
@@ -638,7 +642,10 @@ function ServicesAreasSection({
             return (
               <article
                 key={`${county.name || "county"}-${index}`}
-                className="flex flex-col overflow-hidden rounded-[12px] border-b-[3px] border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1.5 hover:border-b-[#bc9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]"
+                className={cls(
+                  "flex flex-col overflow-hidden rounded-[12px] border-b-[3px] border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1.5 hover:border-b-[#bc9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]",
+                  shouldMatchCardHeights && "h-full",
+                )}
               >
                 {/* Image with gradient overlay + zoom */}
                 <div className="group relative h-[220px] overflow-hidden">

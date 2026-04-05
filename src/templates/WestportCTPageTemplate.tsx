@@ -811,7 +811,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
         </div>
 
         {/* ── 14. TRUST STRIP ─────────────────────────────────────────── */}
-        <section className="gwch-trust-strip">
+        <section className="gwch-trust-strip" role="region" aria-label="Trust indicators">
           <div className="gwch-trust-strip-bg" />
           <div className="gwch-trust-strip-inner">
             {[
@@ -821,53 +821,53 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                   </svg>
                 ),
-                label: 'Google Rating',
-                value: '4.9',
-                url: 'https://www.google.com/maps/place/BuiltWell',
+                text: 'Google Rating 4.9',
+                ariaLabel: 'Google Rating 4.9',
+                url: 'https://www.google.com/search?q=builtwell+ct+reviews',
               },
               {
                 icon: (
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                    <polyline points="22 4 12 14.01 9 11.01" />
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M9 12l2 2 4-4" />
                   </svg>
                 ),
-                label: 'Trusted on',
-                value: 'Houzz',
-                url: 'https://www.houzz.com/professionals/general-contractors/builtwell-ct-pfvwus-pf~820498730',
+                text: 'Trusted on Houzz',
+                ariaLabel: 'Trusted on Houzz',
+                url: 'https://www.houzz.com/professionals/general-contractors/builtwell-ct',
               },
               {
                 icon: (
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                    <line x1="16" y1="2" x2="16" y2="6" />
-                    <line x1="8" y1="2" x2="8" y2="6" />
-                    <line x1="3" y1="10" x2="21" y2="10" />
+                    <rect x="3" y="4" width="18" height="16" rx="2" />
+                    <path d="M8 2v4M16 2v4M3 10h18" />
                   </svg>
                 ),
-                label: 'CT HIC License',
-                value: '#0668405',
+                text: 'CT HIC License #0668405',
                 url: 'https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx',
               },
               {
                 icon: (
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                    <polyline points="22 4 12 14.01 9 11.01" />
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M9 12l2 2 4-4" />
                   </svg>
                 ),
-                label: 'Verified on',
-                value: 'Angi',
-                url: 'https://www.angi.com/companylist/us/ct/fairfield/builtwell-ct-reviews-10768',
+                text: 'Verified on Angi',
+                ariaLabel: 'Verified on Angi',
+                url: 'https://www.angi.com/companylist/us/ct/orange/builtwell-ct-reviews-',
               },
             ].map((item, i, arr) => (
               <div key={i} className="gwch-trust-strip-item-wrap">
-                <a href={item.url} target="_blank" rel="noopener noreferrer" className="gwch-trust-strip-item">
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="gwch-trust-strip-item"
+                  aria-label={item.ariaLabel || item.text}
+                >
                   <span className="gwch-trust-strip-icon">{item.icon}</span>
-                  <span className="gwch-trust-strip-text">
-                    <span className="gwch-trust-strip-label">{item.label}</span>
-                    <span className="gwch-trust-strip-value">{item.value}</span>
-                  </span>
+                  <span className="gwch-trust-strip-copy">{item.text}</span>
                 </a>
                 {i < arr.length - 1 && <div className="gwch-trust-divider" />}
               </div>
@@ -1120,18 +1120,29 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
 
         /* ── TRUST STRIP ── */
         .gwch-trust-strip { position: relative; overflow: hidden; background: linear-gradient(135deg, #1e2b43 0%, #151e30 100%); padding: 56px 40px; }
-        .gwch-trust-strip-bg { position: absolute; inset: 0; background: url('/hero/builtwell-job-site-aerial-hero-ct.jpg') center/cover; opacity: 0.12; }
-        .gwch-trust-strip-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0; }
+        .gwch-trust-strip-bg { position: absolute; inset: 0; background: url('/hero/builtwell-job-site-aerial-hero-ct.jpg') center/cover no-repeat; opacity: 0.12; }
+        .gwch-trust-strip-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap; }
         .gwch-trust-strip-item-wrap { display: contents; }
-        .gwch-trust-strip-item { display: flex; align-items: center; gap: 10px; padding: 20px 32px; min-width: 180px; flex: 1; flex-direction: column; text-align: center; color: rgba(255,255,255,0.9); transition: all 0.3s; cursor: pointer; text-decoration: none; }
+        .gwch-trust-strip-item { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 32px; min-width: 180px; flex: 1; font-size: 13px; font-weight: 600; line-height: 1.4; letter-spacing: 0.4px; white-space: nowrap; text-align: center; color: rgba(255,255,255,0.9); text-decoration: none; transition: all 0.3s; }
         .gwch-trust-strip-item:hover { transform: translateY(-2px); color: var(--gwch-gold); }
-        .gwch-trust-strip-icon { color: var(--gwch-gold); }
-        .gwch-trust-strip-text { display: flex; flex-direction: column; gap: 2px; }
-        .gwch-trust-strip-label { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
-        .gwch-trust-strip-value { font-size: 14px; font-weight: 700; }
-        .gwch-trust-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); display: none; }
+        .gwch-trust-strip-icon { color: var(--gwch-gold); flex-shrink: 0; }
+        .gwch-trust-strip-icon :global(svg) { width: 22px; height: 22px; filter: drop-shadow(0 2px 4px rgba(188,145,85,0.3)); }
+        .gwch-trust-strip-copy { display: inline-flex; align-items: center; justify-content: center; }
+        .gwch-trust-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); flex-shrink: 0; display: none; }
         @media (min-width: 1024px) { .gwch-trust-divider { display: block; } }
-        @media (max-width: 768px) { .gwch-trust-strip { padding: 40px 20px; } }
+        @media (max-width: 768px) {
+          .gwch-trust-strip { padding: 40px 24px; }
+          .gwch-trust-strip-inner { gap: 0; }
+          .gwch-trust-strip-item { padding: 16px 20px; min-width: 140px; font-size: 12px; }
+          .gwch-trust-divider { display: none; }
+        }
+        @media (max-width: 560px) {
+          .gwch-trust-strip { padding: 32px 20px; }
+          .gwch-trust-strip-inner { gap: 0; flex-wrap: wrap; }
+          .gwch-trust-strip-item { padding: 16px 12px; min-width: 33.33%; font-size: 11px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; white-space: normal; }
+          .gwch-trust-strip-icon :global(svg) { width: 18px; height: 18px; }
+          .gwch-trust-divider { display: none; }
+        }
       `}</style>
     </div>
   );

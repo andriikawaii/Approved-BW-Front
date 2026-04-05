@@ -877,6 +877,8 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
   const lead = section<any>(page, "lead_form");
   const related = section<any>(page, "project_highlights");
   const normalizedSlug = (page.slug || "").replace(/^\/+|\/+$/g, "");
+  const isDecksPorchesPage = normalizedSlug === "decks-porches";
+  const usesReferenceHeroCtas = isDecksPorchesPage || normalizedSlug === "remodeling-design-planning";
   const serviceRoot = normalizedSlug.split("/")[0] || "kitchen-remodeling";
   const serviceLabel = (hero?.title || "")
     .replace(/\s+in\s+connecticut$/i, "")
@@ -959,7 +961,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
   }, []);
 
   return (
-    <div className="bg-white text-[#1E2B43]">
+    <div className={cx("bg-white text-[#1E2B43]", usesReferenceHeroCtas && "decks-porches-ref-page")}>
       <main id="main">
         <section className="relative isolate overflow-hidden bg-[#151E30] px-5 pb-8 pt-[72px] text-white sm:pb-8 sm:pt-[84px] md:px-10 md:pb-10 md:pt-[104px]">
           <div
@@ -1005,12 +1007,12 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             <p className="mt-4 max-w-[560px] text-[17px] leading-[1.7] text-white/80">
               {hero?.subtitle}
             </p>
-            <div className="mt-7 flex w-full max-w-[620px] flex-col items-center gap-[14px] sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center">
+            <div className={cx("mt-7 flex w-full max-w-[620px] flex-col items-center gap-[14px] sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center", usesReferenceHeroCtas && "decks-hero-ctas")}>
               {ctaPhones.map((item) => (
                 <a
                   key={item.label}
                   href={`tel:${(item.number || "").replace(/\D/g, "")}`}
-                  className="min-w-[190px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
+                  className={usesReferenceHeroCtas ? "decks-hero-cta-btn" : "min-w-[190px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]"}
                 >
                   <span className="text-[15px] font-semibold tracking-[0.1px] text-white">
                     {`${normalizePhoneChipLabel(item.label)}: ${item.number}`}
@@ -1019,7 +1021,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
               ))}
               <a
                 href={hero?.primary_cta?.url || "#contact"}
-                className="order-first min-w-[220px] rounded-[8px] border border-[#BC9155] bg-[#BC9155] px-8 py-[14px] text-center text-[15px] font-semibold text-white transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#D4A95A] hover:bg-[#D4A95A] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
+                className={usesReferenceHeroCtas ? "order-first decks-hero-cta-btn decks-hero-cta-btn--primary" : "order-first min-w-[220px] rounded-[8px] border border-[#BC9155] bg-[#BC9155] px-8 py-[14px] text-center text-[15px] font-semibold text-white transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#D4A95A] hover:bg-[#D4A95A] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"}
               >
                 {hero?.primary_cta?.label || "Get Your Free Estimate"}
               </a>
@@ -1874,6 +1876,61 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
           font-size: 13px;
           color: rgba(255, 255, 255, 0.4);
         }
+        .decks-porches-ref-page .decks-hero-ctas {
+          display: flex;
+          gap: 14px;
+          margin-top: 28px;
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+        }
+        .decks-porches-ref-page .decks-hero-cta-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 14px 32px;
+          border-radius: 8px;
+          background: rgba(10, 18, 35, 0.42);
+          border: 1px solid rgba(255, 255, 255, 0.22);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          color: #fff;
+          text-decoration: none;
+          font-size: 15px;
+          font-weight: 600;
+          letter-spacing: 0.3px;
+          transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+          white-space: nowrap;
+          transform: translateY(0);
+          will-change: transform, box-shadow, background, border-color;
+          min-width: 190px;
+          text-align: center;
+        }
+        .decks-porches-ref-page .decks-hero-cta-btn:hover {
+          background: rgba(10, 18, 35, 0.62);
+          border-color: rgba(255, 255, 255, 0.35);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        .decks-porches-ref-page .decks-hero-cta-btn--primary {
+          min-width: 220px;
+          background: #bc9155;
+          border: 1px solid #bc9155;
+          color: #fff;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+        }
+        .decks-porches-ref-page .decks-hero-cta-btn--primary:hover {
+          background: #d4a95a;
+          border-color: #d4a95a;
+          box-shadow: 0 8px 24px rgba(188, 145, 85, 0.4);
+        }
+        .decks-porches-ref-page .decks-hero-cta-btn:focus-visible {
+          outline: 2px solid #fff;
+          outline-offset: 2px;
+          box-shadow: 0 0 0 4px rgba(188, 145, 85, 0.4);
+        }
         .kitchen-trust-strip {
           background: linear-gradient(135deg, #1e2b43 0%, #151e30 100%);
           padding: 56px 40px;
@@ -2041,6 +2098,19 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
           }
         }
         @media (max-width: 768px) {
+          .decks-porches-ref-page .decks-hero-ctas {
+            flex-direction: column;
+            align-items: center;
+          }
+          .decks-porches-ref-page .decks-hero-cta-btn {
+            min-height: 44px;
+            width: 100%;
+            max-width: 300px;
+            min-width: 0;
+            justify-content: center;
+            font-size: 14px;
+            padding: 12px 24px;
+          }
           .kitchen-trust-strip-divider {
             display: none;
           }

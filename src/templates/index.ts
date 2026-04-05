@@ -12,6 +12,7 @@ import { DefaultPageTemplate } from './DefaultPageTemplate';
 import { FaqPageTemplate } from './FaqPageTemplate';
 import { FinancingPageTemplate } from './FinancingPageTemplate';
 import { HomePageTemplate } from './HomePageTemplate';
+import { HomeownerHubPageTemplate } from './HomeownerHubPageTemplate';
 import { InsuranceRestorationPageTemplate } from './InsuranceRestorationPageTemplate';
 import { KitchenRemodelingCityPageTemplate } from './KitchenRemodelingCityPageTemplate';
 import { KitchenRemodelingPageTemplate } from './KitchenRemodelingPageTemplate';
@@ -198,6 +199,10 @@ export function renderTemplate(page: CMSPage) {
 
   if (normalizePageSlug(page.slug) === 'financing') {
     return createElement(FinancingPageTemplate, { page });
+  }
+
+  if (normalizePageSlug(page.slug) === 'homeowner-hub') {
+    return createElement(HomeownerHubPageTemplate, { page });
   }
 
   if (normalizePageSlug(page.slug) === 'pricing') {

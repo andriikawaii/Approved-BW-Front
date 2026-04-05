@@ -88,15 +88,9 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
   const contactField = fields.find((field: any) => field.type === "radio_group");
   const messageField = fields.find((field: any) => field.type === "textarea");
   const heroCtas = [
-    { label: "Fairfield County", value: "(203) 919-9616", url: "tel:2039199616", primary: false },
-    { label: "New Haven County", value: "(203) 466-9148", url: "tel:2034669148", primary: false },
-    { label: "Free Estimate", value: "Schedule Now", url: "#contact", primary: true },
-  ];
-  const topTrustItems = [
-    { value: "15+", label: "Years of Experience", icon: "value" },
-    { value: "100+", label: "Completed Projects", icon: "value" },
-    { value: "4.9", label: "Google Rating", icon: "value" },
-    { value: "", label: "Fully Bonded & Insured", icon: "shield" },
+    { text: "Get Your Free Estimate", url: "#contact", primary: true },
+    { text: "Fairfield: (203) 919-9616", url: "tel:2039199616", primary: false },
+    { text: "New Haven: (203) 466-9148", url: "tel:2034669148", primary: false },
   ];
   const generalTopFaq = FAQ_REFERENCE_GENERAL.slice(0, 5);
   const generalMoreFaq = FAQ_REFERENCE_GENERAL.slice(5);
@@ -118,15 +112,13 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
             {faqHeroParts.after}
           </h1>
           <p className="mt-4 max-w-[560px] text-[17px] leading-[1.7] text-white/85 [text-shadow:0_1px_8px_rgba(0,0,0,0.4)]">{FAQ_REFERENCE_HERO.subtitle}</p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <div className="faq-hero-ctas mt-8 flex flex-wrap justify-center gap-4">
             {heroCtas.map((cta) => (
-              <div key={`${cta.label}-${cta.value}`}>
+              <div key={cta.text}>
                 {linkNode(
                   cta.url,
-                  <span className={cls("hero-cta-btn flex min-w-[180px] flex-col items-center rounded-[8px] px-7 py-4 text-center transition-all", cta.primary && "hero-cta-primary")}>
-                    <span className="hero-cta-label text-[11px] font-semibold uppercase tracking-[1.2px]">{cta.label}</span>
-                    <span className="hero-cta-phone text-[18px] font-semibold">{cta.value}</span>
-                  </span>,
+                  cta.text,
+                  cls("hero-cta-btn", cta.primary && "hero-cta-primary"),
                 )}
               </div>
             ))}
@@ -136,20 +128,32 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
 
       <section className="trust-bar">
         <div className="trust-bar-inner">
-          {topTrustItems.map((item, index) => (
-            <div key={`${item.label}-${index}`} className="trust-item">
-              {item.icon === "shield" ? (
-                <div className="trust-number trust-number-icon">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  </svg>
-                </div>
-              ) : (
-                <div className="trust-number">{item.value}</div>
-              )}
-              <div className="trust-label">{item.label}</div>
+          <div className="trust-item">
+            <div className="trust-number">15+</div>
+            <div className="trust-label">Years of Experience</div>
+          </div>
+          <div className="trust-item">
+            <div className="trust-number">100+</div>
+            <div className="trust-label">Completed Projects</div>
+          </div>
+          <a
+            href="https://www.google.com/maps/search/?api=1&query=BuiltWell+CT,+206A+Boston+Post+Road,+Orange,+CT+06477"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="trust-item trust-item-link"
+            aria-label="Google Rating 4.9"
+          >
+            <div className="trust-number">4.9</div>
+            <div className="trust-label">Google Rating</div>
+          </a>
+          <div className="trust-item">
+            <div className="trust-number trust-number-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
             </div>
-          ))}
+            <div className="trust-label">Fully Bonded &amp; Insured</div>
+          </div>
         </div>
       </section>
 
@@ -247,13 +251,6 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
             Google Rating 4.9
           </a>
           <div className="trust-strip-divider" />
-          <a href="https://www.bbb.org/search?find_country=USA&find_text=builtwell+ct&find_loc=Orange%2C+CT" target="_blank" rel="noopener noreferrer" className="trust-strip-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            </svg>
-            BBB A+ Accredited
-          </a>
-          <div className="trust-strip-divider" />
           <a href="https://www.houzz.com/professionals/general-contractors/builtwell-ct" target="_blank" rel="noopener noreferrer" className="trust-strip-item" aria-label="Trusted on Houzz">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <circle cx="12" cy="12" r="10" />
@@ -270,12 +267,12 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
             CT HIC License #0668405
           </a>
           <div className="trust-strip-divider" />
-          <a href="https://www.angi.com/companylist/us/ct/orange/builtwell-ct-reviews-" target="_blank" rel="noopener noreferrer" className="trust-strip-item" aria-label="Verified on Angi and Thumbtack">
+          <a href="https://www.angi.com/companylist/us/ct/orange/builtwell-ct-reviews-" target="_blank" rel="noopener noreferrer" className="trust-strip-item" aria-label="Verified on Angi">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <circle cx="12" cy="12" r="10" />
               <path d="M9 12l2 2 4-4" />
             </svg>
-            Verified on Angi &amp; Thumbtack
+            Verified on Angi
           </a>
         </div>
       </div>
@@ -325,41 +322,49 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
 
       <style jsx global>{`
         .faq-ref .hero-cta-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 14px 32px;
+          border-radius: 8px;
           background: rgba(10, 18, 35, 0.42);
-          border: 1px solid rgba(255, 255, 255, 0.18);
-          border-bottom: 2px solid #bc9155;
+          border: 1px solid rgba(255, 255, 255, 0.22);
           backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
           color: #ffffff;
           text-decoration: none;
+          font-family: "Inter", sans-serif;
+          font-size: 15px;
+          font-weight: 600;
+          letter-spacing: 0.3px;
+          white-space: nowrap;
+          transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
         }
         .faq-ref .hero-cta-btn:hover {
           background: rgba(10, 18, 35, 0.62);
-          border-color: rgba(255, 255, 255, 0.28);
-          border-bottom-color: #bc9155;
+          border-color: rgba(255, 255, 255, 0.35);
           transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(188, 145, 85, 0.2);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
         .faq-ref .hero-cta-btn.hero-cta-primary {
           background: #bc9155;
           border: 1px solid #bc9155;
-          border-bottom: 2px solid #a57d48;
           backdrop-filter: none;
+          -webkit-backdrop-filter: none;
         }
         .faq-ref .hero-cta-btn.hero-cta-primary:hover {
           background: #d4a95a;
           border-color: #d4a95a;
-          border-bottom-color: #a57d48;
           box-shadow: 0 8px 24px rgba(188, 145, 85, 0.4);
         }
-        .faq-ref .hero-cta-label {
-          opacity: 0.7;
-          margin-bottom: 4px;
-        }
-        .faq-ref .hero-cta-primary .hero-cta-label {
-          opacity: 0.9;
-        }
-        .faq-ref .hero-cta-phone {
-          font-family: "Playfair Display", serif;
+        .faq-ref .faq-hero-ctas {
+          display: flex;
+          gap: 14px;
+          margin-top: 28px;
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
         }
         .faq-ref .trust-bar {
           background: linear-gradient(135deg, #1e2b43 0%, #151e30 100%);
@@ -378,6 +383,12 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
           border-right: 1px solid rgba(188, 145, 85, 0.12);
           cursor: default;
           transition: background 0.3s, transform 0.3s;
+        }
+        .faq-ref .trust-item-link {
+          display: block;
+          text-decoration: none;
+          color: inherit;
+          cursor: pointer;
         }
         .faq-ref .trust-item:hover {
           background: rgba(188, 145, 85, 0.08);
@@ -680,16 +691,6 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
           color: #bc9155;
         }
         @media (max-width: 1024px) {
-          .faq-ref .trust-bar-inner {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          .faq-ref .trust-item {
-            padding: 24px 16px;
-            background: rgba(188, 145, 85, 0.08);
-          }
-          .faq-ref .trust-item:hover {
-            transform: none;
-          }
           .faq-ref .trust-strip {
             padding: 40px 24px;
           }
@@ -709,6 +710,28 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
           }
         }
         @media (max-width: 768px) {
+          .faq-ref .trust-bar-inner {
+            grid-template-columns: repeat(2, 1fr);
+          }
+          .faq-ref .trust-item {
+            padding: 24px 16px;
+            background: rgba(188, 145, 85, 0.08);
+          }
+          .faq-ref .trust-item:hover {
+            transform: none;
+          }
+          .faq-ref .faq-hero-ctas {
+            flex-direction: column;
+            align-items: center;
+          }
+          .faq-ref .hero-cta-btn {
+            min-height: 44px;
+            width: 100%;
+            max-width: 300px;
+            justify-content: center;
+            font-size: 14px;
+            padding: 12px 24px;
+          }
           .faq-ref .trust-strip {
             padding: 32px 20px;
           }
@@ -717,9 +740,14 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
             flex-wrap: wrap;
           }
           .faq-ref .trust-strip-item {
-            padding: 12px 16px;
-            min-width: 50%;
+            padding: 16px 12px;
+            min-width: 33.33%;
             font-size: 11px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
           }
           .faq-ref .trust-strip-item svg {
             width: 18px;

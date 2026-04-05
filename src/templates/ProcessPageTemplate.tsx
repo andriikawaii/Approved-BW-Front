@@ -825,6 +825,18 @@ function ProcessAreasSection({
 }) {
   const titleParts = parts(data?.title, data?.highlight_text);
   const areasFadeRef = useFadeUp();
+  const counties = data?.counties || [];
+  const expandableCount = counties.filter((county: any) => {
+    const allMainTowns = county.towns || [];
+    const extraTowns = [...allMainTowns.slice(8), ...(county.extra_towns || [])];
+    return extraTowns.length > 0;
+  }).length;
+  const expandedCount = counties.filter((county: any, index: number) => {
+    const allMainTowns = county.towns || [];
+    const extraTowns = [...allMainTowns.slice(8), ...(county.extra_towns || [])];
+    return extraTowns.length > 0 && countyOpen[index];
+  }).length;
+  const shouldMatchCardHeights = expandedCount === 0 || (expandableCount > 0 && expandedCount === expandableCount);
 
   return (
     <section ref={areasFadeRef} className="bg-[#f5f1e9] px-5 py-24 md:px-10">
@@ -842,10 +854,13 @@ function ProcessAreasSection({
         </div>
 
         <div
-          className="fade-up mx-auto grid max-w-[640px] grid-cols-1 items-start gap-8 lg:max-w-none lg:grid-cols-2"
+          className={cls(
+            "fade-up mx-auto grid max-w-[640px] grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-2",
+            shouldMatchCardHeights ? "items-stretch" : "items-start",
+          )}
           style={{ ...fadeUpStyle, transitionDelay: "0.15s" }}
         >
-          {(data?.counties || []).map((county: any, index: number) => {
+          {counties.map((county: any, index: number) => {
             const expanded = !!countyOpen[index];
             const allMainTowns = county.towns || [];
             const mainTowns = allMainTowns.slice(0, 8);
@@ -856,7 +871,10 @@ function ProcessAreasSection({
             return (
               <article
                 key={`${county.name || "county"}-${index}`}
-                className="flex w-full self-start flex-col overflow-hidden rounded-[12px] border-b-[3px] border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-[6px] hover:border-b-[#bc9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]"
+                className={cls(
+                  "flex w-full flex-col overflow-hidden rounded-[12px] border-b-[3px] border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-[6px] hover:border-b-[#bc9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]",
+                  shouldMatchCardHeights && "h-full",
+                )}
               >
                 {/* Image with gradient overlay + zoom */}
                 <div className="group relative h-[220px] overflow-hidden">
@@ -927,7 +945,7 @@ function ProcessAreasSection({
                           <span>{county.cta_label || `Learn more about ${county.name}`}</span>
                           <ArrowRight className="h-4 w-4" />
                         </>,
-                        "mt-5 inline-flex items-center justify-center gap-1.5 text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-2.5",
+                        "mt-auto inline-flex items-center justify-center gap-1.5 pt-5 text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-2.5",
                       )
                     : null}
                 </div>
