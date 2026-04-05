@@ -25,6 +25,11 @@ export function WestportCTPageTemplate({ page }: { page: CMSPage }) {
   const housingSection = page.sections.find((s) => s.type === 'full_width_text_dark');
   const housingBg = (housingSection?.data as { background_image?: string } | undefined)?.background_image || '/images/areas/westport-ct-saugatuck-river.jpg';
 
+  const richTextImageSections = page.sections.filter((s) => s.type === 'rich_text_image');
+  const altImg1 = (richTextImageSections[0]?.data as { image?: string } | undefined)?.image || '';
+  const altImg2 = (richTextImageSections[1]?.data as { image?: string } | undefined)?.image || '';
+  const altImg3 = (richTextImageSections[2]?.data as { image?: string } | undefined)?.image || '';
+
 
   const primaryServices = [
     { title: 'Kitchen Remodeling', href: '/kitchen-remodeling/westport-ct/', img: '/images/services/service-kitchen.jpg', desc: 'Full kitchen renovations in Westport including cabinetry, countertops, tile, electrical, plumbing, and permits. Custom cabinet lead times run 8 to 12 weeks in this market.', price: '$40K–$250K+', time: '6–12 weeks' },
@@ -228,7 +233,7 @@ export function WestportCTPageTemplate({ page }: { page: CMSPage }) {
             <FadeUp>
               <div className="gwch-alt-block">
                 <div className="gwch-alt-img">
-                  <img src="/images/areas/westport-ct-colonial-home.jpg" alt="Postwar Cape Cod style home in Westport CT typical of 1940s-1970s housing stock" />
+                  <img src={altImg1} alt="Postwar Cape Cod style home in Westport CT typical of 1940s-1970s housing stock" />
                 </div>
                 <div className="gwch-alt-content">
                   <h3 className="gwch-h3">Postwar Colonials, Cape Cods, and Ranches</h3>
@@ -255,7 +260,7 @@ export function WestportCTPageTemplate({ page }: { page: CMSPage }) {
                   </p>
                 </div>
                 <div className="gwch-alt-img">
-                  <img src="/images/areas/westport-ct-coastal-waterfront.jpg" alt="Waterfront homes along the Saugatuck River in Westport CT flood zone" />
+                  <img src={altImg2} alt="Waterfront homes along the Saugatuck River in Westport CT flood zone" />
                 </div>
               </div>
             </FadeUp>
@@ -264,7 +269,7 @@ export function WestportCTPageTemplate({ page }: { page: CMSPage }) {
             <FadeUp delay={120}>
               <div className="gwch-alt-block">
                 <div className="gwch-alt-img">
-                  <img src="/images/areas/westport-ct-rock-ledge.jpg" alt="Rock ledge excavation for residential construction similar to Westport CT inland geology" />
+                  <img src={altImg3} alt="Rock ledge excavation for residential construction similar to Westport CT inland geology" />
                 </div>
                 <div className="gwch-alt-content">
                   <h3 className="gwch-h3">Ledge Rock and Inland Geology</h3>
