@@ -28,6 +28,7 @@ import {
 type HeroData = {
   headline?: string;
   subheadline?: string;
+  background_image?: string;
   badges?: Array<{ label?: string; value?: string | null; url?: string; is_primary?: boolean }>;
 };
 
