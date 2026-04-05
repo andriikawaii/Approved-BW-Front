@@ -33,14 +33,8 @@ const FALLBACK_MEDIA: Record<string, string> = {
 };
 
 function localMedia(value?: string | null, fallback = "") {
-  const source = value || "";
-  if (!source) return fallback;
-  try {
-    const normalized = source.startsWith("http") ? new URL(source).pathname : source;
-    return FALLBACK_MEDIA[source] || FALLBACK_MEDIA[normalized] || source || fallback;
-  } catch {
-    return FALLBACK_MEDIA[source] || source || fallback;
-  }
+  if (!value) return fallback;
+  return FALLBACK_MEDIA[value] || value;
 }
 
 function paras(value?: string | null) {

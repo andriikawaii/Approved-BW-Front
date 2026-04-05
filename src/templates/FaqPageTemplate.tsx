@@ -14,11 +14,7 @@ const opts = (value?: Array<string | { label: string; value: string }> | null) =
 
 function media(value?: string | null, fallback = "") {
   if (!value) return fallback;
-  try {
-    return value.startsWith("http") ? new URL(value).pathname : value;
-  } catch {
-    return value;
-  }
+  return value;
 }
 
 function parts(text?: string | null, mark?: string | null) {

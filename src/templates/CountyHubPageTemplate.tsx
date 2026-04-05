@@ -170,14 +170,8 @@ const COUNTY_FEATURED_OVERRIDES: Record<string, Array<{ title: string; body: str
 };
 
 function media(value?: string | null, fallback = "") {
-  const source = value || "";
-  if (!source) return fallback;
-  try {
-    const normalized = source.startsWith("http") ? new URL(source).pathname : source;
-    return FALLBACK_MEDIA[source] || FALLBACK_MEDIA[normalized] || normalized || fallback;
-  } catch {
-    return FALLBACK_MEDIA[source] || source || fallback;
-  }
+  if (!value) return fallback;
+  return value;
 }
 
 function parts(text?: string | null, mark?: string | null) {

@@ -194,7 +194,7 @@ function normalizeMediaPath(value?: string | null) {
     const storageIndex = url.pathname.indexOf(storagePrefix);
 
     if (storageIndex === -1) {
-      return url.pathname || value;
+      return value;
     }
 
     const relativePath = url.pathname.slice(storageIndex + storagePrefix.length);
