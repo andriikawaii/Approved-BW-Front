@@ -41,6 +41,8 @@ type RichTextData = {
   highlight_text?: string | null;
   content?: string;
   style_variant?: string;
+  image?: string | null;
+  image_alt?: string | null;
   cta?: {
     label?: string;
     url?: string;
@@ -80,6 +82,8 @@ type CaseStudyCard = {
   quote: string;
   attribution: string;
   link: string;
+  image?: string | null;
+  image_alt?: string | null;
 };
 
 type TrustLinkItem = {
@@ -204,6 +208,8 @@ function parseCaseStudy(block: RichTextData): CaseStudyCard {
     quote: values.get("quote") || "",
     attribution: values.get("attribution") || "",
     link: values.get("link") || "#contact",
+    image: block.image || null,
+    image_alt: block.image_alt || null,
   };
 }
 
@@ -297,13 +303,13 @@ function CaseStudyGrid({ cards }: { cards: CaseStudyCard[] }) {
       <div className="mx-auto max-w-[1240px]">
         <div className="mx-auto grid max-w-[1200px] gap-8 md:grid-cols-2">
           {cards.map((card, i) => {
-            const image = CARD_IMAGE_MAP[card.title] || "/portfolio/builtwell-contractor-client-consultation-ct.jpeg";
+            const image = media(card.image, CARD_IMAGE_MAP[card.title] || "/portfolio/builtwell-contractor-client-consultation-ct.jpeg");
 
             return (
               <FadeUp key={card.title} delay={i % 2 === 0 ? 0 : 120}>
                 <article className="group/card flex h-full flex-col rounded-[12px] border-b-[3px] border-b-transparent bg-white p-7 shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1.5 hover:border-b-[#BC9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
                   <div className="relative mb-5 h-[280px] overflow-hidden rounded-[8px]">
-                    <img src={image} alt={card.title} className="h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover/card:scale-105" />
+                    <img src={image} alt={card.image_alt || card.title} className="h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover/card:scale-105" />
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[76px] bg-[linear-gradient(to_bottom,transparent_0%,rgba(0,0,0,0.92)_55%,rgba(0,0,0,0.96)_100%)]" />
                     <div className="absolute bottom-0 left-0 z-[2] flex h-[76px] w-1/2 items-end px-[14px] pb-[13px]"><span className="text-[13px] font-extrabold uppercase tracking-[2.5px] text-white">Before</span></div>
                     <div className="absolute bottom-0 right-0 z-[2] flex h-[76px] w-1/2 items-end justify-end px-[14px] pb-[13px]"><span className="text-[13px] font-extrabold uppercase tracking-[2.5px] text-white">After</span></div>
