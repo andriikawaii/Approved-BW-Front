@@ -1,37 +1,11 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import type { CMSPage } from '@/types/cms';
 import { AreasSection as SharedAreasSection, FinancingStrip as SharedFinancingStrip, LeadFormSection as SharedLeadFormSection } from './template-utils';
-
-// ─── FadeUp ───────────────────────────────────────────────────────────────────
-function FadeUp({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
-      { threshold: 0.12 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-  return (
-    <div
-      ref={ref}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(28px)',
-        transition: `opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms`,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
+import FadeUp from '@/src/components/ui/FadeUp';
+import WestportServicesToggle from './WestportServicesToggle';
 
 // ─── SectionLabel ──────────────────────────────────────────────────────────────
 function SectionLabel({ text, dark = false }: { text: string; dark?: boolean }) {
@@ -45,8 +19,6 @@ function SectionLabel({ text, dark = false }: { text: string; dark?: boolean }) 
 
 // ─── Main Template ─────────────────────────────────────────────────────────────
 export function WestportCTPageTemplate({ page }: { page: CMSPage }) {
-  const [servicesOpen, setServicesOpen] = useState(false);
-
   const heroSection = page.sections.find((s) => s.type === 'hero');
   const heroBg = (heroSection?.data as { background_image?: string } | undefined)?.background_image || '/images/areas/westport-ct-downtown.jpg';
 
@@ -55,105 +27,21 @@ export function WestportCTPageTemplate({ page }: { page: CMSPage }) {
 
 
   const primaryServices = [
-    {
-      title: 'Kitchen Remodeling',
-      href: '/kitchen-remodeling/westport-ct/',
-      img: '/images/services/service-kitchen.jpg',
-      desc: 'Full kitchen renovations in Westport including cabinetry, countertops, tile, electrical, plumbing, and permits. Custom cabinet lead times run 8 to 12 weeks in this market.',
-      price: '$40K–$250K+',
-      time: '6–12 weeks',
-    },
-    {
-      title: 'Bathroom Remodeling',
-      href: '/bathroom-remodeling/westport-ct/',
-      img: '/images/services/bathroom-remodel-new.jpg',
-      desc: 'Primary suite renovations, hall bath updates, and full gut remodels for Westport homeowners.',
-      price: '$25K–$120K+',
-      time: '3–6 weeks',
-    },
-    {
-      title: 'Basement Finishing',
-      href: '/basement-finishing/westport-ct/',
-      img: '/images/services/basement-finish-real.jpeg',
-      desc: 'Flood zone awareness before anything else. In Westport, we confirm existing floor elevation relative to Base Flood Elevation before framing begins.',
-      price: '$25K–$100K+',
-      time: '4–8 weeks',
-    },
-    {
-      title: 'Flooring Installation',
-      href: '/flooring/westport-ct/',
-      img: '/images/services/service-flooring.png',
-      desc: 'Hardwood, LVP, tile, and engineered wood. Original hardwood in Westport\'s 1950s colonials is often intact under carpet and worth refinishing.',
-      price: '$6–$25/sqft',
-      time: '2–5 days',
-    },
-    {
-      title: 'Home Additions',
-      href: '/home-additions/',
-      img: '/images/services/living-room-real.jpeg',
-      desc: 'Single-story and second-story additions, sunrooms, and bump-outs with full structural work for Westport homeowners.',
-      price: '$150–$400/sqft',
-      time: '8–16 weeks',
-    },
-    {
-      title: 'Interior Painting',
-      href: '/interior-painting/',
-      img: '/images/services/interior-painting-new.jpg',
-      desc: 'Walls, ceilings, trim, doors, and built-ins with professional-grade paints and proper prep for Westport homes.',
-      price: '$3–$6/sqft',
-      time: '2–5 days',
-    },
+    { title: 'Kitchen Remodeling', href: '/kitchen-remodeling/westport-ct/', img: '/images/services/service-kitchen.jpg', desc: 'Full kitchen renovations in Westport including cabinetry, countertops, tile, electrical, plumbing, and permits. Custom cabinet lead times run 8 to 12 weeks in this market.', price: '$40K–$250K+', time: '6–12 weeks' },
+    { title: 'Bathroom Remodeling', href: '/bathroom-remodeling/westport-ct/', img: '/images/services/bathroom-remodel-new.jpg', desc: 'Primary suite renovations, hall bath updates, and full gut remodels for Westport homeowners.', price: '$25K–$120K+', time: '3–6 weeks' },
+    { title: 'Basement Finishing', href: '/basement-finishing/westport-ct/', img: '/images/services/basement-finish-real.jpeg', desc: 'Flood zone awareness before anything else. In Westport, we confirm existing floor elevation relative to Base Flood Elevation before framing begins.', price: '$25K–$100K+', time: '4–8 weeks' },
+    { title: 'Flooring Installation', href: '/flooring/westport-ct/', img: '/images/services/service-flooring.png', desc: "Hardwood, LVP, tile, and engineered wood. Original hardwood in Westport's 1950s colonials is often intact under carpet and worth refinishing.", price: '$6–$25/sqft', time: '2–5 days' },
+    { title: 'Home Additions', href: '/home-additions/', img: '/images/services/living-room-real.jpeg', desc: 'Single-story and second-story additions, sunrooms, and bump-outs with full structural work for Westport homeowners.', price: '$150–$400/sqft', time: '8–16 weeks' },
+    { title: 'Interior Painting', href: '/interior-painting/', img: '/images/services/interior-painting-new.jpg', desc: 'Walls, ceilings, trim, doors, and built-ins with professional-grade paints and proper prep for Westport homes.', price: '$3–$6/sqft', time: '2–5 days' },
   ];
 
   const moreServices = [
-    {
-      title: 'Interior Carpentry',
-      href: '/interior-carpentry/',
-      img: '/images/services/service-kitchen.jpg',
-      desc: 'Custom millwork, built-in cabinetry, wainscoting, crown molding, coffered ceilings, closet systems, and finish trim for Westport residences.',
-      price: '$75–$150/hr',
-      time: 'Varies',
-    },
-    {
-      title: 'Attic Conversions',
-      href: '/attic-conversions/',
-      img: '/images/services/basement-finish-real.jpeg',
-      desc: 'Converting unfinished attics into bedrooms, offices, or playrooms with full structural assessment in Westport.',
-      price: '$50K–$150K',
-      time: '6–12 weeks',
-    },
-    {
-      title: 'Decks & Porches',
-      href: '/decks-porches/',
-      img: '/images/services/living-room-real.jpeg',
-      desc: 'Pressure-treated lumber, composite, and hardwood. Covered porches, screened-in structures, pergolas, and multi-level decks built for Westport properties.',
-      price: '$15K–$75K',
-      time: '2–4 weeks',
-    },
-    {
-      title: 'Design & Planning',
-      href: '/remodeling-design-planning/',
-      img: '/images/services/service-kitchen.jpg',
-      desc: 'Space planning, material selection, finish coordination, and project documentation before construction begins on your Westport remodel.',
-      price: '$2.5K–$15K',
-      time: '2–6 weeks',
-    },
-    {
-      title: 'Comfort & Accessibility',
-      href: '/comfort-accessibility-remodeling/',
-      img: '/images/services/bathroom-remodel-new.jpg',
-      desc: 'Grab bars, roll-in showers, wider doorways, ramp installation, and first-floor adaptations for Westport homeowners of all ages and abilities.',
-      price: '$5K–$50K',
-      time: '1–4 weeks',
-    },
-    {
-      title: 'Insurance Reconstruction',
-      href: '/insurance-restoration/',
-      img: '/images/services/living-room-real.jpeg',
-      desc: 'Rebuilding Westport homes after fire, water, and storm damage. Full reconstruction once cleanup is complete, working directly with your insurance carrier.',
-      price: '$25K–$250K+',
-      time: '4–16 weeks',
-    },
+    { title: 'Interior Carpentry', href: '/interior-carpentry/', img: '/images/services/service-kitchen.jpg', desc: 'Custom millwork, built-in cabinetry, wainscoting, crown molding, coffered ceilings, closet systems, and finish trim for Westport residences.', price: '$75–$150/hr', time: 'Varies' },
+    { title: 'Attic Conversions', href: '/attic-conversions/', img: '/images/services/basement-finish-real.jpeg', desc: 'Converting unfinished attics into bedrooms, offices, or playrooms with full structural assessment in Westport.', price: '$50K–$150K', time: '6–12 weeks' },
+    { title: 'Decks & Porches', href: '/decks-porches/', img: '/images/services/living-room-real.jpeg', desc: 'Pressure-treated lumber, composite, and hardwood. Covered porches, screened-in structures, pergolas, and multi-level decks built for Westport properties.', price: '$15K–$75K', time: '2–4 weeks' },
+    { title: 'Design & Planning', href: '/remodeling-design-planning/', img: '/images/services/service-kitchen.jpg', desc: 'Space planning, material selection, finish coordination, and project documentation before construction begins on your Westport remodel.', price: '$2.5K–$15K', time: '2–6 weeks' },
+    { title: 'Comfort & Accessibility', href: '/comfort-accessibility-remodeling/', img: '/images/services/bathroom-remodel-new.jpg', desc: 'Grab bars, roll-in showers, wider doorways, ramp installation, and first-floor adaptations for Westport homeowners of all ages and abilities.', price: '$5K–$50K', time: '1–4 weeks' },
+    { title: 'Insurance Reconstruction', href: '/insurance-restoration/', img: '/images/services/living-room-real.jpeg', desc: 'Rebuilding Westport homes after fire, water, and storm damage. Full reconstruction once cleanup is complete, working directly with your insurance carrier.', price: '$25K–$250K+', time: '4–16 weeks' },
   ];
 
   const neighborhoods = [
@@ -641,84 +529,7 @@ export function WestportCTPageTemplate({ page }: { page: CMSPage }) {
               </div>
             </FadeUp>
 
-            <div className="gwch-services-grid">
-              {primaryServices.map((svc, i) => (
-                <FadeUp key={svc.title} delay={i * 40}>
-                  <article className="gwch-service-card">
-                    <div className="gwch-service-img">
-                      <img src={svc.img} alt={svc.title} />
-                    </div>
-                    <div className="gwch-service-body">
-                      <h3 className="gwch-service-title">
-                        <Link href={svc.href}>{svc.title}</Link>
-                      </h3>
-                      <p className="gwch-service-desc">{svc.desc}</p>
-                      <div className="gwch-service-badges">
-                        <span className="gwch-badge"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" /></svg>{svc.price}</span>
-                        <span className="gwch-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>{svc.time}</span>
-                      </div>
-                      <Link href={svc.href} className="gwch-learn-more">
-                        Get Started
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M5 12h14M12 5l7 7-7 7" />
-                        </svg>
-                      </Link>
-                    </div>
-                  </article>
-                </FadeUp>
-              ))}
-            </div>
-
-            <div className={`gwch-services-more${servicesOpen ? ' show' : ''}`}>
-              <div className="gwch-services-grid">
-                {moreServices.map((svc, i) => (
-                  <FadeUp key={svc.title} delay={i * 40}>
-                    <article className="gwch-service-card">
-                      <div className="gwch-service-img">
-                        <img src={svc.img} alt={svc.title} />
-                      </div>
-                      <div className="gwch-service-body">
-                        <h3 className="gwch-service-title">
-                          <Link href={svc.href}>{svc.title}</Link>
-                        </h3>
-                        <p className="gwch-service-desc">{svc.desc}</p>
-                        <div className="gwch-service-badges">
-                          <span className="gwch-badge">{svc.price}</span>
-                          <span className="gwch-badge">{svc.time}</span>
-                        </div>
-                        <Link href={svc.href} className="gwch-learn-more">
-                          Get Started
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M5 12h14M12 5l7 7-7 7" />
-                          </svg>
-                        </Link>
-                      </div>
-                    </article>
-                  </FadeUp>
-                ))}
-              </div>
-            </div>
-
-            <div className="gwch-services-toggle-wrap">
-              <button
-                type="button"
-                className="gwch-services-toggle"
-                onClick={() => setServicesOpen((v) => !v)}
-              >
-                {servicesOpen ? 'Show Less' : 'Show 6 More Services'}
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  style={{ transform: servicesOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}
-                >
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </button>
-            </div>
+            <WestportServicesToggle primaryServices={primaryServices} moreServices={moreServices} />
           </div>
         </section>
 
@@ -883,7 +694,7 @@ export function WestportCTPageTemplate({ page }: { page: CMSPage }) {
         </section>
 
         {/* ── 15. CTA FORM ────────────────────────────────────────────── */}
-        <SharedLeadFormSection page={_page} data={{
+        <SharedLeadFormSection page={page} data={{
           eyebrow: "Get Started",
           title: "Schedule Your Free Consultation",
           title_highlight: "Consultation",
@@ -935,222 +746,7 @@ export function WestportCTPageTemplate({ page }: { page: CMSPage }) {
 
       </main>
 
-      <style jsx global>{`
-        /* ── Variables ── */
-        :root {
-          --gwch-gold: #bc9155;
-          --gwch-gold-dark: #a57d48;
-          --gwch-gold-light: #d4a95a;
-          --gwch-navy: #1e2b43;
-          --gwch-oxford: #151e30;
-          --gwch-muted: #5c677d;
-          --gwch-cream: #f5f1e9;
-          --gwch-border: rgba(30,43,67,0.09);
-        }
-        .gwch-page { background: #fff; color: var(--gwch-navy); font-family: "Inter", sans-serif; }
-        .gwch-label { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #9a7340; margin-bottom: 12px; }
-        .gwch-label-dark { color: #c89b5b; }
-        .gwch-label-line { display: inline-block; width: 10px; height: 2px; background: var(--gwch-gold); }
-        .gwch-label-dark .gwch-label-line { background: #c89b5b; }
-        .gwch-h2 { font-family: "Playfair Display", serif; font-size: clamp(28px, 3.5vw, 44px); font-weight: 700; line-height: 1.2; letter-spacing: -0.5px; color: var(--gwch-navy); margin: 0 0 20px; }
-        .gwch-h2 strong { font-weight: 700; color: var(--gwch-gold); font-style: normal; }
-        .gwch-text-white { color: #fff !important; }
-        .gwch-text-white strong { color: var(--gwch-gold-light) !important; }
-        .gwch-h3 { font-family: "Playfair Display", serif; font-size: 22px; font-weight: 700; line-height: 1.25; color: var(--gwch-navy); margin: 0 0 14px; }
-        .gwch-h3 strong { color: var(--gwch-gold); }
-        .gwch-body-text { font-size: 16px; line-height: 1.85; color: var(--gwch-muted); margin: 0 0 16px; }
-        .gwch-section-header { text-align: center; margin-bottom: 64px; }
-        .gwch-section-header .gwch-h2 { margin-bottom: 16px; }
-        .gwch-section-subtitle { font-size: 17px; line-height: 1.75; color: var(--gwch-muted); max-width: 700px; margin: 0 auto; }
-        .gwch-section-inner { max-width: 1240px; margin: 0 auto; padding: 100px 40px; }
-        .gwch-section-narrow { max-width: 820px; }
-        @media (max-width: 768px) { .gwch-section-inner { padding: 72px 20px; } .gwch-section-header { margin-bottom: 48px; } }
-
-        /* ── HERO ── */
-        .gwch-page-hero { position: relative; isolation: isolate; overflow: hidden; background: var(--gwch-oxford); padding: 0 40px 48px; padding-top: 120px; color: #fff; min-height: 50vh; display: flex; align-items: stretch; }
-        .gwch-hero-bg { position: absolute; inset: 0; background-image: url('/images/areas/greenwich-ct-avenue.jpg'); background-size: cover; background-position: center 30%; opacity: 0.72; z-index: -2; }
-        .gwch-hero-bg-westport { background-image: url('/images/areas/westport-ct-downtown.jpg') !important; background-position: center 40% !important; }
-        .gwch-hero-gradient { position: absolute; inset: 0; background: radial-gradient(ellipse at 97% 97%, rgba(21,30,48,1) 0%, rgba(21,30,48,0.9) 8%, transparent 30%), radial-gradient(ellipse at 3% 97%, rgba(21,30,48,0.9) 0%, transparent 25%), linear-gradient(180deg, rgba(21,30,48,0.35) 0%, rgba(21,30,48,0.2) 30%, rgba(21,30,48,0.45) 65%, rgba(21,30,48,0.92) 100%); z-index: -1; }
-        .gwch-hero-inner { position: relative; max-width: 1240px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; justify-content: center; }
-        .gwch-breadcrumb { list-style: none; margin: 0 0 20px; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 0; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.92); text-shadow: 0 1px 6px rgba(0,0,0,0.7); }
-        .gwch-breadcrumb li { display: flex; align-items: center; }
-        .gwch-bc-sep { color: var(--gwch-gold); margin: 0 10px; font-size: 14px; line-height: 1; user-select: none; }
-        .gwch-breadcrumb a { color: rgba(255,255,255,0.85); text-decoration: none; transition: color 0.2s; }
-        .gwch-breadcrumb a:hover { color: var(--gwch-gold); }
-        .gwch-bc-current { color: #fff; font-weight: 600; }
-        .gwch-hero-h1 { font-family: "Playfair Display", serif; font-size: clamp(40px, 4.5vw, 56px); font-weight: 700; line-height: 1.08; letter-spacing: -0.5px; color: #fff; max-width: 920px; margin: 0 0 12px; text-shadow: 0 2px 20px rgba(0,0,0,0.5); }
-        .gwch-gold { color: var(--gwch-gold); }
-        .gwch-hero-sub { max-width: 560px; font-size: 17px; line-height: 1.7; color: rgba(255,255,255,0.82); margin: 16px auto 0; font-family: "Inter", sans-serif; font-weight: 400; }
-        .gwch-hero-ctas { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 32px; justify-content: center; }
-        .gwch-cta-btn { display: inline-flex; align-items: center; justify-content: center; padding: 15px 32px; border-radius: 8px; background: rgba(10,18,35,0.42); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: #fff; text-decoration: none; text-align: center; font-size: 15px; font-weight: 600; transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s; }
-        .gwch-cta-btn:hover { background: rgba(10,18,35,0.62); border-color: rgba(255,255,255,0.28); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3), 0 0 0 1px rgba(188,145,85,0.2); }
-        .gwch-cta-btn.gwch-cta-primary { background: var(--gwch-gold); border: 1px solid var(--gwch-gold); color: #fff; backdrop-filter: none; }
-        .gwch-cta-btn.gwch-cta-primary:hover { background: #d4a95a; border-color: #d4a95a; box-shadow: 0 8px 24px rgba(188,145,85,0.4); }
-        @media (max-width: 768px) { .gwch-page-hero { padding: 88px 20px 36px; min-height: 40vh; max-height: none; } .gwch-hero-h1 { font-size: clamp(30px, 7vw, 42px); } .gwch-hero-sub { font-size: 15px; } .gwch-hero-ctas { flex-direction: column; align-items: stretch; } .gwch-cta-btn { min-height: 48px; } .gwch-breadcrumb { font-size: 12px; } }
-
-        /* ── TRUST BAR ── */
-        .gwch-trust-bar { border-top: 1px solid rgba(188,145,85,0.2); border-bottom: 1px solid rgba(188,145,85,0.2); background: linear-gradient(135deg, #1e2b43 0%, #151e30 100%); }
-        .gwch-trust-bar-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, 1fr); }
-        @media (min-width: 1024px) { .gwch-trust-bar-inner { grid-template-columns: repeat(4, 1fr); } }
-        .gwch-trust-item { padding: 36px 20px; text-align: center; cursor: default; border-right: 1px solid rgba(188,145,85,0.12); transition: background 0.3s, transform 0.3s; }
-        .gwch-trust-item:last-child { border-right: none; }
-        .gwch-trust-item:hover { background: rgba(188,145,85,0.08); transform: translateY(-3px); }
-        .gwch-trust-val { font-family: "Playfair Display", serif; font-size: 42px; font-weight: 700; line-height: 1; color: var(--gwch-gold); min-height: 52px; display: flex; align-items: center; justify-content: center; transition: color 0.3s, text-shadow 0.3s; }
-        .gwch-trust-item:hover .gwch-trust-val { color: var(--gwch-gold-light); text-shadow: 0 0 20px rgba(188,145,85,0.3); }
-        .gwch-trust-lbl { margin-top: 8px; font-size: 13px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.6); transition: color 0.3s; }
-        .gwch-trust-item:hover .gwch-trust-lbl { color: rgba(255,255,255,0.85); }
-
-        /* ── INTRO ── */
-        .gwch-intro-section { background: #fff; border-bottom: 1px solid var(--gwch-border); }
-        .gwch-intro-inner { max-width: 820px; margin: 0 auto; padding: 80px 40px; }
-        @media (max-width: 768px) { .gwch-intro-inner { padding: 60px 20px; } }
-        .gwch-intro-header { text-align: center; margin-bottom: 24px; }
-        .gwch-intro-body { font-size: 16px; color: var(--gwch-muted); line-height: 1.85; margin-bottom: 0; }
-        .gwch-inline-link { color: var(--gwch-gold); text-decoration: none; font-weight: 600; }
-        .gwch-inline-link:hover { text-decoration: underline; }
-
-        /* ── HOUSING BANNER ── */
-        .gwch-housing-banner { position: relative; overflow: hidden; background: #0d1a2e; padding: 80px 40px; color: #fff; text-align: center; }
-        .gwch-housing-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.3; }
-        .gwch-housing-bg-westport { background-image: url('/images/areas/westport-ct-saugatuck-river.jpg') !important; background-position: center 40% !important; }
-        .gwch-housing-gradient { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(13,26,46,0.6) 0%, rgba(13,26,46,0.4) 40%, rgba(13,26,46,0.7) 100%); }
-        .gwch-housing-inner { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; }
-        .gwch-housing-body { font-size: 17px; line-height: 1.8; color: rgba(255,255,255,0.82); margin: 0; }
-
-        /* ── ALT BLOCKS ── */
-        .gwch-alt-section { background: #fff; padding: 0; }
-        .gwch-alt-container { max-width: 1240px; margin: 0 auto; padding: 80px 40px; display: flex; flex-direction: column; gap: 80px; }
-        @media (max-width: 768px) { .gwch-alt-container { padding: 60px 20px; gap: 60px; } }
-        .gwch-alt-block { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
-        @media (max-width: 900px) { .gwch-alt-block { grid-template-columns: 1fr; gap: 32px; } .gwch-alt-block .gwch-alt-content { order: 1; } .gwch-alt-block .gwch-alt-img { order: 0; } }
-        .gwch-alt-img { border-radius: 10px; overflow: hidden; aspect-ratio: 4/3; }
-        .gwch-alt-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .gwch-alt-content .gwch-body-text:last-child { margin-bottom: 0; }
-
-        /* ── NEIGHBORHOODS ── */
-        .gwch-neighborhoods-section { background: #fff; }
-        .gwch-neighborhoods-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 900px; margin: 0 auto; }
-        @media (max-width: 768px) { .gwch-neighborhoods-grid { grid-template-columns: 1fr; } }
-        .gwch-neighborhood-card { background: #fff; border-radius: 12px; padding: 0; box-shadow: 0 2px 12px rgba(30,43,67,0.06), 0 1px 3px rgba(30,43,67,0.04); border: none; border-bottom: 2px solid transparent; overflow: hidden; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
-        .gwch-neighborhood-card:hover { transform: translateY(-4px); border-bottom-color: var(--gwch-gold); box-shadow: 0 12px 28px rgba(30,43,67,0.1), 0 28px 56px rgba(30,43,67,0.12); }
-        .gwch-neighborhood-card[open] { border-bottom-color: var(--gwch-gold); }
-        .gwch-neighborhood-summary { display: flex; align-items: center; justify-content: space-between; padding: 24px 28px; font-size: 20px; font-weight: 700; font-family: "Playfair Display", serif; color: var(--gwch-navy); cursor: pointer; list-style: none; user-select: none; transition: background 0.2s; }
-        .gwch-neighborhood-summary::-webkit-details-marker { display: none; }
-        .gwch-neighborhood-summary:hover { background: rgba(188,145,85,0.04); }
-        .gwch-summary-icon { color: var(--gwch-gold); flex-shrink: 0; transition: transform 0.2s; }
-        .gwch-neighborhood-card[open] .gwch-summary-icon { transform: rotate(45deg); }
-        .gwch-neighborhood-body { padding: 0 28px 24px; font-size: 15px; line-height: 1.75; color: var(--gwch-muted); margin: 0; }
-
-        /* ── PERMITTING ── */
-        .gwch-permitting-section { background: var(--gwch-cream); }
-
-        /* ── COSTS ── */
-        .gwch-costs-section { background: #fff; }
-        .gwch-cost-h3 { font-family: "Playfair Display", serif; font-size: 22px; font-weight: 700; color: var(--gwch-navy); margin: 48px 0 16px; padding-top: 32px; border-top: 1px solid var(--gwch-border); }
-        .gwch-cost-h3:first-of-type { border-top: none; padding-top: 0; margin-top: 32px; }
-        .gwch-cost-table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        .gwch-cost-table { width: 100%; border-collapse: collapse; font-size: 15px; margin-bottom: 0; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(30,43,67,0.06); table-layout: fixed; }
-        .gwch-cost-table th { background: var(--gwch-navy); text-align: left; padding: 16px 24px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #fff; }
-        .gwch-cost-table td { padding: 16px 24px; border-bottom: 1px solid var(--gwch-border); color: var(--gwch-muted); transition: background 0.15s; }
-        .gwch-cost-table tbody tr:nth-child(even) td { background: rgba(30,43,67,0.02); }
-        .gwch-cost-table tbody tr:hover td { background: rgba(188,145,85,0.06); }
-        .gwch-cost-table tr:last-child td { border-bottom: none; }
-        .gwch-cost-table td:first-child { font-weight: 600; color: var(--gwch-navy); }
-        .gwch-td-price { color: var(--gwch-gold) !important; font-weight: 600; white-space: nowrap; font-family: "Playfair Display", serif; font-size: 16px; }
-        .gwch-cost-note { font-size: 14px; line-height: 1.7; color: var(--gwch-muted); background: var(--gwch-cream); border-left: 3px solid var(--gwch-gold); padding: 12px 16px; border-radius: 0 6px 6px 0; margin: 12px 0 0; }
-        @media (max-width: 900px) { .gwch-cost-table { min-width: 640px; } }
-        @media (max-width: 600px) { .gwch-cost-table { font-size: 13px; } .gwch-cost-table th, .gwch-cost-table td { padding: 10px 12px; } }
-
-        /* ── SERVICES ── */
-        .gwch-services-section { background: var(--gwch-cream); }
-        .gwch-services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-bottom: 24px; }
-        @media (max-width: 900px) { .gwch-services-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 600px) { .gwch-services-grid { grid-template-columns: 1fr; } }
-        .gwch-services-more { display: none; }
-        .gwch-services-more.show { display: block; }
-        .gwch-services-toggle-wrap { text-align: center; margin-top: 48px; }
-        .gwch-services-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 12px 32px; border: 2px solid var(--gwch-gold); border-radius: 6px; background: transparent; color: var(--gwch-gold); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; letter-spacing: 0.3px; }
-        .gwch-services-toggle:hover { background: var(--gwch-gold); color: #fff; }
-        .gwch-service-card { display: flex; height: 100%; flex-direction: column; background: #fff; border-radius: 8px; overflow: hidden; border-bottom: 2px solid transparent; box-shadow: 0 2px 12px rgba(30,43,67,0.06), 0 1px 3px rgba(30,43,67,0.04); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); }
-        .gwch-service-card:hover { transform: translateY(-4px); border-bottom-color: var(--gwch-gold); box-shadow: 0 12px 28px rgba(30,43,67,0.1), 0 28px 56px rgba(30,43,67,0.12); }
-        .gwch-service-img { height: 180px; overflow: hidden; }
-        .gwch-service-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .gwch-service-card:hover .gwch-service-img img { transform: scale(1.05); }
-        .gwch-service-body { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 28px 28px 32px; }
-        .gwch-service-title { font-size: 22px; font-weight: 700; color: var(--gwch-navy); margin: 0 0 12px; font-family: "Playfair Display", serif; }
-        .gwch-service-title a { color: inherit; text-decoration: none; transition: color 0.2s; }
-        .gwch-service-title a:hover { color: var(--gwch-gold); }
-        .gwch-service-card:hover .gwch-service-title a { color: var(--gwch-gold); }
-        .gwch-service-desc { font-size: 15px; line-height: 1.7; color: var(--gwch-muted); flex: 1; margin: 0 0 20px; }
-        .gwch-service-badges { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
-        .gwch-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background: rgba(188,145,85,0.1); font-size: 12px; font-weight: 600; color: #9a7340; letter-spacing: 0.3px; }
-        .gwch-badge svg { width: 14px; height: 14px; stroke: var(--gwch-gold); fill: none; stroke-width: 2; flex-shrink: 0; }
-        .gwch-learn-more { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--gwch-gold); text-decoration: none; transition: gap 0.3s; margin-top: auto; }
-        .gwch-learn-more:hover { gap: 10px; }
-
-        /* ── MID CTA ── */
-        .gwch-mid-cta-btn {
-          display: inline-block;
-          background: #bc9155;
-          color: #fff;
-          padding: 16px 48px;
-          border-radius: 8px;
-          font-family: "Inter", sans-serif;
-          font-weight: 600;
-          font-size: 16px;
-          text-decoration: none;
-          transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-        }
-        .gwch-mid-cta-btn:hover {
-          background: #a57d48;
-          transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(188,145,85,0.3);
-        }
-
-        /* ── WHAT TO EXPECT / FAQ ── */
-        .gwch-expect-section { background: #fff; border-top: 1px solid var(--gwch-border); }
-        .gwch-faq-section { background: #fff; border-top: 1px solid var(--gwch-border); }
-        .gwch-faq-list { display: flex; flex-direction: column; gap: 10px; }
-        .gwch-faq-item { border: 1px solid rgba(30,43,67,0.1); border-radius: 8px; overflow: hidden; transition: border-color 0.2s; }
-        .gwch-faq-item[open] { border-color: var(--gwch-gold); }
-        .gwch-faq-summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 24px; font-size: 16px; font-weight: 600; color: var(--gwch-navy); cursor: pointer; list-style: none; }
-        .gwch-faq-summary::-webkit-details-marker { display: none; }
-        .gwch-faq-summary:hover { background: rgba(188,145,85,0.04); }
-        .gwch-faq-icon { color: var(--gwch-gold); flex-shrink: 0; transition: transform 0.3s; }
-        .gwch-faq-item[open] .gwch-faq-icon { transform: rotate(180deg); }
-        .gwch-faq-answer { padding: 0 24px 18px; font-size: 15px; line-height: 1.78; color: var(--gwch-muted); margin: 0; }
-
-        /* ── AREAS CENTER ── */
-        .gwch-areas-center [class*="areas"] [class*="grid"],
-        .gwch-areas-center [class*="areas"] [class*="cards"],
-        .gwch-areas-center [class*="county-card"] { max-width: 820px; margin-left: auto; margin-right: auto; }
-
-        /* ── TRUST STRIP ── */
-        .gwch-trust-strip { position: relative; overflow: hidden; background: linear-gradient(135deg, #1e2b43 0%, #151e30 100%); padding: 56px 40px; }
-        .gwch-trust-strip-bg { position: absolute; inset: 0; background: url('/hero/builtwell-job-site-aerial-hero-ct.jpg') center/cover no-repeat; opacity: 0.12; }
-        .gwch-trust-strip-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap; }
-        .gwch-trust-strip-item-wrap { display: contents; }
-        .gwch-trust-strip-item { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 32px; min-width: 180px; flex: 1; font-size: 13px; font-weight: 600; line-height: 1.4; letter-spacing: 0.4px; white-space: nowrap; text-align: center; color: rgba(255,255,255,0.9); text-decoration: none; transition: all 0.3s; }
-        .gwch-trust-strip-item:hover { transform: translateY(-2px); color: var(--gwch-gold); }
-        .gwch-trust-strip-icon { color: var(--gwch-gold); flex-shrink: 0; }
-        .gwch-trust-strip-icon :global(svg) { width: 22px; height: 22px; filter: drop-shadow(0 2px 4px rgba(188,145,85,0.3)); }
-        .gwch-trust-strip-copy { display: inline-flex; align-items: center; justify-content: center; }
-        .gwch-trust-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); flex-shrink: 0; display: none; }
-        @media (min-width: 1024px) { .gwch-trust-divider { display: block; } }
-        @media (max-width: 768px) {
-          .gwch-trust-strip { padding: 40px 24px; }
-          .gwch-trust-strip-inner { gap: 0; }
-          .gwch-trust-strip-item { padding: 16px 20px; min-width: 140px; font-size: 12px; }
-          .gwch-trust-divider { display: none; }
-        }
-        @media (max-width: 560px) {
-          .gwch-trust-strip { padding: 32px 20px; }
-          .gwch-trust-strip-inner { gap: 0; flex-wrap: wrap; }
-          .gwch-trust-strip-item { padding: 16px 12px; min-width: 33.33%; font-size: 11px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; white-space: normal; }
-          .gwch-trust-strip-icon :global(svg) { width: 18px; height: 18px; }
-          .gwch-trust-divider { display: none; }
-        }
-      `}</style>
+      {/* gwch-* styles are in app/globals.css */}
     </div>
   );
 }
