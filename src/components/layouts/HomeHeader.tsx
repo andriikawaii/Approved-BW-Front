@@ -69,7 +69,7 @@ export default function HomeHeader({ phones }: HomeHeaderProps) {
             <button
               type="button"
               onClick={() => setConsultationOpen(true)}
-              className="rounded-sm bg-[#9a7340] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#a57d48]"
+              className="rounded-sm bg-[#A57D48] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#a57d48]"
             >
               Get Your Free Estimate
             </button>
@@ -140,7 +140,7 @@ export default function HomeHeader({ phones }: HomeHeaderProps) {
               ))}
               <button
                 type="button"
-                className="mt-6 inline-flex items-center justify-center rounded-sm bg-[#9a7340] px-4 py-4 text-sm font-semibold uppercase tracking-[0.15em] text-white transition-colors hover:bg-[#a57d48]"
+                className="mt-6 inline-flex items-center justify-center rounded-sm bg-[#A57D48] px-4 py-4 text-sm font-semibold uppercase tracking-[0.15em] text-white transition-colors hover:bg-[#a57d48]"
                 onClick={() => {
                   setMobileOpen(false);
                   setConsultationOpen(true);
