@@ -276,9 +276,9 @@ export function AreasSection({ data }: { data: any }) {
         .bw-areas-header { text-align:center; margin-bottom:48px; }
         .bw-areas-header h2 { font:700 clamp(34px,3.8vw,50px)/1.15 "Playfair Display",serif; color:#1e2b43; letter-spacing:-.02em; margin:0; }
         .bw-areas-header p { max-width:760px; margin:12px auto 0; font-size:17px; line-height:1.8; color:#5c677d; }
-        .bw-areas-subtitle-link { color:#bc9155; font-weight:600; text-decoration:none !important; transition:color .2s; }
-        .bw-areas-subtitle-link:hover, .bw-areas-subtitle-link:focus-visible { color:#9a7340; text-decoration:none !important; }
-        .bw-gold { color:#bc9155; }
+        .bw-areas-subtitle-link { color:#9a7340; font-weight:600; text-decoration:none !important; transition:color .2s; }
+        .bw-areas-subtitle-link:hover, .bw-areas-subtitle-link:focus-visible { color:#7a5c2e; text-decoration:none !important; }
+        .bw-gold { color:#9a7340; }
         .bw-areas-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:start; }
         .bw-areas-grid.bw-areas-grid-match { align-items:stretch; }
         .bw-area-card { background:#fff; border-radius:12px; overflow:hidden; border-bottom:3px solid transparent; box-shadow:0 2px 12px rgba(30,43,67,.06),0 1px 3px rgba(30,43,67,.04); transition:all .35s cubic-bezier(.4,0,.2,1); position:relative; display:flex; flex-direction:column; }
@@ -292,7 +292,7 @@ export function AreasSection({ data }: { data: any }) {
         .bw-area-card-body { padding:28px 28px 32px; text-align:center; display:flex; flex:1; flex-direction:column; }
         .bw-area-card-body h3 { font:700 24px/1.2 "Playfair Display",serif; color:#1e2b43; margin:0 0 6px; }
         .bw-area-card-phone { font-size:15px; color:#5c677d; margin-bottom:14px; }
-        .bw-area-card-phone a { color:#bc9155; font-weight:600; text-decoration:none; }
+        .bw-area-card-phone a { color:#9a7340; font-weight:600; text-decoration:none; }
         .bw-area-card-phone a:hover { text-decoration:underline; }
         .bw-area-card-desc { font-size:14px; line-height:1.7; color:#5c677d; margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid rgba(30,43,67,.06); }
         .bw-area-towns { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
@@ -302,13 +302,13 @@ export function AreasSection({ data }: { data: any }) {
         .bw-area-town-static:hover { background:#f5f1e9; color:#9a7340; }
         .bw-area-towns-more { display:none; grid-template-columns:repeat(4,1fr); gap:8px; grid-column:1 / -1; }
         .bw-area-towns-more.show { display:grid; }
-        .bw-area-towns-toggle { grid-column:1 / -1; margin-top:4px; background:none; border:none; color:#bc9155; font-size:13px; font-weight:600; cursor:pointer; padding:4px 0; transition:color .2s; text-align:center; }
-        .bw-area-towns-toggle:hover { color:#9a7340; }
-        .bw-area-link { display:inline-flex; align-items:center; gap:6px; margin-top:auto; padding-top:4px; color:#bc9155; font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; justify-content:center; }
+        .bw-area-towns-toggle { grid-column:1 / -1; margin-top:4px; background:none; border:none; color:#9a7340; font-size:13px; font-weight:600; cursor:pointer; padding:4px 0; transition:color .2s; text-align:center; }
+        .bw-area-towns-toggle:hover { color:#7a5c2e; }
+        .bw-area-link { display:inline-flex; align-items:center; gap:6px; margin-top:auto; padding-top:4px; color:#9a7340; font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; justify-content:center; }
         .bw-area-link:hover { gap:10px; }
         .bw-area-link-arrow { width:14px; height:14px; }
         .bw-areas-note { margin:20px auto 0; text-align:center; font-size:14px; line-height:1.7; color:#5c677d; }
-        .bw-areas-note a, .bw-areas-note-link { color:#bc9155; font-weight:600; text-decoration:none; }
+        .bw-areas-note a, .bw-areas-note-link { color:#9a7340; font-weight:600; text-decoration:none; }
         .bw-areas-note a:hover, .bw-areas-note-link:hover { text-decoration:underline; }
         @media (max-width:1024px) {
           .bw-areas-section { padding:60px 32px; }
@@ -490,8 +490,8 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
                     ) : null}
                     {timeField ? (
                       <div className="bw-form-group">
-                        <label>{timeField.label}{timeField.required ? " *" : ""}</label>
-                        <select required={timeField.required} value={formValues[timeField.name] || ""} onChange={(event) => setFormValues((current) => ({ ...current, [timeField.name]: event.target.value }))}>
+                        <label htmlFor="bw-best-time">{timeField.label}{timeField.required ? " *" : ""}</label>
+                        <select id="bw-best-time" required={timeField.required} value={formValues[timeField.name] || ""} onChange={(event) => setFormValues((current) => ({ ...current, [timeField.name]: event.target.value }))}>
                           <option value="">Select a time</option>
                           {opts(timeField.options).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                         </select>
@@ -525,8 +525,8 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
                   ) : null}
                   {fileField ? (
                     <div className="bw-form-group">
-                      <label>{fileField.label}{fileField.required ? " *" : ""}</label>
-                      <input type="file" required={fileField.required} />
+                      <label htmlFor="bw-file-upload">{fileField.label}{fileField.required ? " *" : ""}</label>
+                      <input id="bw-file-upload" type="file" required={fileField.required} aria-label={fileField.label || 'Upload files'} />
                     </div>
                   ) : null}
                   <div className="bw-form-consent">
@@ -544,14 +544,14 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
         </div>
       </section>
       <style jsx global>{`
-        .bw-gold { color:#bc9155; }
+        .bw-gold { color:#9a7340; }
         .bw-cta-section { background:#f5f1e9; border-top:1px solid rgba(30,43,67,.08); padding:64px 40px 72px; }
         .bw-cta-section-inner { max-width:1200px; margin:0 auto; }
         .bw-cta-header { text-align:center; margin-bottom:32px; }
         .bw-cta-header h2 { margin-bottom:8px; font:700 clamp(30px,3vw,42px)/1.2 "Playfair Display",serif; color:#1e2b43; letter-spacing:-.5px; }
         .bw-cta-header .bw-cta-sub { max-width:600px; margin:0 auto; font-size:16px; line-height:1.7; color:#5c677d; }
         .bw-cta-header .bw-cta-phones { max-width:600px; margin:8px auto 0; font-size:15px; line-height:1.7; color:#5c677d; text-align:center; }
-        .bw-cta-header .bw-cta-phones a { color:#BC9155; font-weight:600; text-decoration:none; }
+        .bw-cta-header .bw-cta-phones a { color:#9a7340; font-weight:600; text-decoration:none; }
         .bw-cta-header .bw-cta-phones a:hover { text-decoration:underline; }
         .bw-cta-header .bw-cta-phones-sep { color:#5c677d; }
         .bw-cta-body { display:grid; grid-template-columns:1fr 1.15fr; gap:32px; align-items:stretch; }

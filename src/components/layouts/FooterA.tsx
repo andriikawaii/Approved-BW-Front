@@ -127,7 +127,7 @@ export default function FooterA({
           </div>
 
           <div className="footer-a-col">
-            <h4>Services</h4>
+            <p className="footer-a-col-heading">Services</p>
             <ul>
               {SERVICES_LINKS.map((link) => (
                 <li key={link.href}>
@@ -141,7 +141,7 @@ export default function FooterA({
           </div>
 
           <div className="footer-a-col">
-            <h4>Company</h4>
+            <p className="footer-a-col-heading">Company</p>
             <ul>
               {COMPANY_LINKS.map((link) => (
                 <li key={link.href}>
@@ -152,7 +152,7 @@ export default function FooterA({
           </div>
 
           <div className="footer-a-col">
-            <h4>Resources</h4>
+            <p className="footer-a-col-heading">Resources</p>
             <ul>
               {RESOURCE_LINKS.map((link) => (
                 <li key={link.href}>
@@ -248,7 +248,7 @@ export default function FooterA({
         }
         .footer-a-county {
           font-size: 11px;
-          color: rgba(255, 255, 255, 0.45);
+          color: rgba(255, 255, 255, 0.65);
           margin-bottom: 8px;
         }
         .footer-a-county-last {
@@ -261,10 +261,11 @@ export default function FooterA({
         }
         .footer-a-address {
           font-size: 13px !important;
-          color: rgba(255, 255, 255, 0.5) !important;
+          color: rgba(255, 255, 255, 0.65) !important;
           line-height: 1.5;
         }
-        .footer-a-col h4 {
+        .footer-a-col h4,
+        .footer-a-col-heading {
           font-family: var(--font-inter), sans-serif;
           font-size: 13px;
           font-weight: 700;
@@ -346,14 +347,14 @@ export default function FooterA({
           flex-wrap: wrap;
           gap: 8px;
           font-size: 13px;
-          color: rgba(255, 255, 255, 0.35);
+          color: rgba(255, 255, 255, 0.6);
         }
         .footer-a-hic {
-          color: rgba(255, 255, 255, 0.35);
+          color: rgba(255, 255, 255, 0.6);
           font-size: 11px;
         }
         .footer-a-legal {
-          color: rgba(255, 255, 255, 0.35);
+          color: rgba(255, 255, 255, 0.6);
           font-size: 13px;
           display: inline-flex;
           align-items: center;
@@ -361,7 +362,7 @@ export default function FooterA({
           line-height: 1.1;
         }
         .footer-a-legal :global(a) {
-          color: rgba(255, 255, 255, 0.45);
+          color: rgba(255, 255, 255, 0.65);
           text-decoration: none;
           font-size: 13px;
           font-weight: 400;

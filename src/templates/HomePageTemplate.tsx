@@ -1784,6 +1784,7 @@ function HomeLeadFormSection({ data }: { data: LeadFormData }) {
                     type="file"
                     multiple
                     accept="image/jpeg,image/png,image/heic,.heic"
+                    aria-label={fileField.label || 'Upload Photos'}
                     className="hidden"
                     onChange={(event) => {
                       const files = Array.from(event.target.files || []).map((file) => file.name);

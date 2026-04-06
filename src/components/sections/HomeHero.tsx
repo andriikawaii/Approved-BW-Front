@@ -82,7 +82,9 @@ export default function HomeHero({ data }: HomeHeroProps) {
             poster={data.background_poster ? data.background_poster.replace(/\.png$/, '.webp').replace(/\.jpg$/, '.webp') : undefined}
             className="absolute inset-0 hidden h-[110%] w-full object-cover object-[center_top] opacity-65 md:block"
             aria-label="BuiltWell CT team and vehicles at a Connecticut home remodeling project"
-          />
+          >
+            <track kind="captions" srcLang="en" label="English" />
+          </video>
         </>
       ) : (
         /* Fallback: slide background images */
