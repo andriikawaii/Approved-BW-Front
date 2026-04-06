@@ -97,7 +97,7 @@ export function HeroTrustBar({ items }: { items?: any[] }) {
 export function DarkTrustStrip({ items }: { items?: any[] }) {
   return (
     <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1e2b43_0%,#151E30_100%)] px-5 py-14 md:px-10">
-      <div className="absolute inset-0 bg-[url('/hero/builtwell-job-site-aerial-hero-ct.jpg')] bg-cover bg-center opacity-[0.12]" />
+      <div className="absolute inset-0 bg-[url('/hero/builtwell-job-site-aerial-hero-ct.webp')] bg-cover bg-center opacity-[0.12]" />
       <div className="relative z-[1] mx-auto flex max-w-[1200px] flex-wrap items-center justify-center">
         {(items || []).map((item: any, index: number) => (
           <div key={`${item.label || "strip"}-${index}`} className="contents">

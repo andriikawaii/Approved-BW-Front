@@ -62,16 +62,28 @@ export default function HomeHero({ data }: HomeHeroProps) {
     <section className="relative isolate flex min-h-[92vh] items-center justify-center overflow-hidden bg-[#151E30] pt-16">
       {/* Video background */}
       {hasVideo ? (
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          src={data.background_video}
-          poster={data.background_poster || undefined}
-          className="absolute inset-0 h-[110%] w-full object-cover object-[center_top] opacity-65"
-          aria-label="BuiltWell CT team and vehicles at a Connecticut home remodeling project"
-        />
+        <>
+          {/* Mobile: poster image only — no video download on slow connections */}
+          {data.background_poster ? (
+            <div
+              className="absolute inset-0 h-[110%] w-full bg-cover bg-[center_top] opacity-65 md:hidden"
+              style={{ backgroundImage: `url(${data.background_poster.replace(/\.png$/, '.webp').replace(/\.jpg$/, '.webp')})` }}
+              aria-hidden="true"
+            />
+          ) : null}
+          {/* Desktop: autoplay video */}
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="none"
+            src={data.background_video}
+            poster={data.background_poster ? data.background_poster.replace(/\.png$/, '.webp').replace(/\.jpg$/, '.webp') : undefined}
+            className="absolute inset-0 hidden h-[110%] w-full object-cover object-[center_top] opacity-65 md:block"
+            aria-label="BuiltWell CT team and vehicles at a Connecticut home remodeling project"
+          />
+        </>
       ) : (
         /* Fallback: slide background images */
         data.slides?.filter((s) => s.image).map((slide, index) => (

@@ -372,7 +372,7 @@ function getServiceFallbackImage(title: string) {
     return '/images/services/comfort-accessibility.jpg';
   }
 
-  return '/images/hero/hero-carousel-final.png';
+  return '/images/hero/hero-carousel-final.webp';
 }
 
 function serviceIcon(title: string) {
@@ -1234,7 +1234,7 @@ function HomeMidCta() {
     <section className="relative overflow-hidden bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] px-5 py-[52px] text-center md:px-10 md:py-[72px]">
       <div
         className="absolute inset-0 bg-cover bg-[center_40%] opacity-25"
-        style={{ backgroundImage: "url('/hero/builtwell-team-van-consultation-hero-ct.jpg')" }}
+        style={{ backgroundImage: "url('/hero/builtwell-team-van-consultation-hero-ct.webp')" }}
         aria-hidden="true"
       />
       <div className="home-fade-up relative z-10">
@@ -1251,7 +1251,7 @@ function HomeMidCta() {
           Get Your Free Estimate
           <ArrowRight className="ml-2 h-4 w-4" />
         </Link>
-        <p className="mt-4 text-[13px] italic text-white/40">
+        <p className="mt-4 text-[13px] italic text-white/60">
           On-site or remote via Google Meet. No charge, no obligation.
         </p>
       </div>
@@ -1665,15 +1665,17 @@ function HomeLeadFormSection({ data }: { data: LeadFormData }) {
 
               <div className="mt-4 grid gap-4 md:grid-cols-2">
                 <div>
-                  <label className="mb-1.5 block text-[12px] font-semibold uppercase tracking-[0.5px] text-[#1E2B43] md:text-[13px]">
+                  <label htmlFor="services-dropdown" className="mb-1.5 block text-[12px] font-semibold uppercase tracking-[0.5px] text-[#1E2B43] md:text-[13px]">
                     {servicesField.label}
                     {servicesField.required ? ' *' : ''}
                   </label>
                   <div className="relative">
                     <button
+                      id="services-dropdown"
                       type="button"
                       className="flex w-full items-center justify-between rounded-[4px] border border-[#1E2B43]/15 bg-white px-[14px] py-[13px] text-left text-[15px] text-[#1E2B43]"
                       aria-expanded={isServicesOpen}
+                      aria-haspopup="listbox"
                       onClick={() => setIsServicesOpen((current) => !current)}
                     >
                       <span className={joinClasses('truncate', selectedServices.length === 0 ? 'text-[#5C677D]' : 'font-medium text-[#1E2B43]')}>
