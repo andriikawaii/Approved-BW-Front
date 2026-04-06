@@ -65,7 +65,7 @@ export default function Header() {
             <button
               type="button"
               onClick={() => setConsultationOpen(true)}
-              className="hidden whitespace-nowrap rounded-[6px] bg-[#A57D48] px-[22px] py-[10px] text-[12px] font-semibold uppercase tracking-[0.5px] text-white transition-all duration-200 hover:-translate-y-px hover:bg-[#a57d48] lg:inline-flex"
+              className="hidden whitespace-nowrap rounded-[6px] bg-[#BC9155] px-[22px] py-[10px] text-[12px] font-semibold uppercase tracking-[0.5px] text-white transition-all duration-200 hover:-translate-y-px hover:bg-[#a57d48] lg:inline-flex"
             >
               Get Your Free Estimate
             </button>
@@ -109,7 +109,7 @@ export default function Header() {
                 setMobileOpen(false);
                 setConsultationOpen(true);
               }}
-              className="mt-4 inline-flex items-center gap-2 rounded-[4px] bg-[#A57D48] px-8 py-4 text-[15px] font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-[#a57d48]"
+              className="mt-4 inline-flex items-center gap-2 rounded-[4px] bg-[#BC9155] px-8 py-4 text-[15px] font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-[#a57d48]"
             >
               Get Your Free Estimate
             </button>
