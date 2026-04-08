@@ -265,6 +265,76 @@ function resourceIcon(icon?: string | null) {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Fallback data for sections missing from cache                     */
+/* ------------------------------------------------------------------ */
+
+const DEFAULT_AREAS = {
+  eyebrow: "Where We Work",
+  title: "Serving Fairfield and New Haven Counties",
+  highlight_text: "New Haven",
+  counties: [
+    {
+      name: "Fairfield County",
+      image: "/images/areas/fairfield-county.jpg",
+      url: "/fairfield-county/",
+      phone: "(203) 919-9616",
+      description: "Reach our Fairfield County team for a free consultation. We serve Greenwich, Stamford, Norwalk, Westport, and every town across the county with dedicated local crews.",
+      towns: ["Greenwich", "Stamford", "Norwalk", "Westport", "Darien", "New Canaan", "Fairfield", "Ridgefield"],
+      extra_towns: ["Bethel", "Bridgeport", "Brookfield", "Danbury", "Easton", "Monroe", "New Fairfield", "Newtown", "Redding", "Shelton", "Sherman", "Stratford", "Trumbull", "Weston", "Wilton"],
+      town_links: {
+        Greenwich: "/fairfield-county/greenwich-ct/",
+        Westport: "/fairfield-county/westport-ct/",
+      },
+      cta_label: "Learn more about Fairfield County",
+    },
+    {
+      name: "New Haven County",
+      image: "/images/areas/new-haven-county.jpg",
+      url: "/new-haven-county/",
+      phone: "(203) 466-9148",
+      description: "Reach our New Haven County team for a free consultation. Based in Orange, CT, we serve every town across the county with fast response times and local expertise.",
+      towns: ["Orange", "New Haven", "Milford", "Madison", "Guilford", "Branford", "Hamden", "Woodbridge"],
+      extra_towns: ["Ansonia", "Beacon Falls", "Bethany", "Cheshire", "Derby", "East Haven", "Naugatuck", "North Branford", "North Haven", "Oxford", "Seymour", "Shelton", "Wallingford", "West Haven"],
+      town_links: {
+        Orange: "/new-haven-county/orange-ct/",
+        "New Haven": "/new-haven-county/new-haven-ct/",
+        Madison: "/new-haven-county/madison-ct/",
+      },
+      cta_label: "Learn more about New Haven County",
+    },
+  ],
+};
+
+const DEFAULT_LEAD_FORM = {
+  eyebrow: "Get In Touch",
+  title: "Tell Us About Your",
+  title_highlight: "Project",
+  subtitle: "Fill out the form and we'll get back to you within one business day with next steps. No obligation, no pressure.",
+  images: [
+    { image: "/portfolio/builtwell-team-client-arrival-ct.jpeg", alt: "BuiltWell CT remodeling team arriving at a Connecticut home for a free consultation." },
+    { image: "/portfolio/builtwell-cherry-hill-project.jpg", alt: "BuiltWell CT owner meeting with a Connecticut homeowner for a remodeling consultation." },
+  ],
+  fields: [
+    { name: "name", label: "Name", type: "text", required: true, placeholder: "Your full name" },
+    { name: "phone", label: "Phone", type: "tel", required: true, placeholder: "(203) 000-0000" },
+    { name: "email", label: "Email", type: "email", required: true, placeholder: "you@email.com" },
+    { name: "zip", label: "Zip Code", type: "text", required: true, placeholder: "06477" },
+    {
+      name: "services", label: "Services Needed", type: "checkbox_group", required: true, options: [
+        { label: "Kitchen Remodeling", value: "Kitchen Remodeling" },
+        { label: "Bathroom Remodeling", value: "Bathroom Remodeling" },
+        { label: "Basement Finishing", value: "Basement Finishing" },
+        { label: "Flooring Installation", value: "Flooring Installation" },
+        { label: "Home Additions", value: "Home Additions" },
+        { label: "Interior Painting", value: "Interior Painting" },
+        { label: "Other", value: "Other" },
+      ],
+    },
+    { name: "message", label: "Project Details", type: "textarea", required: false, placeholder: "Tell us about your project..." },
+  ],
+};
+
+/* ------------------------------------------------------------------ */
 /*  Main Export                                                        */
 /* ------------------------------------------------------------------ */
 
@@ -476,7 +546,7 @@ export function HomeownerHubPageTemplate({ page }: { page: CMSPage }) {
       {/* ============================================================ */}
       {/*  AREAS SERVED (shared component)                             */}
       {/* ============================================================ */}
-      <SharedAreasSection data={areas} />
+      <SharedAreasSection data={areas ?? DEFAULT_AREAS} />
 
       {/* ============================================================ */}
       {/*  RESOURCES / LEARN MORE                                      */}
@@ -488,7 +558,7 @@ export function HomeownerHubPageTemplate({ page }: { page: CMSPage }) {
       {/* ============================================================ */}
       <SharedLeadFormSection
         page={page}
-        data={lead}
+        data={lead ?? DEFAULT_LEAD_FORM}
         accent="Remodeling Project"
       />
 
