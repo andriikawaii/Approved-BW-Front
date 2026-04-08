@@ -355,22 +355,16 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
             </p>
           ) : null}
           {/* CTA buttons — reference style */}
-          <div className="fade-up mt-8 flex flex-wrap items-stretch justify-center gap-4" style={{ ...fadeUpStyle, transitionDelay: "0.3s" }}>
-            {linkNode(
-              hero?.cta_primary?.url || "#contact",
-              "Get Your Free Estimate",
-              "inline-flex min-w-[220px] items-center justify-center rounded-[8px] border border-[#bc9155] bg-[#bc9155] px-7 py-3.5 text-center text-[14px] font-semibold tracking-[0.4px] text-white transition-all duration-300 hover:-translate-y-[2px] hover:border-[#d4a95a] hover:bg-[#d4a95a] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]",
-            )}
-            {linkNode(
-              fairfieldPhoneHref,
-              `Fairfield: ${fairfieldPhone}`,
-              "inline-flex min-w-[220px] items-center justify-center rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.45)] px-7 py-3.5 text-center text-[14px] font-semibold tracking-[0.4px] text-white backdrop-blur-[10px] transition-all duration-300 hover:-translate-y-[2px] hover:border-white/[0.32] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]",
-            )}
-            {linkNode(
-              newHavenPhoneHref,
-              `New Haven: ${newHavenPhone}`,
-              "inline-flex min-w-[220px] items-center justify-center rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.45)] px-7 py-3.5 text-center text-[14px] font-semibold tracking-[0.4px] text-white backdrop-blur-[10px] transition-all duration-300 hover:-translate-y-[2px] hover:border-white/[0.32] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]",
-            )}
+          <div className="fade-up mt-8 flex flex-col items-center gap-[14px] sm:flex-row sm:justify-center" style={{ ...fadeUpStyle, transitionDelay: "0.3s" }}>
+            <a href="#contact" className="w-[280px] rounded-[8px] border border-[#BC9155] bg-[#BC9155] px-8 py-[14px] text-center text-[15px] font-semibold text-white transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#D4A95A] hover:bg-[#D4A95A] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]">
+              Get Your Free Estimate
+            </a>
+            <a href="tel:2039199616" className="w-[280px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
+              <span className="text-[15px] font-semibold tracking-[0.1px] text-white">Fairfield: (203) 919-9616</span>
+            </a>
+            <a href="tel:2034669148" className="w-[280px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
+              <span className="text-[15px] font-semibold tracking-[0.1px] text-white">New Haven: (203) 466-9148</span>
+            </a>
           </div>
         </div>
       </section>
@@ -418,7 +412,7 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
                     />
                     </div>
                     <div className="step-content">
-                      <span className="step-label">Step {["One", "Two", "Three", "Four", "Five"][index] || index + 1}</span>
+                      <span className="step-label">{`0${index + 1}`}</span>
                       <h3 className="step-title">
                         {`${
                           item.title || `Step ${index + 1}`
@@ -703,6 +697,10 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
         .step-content {
           position: relative;
           padding: 44px 38px 38px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          text-align: center;
         }
         .step-content::before {
           content: "";
@@ -720,18 +718,19 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
           border-radius: 4px 0 0 4px;
         }
         .step-label {
-          display: inline-block;
-          margin-bottom: 10px;
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 1.3px;
-          text-transform: uppercase;
-          color: #bc9155;
+          display: block;
+          margin: -20px auto 0;
+          font-size: 96px;
+          font-weight: 900;
+          font-family: "Inter", sans-serif;
+          color: rgba(188, 145, 85, 0.22);
+          line-height: 0.85;
+          letter-spacing: -0.05em;
         }
         .step-title {
           margin: 0 0 14px;
           color: #1e2b43;
-          font: 700 30px/1.2 "Playfair Display", serif;
+          font: 700 28px/1.2 "Playfair Display", serif;
           letter-spacing: -0.02em;
         }
         .step-desc,
@@ -755,9 +754,11 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
           font-weight: 600;
           display: inline-flex;
           align-items: center;
+          justify-content: center;
           gap: 6px;
           cursor: pointer;
           transition: color 0.25s;
+          width: 100%;
         }
         .step-read-more svg {
           transition: transform 0.3s;
@@ -825,18 +826,6 @@ function ProcessAreasSection({
 }) {
   const titleParts = parts(data?.title, data?.highlight_text);
   const areasFadeRef = useFadeUp();
-  const counties = data?.counties || [];
-  const expandableCount = counties.filter((county: any) => {
-    const allMainTowns = county.towns || [];
-    const extraTowns = [...allMainTowns.slice(8), ...(county.extra_towns || [])];
-    return extraTowns.length > 0;
-  }).length;
-  const expandedCount = counties.filter((county: any, index: number) => {
-    const allMainTowns = county.towns || [];
-    const extraTowns = [...allMainTowns.slice(8), ...(county.extra_towns || [])];
-    return extraTowns.length > 0 && countyOpen[index];
-  }).length;
-  const shouldMatchCardHeights = expandedCount === 0 || (expandableCount > 0 && expandedCount === expandableCount);
 
   return (
     <section ref={areasFadeRef} className="bg-[#f5f1e9] px-5 py-24 md:px-10">
@@ -854,13 +843,10 @@ function ProcessAreasSection({
         </div>
 
         <div
-          className={cls(
-            "fade-up mx-auto grid max-w-[640px] grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-2",
-            shouldMatchCardHeights ? "items-stretch" : "items-start",
-          )}
+          className="fade-up mx-auto grid max-w-[640px] grid-cols-1 items-start gap-8 lg:max-w-none lg:grid-cols-2"
           style={{ ...fadeUpStyle, transitionDelay: "0.15s" }}
         >
-          {counties.map((county: any, index: number) => {
+          {(data?.counties || []).map((county: any, index: number) => {
             const expanded = !!countyOpen[index];
             const allMainTowns = county.towns || [];
             const mainTowns = allMainTowns.slice(0, 8);
@@ -871,10 +857,7 @@ function ProcessAreasSection({
             return (
               <article
                 key={`${county.name || "county"}-${index}`}
-                className={cls(
-                  "flex w-full flex-col overflow-hidden rounded-[12px] border-b-[3px] border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-[6px] hover:border-b-[#bc9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]",
-                  shouldMatchCardHeights && "h-full",
-                )}
+                className="flex w-full self-start flex-col overflow-hidden rounded-[12px] border-b-[3px] border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-[6px] hover:border-b-[#bc9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]"
               >
                 {/* Image with gradient overlay + zoom */}
                 <div className="group relative h-[220px] overflow-hidden">
@@ -945,7 +928,7 @@ function ProcessAreasSection({
                           <span>{county.cta_label || `Learn more about ${county.name}`}</span>
                           <ArrowRight className="h-4 w-4" />
                         </>,
-                        "mt-auto inline-flex items-center justify-center gap-1.5 pt-5 text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-2.5",
+                        "mt-5 inline-flex items-center justify-center gap-1.5 text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-2.5",
                       )
                     : null}
                 </div>

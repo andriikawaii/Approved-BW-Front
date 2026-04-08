@@ -217,13 +217,13 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
                   <div className="h-[420px] overflow-hidden md:h-[520px]">
                     <img src={image} alt={member.image_alt || member.name || "BuiltWell CT team"} className="h-full w-full object-cover object-[center_20%]" />
                   </div>
-                  <div className="flex flex-1 flex-col p-8">
+                  <div className="flex flex-1 flex-col p-8 text-center">
                     <h3 className="text-[24px] font-bold">{member.name}</h3>
                     <p className="mt-1 text-[14px] font-semibold uppercase tracking-[0.08em] text-[#bc9155]">{member.position}</p>
                     <div className={cls("mt-5 overflow-hidden text-[15px] leading-[1.8] text-[#5c677d] transition-[max-height] duration-300", expanded ? "max-h-[620px]" : "max-h-[10.5em]")}>
                       {paras(member.bio).map((paragraph) => <p key={paragraph.slice(0, 30)} className="mb-4 last:mb-0">{paragraph}</p>)}
                     </div>
-                    <button type="button" onClick={() => setBioOpen((current) => ({ ...current, [index]: !current[index] }))} className="mt-4 inline-flex items-center gap-1 text-[14px] font-semibold text-[#bc9155] transition-colors hover:text-[#a57d48]">
+                    <button type="button" onClick={() => setBioOpen((current) => ({ ...current, [index]: !current[index] }))} className="mt-4 inline-flex items-center justify-center gap-1 text-[14px] font-semibold text-[#bc9155] transition-colors hover:text-[#a57d48]">
                       {expanded ? "Show Less" : "Read More"}
                     </button>
                   </div>

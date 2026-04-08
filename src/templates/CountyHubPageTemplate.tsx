@@ -170,8 +170,14 @@ const COUNTY_FEATURED_OVERRIDES: Record<string, Array<{ title: string; body: str
 };
 
 function media(value?: string | null, fallback = "") {
-  if (!value) return fallback;
-  return value;
+  const source = value || "";
+  if (!source) return fallback;
+  try {
+    const normalized = source.startsWith("http") ? new URL(source).pathname : source;
+    return FALLBACK_MEDIA[source] || FALLBACK_MEDIA[normalized] || normalized || fallback;
+  } catch {
+    return FALLBACK_MEDIA[source] || source || fallback;
+  }
 }
 
 function parts(text?: string | null, mark?: string | null) {
@@ -257,7 +263,7 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
   const messageField = fields.find((field: any) => field.type === "textarea");
 
   return (
-    <div className="county-hub-page bg-[#f5f1e9] text-[#1e2b43]">
+    <div className="bg-[#f5f1e9] text-[#1e2b43]">
       <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pb-0 pt-[130px] text-white md:px-10">
         <div className="absolute inset-0 bg-cover bg-center opacity-[0.72]" style={{ backgroundImage: `url(${media(hero?.background_image, slug === "fairfield-county" ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")})` }} />
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(21,30,48,0.45) 0%, rgba(21,30,48,0.35) 24%, rgba(21,30,48,0.68) 70%, rgba(21,30,48,0.95) 100%)" }} />
@@ -274,7 +280,7 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
             {heroParts.after}
           </h1>
           <p className="mt-5 max-w-[700px] text-[14px] leading-[1.7] text-white/92 md:text-[15px]">{countyCopy.heroSubtitle}</p>
-          <div className="county-hero-ctas mt-8 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             {[...(hero?.badges || [])].sort((a: any, b: any) => (b.is_primary ? 1 : 0) - (a.is_primary ? 1 : 0)).map((badge: any, index: number) => {
               const isPrimary = !!badge.is_primary;
               const btnText = isPrimary ? (badge.value || badge.label) : `Call ${badge.value || badge.label}`;
@@ -282,11 +288,16 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
                 <div key={`${badge.label || "badge"}-${index}`}>
                   {linkNode(
                     badge.url || "#",
-                    btnText,
-                    cls(
-                      "county-hero-cta-btn",
-                      isPrimary && "county-hero-cta-btn--primary",
-                    ),
+                    <span
+                      className={cls(
+                        "inline-flex items-center justify-center rounded-[8px] px-8 py-[14px] text-[15px] font-semibold leading-none transition-all duration-300 hover:-translate-y-[2px]",
+                        isPrimary
+                          ? "bg-[#bc9155] text-white shadow-[0_4px_16px_rgba(188,145,85,0.35)] hover:bg-[#d4a95a] hover:shadow-[0_8px_24px_rgba(188,145,85,0.45)]"
+                          : "border border-white/[0.22] bg-[rgba(10,18,35,0.42)] text-white backdrop-blur-[12px] hover:bg-[rgba(10,18,35,0.62)] hover:border-white/[0.35] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]",
+                      )}
+                    >
+                      {btnText}
+                    </span>,
                   )}
                 </div>
               );
@@ -520,74 +531,6 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
 
       <SharedLeadFormSection page={page} data={lead} accent={lead?.title_highlight || "Project"} />
       <SharedFinancingStrip data={financing} />
-
-      <style jsx global>{`
-        .county-hub-page .county-hero-ctas {
-          display: flex;
-          gap: 14px;
-          margin-top: 28px;
-          justify-content: center;
-          align-items: center;
-          flex-wrap: wrap;
-        }
-
-        .county-hub-page .county-hero-cta-btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          padding: 14px 32px;
-          border-radius: 8px;
-          background: rgba(10, 18, 35, 0.42);
-          border: 1px solid rgba(255, 255, 255, 0.22);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          color: #fff;
-          text-decoration: none;
-          font-family: "Inter", sans-serif;
-          font-size: 15px;
-          font-weight: 600;
-          letter-spacing: 0.3px;
-          white-space: nowrap;
-          transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-        }
-
-        .county-hub-page .county-hero-cta-btn:hover {
-          background: rgba(10, 18, 35, 0.62);
-          border-color: rgba(255, 255, 255, 0.35);
-          transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        }
-
-        .county-hub-page .county-hero-cta-btn--primary {
-          background: #bc9155;
-          border-color: #bc9155;
-          backdrop-filter: none;
-          -webkit-backdrop-filter: none;
-        }
-
-        .county-hub-page .county-hero-cta-btn--primary:hover {
-          background: #d4a95a;
-          border-color: #d4a95a;
-          box-shadow: 0 8px 24px rgba(188, 145, 85, 0.4);
-        }
-
-        @media (max-width: 768px) {
-          .county-hub-page .county-hero-ctas {
-            flex-direction: column;
-            align-items: center;
-          }
-
-          .county-hub-page .county-hero-cta-btn {
-            min-height: 44px;
-            width: 100%;
-            max-width: 300px;
-            justify-content: center;
-            font-size: 14px;
-            padding: 12px 24px;
-          }
-        }
-      `}</style>
     </div>
   );
 }

@@ -13,6 +13,7 @@ import {
   Linkedin,
   Mail,
   Menu,
+  MessageSquareMore,
   ShieldCheck,
   Star,
   X,
@@ -98,6 +99,13 @@ type ServicesGridData = {
   toggle_label?: string;
   toggle_less_label?: string;
   items?: ServiceItem[];
+  cta_card?: {
+    title?: string;
+    body?: string;
+    label?: string;
+    url?: string;
+    subtext?: string;
+  };
 };
 
 type RichTextData = {
@@ -194,7 +202,7 @@ function normalizeMediaPath(value?: string | null) {
     const storageIndex = url.pathname.indexOf(storagePrefix);
 
     if (storageIndex === -1) {
-      return value;
+      return url.pathname || value;
     }
 
     const relativePath = url.pathname.slice(storageIndex + storagePrefix.length);
@@ -495,25 +503,16 @@ function AreasHero({ data, phones }: { data?: HeroData; phones: PhoneItem[] }) {
           </p>
         ) : null}
 
-        <div className="hero-ctas areas-hero-ctas">
-          <ExternalOrInternalLink
-            href="#contact"
-            className="hero-cta-btn hero-cta-primary areas-hero-cta-btn-simple"
-          >
+        <div className="mt-8 flex flex-col items-center gap-[14px] sm:flex-row sm:justify-center">
+          <a href="#contact" className="w-[280px] rounded-[8px] border border-[#BC9155] bg-[#BC9155] px-8 py-[14px] text-center text-[15px] font-semibold text-white transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#D4A95A] hover:bg-[#D4A95A] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]">
             Get Your Free Estimate
-          </ExternalOrInternalLink>
-          <ExternalOrInternalLink
-            href={toTelHref(fairfieldPhone)}
-            className="hero-cta-btn areas-hero-cta-btn-simple"
-          >
-            Fairfield: {fairfieldPhone}
-          </ExternalOrInternalLink>
-          <ExternalOrInternalLink
-            href={toTelHref(newHavenPhone)}
-            className="hero-cta-btn areas-hero-cta-btn-simple"
-          >
-            New Haven: {newHavenPhone}
-          </ExternalOrInternalLink>
+          </a>
+          <a href="tel:2039199616" className="w-[280px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
+            <span className="text-[15px] font-semibold tracking-[0.1px] text-white">Fairfield: (203) 919-9616</span>
+          </a>
+          <a href="tel:2034669148" className="w-[280px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
+            <span className="text-[15px] font-semibold tracking-[0.1px] text-white">New Haven: (203) 466-9148</span>
+          </a>
         </div>
       </div>
     </section>
@@ -552,9 +551,6 @@ function AreasSection({ data, phones }: { data?: AreasServedData; phones: PhoneI
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const titleParts = getHighlightParts(data?.title, data?.highlight_text || undefined);
   const counties = data?.counties || [];
-  const expandableCount = counties.filter((county) => (county.extra_towns || []).length > 0).length;
-  const expandedCount = counties.filter((county) => (county.extra_towns || []).length > 0 && expanded[county.name || ""]).length;
-  const shouldMatchCardHeights = expandedCount === 0 || (expandableCount > 0 && expandedCount === expandableCount);
 
   return (
     <section className="section where-we-work areas-where-we-work">
@@ -569,7 +565,7 @@ function AreasSection({ data, phones }: { data?: AreasServedData; phones: PhoneI
           {data?.subtitle ? <p>{data.subtitle}</p> : null}
         </div>
 
-        <div className={`areas-grid${shouldMatchCardHeights ? " areas-grid-match" : ""}`}>
+        <div className="areas-grid">
           {counties.map((county) => {
             const countyName = county.name || "";
             const isExpanded = Boolean(expanded[countyName]);
@@ -684,7 +680,7 @@ function ServicesSection({ data }: { data?: ServicesGridData }) {
           ))}
         </div>
 
-        {hiddenItems.length > 0 ? (
+        {hiddenItems.length > 0 || data?.cta_card ? (
           <div className="services-toggle-wrap">
             <button
               type="button"
@@ -706,6 +702,7 @@ function ServicesSection({ data }: { data?: ServicesGridData }) {
             ))}
           </div>
         ) : null}
+
       </div>
     </section>
   );
@@ -726,6 +723,27 @@ function ServiceCard({ item }: { item: ServiceItem }) {
         <div className="service-card-divider" />
 
         {item.summary ? <p>{item.summary}</p> : null}
+      </div>
+    </article>
+  );
+}
+function ServiceCtaCard({
+  card,
+}: {
+  card: NonNullable<ServicesGridData["cta_card"]>;
+}) {
+  return (
+    <article className="service-card service-card-cta">
+      <div className="service-card-cta-inner">
+        <div className="cta-card-icon">
+          <MessageSquareMore className="h-10 w-10" />
+        </div>
+        <h3>{card.title}</h3>
+        {card.body ? <p>{card.body}</p> : null}
+        <Link href={card.url || "#contact"} className="cta-card-btn">
+          {card.label || "Schedule a Free Consultation"}
+        </Link>
+        {card.subtext ? <span className="cta-card-sub">{card.subtext}</span> : null}
       </div>
     </article>
   );
@@ -1215,20 +1233,18 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
         .areas-page .where-we-work, .areas-page .areas-services-section { background:var(--cream); }
         .areas-page .areas-services-section { padding-top:60px; padding-bottom:60px; }
         .areas-page .areas-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:start; }
-        .areas-page .areas-grid.areas-grid-match { align-items:stretch; }
         .areas-page .area-card { background:#fff; border-radius:12px; overflow:hidden; border-bottom:3px solid transparent; box-shadow:0 2px 12px rgba(30,43,67,.06),0 1px 3px rgba(30,43,67,.04); transition:.35s cubic-bezier(.4,0,.2,1); position:relative; display:flex; flex-direction:column; }
-        .areas-page .areas-grid.areas-grid-match .area-card { height:100%; }
         .areas-page .area-card:hover { transform:translateY(-6px); border-bottom-color:var(--gold); box-shadow:0 16px 40px rgba(30,43,67,.1),0 32px 64px rgba(30,43,67,.08); }
         .areas-page .area-card-img { height:220px; position:relative; overflow:hidden; }
         .areas-page .area-card-img:after { content:""; position:absolute; left:0; right:0; bottom:0; height:80px; background:linear-gradient(to top,rgba(30,43,67,.4),transparent); }
         .areas-page .area-card-img img { width:100%; height:100%; object-fit:cover; transition:transform .5s; }
         .areas-page .area-card:hover .area-card-img img { transform:scale(1.05); }
         .areas-page .area-card-img img.show-top { object-position:top; }
-        .areas-page .area-card-body { padding:28px 28px 32px; text-align:center; display:flex; flex:1; flex-direction:column; }
+        .areas-page .area-card-body { padding:28px 28px 32px; text-align:center; }
         .areas-page .area-card-body h3 { margin-bottom:6px; font:700 24px/1.2 "Playfair Display",serif; color:var(--oxford-blue); }
         .areas-page .area-card-phone { margin-bottom:14px; font-size:15px; color:var(--slate); }
         .areas-page .area-card-phone a { color:var(--gold); font-weight:600; }
-        .areas-page .area-card-desc { margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid rgba(30,43,67,.06); font-size:14px; line-height:1.7; color:var(--slate); }
+        .areas-page .area-card-desc { margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid rgba(30,43,67,.06); font-size:14px; line-height:1.7; color:var(--slate); flex:1; }
         .areas-page .area-towns { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
         .areas-page .area-town { background:var(--cream); border-radius:50px; padding:7px 10px; text-align:center; font-size:11px; font-weight:600; letter-spacing:.2px; color:var(--oxford-blue); text-decoration:none; white-space:nowrap; transition:.2s; }
         .areas-page .area-town:hover { background:var(--gold-light); color:var(--gold-dark); }
@@ -1238,7 +1254,7 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
         .areas-page .area-towns-more.show { display:grid; }
         .areas-page .area-towns-toggle { grid-column:1 / -1; margin-top:4px; background:none; border:none; color:var(--gold); font-size:13px; font-weight:600; cursor:pointer; }
         .areas-page .area-towns-toggle:hover { color:var(--gold-dark); }
-        .areas-page .area-link { display:inline-flex; align-items:center; gap:6px; margin-top:auto; padding-top:4px; color:var(--gold); font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; }
+        .areas-page .area-link { display:inline-flex; align-items:center; gap:6px; margin-top:4px; color:var(--gold); font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; }
         .areas-page .area-link:hover { gap:10px; }
 
         .areas-page .services-grid, .areas-page .services-more { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }

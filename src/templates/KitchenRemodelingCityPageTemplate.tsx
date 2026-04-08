@@ -152,6 +152,12 @@ const FLOORING_INCLUDED_COPY: Record<string, string> = {
   "Furniture Moving & Protection": "Careful furniture relocation and surface protection throughout the project.",
 };
 
+const FLOORING_EXTRA_PARAGRAPHS = [
+  "We install hardwood, engineered hardwood, luxury vinyl plank, and tile. Material selection depends on the room, the subfloor condition, and how the space is used. We walk you through the options during planning so you choose the right product for the right application,not just what looks good in a showroom.",
+  "Installation includes all transitions between rooms, baseboards and quarter-round trim, and any threshold adjustments at doorways. We protect all adjacent surfaces, furniture, and fixtures throughout the project. Dust barriers go up before demo begins and stay up until final cleanup.",
+  "Every flooring project ends with a detailed walkthrough. We inspect every seam, transition, and edge before we consider the job complete. If anything is not right, we fix it before we leave.",
+];
+
 const BASEMENT_INCLUDED_COPY: Record<string, string> = {
   "Framing & Insulation": "Steel or wood stud framing with rigid foam or fiberglass insulation for comfort and code compliance.",
   "Drywall & Paint": "Moisture-resistant drywall throughout, taped, mudded, sanded, and finished with premium interior paint.",
@@ -164,7 +170,7 @@ const BASEMENT_INCLUDED_COPY: Record<string, string> = {
 };
 
 const BATHROOM_INCLUDED_COPY: Record<string, string> = {
-  "Tile & Stone": "Shower tile, floor tile, and accent walls — porcelain, ceramic, marble, and natural stone options.",
+  "Tile & Stone": "Shower tile, floor tile, and accent walls,porcelain, ceramic, marble, and natural stone options.",
   "Vanity & Countertops": "Custom, semi-custom, or stock vanities with stone or solid-surface countertops and undermount sinks.",
   "Shower & Tub": "Walk-in showers, tub-to-shower conversions, freestanding tubs, and glass enclosures.",
   Plumbing: "New supply lines, drain relocation, fixture connections, and water heater assessment.",
@@ -178,9 +184,12 @@ type ServiceMeta = {
   serviceLabel: string;
   servicePath: string;
   defaultHeroImage: string;
+  defaultIntroMain: string;
+  defaultIntroSecondary: string;
   scopeLabel: string;
   includedCopy: Record<string, string>;
   relatedFooter: string;
+  defaultRecentImages: string[];
 };
 
 const SERVICE_META: Record<string, ServiceMeta> = {
@@ -188,33 +197,45 @@ const SERVICE_META: Record<string, ServiceMeta> = {
     serviceLabel: "Kitchen Remodeling",
     servicePath: "/kitchen-remodeling/",
     defaultHeroImage: "/images/headers/kitchen-remodeling-header.jpg",
+    defaultIntroMain: "/services/kitchen-remodeling-ct.jpg",
+    defaultIntroSecondary: "/services/kitchen-remodeling-consultation-ct-03.jpg",
     scopeLabel: "Scope of Work",
     includedCopy: KITCHEN_INCLUDED_COPY,
     relatedFooter: "Many kitchen remodeling projects include or lead to these related services.",
+    defaultRecentImages: ["/images/before-after/kitchen-before-after-1.jpg", "/images/before-after/kitchen-before-after-2.jpg", "/images/before-after/kitchen-before-after-3.jpg"],
   },
   flooring: {
     serviceLabel: "Flooring",
     servicePath: "/flooring/",
     defaultHeroImage: "/images/headers/flooring-header.jpg",
+    defaultIntroMain: "/services/flooring-hardwood-installation-ct-02.jpg",
+    defaultIntroSecondary: "/services/flooring-installation-detail-01-ct.jpg",
     scopeLabel: "Scope of Work",
     includedCopy: FLOORING_INCLUDED_COPY,
     relatedFooter: "Many flooring projects include or lead to these related services.",
+    defaultRecentImages: ["/services/flooring-greenwich-ct.jpg", "/services/flooring-milford-ct.jpg", "/services/flooring-installation-ct.jpg"],
   },
   "bathroom-remodeling": {
     serviceLabel: "Bathroom Remodeling",
     servicePath: "/bathroom-remodeling/",
     defaultHeroImage: "/images/headers/bathroom-remodeling-header.jpg",
+    defaultIntroMain: "/services/bathroom-remodeling-ct.jpg",
+    defaultIntroSecondary: "/services/bathroom-remodeling-luxury-master-ct-01.jpeg",
     scopeLabel: "Scope of Work",
     includedCopy: BATHROOM_INCLUDED_COPY,
     relatedFooter: "Many bathroom remodeling projects include or lead to these related services.",
+    defaultRecentImages: ["/services/bathroom-remodeling-ct.jpg", "/services/bathroom-remodeling-luxury-master-ct-01.jpeg", "/services/bathroom-remodeling-completed-walkthrough-ct-02.jpg"],
   },
   "basement-finishing": {
     serviceLabel: "Basement Finishing",
     servicePath: "/basement-finishing/",
     defaultHeroImage: "/images/headers/basement-finishing-header.jpg",
+    defaultIntroMain: "/services/basement-finishing-ct.jpg",
+    defaultIntroSecondary: "/services/basement-finishing-framing-ct-01.jpeg",
     scopeLabel: "Scope of Work",
     includedCopy: BASEMENT_INCLUDED_COPY,
     relatedFooter: "Many basement finishing projects include or lead to these related services.",
+    defaultRecentImages: ["/services/basement-finishing-ct.jpg", "/services/basement-finishing-drywall-work-ct-01.jpeg", "/services/basement-finishing-framing-ct-01.jpeg"],
   },
 };
 
@@ -240,9 +261,12 @@ function deriveCityConfig(slug: string) {
     serviceLabel: meta.serviceLabel,
     servicePath: meta.servicePath,
     defaultHeroImage: meta.defaultHeroImage,
+    defaultIntroMain: meta.defaultIntroMain,
+    defaultIntroSecondary: meta.defaultIntroSecondary,
     scopeLabel: meta.scopeLabel,
     includedCopy: meta.includedCopy,
     relatedFooter: meta.relatedFooter,
+    defaultRecentImages: meta.defaultRecentImages,
   };
 }
 
@@ -283,7 +307,7 @@ function IncludedIcon() {
 }
 
 function paragraphize(value?: string | null) {
-  return (value || "").split(/\n\n+/).map((entry) => entry.trim()).filter(Boolean);
+  return (value || "").replace(/\s*—\s*/g, ", ").split(/\n\n+/).map((entry) => entry.trim()).filter(Boolean);
 }
 
 function normalizeSlug(slug?: string) {
@@ -323,12 +347,17 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
   const config = deriveCityConfig(slug);
   const phones = ((page as CMSPage & { phones?: { items?: PhoneItem[] } }).phones?.items) || [];
   const primaryPhone = resolveCountyPhone(phones, config.countyLabel, config.defaultPhone);
+  const isFairfieldPrimary = config.countyLabel.includes("Fairfield");
+  const secondaryPhone = isFairfieldPrimary ? "(203) 466-9148" : "(203) 919-9616";
+  const secondaryCountyLabel = isFairfieldPrimary ? "New Haven" : "Fairfield";
   const repeatedBrands = useMemo(() => ([...(brands?.items || []), ...(brands?.items || [])]), [brands?.items]);
   const [activeStep, setActiveStep] = useState<number | null>(null);
   const [countyOpen, setCountyOpen] = useState<Record<number, boolean>>({});
   const localExpertiseParagraphs = paragraphize(localExpertise?.content);
   const localExpertiseIntro = localExpertiseParagraphs[0];
   const localExpertiseBody = localExpertiseParagraphs.slice(1);
+  const serviceSlug = deriveServiceSlug(slug);
+  const showBeforeAfter = serviceSlug === "kitchen-remodeling";
 
   return (
     <div className="bg-white text-[#1e2b43]">
@@ -350,9 +379,19 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
               <AccentTitle text={hero?.headline || `${config.serviceLabel} in ${config.cityLabel}`} accent={config.heroAccent} />
             </h1>
             {hero?.subheadline ? <p className="mt-4 max-w-[720px] text-[17px] leading-[1.72] text-white/84">{hero.subheadline}</p> : null}
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <HeroCta label={config.countyLabel} value={primaryPhone} href={`tel:${primaryPhone.replace(/\D/g, "")}`} />
-              <HeroCta label={hero?.primary_cta?.label || "Free Estimate"} value="Schedule Now" href={hero?.primary_cta?.url || "#contact"} primary />
+            <div className="mt-8 flex flex-col items-center gap-[14px] sm:flex-row sm:justify-center">
+              <a
+                href="#contact"
+                className="w-[280px] rounded-[8px] border border-[#BC9155] bg-[#BC9155] px-8 py-[14px] text-center text-[15px] font-semibold text-white transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#D4A95A] hover:bg-[#D4A95A] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
+              >
+                Get Your Free Estimate
+              </a>
+              <a
+                href={`tel:${primaryPhone.replace(/\D/g, "")}`}
+                className="w-[280px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
+              >
+                <span className="text-[15px] font-semibold tracking-[0.1px] text-white">{isFairfieldPrimary ? "Fairfield" : "New Haven"}: {primaryPhone}</span>
+              </a>
             </div>
           </div>
         </section>
@@ -379,21 +418,25 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
                 <AccentTitle text={intro?.title || `What Is Included in a ${config.serviceLabel} Project in ${config.cityShort}`} accent={config.cityShort} />
               </h2>
             </div>
-            <div className="grid gap-12 lg:grid-cols-2">
-              <div className="grid gap-3">
-                <div className="aspect-[16/10] overflow-hidden rounded-[12px] bg-[#F3EFE7] shadow-[0_10px_34px_rgba(30,43,67,0.1)]">
-                  <img src={media(intro?.image_main, "/services/kitchen-remodeling-ct.jpg")} alt={intro?.image_main_alt || "Finished kitchen remodel"} className="h-full w-full object-cover object-center" />
+            <div className="grid gap-12 lg:grid-cols-2 lg:items-stretch">
+              <div className="grid gap-3 lg:h-full lg:grid-rows-2">
+                <div className="aspect-[16/10] overflow-hidden rounded-[12px] bg-[#F3EFE7] shadow-[0_8px_32px_rgba(30,43,67,0.1)] lg:aspect-auto lg:h-full">
+                  <img src={media(intro?.image_main, config.defaultIntroMain)} alt={intro?.image_main_alt || `${config.serviceLabel} project`} className="h-full w-full object-cover object-center" />
                 </div>
-                <div className="aspect-[16/10] overflow-hidden rounded-[12px] bg-[#F3EFE7] shadow-[0_10px_34px_rgba(30,43,67,0.1)]">
-                  <img src={media(intro?.image_secondary, "/services/kitchen-remodeling-ct.jpg")} alt={intro?.image_secondary_alt || "Kitchen remodeling consultation"} className="h-full w-full object-cover object-center" />
+                <div className="aspect-[16/10] overflow-hidden rounded-[12px] bg-[#F3EFE7] shadow-[0_8px_32px_rgba(30,43,67,0.1)] lg:aspect-auto lg:h-full">
+                  <img src={intro?.image_secondary && intro.image_secondary !== intro.image_main ? media(intro.image_secondary, config.defaultIntroSecondary) : media(config.defaultIntroSecondary)} alt={intro?.image_secondary_alt || `${config.serviceLabel} consultation`} className="h-full w-full object-cover object-center" />
                 </div>
               </div>
-              <div className="rounded-[12px] border border-[#1e2b4312] bg-white px-6 py-7 shadow-[0_2px_12px_rgba(30,43,67,0.05)] md:px-9">
-                {paragraphize(intro?.content).map((paragraph, index) => (
-                  <p key={paragraph.slice(0, 30)} className={`mb-[18px] text-[16px] leading-[1.8] text-[#5c677d] last:mb-0 ${index === 0 ? "border-b border-[#1e2b4312] pb-[18px] font-medium text-[#1e2b43]" : ""}`}>
-                    {paragraph}
-                  </p>
-                ))}
+              <div className="h-full overflow-hidden rounded-[12px] border border-[#1e2b4312] bg-white px-6 py-7 shadow-[0_2px_12px_rgba(30,43,67,0.05)] md:px-9">
+                {(() => {
+                  const paras = paragraphize(intro?.content);
+                  const allParas = serviceSlug === "flooring" && paras.length < 4 ? [...paras, ...FLOORING_EXTRA_PARAGRAPHS] : paras;
+                  return allParas.map((paragraph, index) => (
+                    <p key={paragraph.slice(0, 30)} className={`mb-[18px] text-[16px] leading-[1.8] text-[#5c677d] last:mb-0 ${index === 0 ? "border-b border-[#1e2b4312] pb-[18px] font-medium text-[#1e2b43]" : ""}`}>
+                      {paragraph}
+                    </p>
+                  ));
+                })()}
               </div>
             </div>
             <div className="mt-12 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
@@ -414,7 +457,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
           <div className="mx-auto max-w-[1100px]">
             <div className="text-center">
               {label(localizedBlock?.eyebrow || "Local Expertise")}
-              <h2 className="text-[clamp(32px,3.8vw,46px)] font-bold leading-[1.2] tracking-[-0.02em]">
+              <h2 className="mx-auto max-w-[640px] text-[clamp(32px,3.8vw,46px)] font-bold leading-[1.2] tracking-[-0.02em]">
                 <AccentTitle text={localizedBlock?.title || `What Makes ${config.serviceLabel} in ${config.cityShort} Different`} accent={localizedBlock?.highlight_text || config.cityShort} />
               </h2>
             </div>
@@ -449,25 +492,24 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
             </div>
             <div className="grid gap-6 lg:grid-cols-3">
               {(recentProjects?.items || []).map((item, index) => (
-                <article key={`${item.title}-${index}`} className="overflow-hidden rounded-[12px] border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
+                <article key={`${item.title}-${index}`} className="flex flex-col overflow-hidden rounded-[12px] border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
                   <div className="relative h-[280px] overflow-hidden">
-                    <div className="grid h-full grid-cols-2">
-                      <img src={media(item.before_image, "/images/before-after/kitchen-before-after-1.jpg")} alt={item.before_image_alt || `${item.title || "Kitchen project"} before`} className="h-full w-full object-cover" />
-                      <img src={media(item.after_image, "/images/before-after/kitchen-before-after-1.png")} alt={item.after_image_alt || `${item.title || "Kitchen project"} after`} className="h-full w-full object-cover" />
-                    </div>
+                    <img src={media(item.before_image || (item as any).image, config.defaultRecentImages[index] || config.defaultRecentImages[0])} alt={item.before_image_alt || `${item.title || config.serviceLabel + " project"}`} className="h-full w-full object-cover" />
+                    {showBeforeAfter && (<>
                     <div className="absolute inset-x-0 bottom-0 h-[76px] bg-[linear-gradient(to_bottom,transparent_0%,rgba(0,0,0,0.92)_55%,rgba(0,0,0,0.96)_100%)]" />
                     <div className="absolute bottom-0 left-0 flex h-[76px] w-1/2 items-end px-[14px] pb-[13px]"><span className="text-[13px] font-extrabold uppercase tracking-[2.5px] text-white">Before</span></div>
                     <div className="absolute bottom-0 right-0 flex h-[76px] w-1/2 items-end justify-end px-[14px] pb-[13px]"><span className="text-[13px] font-extrabold uppercase tracking-[2.5px] text-white">After</span></div>
+                    </>)}
                   </div>
-                  <div className="px-7 py-7">
+                  <div className="flex flex-1 flex-col px-7 py-7">
                     <h3 className="mb-3 text-[20px] font-bold">{item.title}</h3>
-                    <p className="text-[14px] leading-[1.75] text-[#5c677d]">{item.before_text}</p>
+                    <p className="flex-1 text-[14px] leading-[1.75] text-[#5c677d]">{item.before_text}</p>
                   </div>
                   {item.quote?.text ? (
                     <div className="border-t border-[#1e2b430f] px-7 py-6">
                       <div className="border-l-[3px] border-[#bc9155] pl-4">
                         <p className="min-h-[72px] text-[14px] italic leading-[1.65] text-[#1e2b43]">&quot;{item.quote.text}&quot;</p>
-                        <cite className="mt-2 block text-[12px] font-semibold not-italic text-[#5c677d]">{[item.quote.author, item.quote.location].filter(Boolean).join(", ")}</cite>
+                        <cite className="mt-2 block text-[12px] font-semibold not-italic text-[#5c677d]">{["Homeowner", item.quote.location].filter(Boolean).join(", ")}</cite>
                       </div>
                     </div>
                   ) : null}
@@ -510,15 +552,14 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
         </section>
 
         <section className="bg-white px-5 py-20 md:px-10">
-          <div className="mx-auto max-w-[820px]">
-            <div className="text-center">
+          <div className="mx-auto max-w-[820px] text-center">
+            <div>
               {label(localExpertise?.eyebrow || "Local Knowledge")}
               <h2 className="text-[clamp(32px,3.8vw,46px)] font-bold leading-[1.2] tracking-[-0.02em]">
                 <AccentTitle text={localExpertise?.title || `Why ${config.serviceLabel} in ${config.cityShort} Requires Local Expertise`} accent={localExpertise?.highlight_text || "Local Expertise"} />
               </h2>
-              {localExpertiseIntro ? <p className="mx-auto mt-3 max-w-[720px] text-[17px] leading-[1.75] text-[#5c677d]">{localExpertiseIntro}</p> : null}
             </div>
-            {localExpertiseBody.map((paragraph) => (
+            {localExpertiseParagraphs.map((paragraph) => (
               <p key={paragraph.slice(0, 30)} className="mt-5 text-[16px] leading-[1.85] text-[#5c677d]">{paragraph}</p>
             ))}
           </div>

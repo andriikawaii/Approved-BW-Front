@@ -405,26 +405,16 @@ export function FinancingPageTemplate({ page }: { page: CMSPage }) {
             {heroSubheadline}
           </p>
           {/* CTA buttons */}
-          <div className="fade-up hero-ctas mt-7 flex flex-col items-center gap-3.5 md:flex-row md:flex-wrap md:justify-center" style={{ ...fadeUpStyle, transitionDelay: "0.3s" }}>
-            {heroBadges.map((badge: any, index: number) => {
-              const isPrimary = !!badge.is_primary;
-              const displayText = badge.value ? `${badge.label}: ${badge.value}` : badge.label;
-              return (
-                <a
-                  key={`${badge.label || "badge"}-${index}`}
-                  href={badge.url || "#"}
-                  className={cls(
-                    "hero-cta-btn inline-flex items-center justify-center gap-2 rounded-lg border px-8 py-3.5 text-[15px] font-semibold tracking-[0.3px] text-white whitespace-nowrap transition-all duration-300 hover:-translate-y-[2px]",
-                    isPrimary
-                      ? "hero-cta-primary border-[#bc9155] bg-[#bc9155] hover:border-[#d4a95a] hover:bg-[#d4a95a] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
-                      : "border-white/[0.22] bg-[rgba(10,18,35,0.42)] backdrop-blur-[12px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]",
-                  )}
-                  {...(badge.url?.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                >
-                  {displayText}
-                </a>
-              );
-            })}
+          <div className="fade-up mt-8 flex flex-col items-center gap-[14px] sm:flex-row sm:justify-center" style={{ ...fadeUpStyle, transitionDelay: "0.3s" }}>
+            <a href="#contact" className="w-[280px] rounded-[8px] border border-[#BC9155] bg-[#BC9155] px-8 py-[14px] text-center text-[15px] font-semibold text-white transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#D4A95A] hover:bg-[#D4A95A] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]">
+              Get Your Free Estimate
+            </a>
+            <a href="tel:2039199616" className="w-[280px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
+              <span className="text-[15px] font-semibold tracking-[0.1px] text-white">Fairfield: (203) 919-9616</span>
+            </a>
+            <a href="tel:2034669148" className="w-[280px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
+              <span className="text-[15px] font-semibold tracking-[0.1px] text-white">New Haven: (203) 466-9148</span>
+            </a>
           </div>
         </div>
       </section>

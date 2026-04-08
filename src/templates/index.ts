@@ -12,7 +12,6 @@ import { DefaultPageTemplate } from './DefaultPageTemplate';
 import { FaqPageTemplate } from './FaqPageTemplate';
 import { FinancingPageTemplate } from './FinancingPageTemplate';
 import { HomePageTemplate } from './HomePageTemplate';
-import { HomeownerHubPageTemplate } from './HomeownerHubPageTemplate';
 import { InsuranceRestorationPageTemplate } from './InsuranceRestorationPageTemplate';
 import { KitchenRemodelingCityPageTemplate } from './KitchenRemodelingCityPageTemplate';
 import { KitchenRemodelingPageTemplate } from './KitchenRemodelingPageTemplate';
@@ -36,6 +35,7 @@ import { GreenwichCTPageTemplate } from './GreenwichCTPageTemplate';
 import { WestportCTPageTemplate } from './WestportCTPageTemplate';
 import { OrangeCTPageTemplate } from './OrangeCTPageTemplate';
 import { NewHavenCTPageTemplate } from './NewHavenCTPageTemplate';
+import { HomeownerHubPageTemplate } from './HomeownerHubPageTemplate';
 import { MadisonCTPageTemplate } from './MadisonCTPageTemplate';
 
 type TemplateComponent = (props: { page: CMSPage }) => React.JSX.Element;
@@ -127,6 +127,10 @@ export function renderTemplate(page: CMSPage) {
     return createElement(FreeConsultationPageTemplate, { page });
   }
 
+  if (normalizePageSlug(page.slug) === 'homeowner-hub') {
+    return createElement(HomeownerHubPageTemplate, { page });
+  }
+
   if (normalizePageSlug(page.slug) === 'insurance-restoration') {
     return createElement(InsuranceRestorationPageTemplate, { page });
   }
@@ -199,10 +203,6 @@ export function renderTemplate(page: CMSPage) {
 
   if (normalizePageSlug(page.slug) === 'financing') {
     return createElement(FinancingPageTemplate, { page });
-  }
-
-  if (normalizePageSlug(page.slug) === 'homeowner-hub') {
-    return createElement(HomeownerHubPageTemplate, { page });
   }
 
   if (normalizePageSlug(page.slug) === 'pricing') {

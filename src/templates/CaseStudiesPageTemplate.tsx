@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ArrowRight, CheckCircle2, ChevronDown, Upload } from "lucide-react";
+import { ArrowRight, CalendarDays, CheckCircle2, ChevronDown, Star, Upload } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
 import { FinancingStrip as SharedFinancingStrip, LeadFormSection as SharedLeadFormSection, cls, linkNode, media, opts, parts, section, sections } from "./template-utils";
 
@@ -41,8 +41,6 @@ type RichTextData = {
   highlight_text?: string | null;
   content?: string;
   style_variant?: string;
-  image?: string | null;
-  image_alt?: string | null;
   cta?: {
     label?: string;
     url?: string;
@@ -82,73 +80,32 @@ type CaseStudyCard = {
   quote: string;
   attribution: string;
   link: string;
-  image?: string | null;
-  image_alt?: string | null;
-};
-
-type TrustLinkItem = {
-  label: string;
-  url: string;
-  icon: React.ReactNode;
 };
 
 const CARD_IMAGE_MAP: Record<string, string> = {
   "Whole-Home Restoration — Hamden": "/portfolio/builtwell-team-interior-inspection-ct.jpg",
   "Basement Finishing — Darien": "/images/headers/basement-finishing-header.jpg",
-  "Bathroom Remodeling — Westport": "/images/headers/bathroom-remodeling-header.jpg",
+  "Deck Build — Shelton": "/images/headers/decks-porches-header.jpg",
   "Kitchen Remodeling — New Canaan": "/images/headers/kitchen-remodeling-header.jpg",
-  "Kitchen + Flooring — Milford": "/portfolio/builtwell-team-completed-interior-ct.png",
 };
 
 const CARD_LINK_MAP: Record<string, string> = {
   "Whole-Home Restoration — Hamden": "/case-studies/whole-home-restoration-hamden",
   "Basement Finishing — Darien": "/case-studies/basement-finishing-darien",
-  "Bathroom Remodeling — Westport": "/case-studies/bathroom-remodeling-westport",
+  "Deck Build — Shelton": "/decks-porches/",
   "Kitchen Remodeling — New Canaan": "/case-studies/kitchen-remodeling-new-canaan",
-  "Kitchen + Flooring — Milford": "/case-studies/kitchen-remodeling-milford",
 };
 
-const CASE_STUDIES_TRUST_LINKS: TrustLinkItem[] = [
-  {
-    label: "Google Rating 4.9",
-    url: "https://www.google.com/search?q=builtwell+ct+reviews",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-    ),
-  },
-  {
-    label: "Trusted on Houzz",
-    url: "https://www.houzz.com/professionals/general-contractors/builtwell-ct",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M9 12l2 2 4-4" />
-      </svg>
-    ),
-  },
-  {
-    label: "CT HIC License #0668405",
-    url: "https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-        <rect x="3" y="4" width="18" height="16" rx="2" />
-        <path d="M8 2v4M16 2v4M3 10h18" />
-      </svg>
-    ),
-  },
-  {
-    label: "Verified on Angi",
-    url: "https://www.angi.com/companylist/us/ct/orange/builtwell-ct-reviews-",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M9 12l2 2 4-4" />
-      </svg>
-    ),
-  },
-];
+/* Override homeowner names to generic "Resident" / "Homeowner" */
+const ATTRIBUTION_MAP: Record<string, string> = {
+  "The Martins, Hamden": "Hamden Homeowner",
+  "Steve R., Darien": "Darien Resident",
+  "The Chens, New Canaan": "New Canaan Homeowner",
+  "Jennifer M., Westport": "Westport Resident",
+  "Ivana P., Milford": "Milford Homeowner",
+  "Homeowner, New Canaan": "New Canaan Homeowner",
+  "Homeowner, Milford": "Milford Homeowner",
+};
 
 function FadeUp({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -191,6 +148,20 @@ function getPhone(phones: PhoneItem[], county: "fairfield" | "new-haven", fallba
   return match?.number || fallback;
 }
 
+function trustIcon(icon?: string | null) {
+  switch ((icon || "").toLowerCase()) {
+    case "star":
+      return <Star className="h-[22px] w-[22px]" />;
+    case "shield":
+      return <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mx-auto"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>;
+    case "calendar":
+    case "clock":
+      return <CalendarDays className="h-[22px] w-[22px]" />;
+    default:
+      return <CheckCircle2 className="h-[22px] w-[22px]" />;
+  }
+}
+
 function parseCaseStudy(block: RichTextData): CaseStudyCard {
   const values = new Map<string, string>();
 
@@ -208,8 +179,6 @@ function parseCaseStudy(block: RichTextData): CaseStudyCard {
     quote: values.get("quote") || "",
     attribution: values.get("attribution") || "",
     link: values.get("link") || "#contact",
-    image: block.image || null,
-    image_alt: block.image_alt || null,
   };
 }
 
@@ -217,7 +186,6 @@ function HeroSection({ hero, phones }: { hero?: HeroData; phones: PhoneItem[] })
   const titleParts = parts(hero?.headline || "Our Case Studies", "Case Studies");
   const fairfieldPhone = getPhone(phones, "fairfield", "(203) 919-9616");
   const newHavenPhone = getPhone(phones, "new-haven", "(203) 466-9148");
-  const primaryHeroLabel = "Get Your Free Estimate";
 
   return (
     <section className="relative isolate overflow-hidden bg-[#151E30] px-5 pb-14 pt-[130px] text-white md:px-10">
@@ -235,10 +203,16 @@ function HeroSection({ hero, phones }: { hero?: HeroData; phones: PhoneItem[] })
           {titleParts.after}
         </h1>
         {hero?.subheadline ? <p className="mt-4 max-w-[560px] text-[17px] leading-[1.7] text-white/82">{hero.subheadline}</p> : null}
-        <div className="case-studies-hero-ctas">
-          {linkNode(hero?.cta_primary?.url || "#contact", primaryHeroLabel, "case-studies-hero-cta-btn case-studies-hero-cta-btn--primary")}
-          {linkNode(toTelHref(fairfieldPhone), `Fairfield: ${fairfieldPhone}`, "case-studies-hero-cta-btn")}
-          {linkNode(toTelHref(newHavenPhone), `New Haven: ${newHavenPhone}`, "case-studies-hero-cta-btn")}
+        <div className="mt-8 flex flex-col items-center gap-[14px] sm:flex-row sm:justify-center">
+          <a href="#contact" className="w-[280px] rounded-[8px] border border-[#BC9155] bg-[#BC9155] px-8 py-[14px] text-center text-[15px] font-semibold text-white transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#D4A95A] hover:bg-[#D4A95A] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]">
+            Get Your Free Estimate
+          </a>
+          <a href="tel:2039199616" className="w-[280px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
+            <span className="text-[15px] font-semibold tracking-[0.1px] text-white">Fairfield: (203) 919-9616</span>
+          </a>
+          <a href="tel:2034669148" className="w-[280px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
+            <span className="text-[15px] font-semibold tracking-[0.1px] text-white">New Haven: (203) 466-9148</span>
+          </a>
         </div>
       </div>
     </section>
@@ -303,176 +277,53 @@ function CaseStudyGrid({ cards }: { cards: CaseStudyCard[] }) {
       <div className="mx-auto max-w-[1240px]">
         <div className="mx-auto grid max-w-[1200px] gap-8 md:grid-cols-2">
           {cards.map((card, i) => {
-            const image = media(card.image, CARD_IMAGE_MAP[card.title] || "/portfolio/builtwell-contractor-client-consultation-ct.jpeg");
+            const image = CARD_IMAGE_MAP[card.title] || "/portfolio/builtwell-contractor-client-consultation-ct.jpeg";
 
             return (
               <FadeUp key={card.title} delay={i % 2 === 0 ? 0 : 120}>
                 <article className="group/card flex h-full flex-col rounded-[12px] border-b-[3px] border-b-transparent bg-white p-7 shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1.5 hover:border-b-[#BC9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
                   <div className="relative mb-5 h-[280px] overflow-hidden rounded-[8px]">
-                    <img src={image} alt={card.image_alt || card.title} className="h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover/card:scale-105" />
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[76px] bg-[linear-gradient(to_bottom,transparent_0%,rgba(0,0,0,0.92)_55%,rgba(0,0,0,0.96)_100%)]" />
-                    <div className="absolute bottom-0 left-0 z-[2] flex h-[76px] w-1/2 items-end px-[14px] pb-[13px]"><span className="text-[13px] font-extrabold uppercase tracking-[2.5px] text-white">Before</span></div>
-                    <div className="absolute bottom-0 right-0 z-[2] flex h-[76px] w-1/2 items-end justify-end px-[14px] pb-[13px]"><span className="text-[13px] font-extrabold uppercase tracking-[2.5px] text-white">After</span></div>
+                    <img src={image} alt={card.title} className="h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover/card:scale-105" />
                   </div>
-                  <div className="flex flex-1 flex-col items-center text-center">
+                  <div className="flex flex-1 flex-col">
                     <h3 className="mb-3 font-serif text-[22px] font-bold text-[#1E2B43]">{card.title}</h3>
                     <div className="mb-3 flex flex-wrap gap-[10px]">
                       <span className="rounded-full bg-[rgba(188,145,85,0.1)] px-3 py-1 text-[12px] font-semibold tracking-[0.3px] text-[#9A7340]">{card.timeline}</span>
                       <span className="rounded-full bg-[rgba(188,145,85,0.1)] px-3 py-1 text-[12px] font-semibold tracking-[0.3px] text-[#9A7340]">{card.badge}</span>
                     </div>
-                    <p className="max-w-[520px] text-[15px] leading-[1.75] text-[#5C677D]">{card.summary}</p>
-                    <div className="mt-4 w-full border-l-[3px] border-l-[#BC9155] px-4 italic text-[#1E2B43]">
+                    <p className="flex-1 text-[15px] leading-[1.75] text-[#5C677D]">{card.summary}</p>
+                    <div className="mt-4 border-l-[3px] border-l-[#BC9155] pl-4 italic text-[#1E2B43]">
                       <p className="min-h-[72px] text-[15px] leading-[1.65] text-[#1E2B43]">&quot;{card.quote}&quot;</p>
-                      <cite className="mt-2 block text-[12px] font-semibold not-italic text-[#5C677D]">{card.attribution}</cite>
+                      <cite className="mt-2 block text-[12px] font-semibold not-italic text-[#5C677D]">- {ATTRIBUTION_MAP[card.attribution] || card.attribution}</cite>
                     </div>
-                    {linkNode(CARD_LINK_MAP[card.title] || card.link, <><span>View Case Study</span><ArrowRight className="h-[14px] w-[14px] transition-transform duration-200 group-hover/card:translate-x-1" /></>, "mt-auto inline-flex items-center gap-[6px] pt-4 text-[14px] font-semibold text-[#BC9155] transition-all duration-200 hover:gap-[10px]")}
                   </div>
                 </article>
               </FadeUp>
             );
           })}
-          <FadeUp delay={cards.length % 2 === 0 ? 0 : 120}>
-            <article className="flex h-full flex-col items-center justify-center rounded-[12px] border-b-[2px] border-b-[#BC9155] bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] px-8 py-12 text-center text-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)]">
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[rgba(188,145,85,0.15)]">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#BC9155" strokeWidth="1.5" aria-hidden="true">
-                  <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
-                  <path d="M12 6v6l4 2" />
-                </svg>
-              </div>
-              <h3 className="font-serif text-[22px] font-bold text-white">
-                Your Project Could Be <span className="text-[#BC9155]">Next</span>
-              </h3>
-              <p className="mt-3 max-w-[320px] text-[15px] leading-[1.7] text-white/70">
-                Tell us about your remodeling project and get a free, no-obligation estimate within 24 hours.
-              </p>
-              {linkNode(
-                "#contact",
-                "Get Your Free Estimate",
-                "mt-7 inline-flex items-center justify-center rounded-[8px] bg-[#BC9155] px-10 py-[14px] text-[15px] font-semibold text-white transition-[background] duration-200 hover:bg-[#A57D48]",
-              )}
-              <p className="mt-[14px] text-[12px] italic text-white/40">On-site or remote via Google Meet</p>
-            </article>
-          </FadeUp>
         </div>
       </div>
     </section>
   );
 }
 
-function TrustStrip() {
+function TrustStrip({ data }: { data?: TrustBarData }) {
+  const items = data?.items ?? [];
+  if (!items.length) return null;
+
   return (
     <FadeUp>
-      <div className="case-studies-trust-strip" role="region" aria-label="Trust indicators">
-        <div className="case-studies-trust-strip-inner">
-          {CASE_STUDIES_TRUST_LINKS.map((item, index) => (
-            <div key={item.label} className="contents">
-              <a
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="case-studies-trust-strip-item"
-                aria-label={item.label}
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </a>
-              {index < CASE_STUDIES_TRUST_LINKS.length - 1 ? <div className="case-studies-trust-strip-divider" /> : null}
+      <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] px-5 py-14 md:px-10">
+        <div className="absolute inset-0 bg-cover bg-center opacity-[0.06]" style={{ backgroundImage: "url(/portfolio/builtwell-job-site-aerial-ct.jpg)" }} />
+        <div className="relative mx-auto flex max-w-[1200px] flex-wrap items-center justify-center">
+          {items.map((item, index) => (
+            <div key={`${item.label}-${index}`} className="contents">
+              {linkNode(item.url || "#", <div className="flex min-w-[180px] flex-1 flex-col items-center gap-[10px] px-8 py-5 text-center text-[13px] font-semibold tracking-[0.4px] text-white/90 transition-all duration-300 hover:-translate-y-1 hover:text-[#BC9155]"><span className="text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))]">{trustIcon(item.icon)}</span><span>{item.label}</span></div>, "flex flex-1 justify-center")}
+              {index < items.length - 1 ? <div className="hidden h-10 w-px bg-white/10 lg:block" /> : null}
             </div>
           ))}
         </div>
       </div>
-      <style jsx global>{`
-        .case-studies-page .case-studies-trust-strip {
-          background: linear-gradient(135deg, #1e2b43 0%, #151e30 100%);
-          padding: 56px 40px;
-          position: relative;
-          overflow: hidden;
-        }
-
-        .case-studies-page .case-studies-trust-strip::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: url("/hero/builtwell-job-site-aerial-hero-ct.jpg") center / cover no-repeat;
-          opacity: 0.06;
-        }
-
-        .case-studies-page .case-studies-trust-strip-inner {
-          max-width: 1200px;
-          margin: 0 auto;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0;
-          flex-wrap: wrap;
-          position: relative;
-          z-index: 1;
-        }
-
-        .case-studies-page .case-studies-trust-strip-item {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 10px;
-          font-size: 13px;
-          font-weight: 600;
-          color: rgba(255, 255, 255, 0.9);
-          letter-spacing: 0.4px;
-          white-space: nowrap;
-          text-decoration: none;
-          transition: all 0.3s;
-          padding: 20px 32px;
-          flex: 1;
-          min-width: 180px;
-          text-align: center;
-        }
-
-        .case-studies-page .case-studies-trust-strip-item:hover {
-          color: #bc9155;
-          transform: translateY(-2px);
-        }
-
-        .case-studies-page .case-studies-trust-strip-item svg {
-          color: #bc9155;
-          flex-shrink: 0;
-          width: 22px;
-          height: 22px;
-          filter: drop-shadow(0 2px 4px rgba(188, 145, 85, 0.3));
-        }
-
-        .case-studies-page .case-studies-trust-strip-divider {
-          width: 1px;
-          height: 40px;
-          background: rgba(255, 255, 255, 0.12);
-          flex-shrink: 0;
-        }
-
-        @media (max-width: 768px) {
-          .case-studies-page .case-studies-trust-strip {
-            padding: 32px 20px;
-          }
-
-          .case-studies-page .case-studies-trust-strip-inner {
-            gap: 0;
-            flex-wrap: wrap;
-          }
-
-          .case-studies-page .case-studies-trust-strip-item {
-            padding: 12px 16px;
-            min-width: 50%;
-            font-size: 11px;
-          }
-
-          .case-studies-page .case-studies-trust-strip-item svg {
-            width: 18px;
-            height: 18px;
-          }
-
-          .case-studies-page .case-studies-trust-strip-divider {
-            display: none;
-          }
-        }
-      `}</style>
     </FadeUp>
   );
 }
@@ -667,97 +518,63 @@ export function CaseStudiesPageTemplate({ page }: { page: CMSPage }) {
   const rich = sections<RichTextData>(page, "rich_text");
   const lead = section<LeadFormData>(page, "lead_form");
   const statsBar = trustBars.find((item) => item.variant === "stats") || trustBars[0];
+  const linkStrip = trustBars.find((item) => item.variant === "link_strip") || trustBars[1];
   const financing = rich.find((item) => item.style_variant === "financing_strip");
   const contentBlocks = rich.filter((item) => item.style_variant !== "financing_strip");
   const intro = contentBlocks[0];
-  const cards = contentBlocks.slice(1).map(parseCaseStudy);
+  const rawCards = contentBlocks.slice(1).map(parseCaseStudy);
+  const filtered = rawCards.filter((card) => !card.title.includes("Milford") && !card.title.includes("Primary Bathroom"));
+  /* Replace the remaining Westport bathroom with deck, add a screened porch card */
+  const cards = [
+    {
+      title: "Whole-Home Restoration — Hamden",
+      summary: filtered.find((c) => c.title.includes("Hamden"))?.summary || "Complete interior restoration after water damage. New flooring, drywall, paint, and bathroom remodel across the entire first and second floor.",
+      timeline: filtered.find((c) => c.title.includes("Hamden"))?.timeline || "5 weeks",
+      badge: filtered.find((c) => c.title.includes("Hamden"))?.badge || "Full Restoration",
+      quote: filtered.find((c) => c.title.includes("Hamden"))?.quote || "We were devastated when we saw the damage. BuiltWell took everything off our plate.",
+      attribution: "Hamden Homeowner",
+      link: "/case-studies/",
+    },
+    {
+      title: "Basement Finishing — Darien",
+      summary: filtered.find((c) => c.title.includes("Darien"))?.summary || "850 square feet of unfinished basement converted to recreation room, home office, and full bathroom with egress window.",
+      timeline: filtered.find((c) => c.title.includes("Darien"))?.timeline || "6 weeks",
+      badge: filtered.find((c) => c.title.includes("Darien"))?.badge || "850 sq ft",
+      quote: filtered.find((c) => c.title.includes("Darien"))?.quote || "We should have done this ten years ago.",
+      attribution: "Darien Resident",
+      link: "/case-studies/",
+    },
+    {
+      title: "Kitchen Remodeling — New Canaan",
+      summary: filtered.find((c) => c.title.includes("New Canaan"))?.summary || "A New Canaan family wanted to open up a kitchen closed off by a load-bearing wall. We engineered a beam solution, installed white shaker cabinets with a quartz island, and extended hardwood flooring.",
+      timeline: filtered.find((c) => c.title.includes("New Canaan"))?.timeline || "10 weeks",
+      badge: filtered.find((c) => c.title.includes("New Canaan"))?.badge || "Full Gut Remodel",
+      quote: filtered.find((c) => c.title.includes("New Canaan"))?.quote || "BuiltWell made it straightforward. Now we can not imagine how we lived before.",
+      attribution: "New Canaan Homeowner",
+      link: "/case-studies/",
+    },
+    {
+      title: "Deck Build — Shelton",
+      summary: "A Shelton homeowner needed their old deck torn down and rebuilt from the ground up. Our crew set new posts, framed the structure, and decked it over the course of a week. New footings poured to the 42-inch frost line, all framing pressure-treated to code.",
+      timeline: "1 week",
+      badge: "Composite Deck",
+      quote: "We use the deck every evening now. The composite was the right call for zero maintenance.",
+      attribution: "Shelton Homeowner",
+      link: "/decks-porches/",
+    },
+  ];
 
   return (
-    <div className="case-studies-page bg-white text-[#1E2B43]">
+    <div className="bg-white text-[#1E2B43]">
       <main>
         <HeroSection hero={hero} phones={phones} />
         <StatsBar data={statsBar} />
         <IntroSection data={intro} />
         <CaseStudyGrid cards={cards} />
-        <TrustStrip />
+        <TrustStrip data={linkStrip} />
         <SharedLeadFormSection page={page} data={lead} accent={lead?.title_highlight || "Remodeling Project"} />
         <SharedFinancingStrip data={financing} />
       </main>
-      <style jsx global>{`
-        .case-studies-page .case-studies-hero-ctas {
-          display: flex;
-          gap: 14px;
-          margin-top: 28px;
-          justify-content: center;
-          align-items: center;
-          flex-wrap: wrap;
-        }
-
-        .case-studies-page .case-studies-hero-cta-btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          padding: 14px 32px;
-          border-radius: 8px;
-          background: rgba(10, 18, 35, 0.42);
-          border: 1px solid rgba(255, 255, 255, 0.22);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          color: #fff;
-          text-decoration: none;
-          font-size: 15px;
-          font-weight: 600;
-          letter-spacing: 0.3px;
-          transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-          white-space: nowrap;
-          transform: translateY(0);
-          will-change: transform, box-shadow, background, border-color;
-        }
-
-        .case-studies-page .case-studies-hero-cta-btn:hover {
-          background: rgba(10, 18, 35, 0.62);
-          border-color: rgba(255, 255, 255, 0.35);
-          transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        }
-
-        .case-studies-page .case-studies-hero-cta-btn--primary {
-          background: #bc9155;
-          border: 1px solid #bc9155;
-          color: #fff;
-          backdrop-filter: none;
-          -webkit-backdrop-filter: none;
-        }
-
-        .case-studies-page .case-studies-hero-cta-btn--primary:hover {
-          background: #d4a95a;
-          border-color: #d4a95a;
-          box-shadow: 0 8px 24px rgba(188, 145, 85, 0.4);
-        }
-
-        .case-studies-page .case-studies-hero-cta-btn:focus-visible {
-          outline: 2px solid #fff;
-          outline-offset: 2px;
-          box-shadow: 0 0 0 4px rgba(188, 145, 85, 0.4);
-        }
-
-        @media (max-width: 768px) {
-          .case-studies-page .case-studies-hero-ctas {
-            flex-direction: column;
-            align-items: center;
-          }
-
-          .case-studies-page .case-studies-hero-cta-btn {
-            min-height: 44px;
-            width: 100%;
-            max-width: 300px;
-            justify-content: center;
-            font-size: 14px;
-            padding: 12px 24px;
-          }
-        }
-      `}</style>
     </div>
   );
 }

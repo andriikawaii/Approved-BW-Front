@@ -1,0 +1,137 @@
+[data-homeowner-hub-page]{--oxford-blue:#1e2b43;--gold:#bc9155;--gold-dark:#9a7340;--cream:#f5f1e9;--slate-gray:#5c677d;--gold-light:#bc91551a;--blue-dark:#151e30}
+[data-homeowner-hub-page] .fade-up{opacity:0;transition:opacity .7s,transform .7s;transform:translateY(30px)}
+[data-homeowner-hub-page] .fade-up.visible{opacity:1;transform:translateY(0)}
+[data-homeowner-hub-page] .section{padding:100px 40px}
+[data-homeowner-hub-page] .section-inner{max-width:1240px;margin:0 auto}
+[data-homeowner-hub-page] .section-header{text-align:center;margin-bottom:64px}
+[data-homeowner-hub-page] .homeowner-header-tight{margin-bottom:32px}
+[data-homeowner-hub-page] .section-header h2{letter-spacing:-.5px;color:var(--oxford-blue);max-width:780px;margin:0 auto;font-family:Playfair Display,serif;font-size:clamp(28px,3.5vw,44px);line-height:1.2}
+[data-homeowner-hub-page] .section-header p{color:#ffffffb3;max-width:700px;margin:20px auto 0;font-size:17px;line-height:1.75}
+[data-homeowner-hub-page] .gold{color:var(--gold)}
+[data-homeowner-hub-page] .page-hero{background:var(--blue-dark);isolation:isolate;color:#fff;align-items:stretch;min-height:50vh;padding:120px 40px 48px;display:flex;position:relative;overflow:hidden}
+[data-homeowner-hub-page] .page-hero:after{content:"";background:var(--hub-hero-image)center 30%/cover no-repeat;opacity:.72;z-index:0;position:absolute;inset:0}
+[data-homeowner-hub-page] .page-hero:before{content:"";z-index:1;background:radial-gradient(at 97% 97%,#151e30 0%,#151e30e6 8%,#0000 30%),radial-gradient(at 3% 97%,#151e30e6 0%,#0000 25%),linear-gradient(#151e3059 0%,#151e3033 30%,#151e3073 65%,#151e30eb 100%);position:absolute;inset:0}
+[data-homeowner-hub-page] .page-hero-inner{z-index:2;text-align:center;flex-direction:column;justify-content:center;align-items:center;width:100%;max-width:1240px;margin:0 auto;display:flex;position:relative}
+[data-homeowner-hub-page] .hero-breadcrumb{color:#ffffffeb;text-shadow:0 1px 6px #000000b3;justify-content:center;align-items:center;gap:0;width:100%;margin:0 auto 20px;padding:0;font-size:13px;font-weight:500;list-style:none;display:flex}
+[data-homeowner-hub-page] .hero-breadcrumb li{align-items:center;display:flex}
+[data-homeowner-hub-page] .hero-breadcrumb li+li:before{content:"›";color:var(--gold);margin:0 10px;font-size:12px}
+[data-homeowner-hub-page] .hero-breadcrumb a{color:#ffffffd9;text-decoration:none}
+[data-homeowner-hub-page] .hero-breadcrumb a:hover{color:var(--gold)}
+[data-homeowner-hub-page] .hero-breadcrumb .current{color:#fff;font-weight:600}
+[data-homeowner-hub-page] .page-hero h1{letter-spacing:-.5px;text-shadow:0 2px 20px #00000080;margin:0 0 12px;font-family:Playfair Display,serif;font-size:clamp(40px,4.5vw,56px);line-height:1.08}
+[data-homeowner-hub-page] .hero-subtitle{color:#ffffffd1;text-align:center;max-width:560px;margin:16px auto 0;font-size:17px;line-height:1.7}
+[data-homeowner-hub-page] .hero-ctas{flex-wrap:wrap;justify-content:center;align-items:center;gap:14px;margin-top:28px;display:flex}
+[data-homeowner-hub-page] .hero-cta-btn{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:#fff;letter-spacing:.3px;white-space:nowrap;background:#0a12236b;border:1px solid #ffffff38;border-radius:8px;justify-content:center;align-items:center;gap:8px;padding:14px 32px;font-size:15px;font-weight:600;text-decoration:none;transition:background .3s,border-color .3s,transform .3s,box-shadow .3s;display:inline-flex}
+[data-homeowner-hub-page] .hero-cta-btn:hover{background:#0a12239e;border-color:#ffffff59;transform:translateY(-2px);box-shadow:0 8px 24px #0000004d}
+[data-homeowner-hub-page] .hero-cta-btn.hero-cta-primary{background:var(--gold);border-color:var(--gold);-webkit-backdrop-filter:none;backdrop-filter:none}
+[data-homeowner-hub-page] .hero-cta-btn.hero-cta-primary:hover{background:#d4a95a;border-color:#d4a95a;box-shadow:0 8px 24px #bc915566}
+[data-homeowner-hub-page] .service-overview{background:#fff;border-bottom:1px solid #1e2b430f}
+[data-homeowner-hub-page] .service-overview-content,[data-homeowner-hub-page] .hub-prose-inner{max-width:800px;margin:0 auto;padding:0 32px}
+[data-homeowner-hub-page] .overview-copy p,[data-homeowner-hub-page] .hub-prose-copy p{color:var(--slate-gray);margin:0 0 20px;font-size:16px;line-height:1.85}
+[data-homeowner-hub-page] .hub-prose-copy p:last-child{margin-bottom:0}
+[data-homeowner-hub-page] .hub-prose-copy a,[data-homeowner-hub-page] .permit-note a,[data-homeowner-hub-page] .hub-callout-copy a{color:var(--gold);font-weight:500;text-decoration:none}
+[data-homeowner-hub-page] .hub-prose-copy a:hover,[data-homeowner-hub-page] .permit-note a:hover,[data-homeowner-hub-page] .hub-callout-copy a:hover{color:var(--gold-dark)}
+[data-homeowner-hub-page] .hub-tags{flex-wrap:wrap;justify-content:center;gap:10px;margin-top:20px;display:flex}
+[data-homeowner-hub-page] .hub-tag{background:var(--gold-light);color:var(--oxford-blue);border-radius:999px;padding:8px 20px;font-size:13px;font-weight:600;transition:background .3s,color .3s,transform .3s;display:inline-block}
+[data-homeowner-hub-page] .hub-tag:hover{background:var(--oxford-blue);color:#fff;transform:translateY(-1px)}
+[data-homeowner-hub-page] .hub-section-light{background:var(--cream)}
+[data-homeowner-hub-page] .hub-section-white{background:#fff}
+[data-homeowner-hub-page] .hub-prose-block{margin-top:36px}
+[data-homeowner-hub-page] .hub-prose-block h3,[data-homeowner-hub-page] .hub-callout h3{color:var(--oxford-blue);margin:0 0 12px;font-family:Playfair Display,serif;font-size:22px}
+[data-homeowner-hub-page] .hub-cta-row{flex-wrap:wrap;justify-content:center;gap:12px;margin-top:32px;display:flex}
+[data-homeowner-hub-page] .hub-cta-btn{min-width:200px;color:var(--oxford-blue);background:#fff;border-radius:6px;justify-content:center;align-items:center;gap:8px;padding:14px 32px;text-decoration:none;transition:all .35s cubic-bezier(.4,0,.2,1);display:inline-flex;box-shadow:0 2px 8px #1e2b430f}
+[data-homeowner-hub-page] .hub-cta-btn:hover{color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 24px #1e2b4314}
+[data-homeowner-hub-page] .hub-callout{background:var(--cream);border-left:3px solid var(--gold);border-radius:8px;margin-top:40px;padding:28px 32px}
+[data-homeowner-hub-page] .hub-callout-copy p{margin-bottom:0;font-size:14px;line-height:1.85}
+[data-homeowner-hub-page] .hub-dark-section{background:linear-gradient(135deg,var(--oxford-blue)0%,#151e30 100%);color:#fff;position:relative;overflow:hidden}
+[data-homeowner-hub-page] .hub-dark-bg{opacity:.12;z-index:0;background-position:50%;background-size:cover;position:absolute;inset:0}
+[data-homeowner-hub-page] .hub-dark-bg-soft{opacity:.08}
+[data-homeowner-hub-page] .hub-dark-inner{z-index:1;position:relative}
+[data-homeowner-hub-page] .hub-dark-section .section-header h2{color:#fff}
+[data-homeowner-hub-page] .permit-grid{grid-template-columns:1fr 1fr;gap:32px;max-width:800px;margin:0 auto;display:grid}
+[data-homeowner-hub-page] .permit-card{background:#ffffff0f;border:1px solid #ffffff1a;border-radius:8px;flex-direction:column;padding:32px;display:flex}
+[data-homeowner-hub-page] .permit-card h3{color:var(--gold);margin:0 0 16px;font-family:Playfair Display,serif;font-size:18px}
+[data-homeowner-hub-page] .permit-card ul{margin:0;padding:0;list-style:none}
+[data-homeowner-hub-page] .permit-card li{color:#ffffffd9;margin-bottom:16px;padding-left:24px;font-size:14px;line-height:1.7;position:relative}
+[data-homeowner-hub-page] .permit-card li:before{content:"✓";color:var(--gold);position:absolute;left:0}
+[data-homeowner-hub-page] .permit-note{color:#fffc;max-width:800px;margin:32px auto 0;font-size:14px;line-height:1.8}
+[data-homeowner-hub-page] .permit-note strong{color:var(--gold)}
+[data-homeowner-hub-page] .hub-checklist-intro{text-align:center;max-width:800px;margin:0 auto 48px;padding:0 32px}
+[data-homeowner-hub-page] .hub-checklist-intro p{color:var(--slate-gray);margin:0;font-size:16px;line-height:1.85}
+[data-homeowner-hub-page] .hub-checklist{max-width:800px;margin:0 auto}
+[data-homeowner-hub-page] .checklist-item{border-bottom:1px solid #1e2b4314;border-radius:8px;align-items:flex-start;gap:20px;padding:24px 16px;transition:background .3s,transform .3s;display:flex}
+[data-homeowner-hub-page] .checklist-item:last-child{border-bottom:none}
+[data-homeowner-hub-page] .checklist-item:hover{background:#1e2b430a;transform:translate(4px)}
+[data-homeowner-hub-page] .checklist-item:hover .checklist-num{background:var(--gold);color:#fff;border-color:var(--gold)}
+[data-homeowner-hub-page] .checklist-num{border:2px solid var(--gold);width:48px;height:48px;color:var(--gold);background:#bc91551a;border-radius:50%;flex-shrink:0;justify-content:center;align-items:center;font-family:Playfair Display,serif;font-size:20px;font-weight:700;transition:background .3s,color .3s,border-color .3s;display:flex}
+[data-homeowner-hub-page] .checklist-content h3{color:var(--oxford-blue);margin:0 0 6px;font-family:Playfair Display,serif;font-size:18px}
+[data-homeowner-hub-page] .checklist-content p{color:var(--slate-gray);margin:0;font-size:14px;line-height:1.8}
+[data-homeowner-hub-page] .hub-room-inner{max-width:800px;margin:0 auto;padding:0 32px}
+[data-homeowner-hub-page] .aip-room-grid{grid-template-columns:1fr 1fr;gap:24px;margin:32px 0;display:grid}
+[data-homeowner-hub-page] .aip-room-card{background:#fff;border-bottom:2px solid #0000;border-radius:8px;padding:28px;transition:all .35s cubic-bezier(.4,0,.2,1);box-shadow:0 2px 12px #1e2b430f}
+[data-homeowner-hub-page] .aip-room-card:hover{border-bottom-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 28px #1e2b431a}
+[data-homeowner-hub-page] .aip-room-card h4{color:var(--oxford-blue);margin:0 0 12px;font-family:Playfair Display,serif;font-size:18px}
+[data-homeowner-hub-page] .aip-room-card ul{margin:0;padding:0;list-style:none}
+[data-homeowner-hub-page] .aip-room-card li{color:var(--slate-gray);margin-bottom:12px;padding-left:22px;font-size:14px;line-height:1.8;position:relative}
+[data-homeowner-hub-page] .aip-room-card li:before{content:"✓";color:var(--gold);position:absolute;left:0}
+[data-homeowner-hub-page] .hub-access-image-wrap{max-width:800px;margin:0 auto;padding:0 32px}
+[data-homeowner-hub-page] .hub-access-image-card{border-radius:12px;margin-top:48px;overflow:hidden;box-shadow:0 8px 32px #1e2b431a}
+[data-homeowner-hub-page] .hub-access-image-card img{object-fit:cover;width:100%;height:320px;display:block}
+[data-homeowner-hub-page] .aip-funding-grid{grid-template-columns:1fr 1fr;gap:24px;max-width:900px;margin:0 auto;display:grid}
+[data-homeowner-hub-page] .aip-funding-card{background:#ffffff0f;border:1px solid #ffffff14;border-radius:8px;padding:28px;transition:background .3s,transform .3s}
+[data-homeowner-hub-page] .aip-funding-card:hover{background:#ffffff1a;transform:translateY(-2px)}
+[data-homeowner-hub-page] .aip-funding-card h4,[data-homeowner-hub-page] .aip-funding-link{color:var(--gold);text-underline-offset:3px;font-family:Playfair Display,serif;font-size:18px;text-decoration:underline;display:inline}
+[data-homeowner-hub-page] .aip-funding-card p{color:#fffc;margin:12px 0 0;font-size:14px;line-height:1.8}
+[data-homeowner-hub-page] .resource-grid{grid-template-columns:repeat(5,1fr);gap:20px;display:grid}
+[data-homeowner-hub-page] .resource-card{text-align:center;background:#fff;border-bottom:3px solid #0000;border-radius:12px;flex-direction:column;align-items:center;gap:14px;padding:32px 20px 28px;text-decoration:none;transition:all .35s cubic-bezier(.4,0,.2,1);display:flex;box-shadow:0 2px 12px #1e2b430f}
+[data-homeowner-hub-page] .resource-card:hover{border-bottom-color:var(--gold);transform:translateY(-6px);box-shadow:0 12px 28px #1e2b431a}
+[data-homeowner-hub-page] .resource-card-icon{background:var(--gold-light);width:58px;height:58px;color:var(--gold);border-radius:50%;justify-content:center;align-items:center;display:flex}
+[data-homeowner-hub-page] .resource-card-icon svg{width:22px;height:22px}
+[data-homeowner-hub-page] .resource-card h3{color:var(--oxford-blue);margin:0;font-family:Playfair Display,serif;font-size:20px}
+[data-homeowner-hub-page] .resource-card-desc{color:var(--slate-gray);margin:0;font-size:14px;line-height:1.75}
+[data-homeowner-hub-page] .resource-arrow{color:var(--gold);align-items:center;gap:6px;font-size:14px;font-weight:600;display:inline-flex}
+[data-homeowner-hub-page] .resource-arrow svg{width:14px;height:14px}
+[data-homeowner-hub-page] .trust-strip{background:linear-gradient(135deg,var(--oxford-blue)0%,#151e30 100%);padding:56px 40px;position:relative;overflow:hidden}
+[data-homeowner-hub-page] .trust-strip:before{content:"";opacity:.12;background:url(/hero/builtwell-job-site-aerial-hero-ct.jpg) 50%/cover no-repeat;position:absolute;inset:0}
+[data-homeowner-hub-page] .trust-strip-inner{z-index:1;flex-wrap:wrap;justify-content:center;align-items:center;gap:0;max-width:1200px;margin:0 auto;display:flex;position:relative}
+[data-homeowner-hub-page] .trust-strip-fragment{display:contents}
+[data-homeowner-hub-page] .trust-strip-item{text-align:center;color:#ffffffe6;letter-spacing:.4px;white-space:nowrap;flex-direction:column;flex:1;align-items:center;gap:10px;min-width:180px;padding:20px 32px;font-size:13px;font-weight:600;text-decoration:none;transition:all .3s;display:flex}
+[data-homeowner-hub-page] .trust-strip-item:hover{color:var(--gold);transform:translateY(-2px)}
+[data-homeowner-hub-page] .trust-strip-item svg{width:22px;height:22px;color:var(--gold);filter:drop-shadow(0 2px 4px #bc91554d);flex-shrink:0}
+[data-homeowner-hub-page] .trust-strip-divider{background:#ffffff1a;flex-shrink:0;width:1px;height:40px}
+@media (max-width:1024px){[data-homeowner-hub-page] .resource-grid{grid-template-columns:repeat(3,1fr)}
+[data-homeowner-hub-page] .trust-strip{padding:40px 24px}
+[data-homeowner-hub-page] .trust-strip-inner{gap:0}
+[data-homeowner-hub-page] .trust-strip-item{min-width:140px;padding:16px 20px;font-size:12px}
+[data-homeowner-hub-page] .trust-strip-divider{display:none}
+@media (max-width:768px){[data-homeowner-hub-page] .fade-up{opacity:1!important;transform:none!important}
+[data-homeowner-hub-page] .page-hero{min-height:40vh;padding:100px 20px 36px}
+[data-homeowner-hub-page] .page-hero h1{font-size:clamp(30px,7vw,42px)}
+[data-homeowner-hub-page] .hero-subtitle{font-size:15px}
+[data-homeowner-hub-page] .hero-ctas{flex-direction:column;align-items:center}
+[data-homeowner-hub-page] .hero-cta-btn{width:100%;max-width:300px;padding:12px 24px;font-size:14px}
+[data-homeowner-hub-page] .section{padding:52px 20px}
+[data-homeowner-hub-page] .section-header{margin-bottom:36px}
+[data-homeowner-hub-page] .service-overview-content,[data-homeowner-hub-page] .hub-prose-inner,[data-homeowner-hub-page] .hub-room-inner,[data-homeowner-hub-page] .hub-access-image-wrap,[data-homeowner-hub-page] .hub-checklist-intro{padding:0}
+[data-homeowner-hub-page] .permit-grid,[data-homeowner-hub-page] .aip-room-grid,[data-homeowner-hub-page] .aip-funding-grid{grid-template-columns:1fr}
+[data-homeowner-hub-page] .resource-grid{grid-template-columns:repeat(2,1fr)}
+[data-homeowner-hub-page] .hub-tags{gap:8px}
+[data-homeowner-hub-page] .hub-tag{padding:6px 16px;font-size:12px}
+[data-homeowner-hub-page] .hub-cta-row{flex-direction:column!important;align-items:stretch!important}
+[data-homeowner-hub-page] .hub-cta-btn{width:100%!important;min-width:0!important}
+[data-homeowner-hub-page] .trust-strip{padding:32px 20px}
+[data-homeowner-hub-page] .trust-strip-inner{flex-wrap:wrap;gap:0}
+[data-homeowner-hub-page] .trust-strip-item{text-align:center;flex-direction:column;justify-content:center;align-items:center;min-width:33.33%;padding:16px 12px;font-size:11px;display:flex}
+[data-homeowner-hub-page] .trust-strip-item svg{width:18px;height:18px}
+[data-homeowner-hub-page] .trust-strip-divider{display:none}
+@media (max-width:480px){[data-homeowner-hub-page] .page-hero{min-height:35vh;padding:90px 16px 32px}
+[data-homeowner-hub-page] .page-hero h1{font-size:clamp(26px,7vw,36px)}
+[data-homeowner-hub-page] .hero-subtitle{font-size:14px}
+[data-homeowner-hub-page] .section{padding:48px 16px}
+[data-homeowner-hub-page] .resource-grid{grid-template-columns:1fr}
+[data-homeowner-hub-page] .resource-card{gap:8px;padding:20px 14px 18px}
+[data-homeowner-hub-page] .resource-card h3{font-size:14px}
+[data-homeowner-hub-page] .resource-card-desc{font-size:11px}
+[data-homeowner-hub-page] .resource-card-icon{width:40px;height:40px}
+[data-homeowner-hub-page] .resource-card-icon svg{width:16px;height:16px}
+@media (prefers-reduced-motion:reduce){[data-homeowner-hub-page] .fade-up,[data-homeowner-hub-page] .hub-tag,[data-homeowner-hub-page] .hero-cta-btn,[data-homeowner-hub-page] .hub-cta-btn,[data-homeowner-hub-page] .permit-card,[data-homeowner-hub-page] .checklist-item,[data-homeowner-hub-page] .aip-room-card,[data-homeowner-hub-page] .aip-funding-card,[data-homeowner-hub-page] .resource-card,[data-homeowner-hub-page] .trust-strip-item{transition:none!important;transform:none!important}

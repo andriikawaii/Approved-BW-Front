@@ -10,9 +10,73 @@ export const section = <T,>(page: CMSPage, type: string) => page.sections.find((
 export const sections = <T,>(page: CMSPage, type: string) => page.sections.filter((entry) => entry.is_active && entry.type === type).map((entry) => entry.data as T);
 export const opts = (value?: Array<string | { label: string; value: string }> | null) => (value || []).map((item) => typeof item === "string" ? { label: item, value: item } : item);
 
+const MEDIA_OVERRIDES: Record<string, string> = {
+  /* Kitchen before/after — API composites → clean local images */
+  "https://builtwell-api.petararsic.rs/storage/media/WaVjfLFMtoSPAnxqls86aJQcgNsZmN1DYoA8CHU2.webp": "/images/before-after/kitchen-before-after-1.jpg",
+  "https://builtwell-api.petararsic.rs/storage/media/jDYH5Q9bjjB1fpQeC8FLfqDpCpDXMWPZ85AdcCxy.webp": "/images/before-after/kitchen-before-after-2.jpg",
+  "https://builtwell-api.petararsic.rs/storage/media/B8KFIFij5lFsCZaMTAvJbBYguy9Kn3OVdYHajTQQ.webp": "/images/before-after/kitchen-before-after-3.jpg",
+  /* Bathroom before/after */
+  "https://builtwell-api.petararsic.rs/storage/media/DsJWsO0OJT6dEZeUgeVtx36epMC57SJ3jtnS1z2p.webp": "/services/bathroom-remodeling-ct.jpg",
+  "https://builtwell-api.petararsic.rs/storage/media/Vs15oZt0XvIMYlsiA4od34tKYdZBA3glb0CiWnj6.webp": "/services/bathroom-remodeling-luxury-master-ct-01.jpeg",
+  "https://builtwell-api.petararsic.rs/storage/media/LUDGoKE8VzNYRjHUnIDK4ebSYq5UEn4LBeD40Xtb.webp": "/services/bathroom-remodeling-completed-walkthrough-ct-02.jpg",
+  /* Basement before/after */
+  "https://builtwell-api.petararsic.rs/storage/media/VCPnRfqDO25qsQVXjObVLhBdZ7G3ZtS7677LuDNJ.webp": "/services/basement-finishing-ct.jpg",
+  "https://builtwell-api.petararsic.rs/storage/media/VSMPOZCvydfK09tha1I6TuQzTaBYsE6VhY5hxN6w.webp": "/services/basement-finishing-drywall-work-ct-01.jpeg",
+  "https://builtwell-api.petararsic.rs/storage/media/Tj19FhtKLl7PmixuHMH99dg8UqkAocdZu4ERb9c2.webp": "/services/basement-finishing-framing-ct-01.jpeg",
+  /* Flooring — distinct images per card */
+  "https://builtwell-api.petararsic.rs/storage/media/g1UiLCW1DEMcyXpWVI43YIQfgvHoWqTdADEvPlEw.webp": "/services/flooring-greenwich-ct.jpg",
+  "https://builtwell-api.petararsic.rs/storage/media/6xJ2Bz700UZUBYXMGoNO225wg3Mp5VwGe5p64zKy.webp": "/services/flooring-milford-ct.jpg",
+  "https://builtwell-api.petararsic.rs/storage/media/Kdo1jIjhD2ZmovDFrvdaYlHuJcZX6wG6vB6QhIaM.webp": "/services/flooring-installation-ct.jpg",
+  /* City page API paths */
+  "https://builtwell-api.petararsic.rs/images/before-after/kitchen-before-after-1.webp": "/images/before-after/kitchen-before-after-1.jpg",
+  "https://builtwell-api.petararsic.rs/images/before-after/kitchen-before-after-2.webp": "/images/before-after/kitchen-before-after-2.jpg",
+  "https://builtwell-api.petararsic.rs/images/before-after/kitchen-before-after-3.webp": "/images/before-after/kitchen-before-after-3.jpg",
+  "https://builtwell-api.petararsic.rs/images/before-after/bathroom-renovation-1.webp": "/services/bathroom-remodeling-ct.jpg",
+  "https://builtwell-api.petararsic.rs/images/before-after/bathroom-renovation-2.webp": "/services/bathroom-remodeling-luxury-master-ct-01.jpeg",
+  "https://builtwell-api.petararsic.rs/images/before-after/bathroom-renovation-3.webp": "/services/bathroom-remodeling-completed-walkthrough-ct-02.jpg",
+  "https://builtwell-api.petararsic.rs/images/before-after/basement-renovation-1.webp": "/services/basement-finishing-ct.jpg",
+  "https://builtwell-api.petararsic.rs/images/before-after/basement-renovation-2.webp": "/services/basement-finishing-drywall-work-ct-01.jpeg",
+  "https://builtwell-api.petararsic.rs/images/before-after/basement-renovation-3.webp": "/services/basement-finishing-framing-ct-01.jpeg",
+  /* localhost:8000 dev URLs → local public */
+  "http://localhost:8000/services/flooring-installation-ct.jpg": "/services/flooring-hardwood-installation-ct-02.jpg",
+  "http://localhost:8000/services/bathroom-remodeling-ct.jpg": "/services/bathroom-remodeling-ct.jpg",
+  "http://localhost:8000/services/interior-painting-ct.jpg": "/services/interior-painting-ct.jpg",
+  "http://localhost:8000/services/kitchen-remodeling-ct.jpg": "/services/kitchen-remodeling-ct.jpg",
+  "http://localhost:8000/services/basement-finishing-ct.jpg": "/services/basement-finishing-ct.jpg",
+  /* API /services/ paths → local public */
+  "https://builtwell-api.petararsic.rs/services/flooring-installation-ct.jpg": "/services/flooring-hardwood-installation-ct-02.jpg",
+  "https://builtwell-api.petararsic.rs/storage/services/flooring-ct.jpg": "/services/flooring-installation-ct.jpg",
+  /* Broken API /storage/services/ paths → local public */
+  "https://builtwell-api.petararsic.rs/storage/services/kitchen-remodeling-luxury-consultation-ct-01.jpeg": "/services/kitchen-remodeling-luxury-consultation-ct-01.jpeg",
+  "https://builtwell-api.petararsic.rs/storage/services/bathroom-remodeling-luxury-master-ct-01.jpeg": "/services/bathroom-remodeling-luxury-master-ct-01.jpeg",
+  /* Town+service page .jpg paths (CMS sends .jpg on city pages, .webp on global pages) */
+  "https://builtwell-api.petararsic.rs/storage/images/before-after/bathroom-before-after-1.jpg": "/services/bathroom-remodeling-ct.jpg",
+  "https://builtwell-api.petararsic.rs/storage/images/before-after/bathroom-before-after-2.jpg": "/services/bathroom-remodeling-luxury-master-ct-01.jpeg",
+  "https://builtwell-api.petararsic.rs/storage/images/before-after/bathroom-before-after-3.jpg": "/services/bathroom-remodeling-completed-walkthrough-ct-02.jpg",
+  "https://builtwell-api.petararsic.rs/storage/images/before-after/basement-before-after-1.jpg": "/services/basement-finishing-ct.jpg",
+  "https://builtwell-api.petararsic.rs/storage/images/before-after/basement-before-after-2.jpg": "/services/basement-finishing-drywall-work-ct-01.jpeg",
+  "https://builtwell-api.petararsic.rs/storage/images/before-after/basement-before-after-3.jpg": "/services/basement-finishing-framing-ct-01.jpeg",
+  "https://builtwell-api.petararsic.rs/storage/images/before-after/flooring-before-after-1.jpg": "/services/flooring-greenwich-ct.jpg",
+  "https://builtwell-api.petararsic.rs/storage/images/before-after/flooring-before-after-2.jpg": "/services/flooring-milford-ct.jpg",
+  "https://builtwell-api.petararsic.rs/storage/images/before-after/flooring-before-after-3.jpg": "/services/flooring-installation-ct.jpg",
+  /* Service scope images — fix duplicate secondary */
+  "https://builtwell-api.petararsic.rs/services/bathroom-remodeling-ct.jpg": "/services/bathroom-remodeling-ct.jpg",
+  "https://builtwell-api.petararsic.rs/services/basement-finishing-ct.jpg": "/services/basement-finishing-ct.jpg",
+  "https://builtwell-api.petararsic.rs/services/kitchen-remodeling-ct.jpg": "/services/kitchen-remodeling-ct.jpg",
+  /* County area images */
+  "https://builtwell-api.petararsic.rs/images/areas/fairfield-county.webp": "/images/areas/fairfield-county.jpg",
+  "https://builtwell-api.petararsic.rs/images/areas/new-haven-county.webp": "/images/areas/new-haven-county.jpg",
+  /* Hero/team fallbacks */
+  "/hero/builtwell-team-van-consultation-hero-ct.jpg": "/portfolio/builtwell-team-client-arrival-ct.jpeg",
+  "/team/builtwell-owner-handshake-client-ct-02.jpg": "/portfolio/builtwell-cherry-hill-project.jpg",
+  "https://builtwell-api.petararsic.rs/team/builtwell-owner-handshake-client-ct-02.webp": "/portfolio/builtwell-cherry-hill-project.jpg",
+  "https://builtwell-api.petararsic.rs/hero/builtwell-team-van-consultation-hero-ct.webp": "/portfolio/builtwell-team-client-arrival-ct.jpeg",
+  "/hero/builtwell-job-site-aerial-hero-ct.jpg": "/portfolio/builtwell-job-site-aerial-ct.jpg",
+};
+
 export function media(value?: string | null, fallback = "") {
   if (!value) return fallback;
-  return value || fallback;
+  return MEDIA_OVERRIDES[value] || value || fallback;
 }
 
 export function parts(text?: string | null, mark?: string | null) {
@@ -97,7 +161,7 @@ export function HeroTrustBar({ items }: { items?: any[] }) {
 export function DarkTrustStrip({ items }: { items?: any[] }) {
   return (
     <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1e2b43_0%,#151E30_100%)] px-5 py-14 md:px-10">
-      <div className="absolute inset-0 bg-[url('/hero/builtwell-job-site-aerial-hero-ct.webp')] bg-cover bg-center opacity-[0.12]" />
+      <div className="absolute inset-0 bg-[url('/hero/builtwell-job-site-aerial-hero-ct.jpg')] bg-cover bg-center opacity-[0.12]" />
       <div className="relative z-[1] mx-auto flex max-w-[1200px] flex-wrap items-center justify-center">
         {(items || []).map((item: any, index: number) => (
           <div key={`${item.label || "strip"}-${index}`} className="contents">
@@ -127,47 +191,6 @@ export function AreasSection({ data }: { data: any }) {
     return links[town] || "";
   };
 
-  const getCountyTownGroups = (county: any) => {
-    const townLinks = county.town_links;
-    const featuredFromLinks: string[] = Array.isArray(townLinks) ? townLinks.slice(0, 8).map((entry: any) => entry?.name).filter(Boolean) : [];
-    const extraFromLinks: string[] = Array.isArray(townLinks) ? townLinks.slice(8).map((entry: any) => entry?.name).filter(Boolean) : [];
-    const featuredTownsRaw: string[] = county.towns || county.cities || featuredFromLinks || [];
-    const extraTownsRaw: string[] =
-      county.extra_towns ||
-      county.towns_expanded ||
-      (featuredTownsRaw.length === 0 ? extraFromLinks : []) ||
-      [];
-    const maxVisibleFromData = Number(
-      county.initial_visible_towns ?? data?.initial_visible_towns ?? 8
-    );
-    const maxVisibleTowns =
-      Number.isFinite(maxVisibleFromData) && maxVisibleFromData > 0
-        ? Math.floor(maxVisibleFromData)
-        : 8;
-    const normalizeTown = (town: string) => String(town || "").trim().toLowerCase();
-    const featuredTownsLimited = featuredTownsRaw.filter(Boolean).slice(0, maxVisibleTowns);
-    const overflowFeaturedTowns = featuredTownsRaw.filter(Boolean).slice(maxVisibleTowns);
-    const featuredTownSet = new Set(featuredTownsLimited.map(normalizeTown));
-    const mergedExtraTowns = [...overflowFeaturedTowns, ...extraTownsRaw];
-    const seenExtra = new Set<string>();
-    const extraTowns: string[] = mergedExtraTowns.filter((town: string) => {
-      if (!town) return false;
-      const normalized = normalizeTown(town);
-      if (!normalized || featuredTownSet.has(normalized) || seenExtra.has(normalized)) return false;
-      seenExtra.add(normalized);
-      return true;
-    });
-
-    return {
-      featuredTowns: featuredTownsLimited,
-      extraTowns,
-    };
-  };
-
-  const expandableCount = counties.filter((county) => getCountyTownGroups(county).extraTowns.length > 0).length;
-  const expandedCount = counties.filter((county, index) => getCountyTownGroups(county).extraTowns.length > 0 && expanded[index]).length;
-  const shouldMatchCardHeights = expandedCount === 0 || (expandableCount > 0 && expandedCount === expandableCount);
-
   return (
     <>
       <section className="bw-areas-section">
@@ -193,10 +216,39 @@ export function AreasSection({ data }: { data: any }) {
               </p>
             ) : null}
           </div>
-          <div className={`bw-areas-grid${shouldMatchCardHeights ? " bw-areas-grid-match" : ""}`}>
+          <div className="bw-areas-grid">
             {counties.map((county: any, index: number) => {
               const isExpanded = !!expanded[index];
-              const { featuredTowns, extraTowns } = getCountyTownGroups(county);
+              const townLinks = county.town_links;
+              const featuredFromLinks: string[] = Array.isArray(townLinks) ? townLinks.slice(0, 8).map((entry: any) => entry?.name).filter(Boolean) : [];
+              const extraFromLinks: string[] = Array.isArray(townLinks) ? townLinks.slice(8).map((entry: any) => entry?.name).filter(Boolean) : [];
+              const featuredTownsRaw: string[] = county.towns || county.cities || featuredFromLinks || [];
+              const extraTownsRaw: string[] =
+                county.extra_towns ||
+                county.towns_expanded ||
+                (featuredTownsRaw.length === 0 ? extraFromLinks : []) ||
+                [];
+              const maxVisibleFromData = Number(
+                county.initial_visible_towns ?? data?.initial_visible_towns ?? 8
+              );
+              const MAX_VISIBLE_TOWNS =
+                Number.isFinite(maxVisibleFromData) && maxVisibleFromData > 0
+                  ? Math.floor(maxVisibleFromData)
+                  : 8;
+              const normalizeTown = (town: string) => String(town || "").trim().toLowerCase();
+              const featuredTownsLimited = featuredTownsRaw.filter(Boolean).slice(0, MAX_VISIBLE_TOWNS);
+              const overflowFeaturedTowns = featuredTownsRaw.filter(Boolean).slice(MAX_VISIBLE_TOWNS);
+              const featuredTownSet = new Set(featuredTownsLimited.map(normalizeTown));
+              const featuredTowns: string[] = featuredTownsLimited;
+              const mergedExtraTowns = [...overflowFeaturedTowns, ...extraTownsRaw];
+              const seenExtra = new Set<string>();
+              const extraTowns: string[] = mergedExtraTowns.filter((town: string) => {
+                if (!town) return false;
+                const normalized = normalizeTown(town);
+                if (!normalized || featuredTownSet.has(normalized) || seenExtra.has(normalized)) return false;
+                seenExtra.add(normalized);
+                return true;
+              });
               const countyKey = String(county.slug || county.url || county.name || county.phone || `county-${index}`);
               const featuredTownKeyCounts: Record<string, number> = {};
               const extraTownKeyCounts: Record<string, number> = {};
@@ -276,25 +328,23 @@ export function AreasSection({ data }: { data: any }) {
         .bw-areas-header { text-align:center; margin-bottom:48px; }
         .bw-areas-header h2 { font:700 clamp(34px,3.8vw,50px)/1.15 "Playfair Display",serif; color:#1e2b43; letter-spacing:-.02em; margin:0; }
         .bw-areas-header p { max-width:760px; margin:12px auto 0; font-size:17px; line-height:1.8; color:#5c677d; }
-        .bw-areas-subtitle-link { color:#9a7340; font-weight:600; text-decoration:none !important; transition:color .2s; }
-        .bw-areas-subtitle-link:hover, .bw-areas-subtitle-link:focus-visible { color:#7a5c2e; text-decoration:none !important; }
-        .bw-gold { color:#9a7340; }
+        .bw-areas-subtitle-link { color:#bc9155; font-weight:600; text-decoration:none !important; transition:color .2s; }
+        .bw-areas-subtitle-link:hover, .bw-areas-subtitle-link:focus-visible { color:#9a7340; text-decoration:none !important; }
+        .bw-gold { color:#bc9155; }
         .bw-areas-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:start; }
-        .bw-areas-grid.bw-areas-grid-match { align-items:stretch; }
         .bw-area-card { background:#fff; border-radius:12px; overflow:hidden; border-bottom:3px solid transparent; box-shadow:0 2px 12px rgba(30,43,67,.06),0 1px 3px rgba(30,43,67,.04); transition:all .35s cubic-bezier(.4,0,.2,1); position:relative; display:flex; flex-direction:column; }
-        .bw-areas-grid.bw-areas-grid-match .bw-area-card { height:100%; }
         .bw-area-card:hover { transform:translateY(-6px); border-bottom-color:#bc9155; box-shadow:0 16px 40px rgba(30,43,67,.1),0 32px 64px rgba(30,43,67,.08); }
         .bw-area-card-img { width:100%; height:220px; overflow:hidden; position:relative; }
         .bw-area-card-img::after { content:""; position:absolute; bottom:0; left:0; right:0; height:80px; background:linear-gradient(to top,rgba(30,43,67,.4),transparent); pointer-events:none; }
         .bw-area-card-img img { width:100%; height:100%; object-fit:cover; transition:transform .5s; }
         .bw-area-card-img img.bw-show-top { object-position:top; }
         .bw-area-card:hover .bw-area-card-img img { transform:scale(1.05); }
-        .bw-area-card-body { padding:28px 28px 32px; text-align:center; display:flex; flex:1; flex-direction:column; }
+        .bw-area-card-body { padding:28px 28px 32px; text-align:center; }
         .bw-area-card-body h3 { font:700 24px/1.2 "Playfair Display",serif; color:#1e2b43; margin:0 0 6px; }
         .bw-area-card-phone { font-size:15px; color:#5c677d; margin-bottom:14px; }
-        .bw-area-card-phone a { color:#9a7340; font-weight:600; text-decoration:none; }
+        .bw-area-card-phone a { color:#bc9155; font-weight:600; text-decoration:none; }
         .bw-area-card-phone a:hover { text-decoration:underline; }
-        .bw-area-card-desc { font-size:14px; line-height:1.7; color:#5c677d; margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid rgba(30,43,67,.06); }
+        .bw-area-card-desc { font-size:14px; line-height:1.7; color:#5c677d; margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid rgba(30,43,67,.06); flex:1; }
         .bw-area-towns { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
         .bw-area-town { font-size:11px; font-weight:600; color:#1e2b43; background:#f5f1e9; padding:7px 10px; border-radius:50px; text-align:center; letter-spacing:.2px; transition:all .2s; white-space:nowrap; text-decoration:none; }
         .bw-area-town:hover { background:#e8dcc4; color:#9a7340; }
@@ -302,13 +352,13 @@ export function AreasSection({ data }: { data: any }) {
         .bw-area-town-static:hover { background:#f5f1e9; color:#9a7340; }
         .bw-area-towns-more { display:none; grid-template-columns:repeat(4,1fr); gap:8px; grid-column:1 / -1; }
         .bw-area-towns-more.show { display:grid; }
-        .bw-area-towns-toggle { grid-column:1 / -1; margin-top:4px; background:none; border:none; color:#9a7340; font-size:13px; font-weight:600; cursor:pointer; padding:4px 0; transition:color .2s; text-align:center; }
-        .bw-area-towns-toggle:hover { color:#7a5c2e; }
-        .bw-area-link { display:inline-flex; align-items:center; gap:6px; margin-top:auto; padding-top:4px; color:#9a7340; font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; justify-content:center; }
+        .bw-area-towns-toggle { grid-column:1 / -1; margin-top:4px; background:none; border:none; color:#bc9155; font-size:13px; font-weight:600; cursor:pointer; padding:4px 0; transition:color .2s; text-align:center; }
+        .bw-area-towns-toggle:hover { color:#9a7340; }
+        .bw-area-link { display:inline-flex; align-items:center; gap:6px; margin-top:4px; color:#bc9155; font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; justify-content:center; }
         .bw-area-link:hover { gap:10px; }
         .bw-area-link-arrow { width:14px; height:14px; }
         .bw-areas-note { margin:20px auto 0; text-align:center; font-size:14px; line-height:1.7; color:#5c677d; }
-        .bw-areas-note a, .bw-areas-note-link { color:#9a7340; font-weight:600; text-decoration:none; }
+        .bw-areas-note a, .bw-areas-note-link { color:#bc9155; font-weight:600; text-decoration:none; }
         .bw-areas-note a:hover, .bw-areas-note-link:hover { text-decoration:underline; }
         @media (max-width:1024px) {
           .bw-areas-section { padding:60px 32px; }
@@ -380,7 +430,7 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
   const fileField = fields.find((field: any) => field.type === "file");
   const defaultImages = [
     { src: "/portfolio/builtwell-team-client-arrival-ct.jpeg", alt: "BuiltWell CT consultation" },
-    { src: "/portfolio/builtwell-contractor-sign-consultation-ct-01.jpg", alt: "BuiltWell CT team" },
+    { src: "/portfolio/builtwell-cherry-hill-project.jpg", alt: "BuiltWell CT trucks at Cherry Hill project site" },
   ];
   const cmsImages: Array<{ src: string; alt: string }> = (data?.images || []).slice(0, 2).map((image: any, index: number) => ({
     src: media(image.image, defaultImages[index]?.src || ""),
@@ -490,8 +540,8 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
                     ) : null}
                     {timeField ? (
                       <div className="bw-form-group">
-                        <label htmlFor="bw-best-time">{timeField.label}{timeField.required ? " *" : ""}</label>
-                        <select id="bw-best-time" required={timeField.required} value={formValues[timeField.name] || ""} onChange={(event) => setFormValues((current) => ({ ...current, [timeField.name]: event.target.value }))}>
+                        <label>{timeField.label}{timeField.required ? " *" : ""}</label>
+                        <select required={timeField.required} value={formValues[timeField.name] || ""} onChange={(event) => setFormValues((current) => ({ ...current, [timeField.name]: event.target.value }))}>
                           <option value="">Select a time</option>
                           {opts(timeField.options).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                         </select>
@@ -525,8 +575,8 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
                   ) : null}
                   {fileField ? (
                     <div className="bw-form-group">
-                      <label htmlFor="bw-file-upload">{fileField.label}{fileField.required ? " *" : ""}</label>
-                      <input id="bw-file-upload" type="file" required={fileField.required} aria-label={fileField.label || 'Upload files'} />
+                      <label>{fileField.label}{fileField.required ? " *" : ""}</label>
+                      <input type="file" required={fileField.required} />
                     </div>
                   ) : null}
                   <div className="bw-form-consent">
@@ -544,14 +594,14 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
         </div>
       </section>
       <style jsx global>{`
-        .bw-gold { color:#9a7340; }
+        .bw-gold { color:#bc9155; }
         .bw-cta-section { background:#f5f1e9; border-top:1px solid rgba(30,43,67,.08); padding:64px 40px 72px; }
         .bw-cta-section-inner { max-width:1200px; margin:0 auto; }
         .bw-cta-header { text-align:center; margin-bottom:32px; }
         .bw-cta-header h2 { margin-bottom:8px; font:700 clamp(30px,3vw,42px)/1.2 "Playfair Display",serif; color:#1e2b43; letter-spacing:-.5px; }
         .bw-cta-header .bw-cta-sub { max-width:600px; margin:0 auto; font-size:16px; line-height:1.7; color:#5c677d; }
         .bw-cta-header .bw-cta-phones { max-width:600px; margin:8px auto 0; font-size:15px; line-height:1.7; color:#5c677d; text-align:center; }
-        .bw-cta-header .bw-cta-phones a { color:#9a7340; font-weight:600; text-decoration:none; }
+        .bw-cta-header .bw-cta-phones a { color:#BC9155; font-weight:600; text-decoration:none; }
         .bw-cta-header .bw-cta-phones a:hover { text-decoration:underline; }
         .bw-cta-header .bw-cta-phones-sep { color:#5c677d; }
         .bw-cta-body { display:grid; grid-template-columns:1fr 1.15fr; gap:32px; align-items:stretch; }

@@ -25,6 +25,62 @@ const FALLBACK_MEDIA: Record<string, string> = {
     "/portfolio/builtwell-contractor-sign-consultation-ct-01.jpg",
   "/hero/builtwell-job-site-aerial-hero-ct.jpg":
     "/portfolio/builtwell-job-site-aerial-ct.jpg",
+  /* Kitchen before/after — override API composites with clean local images */
+  "https://builtwell-api.petararsic.rs/storage/media/WaVjfLFMtoSPAnxqls86aJQcgNsZmN1DYoA8CHU2.webp":
+    "/images/before-after/kitchen-before-after-1.jpg",
+  "https://builtwell-api.petararsic.rs/storage/media/jDYH5Q9bjjB1fpQeC8FLfqDpCpDXMWPZ85AdcCxy.webp":
+    "/images/before-after/kitchen-before-after-2.jpg",
+  "https://builtwell-api.petararsic.rs/storage/media/B8KFIFij5lFsCZaMTAvJbBYguy9Kn3OVdYHajTQQ.webp":
+    "/images/before-after/kitchen-before-after-3.jpg",
+  /* Bathroom before/after */
+  "https://builtwell-api.petararsic.rs/storage/media/DsJWsO0OJT6dEZeUgeVtx36epMC57SJ3jtnS1z2p.webp":
+    "/services/bathroom-remodeling-ct.jpg",
+  "https://builtwell-api.petararsic.rs/storage/media/Vs15oZt0XvIMYlsiA4od34tKYdZBA3glb0CiWnj6.webp":
+    "/services/bathroom-remodeling-luxury-master-ct-01.jpeg",
+  "https://builtwell-api.petararsic.rs/storage/media/LUDGoKE8VzNYRjHUnIDK4ebSYq5UEn4LBeD40Xtb.webp":
+    "/services/bathroom-remodeling-completed-walkthrough-ct-02.jpg",
+  /* Basement before/after */
+  "https://builtwell-api.petararsic.rs/storage/media/VCPnRfqDO25qsQVXjObVLhBdZ7G3ZtS7677LuDNJ.webp":
+    "/services/basement-finishing-ct.jpg",
+  "https://builtwell-api.petararsic.rs/storage/media/VSMPOZCvydfK09tha1I6TuQzTaBYsE6VhY5hxN6w.webp":
+    "/services/basement-finishing-drywall-work-ct-01.jpeg",
+  "https://builtwell-api.petararsic.rs/storage/media/Tj19FhtKLl7PmixuHMH99dg8UqkAocdZu4ERb9c2.webp":
+    "/services/basement-finishing-framing-ct-01.jpeg",
+  /* localhost:8000 dev URLs → local public */
+  "http://localhost:8000/services/flooring-installation-ct.jpg": "/services/flooring-hardwood-installation-ct-02.jpg",
+  "http://localhost:8000/services/bathroom-remodeling-ct.jpg": "/services/bathroom-remodeling-ct.jpg",
+  "http://localhost:8000/services/interior-painting-ct.jpg": "/services/interior-painting-ct.jpg",
+  "http://localhost:8000/services/kitchen-remodeling-ct.jpg": "/services/kitchen-remodeling-ct.jpg",
+  "http://localhost:8000/services/basement-finishing-ct.jpg": "/services/basement-finishing-ct.jpg",
+  /* API /services/ paths → local public */
+  "https://builtwell-api.petararsic.rs/services/flooring-installation-ct.jpg": "/services/flooring-hardwood-installation-ct-02.jpg",
+  "https://builtwell-api.petararsic.rs/storage/services/flooring-ct.jpg": "/services/flooring-hardwood-installation-ct-02.jpg",
+  /* City page before/after — API serves from /images/ path instead of /storage/media/ */
+  "https://builtwell-api.petararsic.rs/images/before-after/kitchen-before-after-1.webp":
+    "/images/before-after/kitchen-before-after-1.jpg",
+  "https://builtwell-api.petararsic.rs/images/before-after/kitchen-before-after-2.webp":
+    "/images/before-after/kitchen-before-after-2.jpg",
+  "https://builtwell-api.petararsic.rs/images/before-after/kitchen-before-after-3.webp":
+    "/images/before-after/kitchen-before-after-3.jpg",
+  "https://builtwell-api.petararsic.rs/images/before-after/bathroom-renovation-1.webp":
+    "/services/bathroom-remodeling-ct.jpg",
+  "https://builtwell-api.petararsic.rs/images/before-after/bathroom-renovation-2.webp":
+    "/services/bathroom-remodeling-luxury-master-ct-01.jpeg",
+  "https://builtwell-api.petararsic.rs/images/before-after/bathroom-renovation-3.webp":
+    "/services/bathroom-remodeling-completed-walkthrough-ct-02.jpg",
+  "https://builtwell-api.petararsic.rs/images/before-after/basement-renovation-1.webp":
+    "/services/basement-finishing-ct.jpg",
+  "https://builtwell-api.petararsic.rs/images/before-after/basement-renovation-2.webp":
+    "/services/basement-finishing-drywall-work-ct-01.jpeg",
+  "https://builtwell-api.petararsic.rs/images/before-after/basement-renovation-3.webp":
+    "/services/basement-finishing-framing-ct-01.jpeg",
+  /* Flooring before/after — distinct images per card */
+  "https://builtwell-api.petararsic.rs/storage/media/g1UiLCW1DEMcyXpWVI43YIQfgvHoWqTdADEvPlEw.webp":
+    "/services/flooring-greenwich-ct.jpg",
+  "https://builtwell-api.petararsic.rs/storage/media/6xJ2Bz700UZUBYXMGoNO225wg3Mp5VwGe5p64zKy.webp":
+    "/services/flooring-milford-ct.jpg",
+  "https://builtwell-api.petararsic.rs/storage/media/Kdo1jIjhD2ZmovDFrvdaYlHuJcZX6wG6vB6QhIaM.webp":
+    "/services/flooring-installation-ct.jpg",
 };
 const INCLUDED_COPY: Record<string, string> = {
   Cabinetry:
@@ -877,9 +933,10 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
   const lead = section<any>(page, "lead_form");
   const related = section<any>(page, "project_highlights");
   const normalizedSlug = (page.slug || "").replace(/^\/+|\/+$/g, "");
-  const isDecksPorchesPage = normalizedSlug === "decks-porches";
-  const usesReferenceHeroCtas = isDecksPorchesPage || normalizedSlug === "remodeling-design-planning";
   const serviceRoot = normalizedSlug.split("/")[0] || "kitchen-remodeling";
+  const PRIMARY_SERVICES = new Set(["kitchen-remodeling", "bathroom-remodeling", "basement-finishing", "flooring"]);
+  const isPrimaryService = PRIMARY_SERVICES.has(serviceRoot);
+  const showBeforeAfter = serviceRoot === "kitchen-remodeling";
   const serviceLabel = (hero?.title || "")
     .replace(/\s+in\s+connecticut$/i, "")
     .replace(/\s+\|\s+.*$/i, "")
@@ -961,7 +1018,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
   }, []);
 
   return (
-    <div className={cx("bg-white text-[#1E2B43]", usesReferenceHeroCtas && "decks-porches-ref-page")}>
+    <div className="bg-white text-[#1E2B43]">
       <main id="main">
         <section className="relative isolate overflow-hidden bg-[#151E30] px-5 pb-8 pt-[72px] text-white sm:pb-8 sm:pt-[84px] md:px-10 md:pb-10 md:pt-[104px]">
           <div
@@ -1007,24 +1064,24 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             <p className="mt-4 max-w-[560px] text-[17px] leading-[1.7] text-white/80">
               {hero?.subtitle}
             </p>
-            <div className={cx("mt-7 flex w-full max-w-[620px] flex-col items-center gap-[14px] sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center", usesReferenceHeroCtas && "decks-hero-ctas")}>
+            <div className="mt-7 flex flex-col items-center gap-[14px] sm:flex-row sm:justify-center">
+              <a
+                href="#contact"
+                className="w-[280px] rounded-[8px] border border-[#BC9155] bg-[#BC9155] px-8 py-[14px] text-center text-[15px] font-semibold text-white transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#D4A95A] hover:bg-[#D4A95A] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
+              >
+                Get Your Free Estimate
+              </a>
               {ctaPhones.map((item) => (
                 <a
                   key={item.label}
                   href={`tel:${(item.number || "").replace(/\D/g, "")}`}
-                  className={usesReferenceHeroCtas ? "decks-hero-cta-btn" : "min-w-[190px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]"}
+                  className="w-[280px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
                 >
                   <span className="text-[15px] font-semibold tracking-[0.1px] text-white">
                     {`${normalizePhoneChipLabel(item.label)}: ${item.number}`}
                   </span>
                 </a>
               ))}
-              <a
-                href={hero?.primary_cta?.url || "#contact"}
-                className={usesReferenceHeroCtas ? "order-first decks-hero-cta-btn decks-hero-cta-btn--primary" : "order-first min-w-[220px] rounded-[8px] border border-[#BC9155] bg-[#BC9155] px-8 py-[14px] text-center text-[15px] font-semibold text-white transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#D4A95A] hover:bg-[#D4A95A] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"}
-              >
-                {hero?.primary_cta?.label || "Get Your Free Estimate"}
-              </a>
             </div>
           </div>
         </section>
@@ -1208,14 +1265,14 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                 {caseStudies?.subtitle}
               </p>
             </div>
-            <div className="grid gap-6 lg:grid-cols-3">
-              {(caseStudies?.projects || []).map(
+            <div className={`grid gap-6 ${isPrimaryService ? "lg:grid-cols-3" : "mx-auto max-w-[480px]"}`}>
+              {(caseStudies?.projects || []).slice(0, isPrimaryService ? 3 : 1).map(
                 (project: any, index: number) => {
                   const quote = splitQuote(project.testimonial_quote);
                   return (
                     <article
                       key={`${project.location}-${index}`}
-                      className="rounded-[12px] border-b-2 border-b-transparent bg-white px-7 py-7 shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#BC9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
+                      className="flex flex-col rounded-[12px] border-b-2 border-b-transparent bg-white px-7 py-7 shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#BC9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
                     >
                       <div className="relative mb-5 h-[280px] overflow-hidden rounded-[8px]">
                         <img
@@ -1226,11 +1283,18 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                           alt={project.image_alt || project.before_image_alt || project.location}
                           className="h-full w-full object-cover"
                         />
+                        {showBeforeAfter ? (
+                          <>
+                            <div className="absolute inset-x-0 bottom-0 h-[76px] bg-[linear-gradient(to_bottom,transparent_0%,rgba(0,0,0,0.92)_55%,rgba(0,0,0,0.96)_100%)]" />
+                            <div className="absolute bottom-0 left-0 flex h-[76px] w-1/2 items-end px-[14px] pb-[13px]"><span className="text-[13px] font-extrabold uppercase tracking-[2.5px] text-white">Before</span></div>
+                            <div className="absolute bottom-0 right-0 flex h-[76px] w-1/2 items-end justify-end px-[14px] pb-[13px]"><span className="text-[13px] font-extrabold uppercase tracking-[2.5px] text-white">After</span></div>
+                          </>
+                        ) : null}
                       </div>
                       <h3 className="mb-3 text-[20px] font-bold">
                         {project.location}
                       </h3>
-                      <p className="text-[14px] leading-[1.75] text-[#5C677D]">
+                      <p className="flex-1 text-[14px] leading-[1.75] text-[#5C677D]">
                         {project.description}
                       </p>
                       {project.testimonial_quote ? (
@@ -1240,7 +1304,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                           </p>
                           {quote.cite ? (
                             <cite className="mt-2 block text-[12px] font-semibold not-italic text-[#5C677D]">
-                              {quote.cite}
+                              Homeowner
                             </cite>
                           ) : null}
                         </div>
@@ -1876,61 +1940,6 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
           font-size: 13px;
           color: rgba(255, 255, 255, 0.4);
         }
-        .decks-porches-ref-page .decks-hero-ctas {
-          display: flex;
-          gap: 14px;
-          margin-top: 28px;
-          justify-content: center;
-          align-items: center;
-          flex-wrap: wrap;
-        }
-        .decks-porches-ref-page .decks-hero-cta-btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          padding: 14px 32px;
-          border-radius: 8px;
-          background: rgba(10, 18, 35, 0.42);
-          border: 1px solid rgba(255, 255, 255, 0.22);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          color: #fff;
-          text-decoration: none;
-          font-size: 15px;
-          font-weight: 600;
-          letter-spacing: 0.3px;
-          transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-          white-space: nowrap;
-          transform: translateY(0);
-          will-change: transform, box-shadow, background, border-color;
-          min-width: 190px;
-          text-align: center;
-        }
-        .decks-porches-ref-page .decks-hero-cta-btn:hover {
-          background: rgba(10, 18, 35, 0.62);
-          border-color: rgba(255, 255, 255, 0.35);
-          transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        }
-        .decks-porches-ref-page .decks-hero-cta-btn--primary {
-          min-width: 220px;
-          background: #bc9155;
-          border: 1px solid #bc9155;
-          color: #fff;
-          backdrop-filter: none;
-          -webkit-backdrop-filter: none;
-        }
-        .decks-porches-ref-page .decks-hero-cta-btn--primary:hover {
-          background: #d4a95a;
-          border-color: #d4a95a;
-          box-shadow: 0 8px 24px rgba(188, 145, 85, 0.4);
-        }
-        .decks-porches-ref-page .decks-hero-cta-btn:focus-visible {
-          outline: 2px solid #fff;
-          outline-offset: 2px;
-          box-shadow: 0 0 0 4px rgba(188, 145, 85, 0.4);
-        }
         .kitchen-trust-strip {
           background: linear-gradient(135deg, #1e2b43 0%, #151e30 100%);
           padding: 56px 40px;
@@ -2098,19 +2107,6 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
           }
         }
         @media (max-width: 768px) {
-          .decks-porches-ref-page .decks-hero-ctas {
-            flex-direction: column;
-            align-items: center;
-          }
-          .decks-porches-ref-page .decks-hero-cta-btn {
-            min-height: 44px;
-            width: 100%;
-            max-width: 300px;
-            min-width: 0;
-            justify-content: center;
-            font-size: 14px;
-            padding: 12px 24px;
-          }
           .kitchen-trust-strip-divider {
             display: none;
           }

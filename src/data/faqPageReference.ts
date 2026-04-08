@@ -582,5 +582,34 @@ export const FAQ_REFERENCE_CATEGORIES: FaqCategory[] = [
         "answer": "Yes, homeowners can upgrade materials during <a href=\"/insurance-restoration/\">insurance reconstruction</a> since the home is already being rebuilt. Insurance covers restoration to pre-loss condition, but many Connecticut homeowners choose to upgrade -- for example, from laminate to quartz countertops or from builder-grade cabinets to semi-custom. The carrier covers the cost of replacing to the original standard, and you pay only the difference for the upgrade. We itemize this clearly so you know exactly what the upgrade costs before committing."
       }
     ]
+  },
+  {
+    "title": "Licensing, Compliance and Materials",
+    "items": [
+      {
+        "question": "How do I verify a contractor's license in Connecticut?",
+        "answer": "Every home improvement contractor in Connecticut must hold a valid HIC (Home Improvement Contractor) license issued by the Department of Consumer Protection. You can verify any license at <a href=\"https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx\" target=\"_blank\" rel=\"noopener noreferrer\">elicense.ct.gov</a>. BuiltWell holds CT HIC License #0668405. We also carry full general liability insurance and workers' compensation coverage. Never hire a contractor who cannot provide their license number and proof of insurance before work begins."
+      },
+      {
+        "question": "What should a remodeling contract include in Connecticut?",
+        "answer": "Connecticut law requires home improvement contracts to include: the contractor's name, address, and HIC license number; a detailed description of the work; the total price and payment schedule; the start and estimated completion dates; and a notice of your right to cancel within three business days. BuiltWell proposals include all of these plus an itemized scope of work, material specifications, and a clear change order process. If a contractor asks for more than one-third of the total cost upfront, that is a red flag under Connecticut regulations."
+      },
+      {
+        "question": "What are the best countertop materials for Connecticut kitchens?",
+        "answer": "Quartz and granite are the most popular choices for Connecticut kitchen remodels. Quartz (brands like Cambria, Silestone, and Caesarstone) is non-porous, requires no sealing, and resists staining. Granite offers natural stone character but needs annual sealing. Marble is beautiful but porous and stains easily, making it better suited for bathrooms. For budget-conscious projects, butcher block and laminate have improved significantly in quality and appearance. We help you weigh durability, maintenance, and cost during the selections phase."
+      },
+      {
+        "question": "Does Connecticut require permits for all remodeling work?",
+        "answer": "Not all work requires permits, but most remodeling does. Any project involving structural changes, electrical work, plumbing modifications, or HVAC alterations requires a building permit in Connecticut. Cosmetic updates like painting, replacing cabinet hardware, or installing new light fixtures on existing circuits typically do not. Permit requirements vary slightly by town. BuiltWell determines what permits are needed during the planning phase and handles all applications and inspections."
+      },
+      {
+        "question": "What flooring holds up best in Connecticut homes?",
+        "answer": "Luxury vinyl plank (LVP) is the top performer for Connecticut basements and high-traffic areas because it is waterproof and handles temperature swings well. Solid hardwood (oak, maple, hickory) remains the preferred choice for main living areas and adds resale value. Engineered hardwood works well in basements and over concrete slabs where moisture is a concern. Tile is ideal for bathrooms and entryways. We recommend specific products based on where the flooring is going, what is underneath it, and how the space is used."
+      },
+      {
+        "question": "How do I protect myself from contractor fraud in Connecticut?",
+        "answer": "Verify the contractor's CT HIC license at elicense.ct.gov. Confirm they carry general liability and workers' compensation insurance and ask for certificates. Never pay more than one-third upfront. Get everything in writing with a detailed scope and payment schedule. Avoid contractors who only accept cash, refuse to pull permits, or pressure you into signing immediately. If something goes wrong, file a complaint with the Connecticut Department of Consumer Protection. BuiltWell provides all documentation upfront and welcomes verification."
+      }
+    ]
   }
 ];

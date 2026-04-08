@@ -33,8 +33,14 @@ const FALLBACK_MEDIA: Record<string, string> = {
 };
 
 function localMedia(value?: string | null, fallback = "") {
-  if (!value) return fallback;
-  return FALLBACK_MEDIA[value] || value;
+  const source = value || "";
+  if (!source) return fallback;
+  try {
+    const normalized = source.startsWith("http") ? new URL(source).pathname : source;
+    return FALLBACK_MEDIA[source] || FALLBACK_MEDIA[normalized] || source || fallback;
+  } catch {
+    return FALLBACK_MEDIA[source] || source || fallback;
+  }
 }
 
 function paras(value?: string | null) {
@@ -326,8 +332,8 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
                   <h3 className="mb-3 text-[22px] font-bold leading-[1.2]">{item.url ? linkNode(item.url, item.title, "transition-colors group-hover:text-[#bc9155]") : item.title}</h3>
                   <p className="mb-5 flex-1 text-[15px] leading-[1.7] text-[#5c677d]">{item.summary}</p>
                   <div className="mb-5 flex flex-wrap justify-center gap-3">
-                    {item.price ? <span className="inline-flex items-center gap-[6px] rounded-full bg-[#bc91551a] px-[14px] py-[6px] text-[12px] font-semibold text-[#9a7340]"><svg className="h-[14px] w-[14px] text-[#bc9155]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>{item.price}</span> : null}
-                    {item.timeline ? <span className="inline-flex items-center gap-[6px] rounded-full bg-[#bc91551a] px-[14px] py-[6px] text-[12px] font-semibold text-[#9a7340]"><svg className="h-[14px] w-[14px] text-[#bc9155]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{item.timeline}</span> : null}
+                    {item.price ? <span className="inline-flex w-[150px] items-center justify-center gap-[6px] rounded-full bg-[#bc91551a] px-[14px] py-[6px] text-[12px] font-semibold text-[#9a7340]"><svg className="h-[14px] w-[14px] flex-shrink-0 text-[#bc9155]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>{item.price}</span> : null}
+                    {item.timeline ? <span className="inline-flex w-[150px] items-center justify-center gap-[6px] rounded-full bg-[#bc91551a] px-[14px] py-[6px] text-[12px] font-semibold text-[#9a7340]"><svg className="h-[14px] w-[14px] flex-shrink-0 text-[#bc9155]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{item.timeline}</span> : null}
                   </div>
                   {item.url ? linkNode(item.url, <><span>{item.cta_label || "Learn More"}</span><ArrowRight className="h-[14px] w-[14px]" /></>, "inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-[10px]") : null}
                 </div>
@@ -605,10 +611,6 @@ function ServicesAreasSection({
   setCountyOpen: React.Dispatch<React.SetStateAction<Record<number, boolean>>>;
 }) {
   const areasFadeRef = useFadeUp();
-  const counties = data?.counties || [];
-  const expandableCount = counties.filter((county: any) => (county.extra_towns || []).length > 0).length;
-  const expandedCount = counties.filter((county: any, index: number) => (county.extra_towns || []).length > 0 && countyOpen[index]).length;
-  const shouldMatchCardHeights = expandedCount === 0 || (expandableCount > 0 && expandedCount === expandableCount);
 
   return (
     <section ref={areasFadeRef} className="bg-[#f5f1e9] px-5 py-24 md:px-10">
@@ -625,8 +627,8 @@ function ServicesAreasSection({
           ) : null}
         </div>
 
-        <div className={cls("fade-up grid gap-8 lg:grid-cols-2", shouldMatchCardHeights ? "items-stretch" : "items-start")} style={{ ...fadeUpStyle, transitionDelay: "0.15s" }}>
-          {counties.map((county: any, index: number) => {
+        <div className="fade-up grid gap-8 lg:grid-cols-2" style={{ ...fadeUpStyle, transitionDelay: "0.15s" }}>
+          {(data?.counties || []).map((county: any, index: number) => {
             const expanded = !!countyOpen[index];
             const mainTowns = county.towns || [];
             const extraTowns = county.extra_towns || [];
@@ -636,10 +638,7 @@ function ServicesAreasSection({
             return (
               <article
                 key={`${county.name || "county"}-${index}`}
-                className={cls(
-                  "flex flex-col overflow-hidden rounded-[12px] border-b-[3px] border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1.5 hover:border-b-[#bc9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]",
-                  shouldMatchCardHeights && "h-full",
-                )}
+                className="flex flex-col overflow-hidden rounded-[12px] border-b-[3px] border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1.5 hover:border-b-[#bc9155] hover:shadow-[0_16px_40px_rgba(30,43,67,0.1),0_32px_64px_rgba(30,43,67,0.08)]"
               >
                 {/* Image with gradient overlay + zoom */}
                 <div className="group relative h-[220px] overflow-hidden">

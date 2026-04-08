@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import type { CMSPage } from '@/types/cms';
 
-// â”€â”€â”€ helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ helpers â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 
 type HeroData = {
   title?: string | null;
@@ -31,7 +31,7 @@ type ConsultationCardsSplitData = {
 const getSection = <T,>(page: CMSPage, type: string): T | undefined =>
   page.sections.find((s) => s.is_active && s.type === type)?.data as T | undefined;
 
-// â”€â”€â”€ static data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ static data â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 
 const STEPS = [
   {
@@ -126,7 +126,7 @@ const RELATED = [
   { href: '/basement-finishing/', img: '/services/basement-finishing-ct.jpg', alt: 'Basement finishing by BuiltWell CT in Connecticut', title: 'Basement Finishing', body: 'Transform your unfinished basement into functional living space with framing, insulation, electrical, flooring, and full finish work.' },
 ];
 
-// â”€â”€â”€ sub-components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ sub-components â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -151,17 +151,18 @@ function TownPill({ town, href, secondary }: { town: string; href?: string; seco
   return <span style={base} className={secondary ? 'area-town-secondary' : undefined}>{town}</span>;
 }
 
-function AreaCard({ county, phone, phoneLabel, img, alt, desc, primaryTowns, moreTowns, townLinks, countyHref, showTop, expanded, onToggle, stretch }: {
+function AreaCard({ county, phone, phoneLabel, img, alt, desc, primaryTowns, moreTowns, townLinks, countyHref, showTop }: {
   county: string; phone: string; phoneLabel?: string; img: string; alt: string; desc: string;
   primaryTowns: string[]; moreTowns: string[]; townLinks: Record<string, string>;
-  countyHref: string; showTop?: boolean; expanded: boolean; onToggle: () => void; stretch: boolean;
+  countyHref: string; showTop?: boolean;
 }) {
+  const [expanded, setExpanded] = useState(false);
   const tel = phone.replace(/\D/g, '');
   const visiblePrimaryTowns = primaryTowns.slice(0, 8);
   const hiddenPrimaryTowns = primaryTowns.slice(8);
   const extraTowns = [...hiddenPrimaryTowns, ...moreTowns];
   return (
-    <div className="area-card-hover" style={{ borderRadius: 12, background: '#fff', borderBottom: '3px solid transparent', boxShadow: '0 2px 12px rgba(30,43,67,0.06)', transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', height: stretch ? '100%' : undefined }}>
+    <div className="area-card-hover" style={{ borderRadius: 12, background: '#fff', borderBottom: '3px solid transparent', boxShadow: '0 2px 12px rgba(30,43,67,0.06)', transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', alignSelf: 'start', height: 'fit-content' }}>
       <div style={{ width: '100%', height: 220, overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, background: 'linear-gradient(to top, rgba(30,43,67,0.4), transparent)', zIndex: 1, pointerEvents: 'none' }} />
         <img src={img} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: showTop ? 'top' : 'center', transition: 'transform 0.5s' }} className="area-card-img-inner" loading="lazy" decoding="async" />
@@ -176,12 +177,12 @@ function AreaCard({ county, phone, phoneLabel, img, alt, desc, primaryTowns, mor
           {visiblePrimaryTowns.map((t) => <TownPill key={t} town={t} href={townLinks[t]} />)}
           {expanded && extraTowns.map((t) => <TownPill key={t} town={t} href={townLinks[t]} secondary />)}
           {extraTowns.length > 0 && (
-            <button onClick={onToggle} style={{ background: 'none', border: 'none', color: '#BC9155', fontSize: 13, fontWeight: 600, cursor: 'pointer', padding: '4px 0', gridColumn: '1 / -1', textAlign: 'center', marginTop: 4, transition: 'color 0.2s' }}>
+            <button onClick={() => setExpanded(!expanded)} style={{ background: 'none', border: 'none', color: '#BC9155', fontSize: 13, fontWeight: 600, cursor: 'pointer', padding: '4px 0', gridColumn: '1 / -1', textAlign: 'center', marginTop: 4, transition: 'color 0.2s' }}>
               {expanded ? 'Show Less -' : 'See All Towns +'}
             </button>
           )}
         </div>
-        <Link href={countyHref} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: 14, fontWeight: 600, color: '#BC9155', textDecoration: 'none', marginTop: 'auto', paddingTop: 4, transition: 'gap 0.3s' }} className="area-link-hover">
+        <Link href={countyHref} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: 14, fontWeight: 600, color: '#BC9155', textDecoration: 'none', marginTop: 4, transition: 'gap 0.3s' }} className="area-link-hover">
           Learn more about {county} <ArrowIcon />
         </Link>
       </div>
@@ -189,7 +190,7 @@ function AreaCard({ county, phone, phoneLabel, img, alt, desc, primaryTowns, mor
   );
 }
 
-// â”€â”€â”€ scheduling modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ scheduling modal â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 
 function SchedulingModal({ open, onClose, initialType = 'in-person' }: { open: boolean; onClose: () => void; initialType?: 'in-person' | 'remote' }) {
   const [type, setType] = useState<'in-person' | 'remote'>(initialType);
@@ -316,7 +317,7 @@ function SchedulingModal({ open, onClose, initialType = 'in-person' }: { open: b
   );
 }
 
-// â”€â”€â”€ lead form section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ lead form section â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 
 function LeadFormSection() {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
@@ -468,7 +469,7 @@ function LeadFormSection() {
   );
 }
 
-// â”€â”€â”€ fade-up animation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ fade-up animation â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 
 function FadeUp({ children, delay = 0, stretch }: { children: React.ReactNode; delay?: number; stretch?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -487,12 +488,11 @@ function FadeUp({ children, delay = 0, stretch }: { children: React.ReactNode; d
   );
 }
 
-// â”€â”€â”€ main template â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ main template â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 
 export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'in-person' | 'remote'>('in-person');
-  const [serviceAreaOpen, setServiceAreaOpen] = useState<Record<string, boolean>>({});
 
   const heroData = (getSection<HeroData>(page, 'hero') || getSection<HeroData>(page, 'service_hero') || getSection<HeroData>(page, 'page_hero'));
   const cardsData = getSection<ConsultationCardsSplitData>(page, 'consultation_cards_split');
@@ -542,8 +542,6 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
   const consultationTitleBefore = consultationTitleIndex >= 0 ? consultationTitle.slice(0, consultationTitleIndex) : consultationTitle;
   const consultationTitleAfter =
     consultationTitleIndex >= 0 ? consultationTitle.slice(consultationTitleIndex + consultationHighlight.length) : '';
-  const serviceAreaExpandedCount = Number(Boolean(serviceAreaOpen.fairfield)) + Number(Boolean(serviceAreaOpen.newHaven));
-  const shouldMatchServiceAreaHeights = serviceAreaExpandedCount === 0 || serviceAreaExpandedCount === 2;
 
   // Split title on "Consultation" for gold accent
   const accentWord = 'Consultation';
@@ -650,7 +648,7 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
         }
       `}</style>
 
-      {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* â"€â"€ HERO â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ */}
       <section style={{ background: '#151E30', padding: '0 40px 48px', paddingTop: 120, color: '#fff', position: 'relative', overflow: 'hidden', minHeight: '50vh', display: 'flex', alignItems: 'stretch', isolation: 'isolate' }}>
         <img src={heroBg} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', opacity: 0.72, zIndex: 0 }} />
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 97% 97%, rgba(21,30,48,1) 0%, rgba(21,30,48,0.9) 8%, transparent 30%), radial-gradient(ellipse at 3% 97%, rgba(21,30,48,0.9) 0%, transparent 25%), linear-gradient(180deg, rgba(21,30,48,0.35) 0%, rgba(21,30,48,0.2) 30%, rgba(21,30,48,0.45) 65%, rgba(21,30,48,0.92) 100%)', zIndex: 1 }} />
@@ -666,21 +664,21 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
           </h1>
           <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.82)', lineHeight: 1.7, maxWidth: 520, margin: '16px auto 0', fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>{heroSubtitle}</p>
           {/* ctas */}
-          <div className="hero-ctas-wrap" style={{ display: 'flex', gap: 14, marginTop: 28, justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
-            <button onClick={() => { setModalType('in-person'); setModalOpen(true); }} className="hero-cta-btn hero-cta-primary" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '14px 32px', borderRadius: 8, background: '#BC9155', border: '1px solid #BC9155', color: '#fff', fontSize: 15, fontWeight: 600, letterSpacing: '0.3px', cursor: 'pointer', transition: 'all 0.3s' }}>
+          <div className="mt-8 flex flex-col items-center gap-[14px] sm:flex-row sm:justify-center">
+            <a href="#contact" className="w-[280px] rounded-[8px] border border-[#BC9155] bg-[#BC9155] px-8 py-[14px] text-center text-[15px] font-semibold text-white transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#D4A95A] hover:bg-[#D4A95A] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]">
               Get Your Free Estimate
-            </button>
-            <a href="tel:2039199616" className="hero-cta-btn" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '14px 32px', borderRadius: 8, background: 'rgba(10,18,35,0.42)', border: '1px solid rgba(255,255,255,0.22)', color: '#fff', textDecoration: 'none', fontSize: 15, fontWeight: 600, letterSpacing: '0.3px', transition: 'all 0.3s', whiteSpace: 'nowrap' }}>
-              Fairfield: (203) 919-9616
             </a>
-            <a href="tel:2034669148" className="hero-cta-btn" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '14px 32px', borderRadius: 8, background: 'rgba(10,18,35,0.42)', border: '1px solid rgba(255,255,255,0.22)', color: '#fff', textDecoration: 'none', fontSize: 15, fontWeight: 600, letterSpacing: '0.3px', transition: 'all 0.3s', whiteSpace: 'nowrap' }}>
-              New Haven: (203) 466-9148
+            <a href="tel:2039199616" className="w-[280px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
+              <span className="text-[15px] font-semibold tracking-[0.1px] text-white">Fairfield: (203) 919-9616</span>
+            </a>
+            <a href="tel:2034669148" className="w-[280px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
+              <span className="text-[15px] font-semibold tracking-[0.1px] text-white">New Haven: (203) 466-9148</span>
             </a>
           </div>
         </div>
       </section>
 
-      {/* â”€â”€ TRUST BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* â"€â"€ TRUST BAR â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ */}
       <section style={{ background: 'linear-gradient(135deg, #1E2B43 0%, #151E30 100%)', borderTop: '1px solid rgba(188,145,85,0.2)', borderBottom: '1px solid rgba(188,145,85,0.2)' }}>
         <div className="four-col-trust" style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', textAlign: 'center' }}>
           <div className="trust-item-hover" style={{ padding: '36px 20px', borderRight: '1px solid rgba(188,145,85,0.12)', cursor: 'default' }}>
@@ -704,7 +702,7 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      {/* â”€â”€ HOW THE CONSULTATION WORKS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* â"€â"€ HOW THE CONSULTATION WORKS â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ */}
       <section style={{ background: '#fff', padding: '80px 40px', borderBottom: '1px solid rgba(30,43,67,0.06)' }}>
         <div style={{ maxWidth: 1240, margin: '0 auto' }}>
           <FadeUp>
@@ -721,7 +719,7 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      {/* â”€â”€ 5 CONSULTATION STEPS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* â"€â"€ 5 CONSULTATION STEPS â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ */}
       <section style={{ background: '#F5F1E9', padding: '80px 40px' }}>
         <div style={{ maxWidth: 1240, margin: '0 auto' }}>
           <FadeUp>
@@ -738,48 +736,49 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      {/* â”€â”€ WHAT TO EXPECT FROM YOUR ESTIMATE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      <section style={{ background: '#fff', padding: '80px 40px' }}>
-        <div style={{ maxWidth: 1240, margin: '0 auto' }}>
+      {/* WHAT TO EXPECT FROM YOUR ESTIMATE */}
+      <section className="bg-white px-5 py-20 md:px-10">
+        <div className="mx-auto max-w-[1240px]">
           <FadeUp>
-            <div style={{ maxWidth: 820, margin: '0 auto' }}>
-              <div style={{ textAlign: 'center', marginBottom: 28 }}>
-                <SectionLabel>Your Estimate</SectionLabel>
-                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 3vw, 38px)', marginBottom: 20, letterSpacing: '-0.3px', color: '#1E2B43' }}>
-                  What to Expect From Your <span style={{ color: '#BC9155' }}>Estimate</span>
-                </h2>
-              </div>
-              <p style={{ fontSize: 16, color: '#5C677D', lineHeight: 1.85, marginBottom: 20 }}>
+            <div className="mb-12 text-center">
+              <SectionLabel>Your Estimate</SectionLabel>
+              <h2 className="font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px] text-[#1E2B43]">
+                What to Expect From Your <span className="text-[#BC9155]">Estimate</span>
+              </h2>
+              <p className="mx-auto mt-4 max-w-[720px] text-[17px] leading-[1.75] text-[#5C677D]">
                 Every BuiltWell estimate includes an itemized scope of work, material specifications, construction timeline with lead times, and a fixed total cost with no hidden fees or vague line items.
               </p>
-              <p style={{ fontSize: 16, color: '#5C677D', lineHeight: 1.85, marginBottom: 20 }}>
-                The written estimate covers scope, materials, timeline, and total cost. No vague ranges. A BuiltWell estimate includes:
-              </p>
-              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px' }}>
-                {[
-                  { label: 'Itemized scope of work:', body: 'what is included and what is explicitly excluded, written in plain terms' },
-                  { label: 'Material specifications:', body: 'the specific products, categories, and grades included' },
-                  { label: 'Timeline:', body: 'start date, construction duration, and any lead times' },
-                  { label: 'Total cost:', body: 'the full project cost as proposed, including all permits, labor, and materials' },
-                ].map((item, i) => (
-                  <li key={i} style={{ position: 'relative', paddingLeft: 24, fontSize: 15, color: '#5C677D', lineHeight: 1.8, marginBottom: 10 }}>
-                    <span style={{ position: 'absolute', left: 0, top: 12, width: 8, height: 8, borderRadius: '50%', background: '#BC9155', display: 'inline-block' }} />
-                    <strong style={{ color: '#1E2B43', fontWeight: 600 }}>{item.label}</strong> {item.body}
-                  </li>
-                ))}
-              </ul>
-              <p style={{ fontSize: 16, color: '#5C677D', lineHeight: 1.85, marginBottom: 20 }}>
-                The estimate is fixed. If something changes during the project, we discuss it first and document it in a written change order. You don&apos;t get a surprise invoice.
-              </p>
-              <p style={{ fontSize: 16, color: '#5C677D', lineHeight: 1.85 }}>
-                Learn more about how we work on our <Link href="/process/" style={{ color: '#BC9155', fontWeight: 600, textDecoration: 'none' }}>process page</Link>.
-              </p>
             </div>
+          </FadeUp>
+          <FadeUp delay={100}>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                { icon: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></>, title: "Itemized Scope", desc: "What is included and what is explicitly excluded, written in plain terms. No ambiguity." },
+                { icon: <><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></>, title: "Material Specs", desc: "The specific products, categories, and grades included. You know exactly what you are getting." },
+                { icon: <><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>, title: "Timeline", desc: "Start date, construction duration, and any lead times. A realistic schedule you can plan around." },
+                { icon: <><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></>, title: "Fixed Total Cost", desc: "The full project cost including all permits, labor, and materials. No surprise invoices." },
+              ].map((item, i) => (
+                <article key={i} className="group relative overflow-hidden rounded-[14px] border border-[#1e2b430a] bg-[#f5f1e9] p-7 text-center transition-all duration-[400ms] hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(30,43,67,0.12)]">
+                  <div className="absolute left-0 top-0 h-full w-[4px] bg-[#BC9155] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#BC9155]/10 transition-all duration-300 group-hover:bg-[#BC9155]/20">
+                    <svg className="h-6 w-6 text-[#BC9155]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{item.icon}</svg>
+                  </div>
+                  <h3 className="mb-2 font-serif text-[20px] font-bold text-[#1E2B43]">{item.title}</h3>
+                  <p className="text-[14px] leading-[1.75] text-[#5C677D]">{item.desc}</p>
+                </article>
+              ))}
+            </div>
+          </FadeUp>
+          <FadeUp delay={200}>
+            <p className="mx-auto mt-10 max-w-[700px] text-center text-[16px] leading-[1.85] text-[#5C677D]">
+              The estimate is fixed. If something changes during the project, we discuss it first and document it in a written change order. You do not get a surprise invoice. Learn more about how we work on our{" "}
+              <Link href="/process/" className="font-semibold text-[#BC9155] transition-colors hover:text-[#9A7340]">process page</Link>.
+            </p>
           </FadeUp>
         </div>
       </section>
 
-      {/* â”€â”€ ON-SITE VS REMOTE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* â"€â"€ ON-SITE VS REMOTE â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ */}
       <section style={{ background: '#F5F1E9', padding: '80px 40px' }}>
         <div style={{ maxWidth: 1240, margin: '0 auto' }}>
           <FadeUp>
@@ -843,7 +842,7 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      {/* â”€â”€ SERVICE AREAS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* â"€â"€ SERVICE AREAS â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ */}
       {/* SERVICE AREAS */}
       <section style={{ background: '#fff', padding: '100px 40px' }}>
         <div style={{ maxWidth: 1240, margin: '0 auto' }}>
@@ -859,7 +858,7 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
             </div>
           </FadeUp>
           <FadeUp delay={100}>
-            <div className="two-col-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, alignItems: shouldMatchServiceAreaHeights ? 'stretch' : 'start' }}>
+            <div className="two-col-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, alignItems: 'start' }}>
               <AreaCard
                 county="Fairfield County"
                 phone="(203) 919-9616"
@@ -871,9 +870,6 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
                 moreTowns={FAIRFIELD_TOWNS_MORE}
                 townLinks={FAIRFIELD_TOWN_LINKS}
                 countyHref="/fairfield-county/"
-                expanded={Boolean(serviceAreaOpen.fairfield)}
-                onToggle={() => setServiceAreaOpen((current) => ({ ...current, fairfield: !current.fairfield }))}
-                stretch={shouldMatchServiceAreaHeights}
               />
               <AreaCard
                 county="New Haven County"
@@ -887,9 +883,6 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
                 townLinks={NEW_HAVEN_TOWN_LINKS}
                 countyHref="/new-haven-county/"
                 showTop
-                expanded={Boolean(serviceAreaOpen.newHaven)}
-                onToggle={() => setServiceAreaOpen((current) => ({ ...current, newHaven: !current.newHaven }))}
-                stretch={shouldMatchServiceAreaHeights}
               />
             </div>
           </FadeUp>
@@ -981,7 +974,7 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
           </a>
         </div>
       </div>
-      {/* â”€â”€ RELATED SERVICES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* â"€â"€ RELATED SERVICES â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ */}
       <section style={{ background: '#F5F1E9', padding: '100px 40px' }}>
         <div style={{ maxWidth: 1240, margin: '0 auto' }}>
           <FadeUp>
@@ -1018,7 +1011,7 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      {/* â”€â”€ SCHEDULING MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* â"€â"€ SCHEDULING MODAL â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ */}
       <SchedulingModal key={`${modalOpen}-${modalType}`} open={modalOpen} initialType={modalType} onClose={() => setModalOpen(false)} />
     </>
   );

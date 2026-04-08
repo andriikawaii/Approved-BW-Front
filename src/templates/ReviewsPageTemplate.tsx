@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import type { CMSPage } from "@/types/cms";
-import { parts, label, section, sections, HeroTrustBar, DarkTrustStrip, FinancingStrip, LeadFormSection } from "./template-utils";
+import { parts, label, linkNode, section, sections, HeroTrustBar, DarkTrustStrip, FinancingStrip, LeadFormSection } from "./template-utils";
 import { usePageData } from "@/src/context/PageDataContext";
 
 export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
@@ -209,15 +209,15 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
           <p className="subtitle">
             {heroSubtitle}
           </p>
-          <div className="rv-hero-ctas">
-            <a href={hero?.cta_primary?.url || "/free-consultation/"} className="rv-cta-btn rv-cta-primary">
-              {hero?.cta_primary?.label || "Get Your Free Estimate"}
+          <div className="mt-8 flex flex-col items-center gap-[14px] sm:flex-row sm:justify-center">
+            <a href="#contact" className="w-[280px] rounded-[8px] border border-[#BC9155] bg-[#BC9155] px-8 py-[14px] text-center text-[15px] font-semibold text-white transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#D4A95A] hover:bg-[#D4A95A] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]">
+              Get Your Free Estimate
             </a>
-            <a href={`tel:${fairfieldNumber.replace(/\D/g, "")}`} className="rv-cta-btn">
-              Fairfield: {fairfieldNumber}
+            <a href="tel:2039199616" className="w-[280px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
+              <span className="text-[15px] font-semibold tracking-[0.1px] text-white">Fairfield: (203) 919-9616</span>
             </a>
-            <a href={`tel:${newHavenNumber.replace(/\D/g, "")}`} className="rv-cta-btn">
-              New Haven: {newHavenNumber}
+            <a href="tel:2034669148" className="w-[280px] rounded-[8px] border border-white/[0.22] bg-[rgba(10,18,35,0.42)] px-8 py-[14px] text-center backdrop-blur-[12px] transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-white/[0.35] hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
+              <span className="text-[15px] font-semibold tracking-[0.1px] text-white">New Haven: (203) 466-9148</span>
             </a>
           </div>
         </div>
@@ -288,40 +288,68 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
           </div>
           <div className="fade-up">
             <p>{leaveReviewData?.paragraphs?.[0] || "Past BuiltWell customers can leave a review on Google to help other Connecticut homeowners find a licensed, reliable remodeling contractor in Fairfield or New Haven County. Honest reviews from real customers are how a company like ours builds its reputation over time."}</p>
-            <div style={{ textAlign: "center", margin: "32px 0" }}>
+            <p style={{ marginTop: "16px" }}>{leaveReviewData?.paragraphs?.[1] || "We read every review. We take the feedback seriously. And we are grateful to the customers who take the time to write one."}</p>
+            <div style={{ textAlign: "center", margin: "32px 0 0" }}>
               <a href={leaveReviewData?.cta?.url || "https://www.google.com/search?q=builtwell+ct+reviews"} target="_blank" rel="noopener noreferrer" className="rv-leave-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                 {leaveReviewData?.cta?.label || "Leave a Google Review"}
               </a>
             </div>
-            <p>{leaveReviewData?.paragraphs?.[1] || "We read every review. We take the feedback seriously. And we are grateful to the customers who take the time to write one."}</p>
           </div>
         </div>
       </section>
 
       {/* WHAT CONSISTENT FEEDBACK LOOKS LIKE */}
-      <section className="rv-feedback">
-        <div className="rv-feedback-inner">
-          <div className="rv-section-header fade-up">
-            <span className="rv-label">{feedbackData?.eyebrow || "Our Standards"}</span>
+      <section className="bg-white px-5 py-20 md:px-10">
+        <div className="mx-auto max-w-[1240px]">
+          <div className="mb-12 text-center">
+            <span className="mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#9A7340] before:relative before:-left-5 before:top-[-3px] before:inline-block before:h-[2px] before:w-[10px] before:bg-[#BC9155]">{feedbackData?.eyebrow || "Our Standards"}</span>
             {(() => {
               const fp = parts(feedbackData?.title || "What Consistent Feedback Looks Like", feedbackData?.title_highlight || "Looks Like");
-              return <h2 className="font-serif font-bold">{fp.before}<span className="text-[#bc9155]">{fp.accent}</span>{fp.after}</h2>;
+              return <h2 className="font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px] text-[#1E2B43]">{fp.before}<span className="text-[#bc9155]">{fp.accent}</span>{fp.after}</h2>;
             })()}
+            <p className="mx-auto mt-4 max-w-[720px] text-[17px] leading-[1.75] text-[#5C677D]">
+              {feedbackData?.intro_paragraphs?.[0] || "Across 100+ completed projects in Connecticut, three themes appear in nearly every BuiltWell review: on-time arrival, daily communication, and clean job sites throughout construction."}
+            </p>
           </div>
-          <article className="fade-up">
-            <p>{feedbackData?.intro_paragraphs?.[0] || "Across 100+ completed projects in Connecticut, three themes appear in nearly every BuiltWell review: on-time arrival, daily communication, and clean job sites throughout construction."}</p>
-            <p>{feedbackData?.intro_paragraphs?.[1] || "These are not about tile patterns or cabinet finishes. They are about how the project was managed: we showed up when we said we would, we communicated when something needed to be communicated, and we cleaned up at the end of every day. These things matter to homeowners more than most contractors seem to understand."}</p>
-
-            {feedbackSections.map((sub: any, i: number) => (
-              <div key={i}>
-                <h3>{sub.title}</h3>
-                <p>{sub.content}</p>
-              </div>
+          <div className="grid gap-8 lg:grid-cols-3">
+            {(feedbackSections.length > 0 ? feedbackSections : [
+              { title: "Showing Up on Schedule", content: "Showing up on schedule is a basic commitment, but it is also one that a significant portion of the industry does not keep. When a crew does not arrive when expected, it creates uncertainty about the whole project. We keep a schedule because we respect that you have made plans around it." },
+              { title: "Clear Communication", content: "Customers mention that they knew what was happening each day, that questions got answered, and that problems were addressed before they became surprises. We give daily updates during construction because a project moving through your home should never leave you guessing." },
+              { title: "Clean Job Sites", content: "A clean job site is a sign of an organized crew, and an organized crew finishes on time. Respect for your home during construction is built into how we train and expect our crews to work. It is not courtesy; it is professionalism. We install dust barriers, protect floors and finishes in adjacent rooms, and clean up at the end of every workday so your home stays livable throughout the project." },
+            ]).map((sub: any, i: number) => (
+              <article
+                key={i}
+                className="group relative overflow-hidden rounded-[14px] border border-[#1e2b430a] bg-[#f5f1e9] p-8 transition-all duration-[400ms] hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(30,43,67,0.12)]"
+              >
+                <div className="absolute left-0 top-0 h-full w-[4px] bg-[#BC9155] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#BC9155]/10 transition-all duration-300 group-hover:bg-[#BC9155]/20">
+                  <svg className="h-6 w-6 text-[#BC9155]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    {i === 0 ? <><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></> :
+                     i === 1 ? <><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></> :
+                     <><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></>}
+                  </svg>
+                </div>
+                <h3 className="mb-3 font-serif text-[22px] font-bold text-[#1E2B43]">{sub.title}</h3>
+                <p className="text-[15px] leading-[1.8] text-[#5C677D]">{sub.content}</p>
+              </article>
             ))}
-
-            <p dangerouslySetInnerHTML={{ __html: feedbackData?.closing || 'View all completed projects on our <a href="/case-studies/">case studies page</a>, or learn more about our five-step <a href="/process/">process</a>. Ready to discuss your project? <a href="/contact/">Contact us</a> or <a href="/free-consultation/">book a free consultation</a>.' }} />
-          </article>
+          </div>
+          <div className="mt-12 text-center">
+            <a
+              href="#contact"
+              className="inline-block w-[280px] rounded-[8px] border border-[#BC9155] bg-[#BC9155] px-8 py-[14px] text-center text-[15px] font-semibold text-white transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#D4A95A] hover:bg-[#D4A95A] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]"
+            >
+              Get Your Free Estimate
+            </a>
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-3 text-[14px]">
+              {linkNode("/case-studies/", "Case Studies", "text-[#5C677D] underline decoration-[#BC9155]/30 underline-offset-2 transition-colors hover:text-[#BC9155]")}
+              <span className="text-[#5C677D]/30">|</span>
+              {linkNode("/process/", "Our Process", "text-[#5C677D] underline decoration-[#BC9155]/30 underline-offset-2 transition-colors hover:text-[#BC9155]")}
+              <span className="text-[#5C677D]/30">|</span>
+              {linkNode("/free-consultation/", "Free Consultation", "text-[#5C677D] underline decoration-[#BC9155]/30 underline-offset-2 transition-colors hover:text-[#BC9155]")}
+            </div>
+          </div>
         </div>
       </section>
 
