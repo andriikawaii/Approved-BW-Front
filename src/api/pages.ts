@@ -3,10 +3,28 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const API_URL = (process.env.LARAVEL_API_URL ?? 'http://localhost:8000').replace(/\/+$/, '');
+const PUBLIC_API_URL = (process.env.NEXT_PUBLIC_API_URL ?? '').replace(/\/+$/, '');
 const CACHE_DIR = path.join(process.cwd(), 'src/api/cache');
 
 // OFFLINE MODE: skip API entirely, serve from local cache only
 const OFFLINE_MODE = true;
+
+// Recursively replace any localhost image URLs with the production API URL
+function replaceLocalhostUrls(obj: unknown): unknown {
+  if (!PUBLIC_API_URL || PUBLIC_API_URL.includes('localhost')) return obj;
+  if (typeof obj === 'string') {
+    return obj.replace(/https?:\/\/localhost(:\d+)?/g, PUBLIC_API_URL);
+  }
+  if (Array.isArray(obj)) return obj.map(replaceLocalhostUrls);
+  if (obj && typeof obj === 'object') {
+    const result: Record<string, unknown> = {};
+    for (const key of Object.keys(obj as Record<string, unknown>)) {
+      result[key] = replaceLocalhostUrls((obj as Record<string, unknown>)[key]);
+    }
+    return result;
+  }
+  return obj;
+}
 let apiDown = false;
 let lastApiCheck = 0;
 
@@ -18,7 +36,7 @@ function readCache(slug: string): Page | null {
 
     if (fs.existsSync(filePath)) {
       const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-      return data;
+      return replaceLocalhostUrls(data) as Page;
     }
   } catch (_) {}
   return null;
@@ -84,7 +102,7 @@ async function fetchFromApi(slug: string): Promise<Page | null> {
 
     const data = JSON.parse(text);
     apiDown = false;
-    return data;
+    return replaceLocalhostUrls(data) as Page;
   } catch (_) {
     clearTimeout(timeout);
     apiDown = true;
