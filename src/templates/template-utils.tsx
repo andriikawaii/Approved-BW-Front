@@ -76,7 +76,13 @@ const MEDIA_OVERRIDES: Record<string, string> = {
 
 export function media(value?: string | null, fallback = "") {
   if (!value) return fallback;
-  return MEDIA_OVERRIDES[value] || value || fallback;
+  if (MEDIA_OVERRIDES[value]) return MEDIA_OVERRIDES[value];
+  // Replace any localhost URL with the configured API URL
+  if (value.includes('localhost')) {
+    const apiUrl = (process.env.NEXT_PUBLIC_API_URL ?? '').replace(/\/+$/, '');
+    if (apiUrl) return value.replace(/https?:\/\/localhost(:\d+)?/, apiUrl);
+  }
+  return value || fallback;
 }
 
 export function parts(text?: string | null, mark?: string | null) {
