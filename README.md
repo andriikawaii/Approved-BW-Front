@@ -15,7 +15,7 @@ Production-grade marketing website for **BuiltWell CT**, a Connecticut-based hom
 | Icons | Lucide React |
 | Markdown | React Markdown + remark-gfm |
 | Fonts | Inter (sans), Playfair Display (serif) |
-| Backend | Laravel REST API |
+| Backend | Laravel  REST API |
 
 ---
 
