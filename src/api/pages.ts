@@ -6,8 +6,9 @@ const API_URL = (process.env.LARAVEL_API_URL ?? 'http://localhost:8000').replace
 const PUBLIC_API_URL = (process.env.NEXT_PUBLIC_API_URL ?? '').replace(/\/+$/, '');
 const CACHE_DIR = path.join(process.cwd(), 'src/api/cache');
 
-// OFFLINE MODE: skip API entirely, serve from local cache only
-const OFFLINE_MODE = true;
+// Opt-in offline mode for local demos. By default we try the backend first,
+// then fall back to cache/stub content if the API is unavailable.
+const OFFLINE_MODE = process.env.BUILTWELL_OFFLINE_MODE === 'true';
 
 // Recursively replace any localhost image URLs with the production API URL
 function replaceLocalhostUrls(obj: unknown): unknown {

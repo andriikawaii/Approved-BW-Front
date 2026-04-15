@@ -71,6 +71,10 @@ const TOWN_HUB_SLUGS = new Set([
   'new-haven-county/madison-ct',
 ]);
 
+const TEMPLATE_OVERRIDES_BY_SLUG: Record<string, string> = {
+  'fairfield-county/fairfield-ct': 'service_town',
+};
+
 function resolveTemplateComponent(template: string): TemplateComponent {
   const normalizedTemplate = normalizeTemplateKey(template);
   const mappedTemplate = TEMPLATE_COMPONENTS[normalizedTemplate];
@@ -99,40 +103,44 @@ function resolveTemplateComponent(template: string): TemplateComponent {
 }
 
 export function renderTemplate(page: CMSPage) {
-  if (normalizePageSlug(page.slug) === 'fairfield-county/greenwich-ct') {
-    return createElement(GreenwichCTPageTemplate, { page });
+  const normalizedSlug = normalizePageSlug(page.slug);
+  const templateOverride = TEMPLATE_OVERRIDES_BY_SLUG[normalizedSlug];
+  const effectivePage = templateOverride ? { ...page, template: templateOverride } : page;
+
+  if (normalizedSlug === 'fairfield-county/greenwich-ct') {
+    return createElement(GreenwichCTPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'fairfield-county/westport-ct') {
-    return createElement(WestportCTPageTemplate, { page });
+  if (normalizedSlug === 'fairfield-county/westport-ct') {
+    return createElement(WestportCTPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'new-haven-county/orange-ct') {
-    return createElement(OrangeCTPageTemplate, { page });
+  if (normalizedSlug === 'new-haven-county/orange-ct') {
+    return createElement(OrangeCTPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'new-haven-county/new-haven-ct') {
-    return createElement(NewHavenCTPageTemplate, { page });
+  if (normalizedSlug === 'new-haven-county/new-haven-ct') {
+    return createElement(NewHavenCTPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'new-haven-county/madison-ct') {
-    return createElement(MadisonCTPageTemplate, { page });
+  if (normalizedSlug === 'new-haven-county/madison-ct') {
+    return createElement(MadisonCTPageTemplate, { page: effectivePage });
   }
 
-  if (TOWN_HUB_SLUGS.has(normalizePageSlug(page.slug))) {
-    return createElement(TownHubPageTemplate, { page });
+  if (TOWN_HUB_SLUGS.has(normalizedSlug)) {
+    return createElement(TownHubPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'free-consultation') {
-    return createElement(FreeConsultationPageTemplate, { page });
+  if (normalizedSlug === 'free-consultation') {
+    return createElement(FreeConsultationPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'homeowner-hub') {
-    return createElement(HomeownerHubPageTemplate, { page });
+  if (normalizedSlug === 'homeowner-hub') {
+    return createElement(HomeownerHubPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'insurance-restoration') {
-    return createElement(InsuranceRestorationPageTemplate, { page });
+  if (normalizedSlug === 'insurance-restoration') {
+    return createElement(InsuranceRestorationPageTemplate, { page: effectivePage });
   }
 
   if ([
@@ -145,102 +153,102 @@ export function renderTemplate(page: CMSPage) {
     'interior-carpentry',
     'interior-painting',
     'remodeling-design-planning',
-  ].includes(normalizePageSlug(page.slug))) {
-    return createElement(PremiumServicePageTemplate, { page });
+  ].includes(normalizedSlug)) {
+    return createElement(PremiumServicePageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'bathroom-remodeling') {
-    return createElement(BathroomRemodelingPageTemplate, { page });
+  if (normalizedSlug === 'bathroom-remodeling') {
+    return createElement(BathroomRemodelingPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'kitchen-remodeling') {
-    return createElement(KitchenRemodelingPageTemplate, { page });
+  if (normalizedSlug === 'kitchen-remodeling') {
+    return createElement(KitchenRemodelingPageTemplate, { page: effectivePage });
   }
 
-  if (/^kitchen-remodeling\/[a-z-]+-ct$/.test(normalizePageSlug(page.slug))) {
-    return createElement(KitchenRemodelingCityPageTemplate, { page });
+  if (/^kitchen-remodeling\/[a-z-]+-ct$/.test(normalizedSlug)) {
+    return createElement(KitchenRemodelingCityPageTemplate, { page: effectivePage });
   }
 
-  if (/^flooring\/[a-z-]+-ct$/.test(normalizePageSlug(page.slug))) {
-    return createElement(KitchenRemodelingCityPageTemplate, { page });
+  if (/^flooring\/[a-z-]+-ct$/.test(normalizedSlug)) {
+    return createElement(KitchenRemodelingCityPageTemplate, { page: effectivePage });
   }
 
-  if (/^bathroom-remodeling\/[a-z-]+-ct$/.test(normalizePageSlug(page.slug))) {
-    return createElement(KitchenRemodelingCityPageTemplate, { page });
+  if (/^bathroom-remodeling\/[a-z-]+-ct$/.test(normalizedSlug)) {
+    return createElement(KitchenRemodelingCityPageTemplate, { page: effectivePage });
   }
 
-  if (/^basement-finishing\/[a-z-]+-ct$/.test(normalizePageSlug(page.slug))) {
-    return createElement(KitchenRemodelingCityPageTemplate, { page });
+  if (/^basement-finishing\/[a-z-]+-ct$/.test(normalizedSlug)) {
+    return createElement(KitchenRemodelingCityPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'areas-we-serve') {
-    return createElement(AreasWeServeTemplate, { page });
+  if (normalizedSlug === 'areas-we-serve') {
+    return createElement(AreasWeServeTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'case-studies') {
-    return createElement(CaseStudiesPageTemplate, { page });
+  if (normalizedSlug === 'case-studies') {
+    return createElement(CaseStudiesPageTemplate, { page: effectivePage });
   }
 
-  if (/^case-studies\/[a-z-]+$/.test(normalizePageSlug(page.slug))) {
-    return createElement(CaseStudyDetailPageTemplate, { page });
+  if (/^case-studies\/[a-z-]+$/.test(normalizedSlug)) {
+    return createElement(CaseStudyDetailPageTemplate, { page: effectivePage });
   }
 
-  if (['fairfield-county', 'new-haven-county'].includes(normalizePageSlug(page.slug))) {
-    return createElement(CountyHubPageTemplate, { page });
+  if (['fairfield-county', 'new-haven-county'].includes(normalizedSlug)) {
+    return createElement(CountyHubPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'portfolio') {
-    return createElement(PortfolioPageTemplate, { page });
+  if (normalizedSlug === 'portfolio') {
+    return createElement(PortfolioPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'careers') {
-    return createElement(CareersPageTemplate, { page });
+  if (normalizedSlug === 'careers') {
+    return createElement(CareersPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'faq') {
-    return createElement(FaqPageTemplate, { page });
+  if (normalizedSlug === 'faq') {
+    return createElement(FaqPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'financing') {
-    return createElement(FinancingPageTemplate, { page });
+  if (normalizedSlug === 'financing') {
+    return createElement(FinancingPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'pricing') {
-    return createElement(PricingPageTemplate, { page });
+  if (normalizedSlug === 'pricing') {
+    return createElement(PricingPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'services') {
-    return createElement(ServicesOverviewPageTemplate, { page });
+  if (normalizedSlug === 'services') {
+    return createElement(ServicesOverviewPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'process') {
-    return createElement(ProcessPageTemplate, { page });
+  if (normalizedSlug === 'process') {
+    return createElement(ProcessPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'privacy-policy') {
-    return createElement(PrivacyPolicyPageTemplate, { page });
+  if (normalizedSlug === 'privacy-policy') {
+    return createElement(PrivacyPolicyPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'terms') {
-    return createElement(TermsPageTemplate, { page });
+  if (normalizedSlug === 'terms') {
+    return createElement(TermsPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'thank_you' || normalizePageSlug(page.slug) === 'thank-you') {
-    return createElement(ThankYouPageTemplate, { page });
+  if (normalizedSlug === 'thank_you' || normalizedSlug === 'thank-you') {
+    return createElement(ThankYouPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'reviews') {
-    return createElement(ReviewsPageTemplate, { page });
+  if (normalizedSlug === 'reviews') {
+    return createElement(ReviewsPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'sitemap') {
-    return createElement(SitemapPageTemplate, { page });
+  if (normalizedSlug === 'sitemap') {
+    return createElement(SitemapPageTemplate, { page: effectivePage });
   }
 
-  if (normalizePageSlug(page.slug) === 'warranty') {
-    return createElement(WarrantyPageTemplate, { page });
+  if (normalizedSlug === 'warranty') {
+    return createElement(WarrantyPageTemplate, { page: effectivePage });
   }
 
-  const Template = resolveTemplateComponent(page.template);
-  return createElement(Template, { page });
+  const Template = resolveTemplateComponent(effectivePage.template);
+  return createElement(Template, { page: effectivePage });
 }
