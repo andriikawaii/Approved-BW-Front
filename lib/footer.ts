@@ -76,6 +76,7 @@ const FOOTER_B_PATHS = new Set([
 
 const FOOTER_C_PATHS = new Set([
   '/new-haven-county/',
+  '/new-haven-county/orange-ct/',
   '/new-haven-county/new-haven-ct/',
   '/new-haven-county/madison-ct/',
   '/kitchen-remodeling/orange-ct/',
@@ -119,8 +120,9 @@ function normalizePath(value: string): string {
   return normalized ? `/${normalized}/` : '/';
 }
 
-export function resolveFooterVariant(_templateKey: string, slug: string): FooterVariant {
+export function resolveFooterVariant(templateKey: string, slug: string): FooterVariant {
   const normalizedPath = normalizePath(slug);
+  const normalizedTemplate = templateKey.trim().toLowerCase().replace(/[\s-]+/g, '_');
 
   if (FOOTER_A_PATHS.has(normalizedPath)) {
     return "A";
@@ -135,7 +137,7 @@ export function resolveFooterVariant(_templateKey: string, slug: string): Footer
   }
 
   // Keep parity with backend FooterTemplateResolver::isOrangePage.
-  if (normalizedPath === "/new-haven-county/orange-ct/") {
+  if (normalizedPath === "/new-haven-county/orange-ct/" && normalizedTemplate === "office") {
     return "D";
   }
 

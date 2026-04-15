@@ -57,7 +57,7 @@ export function SitemapPageTemplate({ page }: { page: CMSPage }) {
         { label: "Areas We Serve", href: "/areas-we-serve/" },
         { label: "Fairfield County", href: "/fairfield-county/" },
         { label: "New Haven County", href: "/new-haven-county/" },
-        { label: "Orange, CT Office", href: "/new-haven-county/orange-ct/" },
+        { label: "Orange, CT", href: "/new-haven-county/orange-ct/" },
         { label: "Greenwich, CT", href: "/fairfield-county/greenwich-ct/" },
         { label: "Kitchen Remodeling Stamford", href: "/kitchen-remodeling/stamford-ct/" },
         { label: "Kitchen Remodeling New Haven", href: "/kitchen-remodeling/new-haven-ct/" },
