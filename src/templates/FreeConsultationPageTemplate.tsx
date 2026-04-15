@@ -98,16 +98,12 @@ const STEPS = [
 const FAIRFIELD_TOWNS_PRIMARY = ['Greenwich', 'Stamford', 'Norwalk', 'Westport', 'Darien', 'New Canaan', 'Fairfield', 'Ridgefield', 'Trumbull'];
 const FAIRFIELD_TOWNS_MORE = ['Bethel', 'Bridgeport', 'Brookfield', 'Danbury', 'Easton', 'Monroe', 'New Fairfield', 'Newtown', 'Redding', 'Shelton', 'Sherman', 'Stratford', 'Weston', 'Wilton'];
 const FAIRFIELD_TOWN_LINKS: Record<string, string> = {
-  Greenwich: '/fairfield-county/greenwich-ct/', Stamford: '/fairfield-county/stamford-ct/', Norwalk: '/fairfield-county/norwalk-ct/',
-  Westport: '/fairfield-county/westport-ct/', Darien: '/fairfield-county/darien-ct/', 'New Canaan': '/fairfield-county/new-canaan-ct/',
-  Fairfield: '/fairfield-county/fairfield-ct/', Ridgefield: '/fairfield-county/ridgefield-ct/', Trumbull: '/fairfield-county/',
+  Greenwich: '/fairfield-county/greenwich-ct/', Westport: '/fairfield-county/westport-ct/', Trumbull: '/fairfield-county/',
 };
 const NEW_HAVEN_TOWNS_PRIMARY = ['Orange', 'New Haven', 'Hamden', 'Branford', 'Guilford', 'Madison', 'Woodbridge', 'Milford', 'Cheshire'];
 const NEW_HAVEN_TOWNS_MORE = ['Ansonia', 'Beacon Falls', 'Bethany', 'Derby', 'East Haven', 'Meriden', 'Middlebury', 'Naugatuck', 'North Branford', 'North Haven', 'Oxford', 'Prospect', 'Seymour', 'Southbury', 'Wallingford', 'Waterbury', 'West Haven', 'Wolcott'];
 const NEW_HAVEN_TOWN_LINKS: Record<string, string> = {
-  Orange: '/new-haven-county/orange-ct/', 'New Haven': '/new-haven-county/new-haven-ct/', Hamden: '/new-haven-county/hamden-ct/',
-  Branford: '/new-haven-county/branford-ct/', Guilford: '/new-haven-county/guilford-ct/', Madison: '/new-haven-county/madison-ct/',
-  Woodbridge: '/new-haven-county/woodbridge-ct/', Milford: '/new-haven-county/milford-ct/',
+  Orange: '/new-haven-county/orange-ct/', 'New Haven': '/new-haven-county/new-haven-ct/', Madison: '/new-haven-county/madison-ct/',
 };
 
 const SERVICES = [

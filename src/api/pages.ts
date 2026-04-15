@@ -84,7 +84,12 @@ function stubPage(slug: string): Page {
   };
 }
 
-async function fetchFromApi(slug: string): Promise<Page | null> {
+type ApiFetchResult =
+  | { kind: 'ok'; page: Page }
+  | { kind: 'not_found' }
+  | { kind: 'error' };
+
+async function fetchFromApi(slug: string): Promise<ApiFetchResult> {
   const p = slug.replace(/^\/+|\/+$/g, '');
   const url = p ? `${API_URL}/api/pages/${p}` : `${API_URL}/api/pages/`;
 
@@ -95,20 +100,23 @@ async function fetchFromApi(slug: string): Promise<Page | null> {
     const res = await fetch(url, { cache: 'no-store', signal: controller.signal });
     clearTimeout(timeout);
 
-    if (res.status === 404) return null;
-    if (!res.ok) return null;
+    if (res.status === 404) {
+      apiDown = false;
+      return { kind: 'not_found' };
+    }
+    if (!res.ok) return { kind: 'error' };
 
     const text = await res.text();
-    if (!text || text.length === 0) return null;
+    if (!text || text.length === 0) return { kind: 'error' };
 
     const data = JSON.parse(text);
     apiDown = false;
-    return replaceLocalhostUrls(data) as Page;
+    return { kind: 'ok', page: replaceLocalhostUrls(data) as Page };
   } catch (_) {
     clearTimeout(timeout);
     apiDown = true;
     lastApiCheck = Date.now();
-    return null;
+    return { kind: 'error' };
   }
 }
 
@@ -128,11 +136,15 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
     return stubPage(slug);
   }
 
-  const apiData = await fetchFromApi(slug);
+  const apiResult = await fetchFromApi(slug);
 
-  if (apiData) {
-    writeCache(slug, apiData);
-    return apiData;
+  if (apiResult.kind === 'ok') {
+    writeCache(slug, apiResult.page);
+    return apiResult.page;
+  }
+
+  if (apiResult.kind === 'not_found') {
+    return null;
   }
 
   if (cached) return cached;

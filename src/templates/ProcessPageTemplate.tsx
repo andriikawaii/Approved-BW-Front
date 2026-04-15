@@ -173,13 +173,7 @@ const referenceAreas = {
       extra_towns: ["Trumbull", "Bethel", "Bridgeport", "Brookfield", "Danbury", "Easton", "Monroe", "New Fairfield", "Newtown", "Redding", "Shelton", "Sherman", "Stratford", "Weston", "Wilton"],
       town_links: {
         Greenwich: "/fairfield-county/greenwich-ct/",
-        Stamford: "/fairfield-county/stamford-ct/",
-        Norwalk: "/fairfield-county/norwalk-ct/",
         Westport: "/fairfield-county/westport-ct/",
-        Darien: "/fairfield-county/darien-ct/",
-        "New Canaan": "/fairfield-county/new-canaan-ct/",
-        Fairfield: "/fairfield-county/fairfield-ct/",
-        Ridgefield: "/fairfield-county/ridgefield-ct/",
       },
     },
     {
@@ -194,12 +188,7 @@ const referenceAreas = {
       town_links: {
         Orange: "/new-haven-county/orange-ct/",
         "New Haven": "/new-haven-county/new-haven-ct/",
-        Hamden: "/new-haven-county/hamden-ct/",
-        Branford: "/new-haven-county/branford-ct/",
-        Guilford: "/new-haven-county/guilford-ct/",
         Madison: "/new-haven-county/madison-ct/",
-        Woodbridge: "/new-haven-county/woodbridge-ct/",
-        Milford: "/new-haven-county/milford-ct/",
       },
     },
   ],

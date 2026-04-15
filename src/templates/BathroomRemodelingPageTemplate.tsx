@@ -294,13 +294,7 @@ const defaultSections: CMSSection[] = [
           ],
           town_links: [
             { name: "Greenwich", url: "/fairfield-county/greenwich-ct/" },
-            { name: "Stamford", url: "/fairfield-county/stamford-ct/" },
-            { name: "Norwalk", url: "/fairfield-county/norwalk-ct/" },
             { name: "Westport", url: "/fairfield-county/westport-ct/" },
-            { name: "Darien", url: "/fairfield-county/darien-ct/" },
-            { name: "New Canaan", url: "/fairfield-county/new-canaan-ct/" },
-            { name: "Fairfield", url: "/fairfield-county/fairfield-ct/" },
-            { name: "Ridgefield", url: "/fairfield-county/ridgefield-ct/" },
           ],
           all_towns: [
             "Bethel", "Bridgeport", "Brookfield", "Danbury", "Easton",
@@ -329,12 +323,7 @@ const defaultSections: CMSSection[] = [
           town_links: [
             { name: "Orange", url: "/new-haven-county/orange-ct/" },
             { name: "New Haven", url: "/new-haven-county/new-haven-ct/" },
-            { name: "Hamden", url: "/new-haven-county/hamden-ct/" },
-            { name: "Branford", url: "/new-haven-county/branford-ct/" },
-            { name: "Guilford", url: "/new-haven-county/guilford-ct/" },
             { name: "Madison", url: "/new-haven-county/madison-ct/" },
-            { name: "Woodbridge", url: "/new-haven-county/woodbridge-ct/" },
-            { name: "Milford", url: "/new-haven-county/milford-ct/" },
           ],
           all_towns: [
             "Ansonia", "Beacon Falls", "Bethany", "Derby", "East Haven",
