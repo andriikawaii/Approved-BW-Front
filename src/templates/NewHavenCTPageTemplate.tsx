@@ -395,7 +395,7 @@ export function NewHavenCTPageTemplate({ page }: { page: CMSPage }) {
   const servicesSubtitle = servicesGrid?.subtitle || '';
 
   return (
-    <div data-new-haven-page>
+    <div data-gwc-page>
       <main id="main">
         <section className="gwc-hero">
           <div className="gwc-hero-bg" aria-hidden="true" style={{ backgroundImage: `url('${heroBg}')` }} />
@@ -938,7 +938,7 @@ export function NewHavenCTPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </main>
 
-
+      
     </div>
   );
 }

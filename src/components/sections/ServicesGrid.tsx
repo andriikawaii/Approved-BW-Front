@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 
 type ServiceItem = {
@@ -19,6 +22,7 @@ type Props = {
     headline?: string;
     subtitle?: string;
     subheadline?: string;
+    eyebrow?: string;
     cta?: {
       label: string;
       url: string;
@@ -27,17 +31,25 @@ type Props = {
     suppress_default_button?: boolean;
     items?: ServiceItem[];
     services?: ServiceItem[];
+    initial_visible_count?: number;
+    toggle_label?: string;
+    toggle_less_label?: string;
   };
 };
 
 export default function ServicesGrid({ data }: Props) {
   const title = data.title || data.headline || '';
   const subtitle = data.subtitle || data.subheadline;
-  const items = (data.items || data.services || []).filter(Boolean);
+  const allItems = (data.items || data.services || []).filter(Boolean);
   const cta = data.cta;
   const isTownHub = Boolean(data.town_hub);
   const suppressDefaultButton = Boolean(data.suppress_default_button);
   const isServicesOverview = /our services/i.test(title);
+
+  const initialCount = data.initial_visible_count ?? allItems.length;
+  const hasToggle = initialCount < allItems.length;
+  const [showAll, setShowAll] = useState(false);
+  const items = hasToggle && !showAll ? allItems.slice(0, initialCount) : allItems;
 
   return (
   <section className={isTownHub ? 'bg-[#f8f3e9] py-20 md:py-24' : 'bg-[#F5F1E9] py-24 md:py-28'}>
@@ -123,7 +135,19 @@ export default function ServicesGrid({ data }: Props) {
         ))}
       </div>
 
-      {!suppressDefaultButton ? (
+      {hasToggle ? (
+        <div className="mt-12 text-center">
+          <button
+            type="button"
+            onClick={() => setShowAll((prev) => !prev)}
+            className="inline-flex min-w-[280px] items-center justify-center rounded-[8px] border border-[#C89B5B] bg-white px-10 py-4 text-sm font-bold uppercase tracking-[0.12em] text-[#C89B5B] shadow-sm transition-all duration-300 hover:bg-[#C89B5B] hover:text-white hover:shadow-md"
+          >
+            {showAll
+              ? (data.toggle_less_label || 'Show Fewer Services')
+              : (data.toggle_label || `Show ${allItems.length - initialCount} More Services`)}
+          </button>
+        </div>
+      ) : !suppressDefaultButton ? (
         <div className="mt-20 text-center">
           <button
             type="button"
