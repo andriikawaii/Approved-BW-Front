@@ -738,7 +738,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 3.5vw, 40px)', color: '#fff', marginBottom: 12 }}>
               Ready to Remodel in <span style={{ color: '#BC9155' }}>Westport</span>?
             </h2>
-            <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', marginBottom: 28 }}>From Compo Beach colonials to Greens Farms estates — Westport remodeling that respects the character of your home.</p>
+            <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', marginBottom: 28 }}>From Compo Beach colonials to Greens Farms estates , Westport remodeling that respects the character of your home.</p>
             <Link href="#contact" className="gwch-mid-cta-btn">Get Your Free Estimate</Link>
             <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginTop: 16, fontStyle: 'italic' }}>On-site or remote via Google Meet. No charge, no obligation.</p>
           </div>

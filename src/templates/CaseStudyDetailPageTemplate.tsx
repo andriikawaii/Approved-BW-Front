@@ -356,7 +356,7 @@ function OverviewSection({ block, gallery }: { block: BodyBlock; gallery?: Galle
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   CHALLENGE / APPROACH / RESULTS — split into distinct visual treatments
+   CHALLENGE / APPROACH / RESULTS , split into distinct visual treatments
    ═══════════════════════════════════════════════════════════════ */
 
 const BLOCK_CONFIG: Record<string, { icon: React.ReactNode; accent: string; eyebrow: string }> = {

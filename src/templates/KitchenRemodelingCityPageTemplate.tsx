@@ -490,32 +490,65 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
               </h2>
               {recentProjects?.subtitle ? <p className="mx-auto mt-3 max-w-[720px] text-[17px] leading-[1.75] text-[#5c677d]">{recentProjects.subtitle}</p> : null}
             </div>
-            <div className="grid gap-6 lg:grid-cols-3">
-              {(recentProjects?.items || []).map((item, index) => (
-                <article key={`${item.title}-${index}`} className="flex flex-col overflow-hidden rounded-[12px] border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
-                  <div className="relative h-[280px] overflow-hidden">
-                    <img src={media(item.before_image || (item as any).image, config.defaultRecentImages[index] || config.defaultRecentImages[0])} alt={item.before_image_alt || `${item.title || config.serviceLabel + " project"}`} className="h-full w-full object-cover" />
-                    {showBeforeAfter && (<>
-                    <div className="absolute inset-x-0 bottom-0 h-[76px] bg-[linear-gradient(to_bottom,transparent_0%,rgba(0,0,0,0.92)_55%,rgba(0,0,0,0.96)_100%)]" />
-                    <div className="absolute bottom-0 left-0 flex h-[76px] w-1/2 items-end px-[14px] pb-[13px]"><span className="text-[13px] font-extrabold uppercase tracking-[2.5px] text-white">Before</span></div>
-                    <div className="absolute bottom-0 right-0 flex h-[76px] w-1/2 items-end justify-end px-[14px] pb-[13px]"><span className="text-[13px] font-extrabold uppercase tracking-[2.5px] text-white">After</span></div>
-                    </>)}
-                  </div>
-                  <div className="flex flex-1 flex-col px-7 py-7">
-                    <h3 className="mb-3 text-[20px] font-bold">{item.title}</h3>
-                    <p className="flex-1 text-[14px] leading-[1.75] text-[#5c677d]">{item.before_text}</p>
-                  </div>
-                  {item.quote?.text ? (
-                    <div className="border-t border-[#1e2b430f] px-7 py-6">
-                      <div className="border-l-[3px] border-[#bc9155] pl-4">
-                        <p className="min-h-[72px] text-[14px] italic leading-[1.65] text-[#1e2b43]">&quot;{item.quote.text}&quot;</p>
-                        <cite className="mt-2 block text-[12px] font-semibold not-italic text-[#5c677d]">{["Homeowner", item.quote.location].filter(Boolean).join(", ")}</cite>
-                      </div>
+            {(recentProjects?.items || []).length > 0 ? (
+              <div className="grid gap-6 lg:grid-cols-3">
+                {(recentProjects?.items || []).map((item, index) => (
+                  <article key={`${item.title}-${index}`} className="flex flex-col overflow-hidden rounded-[12px] border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
+                    <div className="relative h-[280px] overflow-hidden">
+                      <img src={media(item.before_image || (item as any).image, config.defaultRecentImages[index] || config.defaultRecentImages[0])} alt={item.before_image_alt || `${item.title || config.serviceLabel + " project"}`} className="h-full w-full object-cover" />
+                      {showBeforeAfter && (<>
+                      <div className="absolute inset-x-0 bottom-0 h-[76px] bg-[linear-gradient(to_bottom,transparent_0%,rgba(0,0,0,0.92)_55%,rgba(0,0,0,0.96)_100%)]" />
+                      <div className="absolute bottom-0 left-0 flex h-[76px] w-1/2 items-end px-[14px] pb-[13px]"><span className="text-[13px] font-extrabold uppercase tracking-[2.5px] text-white">Before</span></div>
+                      <div className="absolute bottom-0 right-0 flex h-[76px] w-1/2 items-end justify-end px-[14px] pb-[13px]"><span className="text-[13px] font-extrabold uppercase tracking-[2.5px] text-white">After</span></div>
+                      </>)}
                     </div>
-                  ) : null}
-                </article>
-              ))}
-            </div>
+                    <div className="flex flex-1 flex-col px-7 py-7">
+                      <h3 className="mb-3 text-[20px] font-bold">{item.title}</h3>
+                      <p className="flex-1 text-[14px] leading-[1.75] text-[#5c677d]">{item.before_text}</p>
+                    </div>
+                    {item.quote?.text ? (
+                      <div className="border-t border-[#1e2b430f] px-7 py-6">
+                        <div className="border-l-[3px] border-[#bc9155] pl-4">
+                          <p className="min-h-[72px] text-[14px] italic leading-[1.65] text-[#1e2b43]">&quot;{item.quote.text}&quot;</p>
+                          <cite className="mt-2 block text-[12px] font-semibold not-italic text-[#5c677d]">{["Homeowner", item.quote.location].filter(Boolean).join(", ")}</cite>
+                        </div>
+                      </div>
+                    ) : null}
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="relative mx-auto max-w-[820px] overflow-hidden rounded-[16px] bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)]">
+                <div aria-hidden="true" className="absolute inset-x-0 top-0 z-10 h-[3px]" style={{ background: "linear-gradient(90deg, transparent 0%, #bc9155 50%, transparent 100%)" }} />
+                <div className="relative h-[260px] overflow-hidden md:h-[320px]">
+                  <img src={config.defaultRecentImages[0]} alt={`${config.serviceLabel} in ${config.cityLabel}`} className="h-full w-full object-cover" />
+                  <div aria-hidden="true" className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(14,24,40,0.15) 0%, rgba(14,24,40,0.45) 100%)" }} />
+                  <div className="absolute inset-x-0 bottom-0 flex justify-center pb-7">
+                    <span className="inline-flex items-center gap-3 rounded-full px-5 py-2 text-[11px] font-extrabold uppercase tracking-[2.5px] text-white backdrop-blur-sm" style={{ background: "rgba(14,24,40,0.65)", border: "1px solid rgba(188,145,85,0.4)" }}>
+                      <span className="h-[1px] w-6" style={{ background: "#bc9155" }} />
+                      In Progress
+                      <span className="h-[1px] w-6" style={{ background: "#bc9155" }} />
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center px-7 py-10 text-center md:px-12 md:py-12">
+                  <h3 className="text-[clamp(22px,2.4vw,28px)] font-bold leading-[1.25] tracking-[-0.01em] text-[#1e2b43]">
+                    Fresh {config.serviceLabel} Case Studies Coming Soon
+                  </h3>
+                  <p className="mx-auto mt-4 max-w-[560px] text-[15px] leading-[1.75] text-[#5c677d]">
+                    Crews are currently framing, insulating, and finishing basements across Fairfield and New Haven Counties. Detailed case studies will be published here as each project wraps. In the meantime, browse our completed work across every service BuiltWell offers.
+                  </p>
+                  <div className="mt-7 flex flex-wrap justify-center gap-3">
+                    <a href="/portfolio" className="inline-flex h-[46px] items-center rounded-full px-6 text-[12px] font-semibold uppercase tracking-[0.14em] text-white transition-all duration-300 hover:shadow-[0_8px_20px_rgba(30,43,67,0.25)]" style={{ background: "#1e2b43" }}>
+                      View Full Portfolio
+                    </a>
+                    <a href="/contact" className="inline-flex h-[46px] items-center rounded-full px-6 text-[12px] font-semibold uppercase tracking-[0.14em] text-[#bc9155] transition-all duration-300 hover:text-white hover:shadow-[0_8px_20px_rgba(188,145,85,0.28)]" style={{ border: "1px solid #bc9155" }} onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "#bc9155"; }} onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "transparent"; }}>
+                      Start Your Project
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
@@ -670,6 +703,76 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
           </div>
         </section>
 
+        {!isFairfieldPrimary ? (
+          <section className="bg-white px-5 py-16 md:px-10 md:py-20">
+            <div className="relative mx-auto max-w-[820px] overflow-hidden rounded-[16px] bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)]">
+              <div aria-hidden="true" className="absolute inset-x-0 top-0 h-[3px]" style={{ background: "linear-gradient(90deg, transparent 0%, #bc9155 50%, transparent 100%)" }} />
+              <div className="flex flex-col items-center px-7 py-12 text-center md:px-14 md:py-14">
+                <div className="relative flex h-[148px] w-[148px] items-center justify-center rounded-full" style={{ background: "linear-gradient(135deg, #1e2b43 0%, #0e1828 100%)" }}>
+                  <div aria-hidden="true" className="absolute inset-[6px] rounded-full" style={{ border: "1px solid rgba(188,145,85,0.4)" }} />
+                  <div aria-hidden="true" className="absolute inset-[14px] rounded-full" style={{ border: "1px solid rgba(188,145,85,0.15)" }} />
+                  <div className="relative text-center">
+                    <div className="text-[9px] font-extrabold uppercase tracking-[3px]" style={{ color: "rgba(188,145,85,0.85)" }}>Est. 2025</div>
+                    <div className="mt-1.5 font-serif text-[38px] font-bold leading-none text-white tracking-[-0.02em]">BW</div>
+                    <div aria-hidden="true" className="mx-auto mt-2 h-[1px] w-8" style={{ background: "rgba(188,145,85,0.6)" }} />
+                    <div className="mt-2 text-[9px] font-semibold uppercase tracking-[2.5px] text-white/50">Orange · CT</div>
+                  </div>
+                </div>
+                <span className="mt-8 inline-flex items-center gap-3 text-[11px] font-extrabold uppercase tracking-[2.8px] text-[#bc9155]">
+                  <span className="h-[1px] w-10" style={{ background: "#bc9155" }} />
+                  Licensed Connecticut Headquarters
+                  <span className="h-[1px] w-10" style={{ background: "#bc9155" }} />
+                </span>
+                <p className="mx-auto mt-5 max-w-[640px] font-serif text-[19px] leading-[1.65] text-[#1e2b43] md:text-[21px]">
+                  BuiltWell serves <strong className="font-bold">{config.cityShort}</strong> from our Orange, CT office at <strong className="font-bold">206A Boston Post Road</strong>. Licensed Connecticut contractor, CT HIC #0668405.
+                </p>
+                <div className="mt-8 flex flex-wrap justify-center gap-3">
+                  <a href="/new-haven-county/orange-ct/" className="inline-flex h-[46px] items-center justify-center rounded-full text-[12px] font-semibold uppercase tracking-[0.14em] text-white transition-all duration-300 hover:shadow-[0_8px_20px_rgba(30,43,67,0.25)]" style={{ background: "#1e2b43", width: "280px" }}>
+                    Visit Our Headquarters
+                  </a>
+                  <a href="tel:2034669148" className="inline-flex h-[46px] items-center justify-center rounded-full text-[12px] font-semibold uppercase tracking-[0.14em] text-[#bc9155] transition-all duration-300 hover:text-white hover:shadow-[0_8px_20px_rgba(188,145,85,0.28)]" style={{ border: "1px solid #bc9155", width: "280px" }} onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "#bc9155"; }} onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "transparent"; }}>
+                    (203) 466-9148
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+        ) : null}
+        {isFairfieldPrimary ? (
+          <section className="bg-white px-5 py-16 md:px-10 md:py-20">
+            <div className="relative mx-auto max-w-[820px] overflow-hidden rounded-[16px] bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)]">
+              <div aria-hidden="true" className="absolute inset-x-0 top-0 h-[3px]" style={{ background: "linear-gradient(90deg, transparent 0%, #bc9155 50%, transparent 100%)" }} />
+              <div className="flex flex-col items-center px-7 py-12 text-center md:px-14 md:py-14">
+                <div className="relative flex h-[148px] w-[148px] items-center justify-center rounded-full" style={{ background: "linear-gradient(135deg, #1e2b43 0%, #0e1828 100%)" }}>
+                  <div aria-hidden="true" className="absolute inset-[6px] rounded-full" style={{ border: "1px solid rgba(188,145,85,0.4)" }} />
+                  <div aria-hidden="true" className="absolute inset-[14px] rounded-full" style={{ border: "1px solid rgba(188,145,85,0.15)" }} />
+                  <div className="relative text-center">
+                    <div className="text-[9px] font-extrabold uppercase tracking-[3px]" style={{ color: "rgba(188,145,85,0.85)" }}>Est. 2025</div>
+                    <div className="mt-1.5 font-serif text-[38px] font-bold leading-none text-white tracking-[-0.02em]">BW</div>
+                    <div aria-hidden="true" className="mx-auto mt-2 h-[1px] w-8" style={{ background: "rgba(188,145,85,0.6)" }} />
+                    <div className="mt-2 text-[9px] font-semibold uppercase tracking-[2.5px] text-white/50">Fairfield · CT</div>
+                  </div>
+                </div>
+                <span className="mt-8 inline-flex items-center gap-3 text-[11px] font-extrabold uppercase tracking-[2.8px] text-[#bc9155]">
+                  <span className="h-[1px] w-10" style={{ background: "#bc9155" }} />
+                  Fairfield County Service Area
+                  <span className="h-[1px] w-10" style={{ background: "#bc9155" }} />
+                </span>
+                <p className="mx-auto mt-5 max-w-[640px] font-serif text-[19px] leading-[1.65] text-[#1e2b43] md:text-[21px]">
+                  BuiltWell&apos;s <strong className="font-bold">Fairfield County Service Area Team</strong> serves <strong className="font-bold">{config.cityShort}</strong> across Greenwich, Westport, Darien, Norwalk, Fairfield, New Canaan, and Ridgefield. Licensed Connecticut Home Improvement Contractor, CT HIC #0668405.
+                </p>
+                <div className="mt-8 flex flex-wrap justify-center gap-3">
+                  <a href="/fairfield-county/" className="inline-flex h-[46px] items-center justify-center rounded-full text-[12px] font-semibold uppercase tracking-[0.14em] text-white transition-all duration-300 hover:shadow-[0_8px_20px_rgba(30,43,67,0.25)]" style={{ background: "#1e2b43", width: "280px" }}>
+                    View Fairfield County
+                  </a>
+                  <a href="tel:2039199616" className="inline-flex h-[46px] items-center justify-center rounded-full text-[12px] font-semibold uppercase tracking-[0.14em] text-[#bc9155] transition-all duration-300 hover:text-white hover:shadow-[0_8px_20px_rgba(188,145,85,0.28)]" style={{ border: "1px solid #bc9155", width: "280px" }} onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "#bc9155"; }} onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "transparent"; }}>
+                    (203) 919-9616
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+        ) : null}
         {lead ? <LeadFormSection page={page} data={lead} accent={config.cityShort} /> : null}
         {financing ? <FinancingStrip data={financing} /> : null}
 

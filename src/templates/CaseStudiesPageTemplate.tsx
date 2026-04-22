@@ -83,17 +83,17 @@ type CaseStudyCard = {
 };
 
 const CARD_IMAGE_MAP: Record<string, string> = {
-  "Whole-Home Restoration — Hamden": "/portfolio/builtwell-team-interior-inspection-ct.jpg",
-  "Basement Finishing — Darien": "/images/headers/basement-finishing-header.jpg",
-  "Deck Build — Shelton": "/images/headers/decks-porches-header.jpg",
-  "Kitchen Remodeling — New Canaan": "/images/headers/kitchen-remodeling-header.jpg",
+  "Whole-Home Restoration , Hamden": "/portfolio/builtwell-team-interior-inspection-ct.jpg",
+  "Basement Finishing , Darien": "/images/headers/basement-finishing-header.jpg",
+  "Deck Build , Shelton": "/images/headers/decks-porches-header.jpg",
+  "Kitchen Remodeling , New Canaan": "/images/headers/kitchen-remodeling-header.jpg",
 };
 
 const CARD_LINK_MAP: Record<string, string> = {
-  "Whole-Home Restoration — Hamden": "/case-studies/whole-home-restoration-hamden",
-  "Basement Finishing — Darien": "/case-studies/basement-finishing-darien",
-  "Deck Build — Shelton": "/decks-porches/",
-  "Kitchen Remodeling — New Canaan": "/case-studies/kitchen-remodeling-new-canaan",
+  "Whole-Home Restoration , Hamden": "/case-studies/whole-home-restoration-hamden",
+  "Basement Finishing , Darien": "/case-studies/basement-finishing-darien",
+  "Deck Build , Shelton": "/decks-porches/",
+  "Kitchen Remodeling , New Canaan": "/case-studies/kitchen-remodeling-new-canaan",
 };
 
 /* Override homeowner names to generic "Resident" / "Homeowner" */
@@ -527,7 +527,7 @@ export function CaseStudiesPageTemplate({ page }: { page: CMSPage }) {
   /* Replace the remaining Westport bathroom with deck, add a screened porch card */
   const cards = [
     {
-      title: "Whole-Home Restoration — Hamden",
+      title: "Whole-Home Restoration , Hamden",
       summary: filtered.find((c) => c.title.includes("Hamden"))?.summary || "Complete interior restoration after water damage. New flooring, drywall, paint, and bathroom remodel across the entire first and second floor.",
       timeline: filtered.find((c) => c.title.includes("Hamden"))?.timeline || "5 weeks",
       badge: filtered.find((c) => c.title.includes("Hamden"))?.badge || "Full Restoration",
@@ -536,7 +536,7 @@ export function CaseStudiesPageTemplate({ page }: { page: CMSPage }) {
       link: "/case-studies/",
     },
     {
-      title: "Basement Finishing — Darien",
+      title: "Basement Finishing , Darien",
       summary: filtered.find((c) => c.title.includes("Darien"))?.summary || "850 square feet of unfinished basement converted to recreation room, home office, and full bathroom with egress window.",
       timeline: filtered.find((c) => c.title.includes("Darien"))?.timeline || "6 weeks",
       badge: filtered.find((c) => c.title.includes("Darien"))?.badge || "850 sq ft",
@@ -545,7 +545,7 @@ export function CaseStudiesPageTemplate({ page }: { page: CMSPage }) {
       link: "/case-studies/",
     },
     {
-      title: "Kitchen Remodeling — New Canaan",
+      title: "Kitchen Remodeling , New Canaan",
       summary: filtered.find((c) => c.title.includes("New Canaan"))?.summary || "A New Canaan family wanted to open up a kitchen closed off by a load-bearing wall. We engineered a beam solution, installed white shaker cabinets with a quartz island, and extended hardwood flooring.",
       timeline: filtered.find((c) => c.title.includes("New Canaan"))?.timeline || "10 weeks",
       badge: filtered.find((c) => c.title.includes("New Canaan"))?.badge || "Full Gut Remodel",
@@ -554,7 +554,7 @@ export function CaseStudiesPageTemplate({ page }: { page: CMSPage }) {
       link: "/case-studies/",
     },
     {
-      title: "Deck Build — Shelton",
+      title: "Deck Build , Shelton",
       summary: "A Shelton homeowner needed their old deck torn down and rebuilt from the ground up. Our crew set new posts, framed the structure, and decked it over the course of a week. New footings poured to the 42-inch frost line, all framing pressure-treated to code.",
       timeline: "1 week",
       badge: "Composite Deck",

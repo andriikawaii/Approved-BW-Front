@@ -707,9 +707,10 @@ export function PortfolioPageTemplate({ page }: { page: CMSPage }) {
         <div className="section-inner">
           {galleryItems.map((gallery: any, gi: number) => {
             const gp = parts(gallery.title || "", gallery.title_highlight || "in CT");
+            const isBeforeAfter = (gallery.eyebrow || "").trim().toLowerCase() === "before and after";
             return (
               <div key={`gallery-${gi}`} className="gallery-group fade-up">
-                {label(gallery.eyebrow || "Before and After")}
+                {gallery.eyebrow ? label(gallery.eyebrow) : null}
                 <h2>
                   {gp.before}
                   {gp.accent ? <span className="gold">{gp.accent}</span> : null}
@@ -728,8 +729,12 @@ export function PortfolioPageTemplate({ page }: { page: CMSPage }) {
                           width={1000}
                           height={500}
                         />
-                        <div className="ba-label-before"><span>Before</span></div>
-                        <div className="ba-label-after"><span>After</span></div>
+                        {isBeforeAfter ? (
+                          <>
+                            <div className="ba-label-before"><span>Before</span></div>
+                            <div className="ba-label-after"><span>After</span></div>
+                          </>
+                        ) : null}
                       </div>
                     </div>
                   ))}

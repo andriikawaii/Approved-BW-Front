@@ -1277,10 +1277,11 @@ function HomeProjectsSection({
   const phraseIndex = projectsDescription.toLowerCase().indexOf(caseStudiesPhrase);
   const getCaseStudyCtaLabel = (project: ProjectItem) => {
     const key = `${project.url || ''} ${project.title || ''}`.toLowerCase();
-    if (key.includes('new-canaan')) return 'Read the New Canaan kitchen remodel case study';
-    if (key.includes('darien')) return 'Read the Darien basement finishing case study';
-    if (key.includes('westport')) return 'Read the Westport bathroom remodel case study';
-    return 'Read case study';
+    if (key.includes('kitchen')) return 'Read Kitchen Case Study';
+    if (key.includes('basement')) return 'Read Basement Case Study';
+    if (key.includes('bathroom')) return 'Read Bathroom Case Study';
+    if (key.includes('flooring')) return 'Read Flooring Case Study';
+    return 'Read Case Study';
   };
 
   return (
@@ -1329,15 +1330,15 @@ function HomeProjectsSection({
                 ) : null}
               </div>
               <div className="flex flex-1 flex-col px-6 py-6 md:px-7 md:py-7">
-                <h3 className="text-center text-[18px] font-bold text-[#1E2B43] md:text-[20px]">{project.title}</h3>
-                <p className="mt-3 text-center text-[13px] leading-[1.7] text-[#5C677D] md:text-[14px]">{project.description}</p>
+                <h3 className="min-h-[52px] text-center text-[18px] font-bold leading-[1.25] text-[#1E2B43] md:min-h-[56px] md:text-[20px]">{project.title}</h3>
+                <p className="mt-3 min-h-[100px] text-center text-[13px] leading-[1.7] text-[#5C677D] md:min-h-[116px] md:text-[14px]">{project.description}</p>
 
                 {project.quote ? (
-                  <div className="mb-6 mt-6 rounded-r-md border-l-[3px] border-[#BC9155] bg-[#F5F1E9] px-4 py-[14px] md:px-5 md:py-[18px]">
+                  <div className="mb-6 mt-6 flex min-h-[104px] flex-col justify-between rounded-r-md border-l-[3px] border-[#BC9155] bg-[#F5F1E9] px-4 py-[14px] md:min-h-[116px] md:px-5 md:py-[18px]">
                     <p className="text-center text-[13px] italic leading-[1.55] text-[#1E2B43] md:text-[14px]">{project.quote}</p>
                     {project.tag ? (
-                      <span className="mt-2 block text-center text-[12px] font-semibold text-[#5C677D] md:text-[13px]">
-                        &mdash; {project.tag}
+                      <span className="mt-3 block text-center text-[12px] font-semibold text-[#5C677D] md:text-[13px]">
+                        {project.tag}
                       </span>
                     ) : null}
                   </div>
@@ -1346,7 +1347,7 @@ function HomeProjectsSection({
                 {project.url ? (
                   <Link
                     href={project.url}
-                    className="mt-auto flex min-h-[56px] w-full items-center justify-center rounded bg-[#BC9155] px-5 py-3.5 text-center text-[14px] font-semibold leading-[1.3] text-white transition-colors hover:bg-[#a57d48]"
+                    className="mt-auto flex h-[52px] w-full items-center justify-center whitespace-nowrap rounded bg-[#BC9155] px-5 text-center text-[14px] font-semibold text-white transition-colors hover:bg-[#a57d48]"
                   >
                     {getCaseStudyCtaLabel(project)}
                   </Link>

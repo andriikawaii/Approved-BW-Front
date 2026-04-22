@@ -269,11 +269,7 @@ h1 {
   }
 }
 
-/* ─── Shared GWC Town-Page Styles ──────────────────────────────────────────
-   Used by: Greenwich, Madison, Orange, New Haven templates.
-   Extracted from inline <style jsx global> to avoid FOUC (Flash of Unstyled
-   Content) caused by client-side style injection.
-   ─────────────────────────────────────────────────────────────────────────── */
+/* Shared GWC Town-Page Styles - used by Greenwich, Madison, Orange, New Haven templates. Extracted from inline style jsx global to avoid FOUC. */
 [data-gwc-page] {
   --gwc-gold: #bc9155;
   --gwc-gold-dark: #9a7340;

@@ -291,7 +291,7 @@ export function CareersPageTemplate({ page }: { page: CMSPage }) {
 
   const benefitsSection = rich[0]; // "Why Work With Us"
   const rolesSection = rich[1];    // "Who We Work With"
-  const wizardSection = rich[2];   // "Submit Your Application" — wizard config
+  const wizardSection = rich[2];   // "Submit Your Application" , wizard config
 
   const heroParts = parts(hero?.headline, hero?.highlight_text || "BuiltWell CT");
   const fadeRef = useFadeUp();

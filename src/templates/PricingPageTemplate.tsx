@@ -71,7 +71,7 @@ export function PricingPageTemplate({ page }: { page: CMSPage }) {
   const financing = rich.find((item) => item.style_variant === "financing_strip");
   const heroParts = parts(hero?.headline, "Connecticut");
 
-  /* trust strip data — try second CMS trust_bar, otherwise use reference defaults */
+  /* trust strip data , try second CMS trust_bar, otherwise use reference defaults */
   const trustStripCms = sections<any>(page, "trust_bar")[1];
   const defaultTrustStrip = [
     { icon: "star", label: "Google Rating", value: "4.9", url: "https://www.google.com/search?q=builtwell+ct+reviews" },
@@ -107,13 +107,13 @@ export function PricingPageTemplate({ page }: { page: CMSPage }) {
               <span className="font-semibold text-white">Pricing</span>
             </li>
           </ol>
-          {/* Title — matches reference clamp(40px, 4.5vw, 56px) */}
+          {/* Title , matches reference clamp(40px, 4.5vw, 56px) */}
           <h1 className="fade-up mb-3 max-w-[900px] text-[clamp(40px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.5px] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]" style={{ ...fadeUpStyle, transitionDelay: "0.1s" }}>
             {heroParts.before}
             {heroParts.accent ? <span className="text-[#bc9155]">{heroParts.accent}</span> : null}
             {heroParts.after}
           </h1>
-          {/* Subtitle — 17px matching reference */}
+          {/* Subtitle , 17px matching reference */}
           {hero?.subheadline ? (
             <p className="fade-up mx-auto mt-4 max-w-[560px] text-center text-[17px] font-normal leading-[1.7] text-white/[0.82]" style={{ ...fadeUpStyle, transitionDelay: "0.2s" }}>
               {hero.subheadline}
@@ -331,7 +331,7 @@ export function PricingPageTemplate({ page }: { page: CMSPage }) {
                 </p>
               ))}
           </div>
-          {/* Insurance carrier chips — rectangular pills matching reference */}
+          {/* Insurance carrier chips , rectangular pills matching reference */}
           <div className="fade-up mx-auto mt-8 grid max-w-[700px] grid-cols-5 gap-3" style={{ ...fadeUpStyle, transitionDelay: "0.25s" }}>
             {(insurance?.chips || []).map((chip: string, index: number) => (
               <span
@@ -354,7 +354,7 @@ export function PricingPageTemplate({ page }: { page: CMSPage }) {
       {/* ══════ TRUST STRIP (below Where We Work) ══════ */}
       <DarkTrustStrip items={trustStripItems} />
 
-      {/* ══════ TRUSTED BRANDS — marquee carousel ══════ */}
+      {/* ══════ TRUSTED BRANDS , marquee carousel ══════ */}
       <section className="border-t border-[rgba(30,43,67,0.08)] bg-white px-5 py-20 md:px-10">
         <div className="mx-auto max-w-[1240px]">
           <div className="fade-up mb-10 text-center" style={fadeUpStyle}>
@@ -440,7 +440,7 @@ function PricingAreasSection({ data }: { data: any }) {
                     </p>
                   ) : null}
                   {county.description ? (
-                    <p className="mt-4 border-b border-[rgba(30,43,67,0.06)] pb-5 text-[14px] leading-[1.7] text-[#5c677d]">
+                    <p className="mt-4 min-h-[96px] border-b border-[rgba(30,43,67,0.06)] pb-5 text-[14px] leading-[1.7] text-[#5c677d] md:min-h-[120px]">
                       {county.description}
                     </p>
                   ) : null}
@@ -491,7 +491,7 @@ function PricingAreasSection({ data }: { data: any }) {
                           <span>{county.cta_label || `Learn more about ${county.name}`}</span>
                           <ArrowRight className="h-4 w-4" />
                         </>,
-                        "mt-5 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-2.5",
+                        "mt-auto inline-flex items-center gap-1.5 pt-5 text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-2.5",
                       )
                     : null}
                 </div>
@@ -511,7 +511,7 @@ function PricingAreasSection({ data }: { data: any }) {
 }
 
 /* ────────────────────────────────────────────────────────────
-   Brands marquee — infinite auto-scrolling carousel
+   Brands marquee , infinite auto-scrolling carousel
    ──────────────────────────────────────────────────────────── */
 function BrandsMarquee({ items }: { items: any[] }) {
   if (!items.length) return null;

@@ -666,7 +666,7 @@ function ServicesAreasSection({
                     </p>
                   ) : null}
 
-                  {/* Town pills — first 2 rows (8 items) get gold bg hover, rest text-only hover */}
+                  {/* Town pills , first 2 rows (8 items) get gold bg hover, rest text-only hover */}
                   <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
                     {towns.map((town: string, townIndex: number) => {
                       const hasLink = !!links[town];

@@ -25,7 +25,7 @@ const FALLBACK_MEDIA: Record<string, string> = {
     "/portfolio/builtwell-contractor-sign-consultation-ct-01.jpg",
   "/hero/builtwell-job-site-aerial-hero-ct.jpg":
     "/portfolio/builtwell-job-site-aerial-ct.jpg",
-  /* Kitchen before/after — override API composites with clean local images */
+  /* Kitchen before/after , override API composites with clean local images */
   "https://builtwell-api.petararsic.rs/storage/media/WaVjfLFMtoSPAnxqls86aJQcgNsZmN1DYoA8CHU2.webp":
     "/images/before-after/kitchen-before-after-1.jpg",
   "https://builtwell-api.petararsic.rs/storage/media/jDYH5Q9bjjB1fpQeC8FLfqDpCpDXMWPZ85AdcCxy.webp":
@@ -55,7 +55,7 @@ const FALLBACK_MEDIA: Record<string, string> = {
   /* API /services/ paths → local public */
   "https://builtwell-api.petararsic.rs/services/flooring-installation-ct.jpg": "/services/flooring-hardwood-installation-ct-02.jpg",
   "https://builtwell-api.petararsic.rs/storage/services/flooring-ct.jpg": "/services/flooring-hardwood-installation-ct-02.jpg",
-  /* City page before/after — API serves from /images/ path instead of /storage/media/ */
+  /* City page before/after , API serves from /images/ path instead of /storage/media/ */
   "https://builtwell-api.petararsic.rs/images/before-after/kitchen-before-after-1.webp":
     "/images/before-after/kitchen-before-after-1.jpg",
   "https://builtwell-api.petararsic.rs/images/before-after/kitchen-before-after-2.webp":
@@ -74,7 +74,7 @@ const FALLBACK_MEDIA: Record<string, string> = {
     "/services/basement-finishing-drywall-work-ct-01.jpeg",
   "https://builtwell-api.petararsic.rs/images/before-after/basement-renovation-3.webp":
     "/services/basement-finishing-framing-ct-01.jpeg",
-  /* Flooring before/after — distinct images per card */
+  /* Flooring before/after , distinct images per card */
   "https://builtwell-api.petararsic.rs/storage/media/g1UiLCW1DEMcyXpWVI43YIQfgvHoWqTdADEvPlEw.webp":
     "/services/flooring-greenwich-ct.jpg",
   "https://builtwell-api.petararsic.rs/storage/media/6xJ2Bz700UZUBYXMGoNO225wg3Mp5VwGe5p64zKy.webp":

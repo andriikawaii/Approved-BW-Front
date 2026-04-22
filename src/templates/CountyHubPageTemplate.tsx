@@ -55,12 +55,12 @@ const COUNTY_PAGE_COPY: Record<string, {
   leadSubtitle: string;
 }> = {
   "fairfield-county": {
-    heroSubtitle: "From Greenwich estates to Stamford condos — renovation that matches the standard.",
+    heroSubtitle: "From Greenwich estates to Stamford condos, renovation that matches the standard.",
     overviewTitle: "Full-Service Home Remodeling in Fairfield County",
     overviewEyebrow: "Fairfield County's Remodeling Contractor",
     overviewParagraphsBefore: [
       "Fairfield County is one of the most demanding residential remodeling markets in the Northeast. The housing stock ranges from pre-war colonials and Tudor estates in Greenwich to mid-century moderns in New Canaan, 1960s ranches in Fairfield, and Victorian-era homes in South Norwalk. Each town has its own building department, zoning requirements, and historic district regulations. Working here requires a contractor who understands the specific construction conditions, permitting processes, and material demands of each municipality.",
-      "BuiltWell CT provides full-scope home remodeling across Fairfield County — kitchens, bathrooms, basements, flooring, additions, interior carpentry, painting, decks, attic conversions, and accessibility modifications. Every project is managed by our in-house team, not subcontracted out. We hold Connecticut Home Improvement Contractor license #0668405 and carry full liability and workers' compensation insurance.",
+      "BuiltWell CT provides full-scope home remodeling across Fairfield County, kitchens, bathrooms, basements, flooring, additions, interior carpentry, painting, decks, attic conversions, and accessibility modifications. Every project is managed by our in-house team, not subcontracted out. We hold Connecticut Home Improvement Contractor license #0668405 and carry full liability and workers' compensation insurance.",
       "Whether you are renovating a coastal home in Westport dealing with salt air and FEMA flood zone requirements, or updating a colonial on a wooded lot in Ridgefield with ledge rock and well water, we have the local experience to anticipate site conditions, navigate the permitting process, and deliver work that holds up over time. Call ",
     ],
     overviewPhoneHref: "tel:2039199616",
@@ -68,7 +68,7 @@ const COUNTY_PAGE_COPY: Record<string, {
     overviewPhoneTrailing: " for a free consultation.",
     midCtaTitle: "Remodeling in",
     midCtaAccent: "Fairfield County",
-    midCtaBody: "From Greenwich estates to Ridgefield colonials — we know the homes, the codes, and the craftsmanship your neighborhood expects.",
+    midCtaBody: "From Greenwich estates to Ridgefield colonials, we know the homes, the codes, and the craftsmanship your neighborhood expects.",
     servicesTitle: "Remodeling Services in Fairfield County",
     servicesSubtitle: "We provide a full range of residential remodeling services across every town in Fairfield County. Each project is managed by our in-house team from consultation through final walkthrough.",
     townsTitle: "Towns We Serve in Fairfield County",
@@ -79,7 +79,7 @@ const COUNTY_PAGE_COPY: Record<string, {
     leadSubtitle: "Tell us about your project. We respond within one business day. Call (203) 919-9616 or fill out the form below.",
   },
   "new-haven-county": {
-    heroSubtitle: "From the shoreline to the suburbs — built by the team next door.",
+    heroSubtitle: "From the shoreline to the suburbs, built by the team next door.",
     overviewTitle: "Full-Service Home Remodeling in New Haven County",
     overviewEyebrow: "New Haven County's Remodeling Contractor",
     overviewParagraphsBefore: [
@@ -107,13 +107,13 @@ const COUNTY_PAGE_COPY: Record<string, {
 const COUNTY_SERVICE_OVERRIDES: Record<string, Record<string, { summary: string; price: string; timeline: string }>> = {
   "fairfield-county": {
     "Kitchen Remodeling": { summary: "Full kitchen renovations including cabinetry, countertops, tile, electrical, plumbing, and permits.", price: "$25K-$150K+", timeline: "6-12 weeks" },
-    "Bathroom Remodeling": { summary: "Complete bathroom renovations — tile, vanities, showers, tubs, and plumbing upgrades.", price: "$15K-$120K+", timeline: "3-6 weeks" },
+    "Bathroom Remodeling": { summary: "Complete bathroom renovations, tile, vanities, showers, tubs, and plumbing upgrades.", price: "$15K-$120K+", timeline: "3-6 weeks" },
     "Basement Finishing": { summary: "Convert unfinished basements into living space with proper waterproofing and egress.", price: "$25K-$100K+", timeline: "4-8 weeks" },
     Flooring: { summary: "Hardwood, LVP, tile, and engineered wood with expert subfloor preparation.", price: "$4-$25/sq ft", timeline: "2-5 days" },
     "Home Additions": { summary: "Single-story and second-story additions, sunrooms, garage conversions, and bump-outs with full structural and finish work.", price: "$150-$400/sq ft", timeline: "8-16 weeks" },
     "Interior Painting": { summary: "Walls, ceilings, trim, doors, and built-ins. Professional-grade paints with proper surface preparation on every project.", price: "$3-$6/sq ft", timeline: "2-5 days" },
     "Interior Carpentry": { summary: "Custom millwork, built-in cabinetry, wainscoting, crown molding, coffered ceilings, closet systems, and finish trim.", price: "$75-$150/hr", timeline: "Varies" },
-    "Attic Conversions": { summary: "Converting unfinished attics into bedrooms, offices, or playrooms — structural assessment through final finish.", price: "$50K-$150K", timeline: "6-12 weeks" },
+    "Attic Conversions": { summary: "Converting unfinished attics into bedrooms, offices, or playrooms, structural assessment through final finish.", price: "$50K-$150K", timeline: "6-12 weeks" },
     "Decks & Porches": { summary: "Pressure-treated lumber, composite, and hardwood. Covered porches, screened-in structures, pergolas, and multi-level decks.", price: "$15K-$75K", timeline: "2-4 weeks" },
     "Design & Planning": { summary: "Space planning, material selection, finish coordination, and project documentation before construction begins.", price: "$2.5K-$15K", timeline: "2-6 weeks" },
     "Comfort & Accessibility": { summary: "Grab bars, roll-in showers, wider doorways, ramp installation, and first-floor adaptations for all ages and abilities.", price: "$5K-$50K", timeline: "1-4 weeks" },
@@ -137,23 +137,66 @@ const COUNTY_TOWN_OVERRIDES: Record<string, Record<string, { style: string; desc
   "fairfield-county": {
     Greenwich: { style: "Colonial, Tudor, French Provincial", description: "Pre-1940 housing stock with strict setbacks and historic district requirements. High-end renovations on large lots with mature landscaping and estate-level finishes.", linked: true },
     Westport: { style: "1940s-1970s Colonials & Ranches", description: "Coastal town with salt air exposure and FEMA flood zone considerations. Many homes are colonials and ranches from the 1940s through 1970s undergoing modern updates.", linked: true },
-    Darien: { style: "Colonials on Wooded Lots", description: "Colonial homes on wooded lots with high water tables and ledge rock conditions throughout. Basement waterproofing and foundation work are common project components here. Families expect quality craftsmanship and clear timelines on every renovation." },
-    "New Canaan": { style: "Mid-Century Modern and Colonial", description: "A mix of mid-century modern and colonial architecture with a historic commission and strict zoning. Renovations often require additional design review approvals. Homeowners here have typically renovated before and value precision and communication." },
-    Stamford: { style: "Urban/Suburban Mix", description: "An urban-suburban mix of condos and single-family homes across diverse ages. Projects range from condo kitchen updates to full single-family renovations. Reliable communication and on-time arrivals set us apart in a market where homeowners have options." },
-    Norwalk: { style: "Victorian-Era and Newer", description: "Victorian-era homes in South Norwalk alongside newer construction throughout the town. Coastal salt air conditions require careful material selection for long-term durability. Bathroom and kitchen remodels are common as homeowners update older layouts to match current living standards." },
-    Fairfield: { style: "1940s-1970s Colonial Homes", description: "A family-oriented town with colonial homes from the 1940s through 1970s. Proximity to the coast means moisture management is a consistent consideration. Kitchen and bathroom remodels are the most common projects as families update aging layouts." },
-    Ridgefield: { style: "Colonial and Cape on Large Lots", description: "Rural character with larger lots, rock ledge conditions, and colonial and cape architecture throughout. Well water systems and septic considerations factor into project planning. Homeowners here value thorough site assessments and clear communication before any work begins." },
+    Darien: { style: "Colonials on Wooded Lots", description: "Colonial homes on wooded lots with high water tables and ledge rock conditions. Basement waterproofing and foundation work are common components here." },
+    "New Canaan": { style: "Mid-Century Modern and Colonial", description: "Mid-century modern and colonial architecture with a historic commission and strict zoning. Renovations often require additional design review approvals." },
+    Stamford: { style: "Urban/Suburban Mix", description: "An urban-suburban mix of condos and single-family homes across diverse ages. Projects range from condo kitchen updates to full single-family renovations." },
+    Norwalk: { style: "Victorian-Era and Newer", description: "Victorian-era homes in South Norwalk alongside newer construction throughout the town. Coastal salt air requires careful material selection for long-term durability." },
+    Fairfield: { style: "1940s-1970s Colonial Homes", description: "A family-oriented town with colonial homes from the 1940s through 1970s. Proximity to the coast means moisture management is a consistent consideration." },
+    Ridgefield: { style: "Colonial and Cape on Large Lots", description: "Rural character with larger lots, rock ledge conditions, and colonial and cape architecture. Well water and septic considerations factor into project planning." },
+    Bethel: { style: "Colonial and Cape on Wooded Lots", description: "Colonial and cape homes on wooded lots in western Fairfield County. Well water and septic systems factor into most renovation projects." },
+    Bridgeport: { style: "Victorian and Early-1900s Urban", description: "Victorian-era and early-1900s urban homes across diverse neighborhoods. Many properties need modern systems and layout updates." },
+    Brookfield: { style: "Lake-Adjacent Colonials and Capes", description: "Lake Candlewood-adjacent colonials and capes with septic planning needs. Seasonal moisture is a consistent project factor." },
+    "Cos Cob": { style: "Older Colonials and New Construction", description: "A Greenwich neighborhood with older colonials and newer Mianus River area homes. Flood zone review applies to many waterfront properties." },
+    Danbury: { style: "Suburban Mixed Housing", description: "Suburban mix of colonials, split-levels, and newer construction. Project scope ranges from kitchen updates to whole-home renovations." },
+    Easton: { style: "Rural Large-Lot Colonials", description: "Rural large-lot colonials and farmhouses with wells and septic. Site access and grading factor into every renovation here." },
+    Monroe: { style: "1970s-1990s Colonials and Capes", description: "Colonial and cape homes from the 1970s through 1990s. A family-oriented town with steady kitchen and bathroom update demand." },
+    "New Fairfield": { style: "Lake Candlewood Homes", description: "Lake Candlewood waterfront and hillside homes. Seasonal moisture and hillside access shape most projects here." },
+    Newtown: { style: "Colonial and Cape with Historic District", description: "Colonial and cape homes with a historic downtown district. Design review is common for renovations in the historic area." },
+    "Old Greenwich": { style: "Coastal Greenwich Village", description: "A coastal Greenwich village with post-war capes and colonials. FEMA flood zone requirements shape every shoreline renovation." },
+    Redding: { style: "Rural Large-Lot Estates", description: "Large-lot rural colonials and estates on wells and septic. Site and access planning are extensive on most projects." },
+    Riverside: { style: "Coastal Greenwich Mid-Century", description: "A coastal Greenwich neighborhood with mid-century homes and waterfront estates. FEMA flood zone considerations apply to many properties." },
+    Rowayton: { style: "Coastal Village with Historic Homes", description: "A coastal village with historic colonials and waterfront homes. Salt air and flood zone considerations shape material choices." },
+    Shelton: { style: "Mixed Ranches and New Construction", description: "A mix of suburban ranches, colonials, and new construction. Renovation scope ranges from kitchen updates to additions." },
+    Sherman: { style: "Rural Large-Lot Colonials", description: "Rural large-lot colonials and farmhouses in northwest Fairfield County. Wells, septic, and site access are standard considerations." },
+    Stratford: { style: "Colonials, Capes, and Ranches", description: "Older colonials, capes, and ranches with some coastal exposure. Kitchen and bathroom remodels are the most common projects." },
+    Trumbull: { style: "Colonial and Split-Level Suburbia", description: "Colonial and split-level suburbia with family-oriented neighborhoods. Kitchen open-ups and bathroom updates lead project demand." },
+    Weston: { style: "Large-Lot Estates and Colonials", description: "Large-lot estates and custom colonials on wooded rural roads. Site planning and access are key project factors." },
+    Wilton: { style: "Mid-Century and Colonial Homes", description: "Mid-century and colonial homes on large wooded lots. Ledge rock conditions and well water are common considerations." },
   },
   "new-haven-county": {
-    Orange: { style: "1960s-1980s Colonials & Ranches", description: "Our home base. Well-maintained colonials and ranches from the 1960s through 1980s on generous lots. Split-levels and raised ranches are the most common renovation candidates, with kitchens and bathrooms that haven't been touched in decades.", linked: true },
-    "New Haven": { style: "Victorian, Colonial & Multi-Family", description: "A mix of Victorian-era homes, colonials, and multi-family properties. Over 40% of homes predate 1940 with plaster walls, balloon framing, and knob-and-tube wiring that require experienced handling.", linked: true },
-    Hamden: { style: "1950s-1970s Split-Levels and Capes", description: "Split-levels, capes, and colonials from the 1950s through 1970s. Basement finishing and whole-home renovations are common as families modernize these well-built mid-century homes with outdated electrical and original plumbing." },
-    Branford: { style: "Coastal Colonials and Capes", description: "A coastal town where salt air exposure and FEMA flood zone considerations shape every renovation decision. Material selection for moisture resistance is a key factor in shoreline neighborhoods." },
-    Guilford: { style: "Historic and Coastal", description: "One of the oldest towns in Connecticut with a significant historic district and pre-Revolutionary housing stock. Renovations here often require design review approval and careful attention to period-appropriate details." },
-    Madison: { style: "Coastal & Suburban", description: "A shoreline town with a mix of beach cottages and larger suburban homes along the Long Island Sound. Elevated humidity and salt air require careful material choices for kitchens, bathrooms, and exterior work.", linked: true },
-    Woodbridge: { style: "Colonials on Wooded Lots", description: "Rural character with larger lots, well water systems, and septic considerations that affect renovation planning. Colonials and contemporaries sit on wooded lots where site access and ledge rock conditions factor into every project." },
-    Milford: { style: "Mixed Suburban and Coastal", description: "A diverse housing stock ranging from beach cottages along the Long Island Sound to newer inland subdivisions. Coastal areas require moisture management while inland neighborhoods feature 1960s-1980s colonials and ranches." },
+    Orange: { style: "1960s-1980s Colonials & Ranches", description: "Our home base. Well-maintained colonials and ranches from the 1960s through 1980s on generous lots. Split-levels and raised ranches are common renovation candidates.", linked: true },
+    "New Haven": { style: "Victorian, Colonial & Multi-Family", description: "A mix of Victorian-era homes, colonials, and multi-family properties. Over 40% of homes predate 1940 with plaster walls, balloon framing, and knob-and-tube wiring.", linked: true },
+    Hamden: { style: "1950s-1970s Split-Levels and Capes", description: "Split-levels, capes, and colonials from the 1950s through 1970s. Basement finishing and whole-home renovations are common as families modernize these mid-century homes." },
+    Branford: { style: "Coastal Colonials and Capes", description: "A coastal town where salt air exposure and FEMA flood zone considerations shape every renovation decision. Material selection for moisture resistance is key." },
+    Guilford: { style: "Historic and Coastal", description: "One of the oldest towns in Connecticut with a significant historic district and pre-Revolutionary housing stock. Renovations often require design review approval." },
+    Madison: { style: "Coastal & Suburban", description: "A shoreline town with a mix of beach cottages and larger suburban homes along the Long Island Sound. Elevated humidity requires careful material choices.", linked: true },
+    Woodbridge: { style: "Colonials on Wooded Lots", description: "Rural character with larger lots, well water systems, and septic considerations. Colonials and contemporaries sit on wooded lots with ledge rock conditions." },
+    Milford: { style: "Mixed Suburban and Coastal", description: "A diverse housing stock ranging from beach cottages along the Long Island Sound to newer inland subdivisions. Coastal areas require moisture management." },
+    Ansonia: { style: "Victorian and Early-1900s Urban", description: "Victorian and early-1900s urban homes in the Naugatuck Valley. Older construction often needs electrical and plumbing upgrades." },
+    "Beacon Falls": { style: "Capes and Colonials on the River", description: "Capes and colonials along the Naugatuck River. A mix of older housing stock with modern renovation needs." },
+    Bethany: { style: "Rural Large-Lot Colonials", description: "Rural town with large-lot colonials and farmhouses. Most properties rely on wells and septic systems." },
+    Cheshire: { style: "Colonial and Cape with Historic District", description: "Colonial and cape homes with a historic main street district. Many renovations involve respecting the historic character of neighborhoods." },
+    Derby: { style: "Older Urban Homes", description: "Older urban homes including Victorians and early-20th century stock. Renovations often address dated systems and layouts." },
+    "East Haven": { style: "Shoreline Capes and Ranches", description: "Shoreline capes and ranches with Long Island Sound exposure. Salt air and humidity affect material decisions throughout." },
+    Meriden: { style: "Diverse Mixed Housing", description: "Diverse housing from Victorians to ranches and new construction. A wide range of renovation scopes fit this market." },
+    Middlebury: { style: "Colonial and Cape on Wooded Lots", description: "Colonial and cape homes on larger lots and wooded settings. Site access and well water are typical project considerations." },
+    Naugatuck: { style: "Valley Colonials and Capes", description: "Valley town with colonials, capes, and older urban homes. Many projects involve older plumbing, electrical, and layout updates." },
+    "North Branford": { style: "Coastal-Influenced Colonials", description: "Coastal-influenced colonials and mid-century homes. Moisture management is a consistent project consideration." },
+    "North Haven": { style: "Suburban Colonials and Splits", description: "Suburban colonials, split-levels, and ranches on generous lots. A range of scopes from kitchen updates to additions." },
+    Oxford: { style: "Rural Colonials and Farmhouses", description: "Rural colonials and farmhouses on larger parcels. Site access, wells, and septic are standard project considerations." },
+    Prospect: { style: "Split-Levels on Hilly Lots", description: "Split-levels and colonials on hilly wooded lots. Site planning and access are key factors in every renovation." },
+    Seymour: { style: "Valley Colonials and Cottages", description: "Valley housing with colonials, capes, and small cottages. Older systems and layout updates are common remodeling needs." },
+    Southbury: { style: "1970s-1990s Colonials and Capes", description: "Suburban colonials and capes built 1970s through 1990s. Kitchen and bathroom renovations update these homes for modern use." },
+    Wallingford: { style: "Mixed Historical Housing", description: "A mix of housing from Victorians to ranches and colonials. Projects span from small updates to whole-home renovations." },
+    Waterbury: { style: "Urban Victorian and Early-1900s", description: "Urban Victorian and early-1900s homes across diverse neighborhoods. Many properties need significant systems upgrades." },
+    "West Haven": { style: "Coastal Urban Capes", description: "Coastal urban area with older colonials and capes. Flood zone considerations apply to many shoreline properties." },
+    Wolcott: { style: "Suburban Colonials and Ranches", description: "Suburban colonials and ranches on generous rural lots. A family-oriented town with kitchen and bathroom updates in demand." },
   },
+};
+
+const COUNTY_TIER2: Record<string, string[]> = {
+  "fairfield-county": ["Bethel", "Bridgeport", "Brookfield", "Cos Cob", "Danbury", "Easton", "Monroe", "New Fairfield", "Newtown", "Old Greenwich", "Redding", "Riverside", "Rowayton", "Shelton", "Sherman", "Stratford", "Trumbull", "Weston", "Wilton"],
+  "new-haven-county": ["Ansonia", "Beacon Falls", "Bethany", "Cheshire", "Derby", "East Haven", "Meriden", "Middlebury", "Naugatuck", "North Branford", "North Haven", "Oxford", "Prospect", "Seymour", "Southbury", "Wallingford", "Waterbury", "West Haven", "Wolcott"],
 };
 
 const COUNTY_FEATURED_OVERRIDES: Record<string, Array<{ title: string; body: string; quote: string; cite: string }>> = {
@@ -234,6 +277,7 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
   const heroTrust = trustBars[0];
   const stripTrust = trustBars[1];
   const [showAllServices, setShowAllServices] = useState(false);
+  const [showAllTowns, setShowAllTowns] = useState(false);
   const [pickedServices, setPickedServices] = useState<string[]>([]);
   const [serviceOpen, setServiceOpen] = useState(false);
   const [fileNames, setFileNames] = useState<string[]>([]);
@@ -369,24 +413,38 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
             </div>
           </FadeUp>
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {visibleServices.map((item: any, index: number) => (
-              <FadeUp key={`${item.title || "service"}-${index}`} delay={index % 3 * 100} className="h-full">
+            {visibleServices.map((item: any, index: number) => {
+              const cardInner = (
                 <article className="group/card flex h-full flex-col overflow-hidden rounded-[10px] border border-[#e6dccd] border-b-[3px] border-b-transparent bg-white shadow-[0_16px_34px_rgba(30,43,67,0.06)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
                   <div className="h-[228px] overflow-hidden">
                     <img src={media(item.image, "/services/kitchen-remodeling-ct.jpg")} alt={item.image_alt || item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105" />
                   </div>
                   <div className="flex flex-1 flex-col p-5 text-center">
-                    <h3 className="font-serif text-[22px] font-bold leading-[1.22]">{item.title}</h3>
+                    <h3 className="font-serif text-[22px] font-bold leading-[1.22] text-[#1e2b43]">{item.title}</h3>
                     <p className="mt-3 flex-1 text-[15px] leading-[1.72] text-[#5c677d]">{item.summary}</p>
                     <div className="mt-4 flex flex-wrap justify-center gap-2">
                       {item.price ? <span className="rounded-full bg-[#bc915512] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#bc9155]">{item.price}</span> : null}
                       {item.timeline ? <span className="rounded-full bg-[#bc915512] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#bc9155]">{item.timeline}</span> : null}
                     </div>
-                    {item.url ? linkNode(item.url, <><span>Get Started</span><ArrowRight className="h-4 w-4" /></>, "mt-5 inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.12em] text-[#bc9155] transition-all duration-300 hover:gap-3 justify-center") : null}
+                    {item.url ? (
+                      <span className="mt-5 inline-flex items-center justify-center gap-2 text-[12px] font-semibold uppercase tracking-[0.12em] text-[#bc9155] transition-all duration-300 group-hover/card:gap-3">
+                        <span>Get Started</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </span>
+                    ) : null}
                   </div>
                 </article>
-              </FadeUp>
-            ))}
+              );
+              return (
+                <FadeUp key={`${item.title || "service"}-${index}`} delay={index % 3 * 100} className="h-full">
+                  {item.url ? (
+                    <Link href={item.url} className="block h-full no-underline">
+                      {cardInner}
+                    </Link>
+                  ) : cardInner}
+                </FadeUp>
+              );
+            })}
             {showAllServices && services?.cta_card ? (
               <article className="flex flex-col justify-between rounded-[10px] border border-[#bc915544] bg-[#1e2b43] p-7 text-white shadow-[0_18px_40px_rgba(30,43,67,0.18)]">
                 <div>
@@ -442,64 +500,60 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
               <p className="mx-auto mt-3 max-w-[720px] text-[15px] leading-[1.8] text-[#5c677d]">{countyCopy.townsSubtitle}</p>
             </div>
           </FadeUp>
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-            {(towns?.tier1 || []).map((town: any, index: number) => {
+          {(() => {
+            const tier1Towns = (towns?.tier1 || []).map((town: any) => {
               const override = townOverrides[town.label] || { style: "", description: town.description || "" };
-              const content = (
-                <div className="flex h-full flex-col rounded-[12px] border-b-2 border-b-transparent bg-white p-7 shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
-                  <h3 className="text-[20px] font-bold text-[#1e2b43]">{town.label}</h3>
-                  {override.style ? <p className="mt-2 text-[13px] font-semibold uppercase tracking-[0.5px] text-[#9a7340]">{override.style}</p> : null}
-                  <p className="mt-3 flex-1 text-[14px] leading-[1.65] text-[#5c677d]">{override.description}</p>
-                  {override.linked ? <span className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#bc9155] transition-all hover:gap-2.5">view {town.label} <ArrowRight className="h-3.5 w-3.5" /></span> : null}
+              return { label: town.label, url: town.url || "", style: override.style, description: override.description, linked: !!override.linked };
+            });
+            const tier2Labels = COUNTY_TIER2[slug] || [];
+            const tier2Towns = tier2Labels.map((label) => {
+              const override = townOverrides[label] || { style: "", description: "" };
+              return { label, url: "", style: override.style, description: override.description, linked: false };
+            });
+            const allTowns = [...tier1Towns, ...tier2Towns];
+            const visibleTownCount = 8;
+            const visibleTowns = showAllTowns ? allTowns : allTowns.slice(0, visibleTownCount);
+            const hiddenCount = Math.max(allTowns.length - visibleTownCount, 0);
+            return (
+              <>
+                <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+                  {visibleTowns.map((town, index) => {
+                    const content = (
+                      <div className="flex h-full min-h-[280px] flex-col rounded-[12px] border-b-2 border-b-transparent bg-white p-7 shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
+                        <h3 className="text-[20px] font-bold text-[#1e2b43]">{town.label}</h3>
+                        {town.style ? <p className="mt-2 text-[13px] font-semibold uppercase tracking-[0.5px] text-[#9a7340]">{town.style}</p> : null}
+                        <p className="mt-3 flex-1 text-[14px] leading-[1.65] text-[#5c677d]">{town.description}</p>
+                        {town.linked && town.url ? (
+                          <span className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#bc9155] transition-all group-hover:gap-2.5">
+                            view {town.label} <ArrowRight className="h-3.5 w-3.5" />
+                          </span>
+                        ) : null}
+                      </div>
+                    );
+                    return (
+                      <FadeUp key={`${town.label || "town"}-${index}`} delay={index % 4 * 80} className="h-full">
+                        {town.linked && town.url ? (
+                          <Link href={town.url} className="group block h-full no-underline">
+                            {content}
+                          </Link>
+                        ) : (
+                          <div className="h-full">{content}</div>
+                        )}
+                      </FadeUp>
+                    );
+                  })}
                 </div>
-              );
-
-              return (
-                <FadeUp key={`${town.label || "town"}-${index}`} delay={index % 4 * 80} className="h-full">
-                  {override.linked && town.url ? (
-                    <Link href={town.url} className="block h-full no-underline">
-                      {content}
-                    </Link>
-                  ) : (
-                    <div className="h-full">{content}</div>
-                  )}
-                </FadeUp>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* FEATURED PROJECTS */}
-      <section className="border-t border-[#1e2b43]/8 bg-[#f5f1e9] px-5 py-20 md:px-10">
-        <div className="mx-auto max-w-[1240px]">
-          <FadeUp>
-            <div className="mb-12 text-center">
-              {label("Recent Work")}
-              <h2 className="font-serif text-[clamp(34px,3.8vw,48px)] font-bold leading-[1.08] tracking-[-0.03em]">
-                {featuredParts.before}
-                {featuredParts.accent ? <span className="text-[#bc9155]">{featuredParts.accent}</span> : null}
-                {featuredParts.after}
-              </h2>
-              <p className="mx-auto mt-3 max-w-[760px] text-[15px] leading-[1.8] text-[#5c677d]">{countyCopy.featuredSubtitle}</p>
-            </div>
-          </FadeUp>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {featuredOverrides.map((item, index) => (
-              <FadeUp key={`${item.title}-${index}`} delay={index * 100}>
-                <article className="flex h-full flex-col rounded-[12px] border-b-[3px] border-b-transparent bg-white p-7 shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
-                  <div className="flex-1">
-                    <h3 className="mb-3 font-serif text-[22px] font-bold">{item.title}</h3>
-                    <p className="text-[15px] leading-[1.75] text-[#5c677d]">{item.body}</p>
+                {hiddenCount > 0 ? (
+                  <div className="mt-8 text-center">
+                    <button type="button" onClick={() => setShowAllTowns((current) => !current)} className="inline-flex items-center gap-2 rounded-[6px] border border-[#bc9155] px-5 py-3 text-[12px] font-semibold uppercase tracking-[0.14em] text-[#bc9155] transition-colors hover:bg-[#bc9155] hover:text-white">
+                      <span>{showAllTowns ? "Show Fewer Towns" : `Show ${hiddenCount} More Towns`}</span>
+                      <ChevronDown className={cls("h-4 w-4 transition-transform", showAllTowns && "rotate-180")} />
+                    </button>
                   </div>
-                  <div className="mt-4 border-l-[3px] border-l-[#bc9155] pl-4">
-                    <p className="min-h-[72px] text-[15px] italic leading-[1.65] text-[#1e2b43]">{item.quote}</p>
-                    <cite className="mt-2 block text-[12px] font-semibold not-italic text-[#5c677d]">{item.cite}</cite>
-                  </div>
-                </article>
-              </FadeUp>
-            ))}
-          </div>
+                ) : null}
+              </>
+            );
+          })()}
         </div>
       </section>
 

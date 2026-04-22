@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Check, CheckCircle, ChevronDown, CreditCard, Shield } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
@@ -11,7 +11,7 @@ export const sections = <T,>(page: CMSPage, type: string) => page.sections.filte
 export const opts = (value?: Array<string | { label: string; value: string }> | null) => (value || []).map((item) => typeof item === "string" ? { label: item, value: item } : item);
 
 const MEDIA_OVERRIDES: Record<string, string> = {
-  /* Kitchen before/after — API composites → clean local images */
+  /* Kitchen before/after , API composites → clean local images */
   "https://builtwell-api.petararsic.rs/storage/media/WaVjfLFMtoSPAnxqls86aJQcgNsZmN1DYoA8CHU2.webp": "/images/before-after/kitchen-before-after-1.jpg",
   "https://builtwell-api.petararsic.rs/storage/media/jDYH5Q9bjjB1fpQeC8FLfqDpCpDXMWPZ85AdcCxy.webp": "/images/before-after/kitchen-before-after-2.jpg",
   "https://builtwell-api.petararsic.rs/storage/media/B8KFIFij5lFsCZaMTAvJbBYguy9Kn3OVdYHajTQQ.webp": "/images/before-after/kitchen-before-after-3.jpg",
@@ -23,10 +23,11 @@ const MEDIA_OVERRIDES: Record<string, string> = {
   "https://builtwell-api.petararsic.rs/storage/media/VCPnRfqDO25qsQVXjObVLhBdZ7G3ZtS7677LuDNJ.webp": "/services/basement-finishing-ct.jpg",
   "https://builtwell-api.petararsic.rs/storage/media/VSMPOZCvydfK09tha1I6TuQzTaBYsE6VhY5hxN6w.webp": "/services/basement-finishing-drywall-work-ct-01.jpeg",
   "https://builtwell-api.petararsic.rs/storage/media/Tj19FhtKLl7PmixuHMH99dg8UqkAocdZu4ERb9c2.webp": "/services/basement-finishing-framing-ct-01.jpeg",
-  /* Flooring — distinct images per card */
+  /* Flooring , distinct images per card */
   "https://builtwell-api.petararsic.rs/storage/media/g1UiLCW1DEMcyXpWVI43YIQfgvHoWqTdADEvPlEw.webp": "/services/flooring-greenwich-ct.jpg",
   "https://builtwell-api.petararsic.rs/storage/media/6xJ2Bz700UZUBYXMGoNO225wg3Mp5VwGe5p64zKy.webp": "/services/flooring-milford-ct.jpg",
   "https://builtwell-api.petararsic.rs/storage/media/Kdo1jIjhD2ZmovDFrvdaYlHuJcZX6wG6vB6QhIaM.webp": "/services/flooring-installation-ct.jpg",
+  "https://builtwell-api.petararsic.rs/storage/media/MOwCnEMuOQRwbeDFwVVXyqTzj0TjrLvzKIxHRKyS.webp": "/services/flooring-hardwood-installation-ct.jpg",
   /* City page API paths */
   "https://builtwell-api.petararsic.rs/images/before-after/kitchen-before-after-1.webp": "/images/before-after/kitchen-before-after-1.jpg",
   "https://builtwell-api.petararsic.rs/images/before-after/kitchen-before-after-2.webp": "/images/before-after/kitchen-before-after-2.jpg",
@@ -43,6 +44,7 @@ const MEDIA_OVERRIDES: Record<string, string> = {
   "http://localhost:8000/services/interior-painting-ct.jpg": "/services/interior-painting-ct.jpg",
   "http://localhost:8000/services/kitchen-remodeling-ct.jpg": "/services/kitchen-remodeling-ct.jpg",
   "http://localhost:8000/services/basement-finishing-ct.jpg": "/services/basement-finishing-ct.jpg",
+  "http://localhost:8000/storage/portfolio/builtwell-cherry-hill-project.jpg": "/portfolio/builtwell-cherry-hill-project.jpg",
   /* API /services/ paths → local public */
   "https://builtwell-api.petararsic.rs/services/flooring-installation-ct.jpg": "/services/flooring-hardwood-installation-ct-02.jpg",
   "https://builtwell-api.petararsic.rs/storage/services/flooring-ct.jpg": "/services/flooring-installation-ct.jpg",
@@ -59,7 +61,7 @@ const MEDIA_OVERRIDES: Record<string, string> = {
   "https://builtwell-api.petararsic.rs/storage/images/before-after/flooring-before-after-1.jpg": "/services/flooring-greenwich-ct.jpg",
   "https://builtwell-api.petararsic.rs/storage/images/before-after/flooring-before-after-2.jpg": "/services/flooring-milford-ct.jpg",
   "https://builtwell-api.petararsic.rs/storage/images/before-after/flooring-before-after-3.jpg": "/services/flooring-installation-ct.jpg",
-  /* Service scope images — fix duplicate secondary */
+  /* Service scope images , fix duplicate secondary */
   "https://builtwell-api.petararsic.rs/services/bathroom-remodeling-ct.jpg": "/services/bathroom-remodeling-ct.jpg",
   "https://builtwell-api.petararsic.rs/services/basement-finishing-ct.jpg": "/services/basement-finishing-ct.jpg",
   "https://builtwell-api.petararsic.rs/services/kitchen-remodeling-ct.jpg": "/services/kitchen-remodeling-ct.jpg",
@@ -345,12 +347,12 @@ export function AreasSection({ data }: { data: any }) {
         .bw-area-card-img img { width:100%; height:100%; object-fit:cover; transition:transform .5s; }
         .bw-area-card-img img.bw-show-top { object-position:top; }
         .bw-area-card:hover .bw-area-card-img img { transform:scale(1.05); }
-        .bw-area-card-body { padding:28px 28px 32px; text-align:center; }
+        .bw-area-card-body { padding:28px 28px 32px; text-align:center; flex:1; display:flex; flex-direction:column; }
         .bw-area-card-body h3 { font:700 24px/1.2 "Playfair Display",serif; color:#1e2b43; margin:0 0 6px; }
         .bw-area-card-phone { font-size:15px; color:#5c677d; margin-bottom:14px; }
         .bw-area-card-phone a { color:#bc9155; font-weight:600; text-decoration:none; }
         .bw-area-card-phone a:hover { text-decoration:underline; }
-        .bw-area-card-desc { font-size:14px; line-height:1.7; color:#5c677d; margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid rgba(30,43,67,.06); flex:1; }
+        .bw-area-card-desc { font-size:14px; line-height:1.7; color:#5c677d; margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid rgba(30,43,67,.06); min-height:120px; }
         .bw-area-towns { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
         .bw-area-town { font-size:11px; font-weight:600; color:#1e2b43; background:#f5f1e9; padding:7px 10px; border-radius:50px; text-align:center; letter-spacing:.2px; transition:all .2s; white-space:nowrap; text-decoration:none; }
         .bw-area-town:hover { background:#e8dcc4; color:#9a7340; }
@@ -360,7 +362,7 @@ export function AreasSection({ data }: { data: any }) {
         .bw-area-towns-more.show { display:grid; }
         .bw-area-towns-toggle { grid-column:1 / -1; margin-top:4px; background:none; border:none; color:#bc9155; font-size:13px; font-weight:600; cursor:pointer; padding:4px 0; transition:color .2s; text-align:center; }
         .bw-area-towns-toggle:hover { color:#9a7340; }
-        .bw-area-link { display:inline-flex; align-items:center; gap:6px; margin-top:4px; color:#bc9155; font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; justify-content:center; }
+        .bw-area-link { display:inline-flex; align-items:center; gap:6px; margin-top:auto; padding-top:16px; color:#bc9155; font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; justify-content:center; }
         .bw-area-link:hover { gap:10px; }
         .bw-area-link-arrow { width:14px; height:14px; }
         .bw-areas-note { margin:20px auto 0; text-align:center; font-size:14px; line-height:1.7; color:#5c677d; }
@@ -424,6 +426,29 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
   const [serviceOpen, setServiceOpen] = useState(false);
   const [formValues, setFormValues] = useState<Record<string, string>>({ contact_method: "call" });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const multiSelectRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!serviceOpen) return;
+    const handlePointer = (event: MouseEvent | TouchEvent) => {
+      if (multiSelectRef.current && !multiSelectRef.current.contains(event.target as Node)) {
+        setServiceOpen(false);
+      }
+    };
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setServiceOpen(false);
+    };
+    document.addEventListener("mousedown", handlePointer);
+    document.addEventListener("touchstart", handlePointer);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handlePointer);
+      document.removeEventListener("touchstart", handlePointer);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [serviceOpen]);
   const titleParts = parts(data?.title, accent || data?.title_highlight || "Project");
   const fields = data?.fields || [];
   const topFields = fields.filter((field: any) => !["checkbox_group", "radio_group", "textarea", "file", "select"].includes(field.type));
@@ -496,7 +521,51 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
                   <p>We received your request and will reach out within one business day.</p>
                 </div>
               ) : (
-                <form onSubmit={(event) => { event.preventDefault(); setSubmitted(true); }}>
+                <form
+                  onSubmit={async (event) => {
+                    event.preventDefault();
+                    if (submitting) return;
+                    setSubmitting(true);
+                    setSubmitError(null);
+
+                    const payload: Record<string, unknown> = {
+                      ...formValues,
+                      services: pickedServices.length > 0 ? pickedServices : undefined,
+                      source_page: page?.seo?.title ?? undefined,
+                      source_page_path: page?.slug ?? undefined,
+                      hp: (event.currentTarget.elements.namedItem("hp") as HTMLInputElement | null)?.value ?? "",
+                    };
+
+                    try {
+                      const response = await fetch("/api/leads/", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload),
+                      });
+                      const result = await response.json().catch(() => null);
+
+                      if (response.ok && result?.success) {
+                        setSubmitted(true);
+                        if (typeof window !== "undefined") {
+                          window.location.href = "/thank-you/";
+                        }
+                        return;
+                      }
+
+                      const firstValidationError = result?.errors
+                        ? Object.values(result.errors)[0]
+                        : null;
+                      const message = Array.isArray(firstValidationError)
+                        ? firstValidationError[0]
+                        : result?.error || result?.message || "Something went wrong. Please try again or call us directly.";
+                      setSubmitError(String(message));
+                    } catch {
+                      setSubmitError("Unable to submit right now. Please call us directly.");
+                    } finally {
+                      setSubmitting(false);
+                    }
+                  }}
+                >
                   {consultationOptions.length > 0 ? (
                     <fieldset className="bw-form-group">
                       <legend>{consultationField.label}{consultationField.required ? " *" : ""}</legend>
@@ -528,7 +597,7 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
                     {servicesField ? (
                       <div className="bw-form-group">
                         <label>{servicesField.label}{servicesField.required ? " *" : ""}</label>
-                        <div className="bw-multi-select-wrap">
+                        <div className="bw-multi-select-wrap" ref={multiSelectRef}>
                           <button type="button" className="bw-multi-select-toggle" aria-expanded={serviceOpen} onClick={() => setServiceOpen((current) => !current)}>
                             <span className={cls("bw-multi-select-text", pickedServices.length > 0 && "bw-has-selection")}>{selectedServicesLabel}</span>
                             <ChevronDown className="h-3 w-3" />
@@ -540,6 +609,9 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
                                 <span>{option.label}</span>
                               </label>
                             ))}
+                            <div className="bw-multi-select-footer">
+                              <button type="button" className="bw-multi-select-done" onClick={() => setServiceOpen(false)}>Done</button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -591,8 +663,15 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
                       <span>I agree to the <a href="/privacy-policy/" className="bw-form-consent-link">Privacy Policy</a> and <a href="/terms/" className="bw-form-consent-link">Terms of Service</a>. I consent to receive calls, texts (SMS), and emails from BuiltWell CT, including automated messages. Msg &amp; data rates may apply. Reply STOP to opt out.</span>
                     </label>
                   </div>
-                  <button type="submit" className="bw-form-submit">{data?.submit_label || "Get Your Free Estimate"}</button>
-                  <p className="bw-form-note">{data?.consent_text || "We respond within 24 hours. No spam, no obligation."}</p>
+                  <input type="text" name="hp" defaultValue="" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: "absolute", left: "-9999px", opacity: 0, height: 0, width: 0 }} />
+                  <button type="submit" className="bw-form-submit" disabled={submitting}>
+                    {submitting ? "Sending…" : (data?.submit_label || "Get Your Free Estimate")}
+                  </button>
+                  {submitError ? (
+                    <p className="bw-form-note" style={{ color: "#c0392b", marginTop: 8 }}>{submitError}</p>
+                  ) : (
+                    <p className="bw-form-note">{data?.consent_text || "We respond within 24 hours. No spam, no obligation."}</p>
+                  )}
                 </form>
               )}
             </div>
@@ -638,6 +717,9 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
         .bw-multi-select-dropdown { display:none; position:absolute; top:calc(100% + 4px); left:0; right:0; max-height:240px; overflow-y:auto; z-index:20; background:#fff; border:1px solid rgba(30,43,67,.15); border-radius:6px; box-shadow:0 8px 24px rgba(0,0,0,.12); padding:6px 0; }
         .bw-multi-select-dropdown.bw-open { display:block; }
         .bw-multi-select-dropdown label { display:flex; align-items:center; gap:10px; margin:0; padding:8px 14px; font-size:14px; font-weight:400; letter-spacing:0; text-transform:none; cursor:pointer; }
+        .bw-multi-select-footer { position:sticky; bottom:0; display:flex; justify-content:flex-end; padding:8px 10px; background:#fff; border-top:1px solid rgba(30,43,67,.08); }
+        .bw-multi-select-done { background:#bc9155; color:#fff; border:none; border-radius:4px; padding:6px 14px; font-size:13px; font-weight:600; cursor:pointer; transition:background .2s; }
+        .bw-multi-select-done:hover { background:#a57d48; }
         .bw-multi-select-dropdown label:hover { background:rgba(188,145,85,.06); }
         .bw-multi-select-dropdown input[type="checkbox"] { appearance:none; -webkit-appearance:none; width:18px; height:18px; border:2px solid rgba(30,43,67,.25); border-radius:3px; position:relative; cursor:pointer; margin:0; flex-shrink:0; }
         .bw-multi-select-dropdown input[type="checkbox"]:checked { background:#bc9155; border-color:#bc9155; }

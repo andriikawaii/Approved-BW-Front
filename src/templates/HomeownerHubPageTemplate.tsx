@@ -124,9 +124,12 @@ const HUB_CSS = `[data-homeowner-hub-page]{--oxford-blue:#1e2b43;--gold:#bc9155;
 [data-homeowner-hub-page] .hub-prose-block{margin-top:36px}
 [data-homeowner-hub-page] .hub-prose-block h3,[data-homeowner-hub-page] .hub-callout h3{color:var(--oxford-blue);margin:0 0 20px;padding-bottom:12px;font-family:Playfair Display,serif;font-size:22px;text-align:center;position:relative}
 [data-homeowner-hub-page] .hub-prose-block h3::after{content:"";display:block;width:40px;height:2px;background:var(--gold);margin:10px auto 0;border-radius:2px}
-[data-homeowner-hub-page] .hub-cta-row{flex-wrap:wrap;justify-content:center;gap:12px;margin-top:32px;display:flex}
-[data-homeowner-hub-page] .hub-cta-btn{width:280px;color:var(--oxford-blue);background:#fff;border-radius:8px;justify-content:center;align-items:center;padding:14px 32px;font-size:15px;font-weight:600;text-decoration:none;transition:all .35s cubic-bezier(.4,0,.2,1);display:inline-flex;box-shadow:0 2px 8px #1e2b430f}
-[data-homeowner-hub-page] .hub-cta-btn:hover{color:#fff;background:var(--gold);transform:translateY(-3px);box-shadow:0 12px 24px rgba(188,145,85,0.25)}
+[data-homeowner-hub-page] .hub-cta-row{flex-wrap:wrap;justify-content:center;gap:14px;margin-top:32px;display:flex}
+[data-homeowner-hub-page] .hub-cta-btn{width:260px;border-radius:8px;justify-content:center;align-items:center;padding:14px 28px;font-size:15px;font-weight:600;text-decoration:none;transition:all .3s cubic-bezier(.4,0,.2,1);display:inline-flex;border:2px solid var(--gold)}
+[data-homeowner-hub-page] .hub-cta-row > span:first-of-type .hub-cta-btn{background:var(--gold);color:#fff}
+[data-homeowner-hub-page] .hub-cta-row > span:first-of-type .hub-cta-btn:hover{background:#a57d48;border-color:#a57d48;transform:translateY(-2px);box-shadow:0 10px 24px rgba(188,145,85,0.3)}
+[data-homeowner-hub-page] .hub-cta-row > span:not(:first-of-type) .hub-cta-btn{background:transparent;color:var(--gold)}
+[data-homeowner-hub-page] .hub-cta-row > span:not(:first-of-type) .hub-cta-btn:hover{background:var(--gold);color:#fff;transform:translateY(-2px);box-shadow:0 10px 24px rgba(188,145,85,0.25)}
 [data-homeowner-hub-page] .hub-callout{background:var(--cream);border-left:3px solid var(--gold);border-radius:8px;margin-top:40px;padding:28px 32px}
 [data-homeowner-hub-page] .hub-callout-copy p{margin-bottom:0;font-size:14px;line-height:1.85}
 [data-homeowner-hub-page] .hub-dark-section{background:linear-gradient(135deg,var(--oxford-blue)0%,#151e30 100%);color:#fff;position:relative;overflow:hidden}
@@ -149,7 +152,7 @@ const HUB_CSS = `[data-homeowner-hub-page]{--oxford-blue:#1e2b43;--gold:#bc9155;
 [data-homeowner-hub-page] .checklist-item:last-child{margin-bottom:0}
 [data-homeowner-hub-page] .checklist-item:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(30,43,67,0.08);border-left-color:var(--gold)}
 [data-homeowner-hub-page] .checklist-item:hover .checklist-num{background:var(--gold);color:#fff;border-color:var(--gold);box-shadow:0 4px 12px rgba(188,145,85,0.3)}
-[data-homeowner-hub-page] .checklist-num{border:2px solid var(--gold);width:52px;height:52px;color:var(--gold);background:#bc91551a;border-radius:50%;flex-shrink:0;justify-content:center;align-items:center;font-family:Playfair Display,serif;font-size:22px;font-weight:700;transition:all .3s;display:flex}
+[data-homeowner-hub-page] .checklist-num{border:2px solid var(--gold);width:52px;height:52px;color:var(--gold);background:#bc91551a;border-radius:50%;flex-shrink:0;justify-content:center;align-items:center;font-family:Playfair Display,serif;font-size:22px;font-weight:700;line-height:1;padding-bottom:2px;transition:all .3s;display:flex}
 [data-homeowner-hub-page] .checklist-content h3{color:var(--oxford-blue);margin:0 0 8px;font-family:Playfair Display,serif;font-size:20px;font-weight:700}
 [data-homeowner-hub-page] .checklist-content p{color:var(--slate-gray);margin:0;font-size:15px;line-height:1.8}
 [data-homeowner-hub-page] .hub-room-inner{max-width:800px;margin:0 auto;padding:0 32px}

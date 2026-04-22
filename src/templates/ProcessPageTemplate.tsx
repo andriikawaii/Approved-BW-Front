@@ -331,19 +331,19 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
               <span className="font-semibold text-white">Our Process</span>
             </li>
           </ol>
-          {/* Title — reference: clamp(40px, 4.5vw, 56px) */}
+          {/* Title , reference: clamp(40px, 4.5vw, 56px) */}
           <h1 className="fade-up mb-3 max-w-[900px] text-[clamp(40px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.5px] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]" style={{ ...fadeUpStyle, transitionDelay: "0.1s" }}>
             {heroParts.before}
             {heroParts.accent ? <span className="text-[#bc9155]">{heroParts.accent}</span> : null}
             {heroParts.after}
           </h1>
-          {/* Subtitle — 17px matching reference */}
+          {/* Subtitle , 17px matching reference */}
           {hero?.subheadline ? (
             <p className="fade-up mx-auto mt-4 max-w-[560px] text-center text-[17px] font-normal leading-[1.7] text-white/[0.82]" style={{ ...fadeUpStyle, transitionDelay: "0.2s" }}>
               {hero.subheadline}
             </p>
           ) : null}
-          {/* CTA buttons — reference style */}
+          {/* CTA buttons , reference style */}
           <div className="fade-up mt-8 flex flex-col items-center gap-[14px] sm:flex-row sm:justify-center" style={{ ...fadeUpStyle, transitionDelay: "0.3s" }}>
             <a href="#contact" className="w-[280px] rounded-[8px] border border-[#BC9155] bg-[#BC9155] px-8 py-[14px] text-center text-[15px] font-semibold text-white transition-[background,border-color,transform,box-shadow] duration-300 hover:-translate-y-[2px] hover:border-[#D4A95A] hover:bg-[#D4A95A] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]">
               Get Your Free Estimate
@@ -708,7 +708,7 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
         }
         .step-label {
           display: block;
-          margin: -20px auto 0;
+          margin: -68px auto 0;
           font-size: 96px;
           font-weight: 900;
           font-family: "Inter", sans-serif;
@@ -874,7 +874,7 @@ function ProcessAreasSection({
                     </p>
                   ) : null}
 
-                  {/* Town pills — first 2 rows gold hover, rest text-only hover */}
+                  {/* Town pills , first 2 rows gold hover, rest text-only hover */}
                   <div className="mt-5 grid grid-cols-4 gap-2 max-[767px]:grid-cols-3">
                     {towns.map((town: string, townIndex: number) => {
                       const hasLink = !!links[town];

@@ -75,7 +75,7 @@ function pickFinancingIcon(title?: string) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   STATIC FALLBACK DATA — matches financing.html reference exactly
+   STATIC FALLBACK DATA , matches financing.html reference exactly
    ═══════════════════════════════════════════════════════════════════ */
 
 const defaultHeroBadges = [
