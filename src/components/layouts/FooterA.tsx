@@ -81,6 +81,23 @@ function GoogleIcon() {
   );
 }
 
+function PhoneIcon() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+    </svg>
+  );
+}
+
+function MailIcon() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m3 7 9 6 9-6" />
+    </svg>
+  );
+}
+
 export default function FooterA({
   currentYear,
   phones,
@@ -105,24 +122,43 @@ export default function FooterA({
               />
             </Link>
 
+            <p className="footer-a-mobile-tagline">
+              The Last Contractor You&apos;ll <span>Hire.</span>
+            </p>
+
             <div className="footer-a-brand-details">
-              <a href={toTelHref(fairfieldPhone)}>{fairfieldPhone}</a>
-              <div className="footer-a-county">Fairfield County</div>
+              <div className="footer-a-row">
+                <span className="footer-a-row-icon" aria-hidden="true"><PhoneIcon /></span>
+                <div className="footer-a-row-text">
+                  <a href={toTelHref(fairfieldPhone)}>{fairfieldPhone}</a>
+                  <div className="footer-a-county">Fairfield County</div>
+                </div>
+              </div>
 
-              <a href={toTelHref(newHavenPhone)}>{newHavenPhone}</a>
-              <div className="footer-a-county footer-a-county-last">New Haven County</div>
+              <div className="footer-a-row">
+                <span className="footer-a-row-icon" aria-hidden="true"><PhoneIcon /></span>
+                <div className="footer-a-row-text">
+                  <a href={toTelHref(newHavenPhone)}>{newHavenPhone}</a>
+                  <div className="footer-a-county footer-a-county-last">New Haven County</div>
+                </div>
+              </div>
 
-              <a href={`mailto:${SUPPORT_EMAIL}`} className="footer-a-email">{SUPPORT_EMAIL}</a>
-              <a
-                href="https://www.google.com/maps/search/?api=1&query=206A+Boston+Post+Road,+Orange,+CT+06477"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-a-address"
-              >
-                206A Boston Post Road
-                <br />
-                Orange, CT 06477
-              </a>
+              <div className="footer-a-row">
+                <span className="footer-a-row-icon" aria-hidden="true"><MailIcon /></span>
+                <div className="footer-a-row-text">
+                  <a href={`mailto:${SUPPORT_EMAIL}`} className="footer-a-email">{SUPPORT_EMAIL}</a>
+                  <a
+                    href="https://www.google.com/maps/search/?api=1&query=206A+Boston+Post+Road,+Orange,+CT+06477"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="footer-a-address"
+                  >
+                    206A Boston Post Road
+                    <br />
+                    Orange, CT 06477
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -228,6 +264,19 @@ export default function FooterA({
         .footer-a-brand-details {
           margin-top: 18px;
           margin-left: 18px;
+        }
+        /* Default (desktop): rows are transparent, icons + mobile tagline hidden — preserves original layout */
+        .footer-a-row {
+          display: block;
+        }
+        .footer-a-row-icon {
+          display: none;
+        }
+        .footer-a-row-text {
+          display: block;
+        }
+        .footer-a-mobile-tagline {
+          display: none;
         }
         .footer-a-logo img {
           width: 150px;
@@ -417,110 +466,211 @@ export default function FooterA({
 
         @media (max-width: 768px) {
           .footer-a-inner {
-            padding: 48px 24px 80px;
+            padding: 44px 24px 36px;
           }
           .footer-a-grid {
             grid-template-columns: 1fr !important;
             gap: 0 !important;
           }
+          /* Brand block: centered logo, no border on mobile (the card carries weight) */
           .footer-a-brand {
-            align-items: flex-start !important;
-            text-align: left;
+            align-items: center !important;
+            text-align: center;
             padding-left: 0 !important;
-            padding-bottom: 36px;
+            padding-bottom: 0;
             margin-bottom: 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: none;
           }
           .footer-a-logo {
-            margin-left: -26px !important;
+            margin-left: 0 !important;
             margin-bottom: 0 !important;
+            align-self: center !important;
           }
           .footer-a-logo img {
-            width: 140px !important;
+            width: 152px !important;
           }
+          /* Mobile tagline — surfaced under logo, anchors the brand */
+          .footer-a-mobile-tagline {
+            display: block !important;
+            margin: 14px 0 0 !important;
+            font-family: var(--font-playfair), serif;
+            font-style: italic;
+            font-size: 18px;
+            line-height: 1.35;
+            letter-spacing: -0.005em;
+            color: #bc9155;
+            text-align: center;
+          }
+          .footer-a-mobile-tagline span {
+            color: #ffffff;
+          }
+          /* Brand details = stack of 3 standalone widget boxes (TextUsWidget style) */
+          .footer-a-brand-details {
+            margin-top: 20px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            width: 100%;
+            max-width: 320px;
+            background: none;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            box-shadow: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+          }
+          /* Rows = clean centered stack, no box — hairline dividers between rows */
+          .footer-a-row {
+            display: block !important;
+            padding: 0;
+            background: none;
+            border: none;
+            border-radius: 0;
+            text-align: center !important;
+            transition: none;
+          }
+          .footer-a-row + .footer-a-row {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+          }
+          /* Hide icon tiles — TextUsWidget doesn't have them */
+          .footer-a-row-icon {
+            display: none !important;
+          }
+          .footer-a-row-text {
+            min-width: 0;
+            line-height: 1.3;
+          }
+          /* Phone rows: county label ABOVE phone number, matching TextUsWidget order */
+          .footer-a-row:nth-of-type(1) .footer-a-row-text,
+          .footer-a-row:nth-of-type(2) .footer-a-row-text {
+            display: flex;
+            flex-direction: column-reverse;
+          }
+          /* Phone number — TextUsWidget proportions, slightly smaller */
           .footer-a-brand a[href^='tel:'] {
-            font-size: 18px !important;
+            font-size: 15px !important;
             font-weight: 600 !important;
             color: #ffffff !important;
             display: block !important;
             min-height: 0;
-            width: auto;
-            max-width: none;
             background: transparent;
             border: none;
             border-radius: 0;
             padding: 0;
-            margin-bottom: 1px !important;
-            letter-spacing: 0;
+            margin-bottom: 0 !important;
+            letter-spacing: -0.005em;
+            line-height: 1.25 !important;
           }
+          /* County label — gold accent, uppercase tracking, centered */
           .footer-a-county {
-            font-size: 12px !important;
-            color: rgba(255, 255, 255, 0.5) !important;
-            margin-bottom: 14px !important;
-            text-align: left;
+            display: block !important;
+            font-size: 10px !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1.2px !important;
+            color: #bc9155 !important;
+            margin-top: 0 !important;
+            margin-bottom: 3px !important;
+            text-align: center !important;
+            line-height: 1.2 !important;
           }
+          .footer-a-county-last {
+            margin-bottom: 3px !important;
+          }
+          /* Email + address — compact box */
           .footer-a-email {
-            font-size: 15px !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            color: #ffffff !important;
             min-height: 0;
             display: block !important;
-            margin-bottom: 6px !important;
+            margin-bottom: 2px !important;
+            line-height: 1.3 !important;
           }
           .footer-a-address {
-            font-size: 13px !important;
-            text-align: left;
-            line-height: 1.6 !important;
+            font-size: 11px !important;
+            color: rgba(255, 255, 255, 0.5) !important;
+            text-align: center !important;
+            line-height: 1.45 !important;
             min-height: 0;
             display: block !important;
           }
+          /* Link columns: centered + tight, separated from contact widgets by a thin divider above first col */
           .footer-a-col {
-            text-align: center;
-            padding: 28px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            text-align: center !important;
+            padding: 0 !important;
+            border-top: none !important;
+            width: 100%;
+            max-width: 320px;
+            justify-self: center !important;
+            margin-top: 22px;
           }
           .footer-a-col:first-of-type {
-            border-top: none;
-            padding-top: 32px;
+            margin-top: 28px;
+            padding-top: 22px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
           }
           .footer-a-col h4 {
-            margin-bottom: 16px;
-            font-size: 13px;
-            letter-spacing: 1.4px;
+            margin: 0 auto 14px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            color: #ffffff;
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+          }
+          .footer-a-col h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 28px;
+            height: 2px;
+            background: #bc9155;
+            border-radius: 1px;
           }
           .footer-a-col ul {
-            align-items: center;
-            gap: 2px;
+            align-items: center !important;
+            gap: 0 !important;
           }
           .footer-a-col :global(a.footer-a-link) {
-            font-size: 16px;
-            min-height: 48px;
+            font-size: 14px;
+            min-height: 0;
+            padding: 5px 0;
             display: inline-flex;
             align-items: center;
             justify-content: center;
           }
           .footer-a-social-row {
             justify-content: center !important;
-            gap: 18px !important;
-            margin-top: 24px !important;
-            padding-top: 20px;
+            gap: 14px !important;
+            margin-top: 28px !important;
+            padding-top: 24px;
             border-top: 1px solid rgba(255, 255, 255, 0.06);
           }
           .footer-a-social-row a {
-            min-height: 48px !important;
-            min-width: 48px !important;
+            min-height: 40px !important;
+            min-width: 40px !important;
             display: inline-flex !important;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            border: 1px solid rgba(188, 145, 85, 0.2);
-            padding: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 10px;
           }
           .footer-a-social-row :global(svg) {
-            width: 20px !important;
-            height: 20px !important;
+            width: 18px !important;
+            height: 18px !important;
           }
+          /* Hide the bottom tagline on mobile — it's surfaced under the logo via .footer-a-mobile-tagline */
           .footer-a-tagline {
-            font-size: 21px;
-            margin-top: 36px;
+            display: none !important;
           }
           .footer-a-bottom {
             flex-direction: column !important;
@@ -528,7 +678,7 @@ export default function FooterA({
             align-items: center !important;
             text-align: center;
             gap: 10px !important;
-            margin-top: 28px;
+            margin-top: 24px;
             padding-top: 22px;
             font-size: 12px;
             line-height: 1.6;

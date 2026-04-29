@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import TextUsWidget from './TextUsWidget';
+import StickyEstimateCta from './StickyEstimateCta';
 
 export default function Layout({
   children,
@@ -14,6 +15,7 @@ export default function Layout({
       <Header />
       <main>{children}</main>
       <TextUsWidget />
+      <StickyEstimateCta />
       <Footer currentYear={currentYear} />
     </>
   );

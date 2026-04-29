@@ -856,7 +856,7 @@ export function OrangeCTPageTemplate({ page }: { page: CMSPage }) {
               <FadeUp>
                 <div className="gwc-section-header">
                   <SectionLabel text={office.eyebrow} dark />
-                  <h2 className="gwc-h2 gwc-h2-light">
+                  <h2 className="gwc-h2">
                     <TitleWithAccent title={office.title} accent="Headquarters" />
                   </h2>
                 </div>
