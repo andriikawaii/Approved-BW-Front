@@ -196,8 +196,8 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
             })()}
           </div>
           <div className="fade-up">
-            <p>{introData?.paragraphs?.[0] || "BuiltWell maintains a 4.9 Google rating, and our founder brings 100+ insurance restoration projects across Fairfield and New Haven County into the BuiltWell brand, with consistent feedback on punctuality, communication, and quality."}</p>
-            <p>{introData?.paragraphs?.[1] || "A remodeling contractor's reputation is built project by project, on whether we showed up when we said we would, communicated clearly when something changed, and handed over work that matched what was agreed on. The feedback below will reflect that as our first BuiltWell-branded projects wrap up across Connecticut."}</p>
+            <p>{introData?.paragraphs?.[0] || "BuiltWell CT operates with a 4.9 Google rating and a track record of 100+ restoration projects led by our founder across Fairfield and New Haven County, with consistent feedback on punctuality, communication, and quality."}</p>
+            <p>{introData?.paragraphs?.[1] || "A remodeling contractor's reputation is built project by project, on whether we showed up when we said we would, communicated clearly when something changed, and handed over work that matched what was agreed on. Project testimonials are added here as each Connecticut remodeling project completes."}</p>
           </div>
         </div>
       </section>
@@ -211,7 +211,7 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
               const tp = parts(testimonialsData?.title || "Project Testimonials", testimonialsData?.title_highlight || "Testimonials");
               return <h2 className="font-serif font-bold">{tp.before}<span className="text-[#bc9155]">{tp.accent}</span>{tp.after}</h2>;
             })()}
-            <p>{testimonialsData?.subtitle || "Detailed project testimonials will be published here as each project completes. BuiltWell CT is a brand-new Connecticut remodeling company built on 15+ years of remodeling and restoration experience — our first projects under the BuiltWell name are wrapping up across Fairfield and New Haven Counties right now."}</p>
+            <p>{testimonialsData?.subtitle || "Detailed project testimonials will be published here as each project completes. BuiltWell CT brings 15+ years of remodeling and restoration experience to every project across Fairfield and New Haven Counties."}</p>
           </div>
 
           {testimonials.length > 0 ? (
@@ -270,7 +270,7 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
               return <h2 className="font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px] text-[#1E2B43]">{fp.before}<span className="text-[#bc9155]">{fp.accent}</span>{fp.after}</h2>;
             })()}
             <p className="mx-auto mt-4 max-w-[720px] text-[17px] leading-[1.75] text-[#5C677D]">
-              {feedbackData?.intro_paragraphs?.[0] || "Across 100+ insurance restoration projects led by our founder, three themes have appeared consistently in homeowner feedback: on-time arrival, daily communication, and clean job sites throughout construction. We are carrying those same standards into every BuiltWell-branded project."}
+              {feedbackData?.intro_paragraphs?.[0] || "Across 100+ insurance restoration projects led by our founder, three themes have appeared consistently in homeowner feedback: on-time arrival, daily communication, and clean job sites throughout construction — the same standards we carry into every Connecticut remodeling project."}
             </p>
           </div>
           <div className="grid gap-8 lg:grid-cols-3">
