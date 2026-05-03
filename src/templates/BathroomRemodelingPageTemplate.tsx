@@ -393,7 +393,7 @@ const defaultSections: CMSSection[] = [
           question:
             "Do you offer financing for bathroom remodeling projects?",
           answer:
-            "Yes. We offer flexible financing through GreenSky, which allows you to get approved in about 60 seconds and start your project right away. Financing options include low monthly payments and promotional periods depending on the plan you choose. Many homeowners use financing to move forward with higher-quality materials or a broader scope of work than they would with cash alone. We can walk you through the options during your consultation so you have a clear picture of both the project cost and the monthly payment before you commit to anything.",
+            "Yes. We offer flexible financing through GreenSky, which allows you to get approved in about 60 seconds (through GreenSky, subject to credit approval) and start your project right away. Financing options include low monthly payments and promotional periods depending on the plan you choose. Many homeowners use financing to move forward with higher-quality materials or a broader scope of work than they would with cash alone. We can walk you through the options during your consultation so you have a clear picture of both the project cost and the monthly payment before you commit to anything.",
         },
       ],
     },

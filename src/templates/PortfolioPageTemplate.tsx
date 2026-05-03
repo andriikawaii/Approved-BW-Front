@@ -120,7 +120,7 @@ export function PortfolioPageTemplate({ page }: { page: CMSPage }) {
   const financingTitle = (financing?.title || "Flexible Financing Available").replace(/\.+$/, "");
   const financingContent = (typeof financing?.content === "string" ? financing.content : "")
     .replace(/<[^>]+>/g, "")
-    .trim() || "Get approved in about 60 seconds and start your project today.";
+    .trim() || "Get approved in about 60 seconds (through GreenSky, subject to credit approval) and start your project today.";
   const financingCtaLabel = financing?.cta?.label || "Check Financing Options";
   const financingCtaUrl = financing?.cta?.url || "https://www.greensky.com";
 

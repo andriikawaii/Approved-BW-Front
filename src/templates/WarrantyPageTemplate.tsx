@@ -184,7 +184,7 @@ export function WarrantyPageTemplate({ page }: { page: CMSPage }) {
   const financingTitle = financingData?.title || "Flexible Financing Available";
   const financingText = typeof financingData?.content === "string"
     ? financingData.content.replace(/<[^>]+>/g, "")
-    : "Get approved in about 60 seconds and start your project today.";
+    : "Get approved in about 60 seconds (through GreenSky, subject to credit approval) and start your project today.";
   const financingCtaLabel = financingData?.cta?.label || "Check Financing Options";
   const financingCtaUrl = financingData?.cta?.url || "https://www.greensky.com";
 

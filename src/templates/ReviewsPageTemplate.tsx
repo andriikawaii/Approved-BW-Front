@@ -46,48 +46,7 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
   const hp = parts(heroTitle, hero?.title_highlight || "CT");
   const heroSubtitle = hero?.subtitle || hero?.subheadline || "Real projects, real feedback from homeowners across Fairfield and New Haven County.";
 
-  const testimonials = testimonialsData?.cards || [
-    {
-      quote: "We were devastated when we saw the damage. BuiltWell took everything off our plate.",
-      author: "Homeowner",
-      location: "Hamden, CT",
-      badge: "Whole-Home Restoration",
-      description: 'This homeowner needed coordinated work across multiple trades following significant interior damage. We managed the full scope, including <a href="/flooring/">flooring</a> replacement, <a href="/bathroom-remodeling/">bathroom</a> restoration, drywall repair, and <a href="/interior-painting/">repainting</a>, so they didn\'t have to coordinate between contractors during an already difficult time. The project was completed in five weeks.',
-      case_study_url: "/case-studies/whole-home-restoration-hamden/",
-    },
-    {
-      quote: "We should have done this ten years ago.",
-      author: "Homeowner",
-      location: "Darien, CT",
-      badge: "Basement Finishing",
-      description: 'This homeowner\'s basement had been raw storage space for years. We finished 850 square feet into usable living area, installed LVP <a href="/flooring/">flooring</a> throughout, and added an egress window to meet code requirements. The project came in on schedule at six weeks.',
-      case_study_url: "/case-studies/basement-finishing-darien/",
-    },
-    {
-      quote: "Four weeks of construction, and now I have the bathroom I've been dreaming about.",
-      author: "Homeowner",
-      location: "Westport, CT",
-      badge: "Bathroom Remodeling",
-      description: "This project was a complete gut renovation: everything out, everything new. New tile, new fixtures, new layout. Four weeks from first day of demolition to final walkthrough.",
-      case_study_url: "/case-studies/bathroom-remodeling-westport/",
-    },
-    {
-      quote: "BuiltWell made it straightforward. Now we can't imagine how we lived before.",
-      author: "Homeowner",
-      location: "New Canaan, CT",
-      badge: "Kitchen Remodeling",
-      description: 'This homeowner wanted a <a href="/kitchen-remodeling/">kitchen</a> that worked better for their household: new cabinets, countertops, layout adjustments, and updated <a href="/flooring/">flooring</a> throughout. The project ran ten weeks, which included lead time for custom cabinet fabrication.',
-      case_study_url: "/case-studies/kitchen-remodeling-new-canaan/",
-    },
-    {
-      quote: "BuiltWell made it easy. They showed up when they said they would, cleaned up every day.",
-      author: "Homeowner",
-      location: "Milford, CT",
-      badge: "Kitchen Remodeling",
-      description: 'This <a href="/kitchen-remodeling/">kitchen remodel</a> included new cabinets, countertops, appliances, and LVP <a href="/flooring/">flooring</a> extended through the adjacent living space. Six weeks, on schedule, with daily cleanup that kept the rest of her home livable throughout construction.',
-      case_study_url: "/case-studies/kitchen-remodeling-milford/",
-    },
-  ];
+  const testimonials = testimonialsData?.cards || [];
 
   const feedbackSections = feedbackData?.subsections || [
     { title: "Showing Up on Schedule", content: "Showing up on schedule is a basic commitment, but it is also one that a significant portion of the industry does not keep. When a crew does not arrive when expected, it is not just an inconvenience; it creates uncertainty about the whole project, including the finish date. We keep a schedule because we respect that you have made plans around it. That consistency is part of how we work, not a special effort we make for some customers and not others." },
@@ -237,8 +196,8 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
             })()}
           </div>
           <div className="fade-up">
-            <p>{introData?.paragraphs?.[0] || "BuiltWell maintains a 4.9 Google rating across 100+ completed remodeling projects in Fairfield and New Haven County, with consistent feedback on punctuality, communication, and quality."}</p>
-            <p>{introData?.paragraphs?.[1] || "A remodeling contractor's reputation is built project by project, on whether we showed up when we said we would, communicated clearly when something changed, and handed over work that matched what was agreed on. The feedback below reflects that. These are real projects completed for real homeowners across Connecticut."}</p>
+            <p>{introData?.paragraphs?.[0] || "BuiltWell maintains a 4.9 Google rating, and our founder brings 100+ insurance restoration projects across Fairfield and New Haven County into the BuiltWell brand, with consistent feedback on punctuality, communication, and quality."}</p>
+            <p>{introData?.paragraphs?.[1] || "A remodeling contractor's reputation is built project by project, on whether we showed up when we said we would, communicated clearly when something changed, and handed over work that matched what was agreed on. The feedback below will reflect that as our first BuiltWell-branded projects wrap up across Connecticut."}</p>
           </div>
         </div>
       </section>
@@ -252,27 +211,29 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
               const tp = parts(testimonialsData?.title || "Project Testimonials", testimonialsData?.title_highlight || "Testimonials");
               return <h2 className="font-serif font-bold">{tp.before}<span className="text-[#bc9155]">{tp.accent}</span>{tp.after}</h2>;
             })()}
-            <p>{testimonialsData?.subtitle || "Every testimonial below is tied to a documented project with a specific scope, timeline, and location across Fairfield and New Haven County, Connecticut. We link to the full case study for each one so you can read the details, not just the quote."}</p>
+            <p>{testimonialsData?.subtitle || "Detailed project testimonials will be published here as each project completes. BuiltWell CT is a brand-new Connecticut remodeling company built on 15+ years of remodeling and restoration experience — our first projects under the BuiltWell name are wrapping up across Fairfield and New Haven Counties right now."}</p>
           </div>
 
-          {testimonials.map((t: any, i: number) => (
-            <div key={i} className="rv-card fade-up">
-              <div className="rv-card-quote">
-                <svg className="rv-quote-icon" width="32" height="32" viewBox="0 0 24 24" fill="#BC9155" aria-hidden="true"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-                <blockquote>
-                  <p>{t.quote}</p>
-                  <cite>{t.author || "Homeowner"}, {t.location}</cite>
-                </blockquote>
-              </div>
-              <div className="rv-card-details">
-                <div className="rv-card-meta">
-                  <span className="rv-badge">{t.badge}</span>
-                  <span className="rv-location">{t.location}</span>
+          {testimonials.length > 0 ? (
+            testimonials.map((t: any, i: number) => (
+              <div key={i} className="rv-card fade-up">
+                <div className="rv-card-quote">
+                  <svg className="rv-quote-icon" width="32" height="32" viewBox="0 0 24 24" fill="#BC9155" aria-hidden="true"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                  <blockquote>
+                    <p>{t.quote}</p>
+                    <cite>{t.author || "Homeowner"}, {t.location}</cite>
+                  </blockquote>
                 </div>
-                <p dangerouslySetInnerHTML={{ __html: t.description }} />
+                <div className="rv-card-details">
+                  <div className="rv-card-meta">
+                    <span className="rv-badge">{t.badge}</span>
+                    <span className="rv-location">{t.location}</span>
+                  </div>
+                  <p dangerouslySetInnerHTML={{ __html: t.description }} />
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : null}
         </div>
       </section>
 
@@ -309,7 +270,7 @@ export function ReviewsPageTemplate({ page }: { page: CMSPage }) {
               return <h2 className="font-serif text-[clamp(28px,3.5vw,44px)] font-bold tracking-[-0.5px] text-[#1E2B43]">{fp.before}<span className="text-[#bc9155]">{fp.accent}</span>{fp.after}</h2>;
             })()}
             <p className="mx-auto mt-4 max-w-[720px] text-[17px] leading-[1.75] text-[#5C677D]">
-              {feedbackData?.intro_paragraphs?.[0] || "Across 100+ completed projects in Connecticut, three themes appear in nearly every BuiltWell review: on-time arrival, daily communication, and clean job sites throughout construction."}
+              {feedbackData?.intro_paragraphs?.[0] || "Across 100+ insurance restoration projects led by our founder, three themes have appeared consistently in homeowner feedback: on-time arrival, daily communication, and clean job sites throughout construction. We are carrying those same standards into every BuiltWell-branded project."}
             </p>
           </div>
           <div className="grid gap-8 lg:grid-cols-3">

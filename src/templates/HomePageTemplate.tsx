@@ -2018,7 +2018,7 @@ export function HomePageTemplate({ page }: { page: CMSPage }) {
 
       {/* 11. Trust + Financing strip */}
       <HomeTrustStrip />
-      <SharedFinancingStrip data={{ title: "Flexible Financing Available", content: "Get approved in about 60 seconds and start your project today.", cta: { url: "https://www.greensky.com", label: "Check Financing Options" } }} />
+      <SharedFinancingStrip data={{ title: "Flexible Financing Available", content: "Get approved in about 60 seconds (through GreenSky, subject to credit approval) and start your project today.", cta: { url: "https://www.greensky.com", label: "Check Financing Options" } }} />
       <style jsx global>{`
         .home-fade-up {
           opacity: 0;

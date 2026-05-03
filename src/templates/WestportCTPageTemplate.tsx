@@ -939,7 +939,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
         }} accent="Consultation" />
 
         {/* ── 16. FINANCING STRIP ─────────────────────────────────────── */}
-        <SharedFinancingStrip data={{ title: "Flexible Financing Available", content: "Get approved in about 60 seconds and start your project today.", cta: { url: "/financing/", label: "Check Financing Options" } }} />
+        <SharedFinancingStrip data={{ title: "Flexible Financing Available", content: "Get approved in about 60 seconds (through GreenSky, subject to credit approval) and start your project today.", cta: { url: "/financing/", label: "Check Financing Options" } }} />
 
       </main>
 

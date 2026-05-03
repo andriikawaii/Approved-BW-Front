@@ -179,7 +179,7 @@ const HUB_CSS = `[data-homeowner-hub-page]{--oxford-blue:#1e2b43;--gold:#bc9155;
 [data-homeowner-hub-page] .resource-card-icon svg{width:22px;height:22px}
 [data-homeowner-hub-page] .resource-card h3{color:var(--oxford-blue);margin:0;font-family:Playfair Display,serif;font-size:20px}
 [data-homeowner-hub-page] .resource-card-desc{color:var(--slate-gray);margin:0;font-size:14px;line-height:1.75}
-[data-homeowner-hub-page] .resource-arrow{color:var(--gold);align-items:center;gap:6px;font-size:14px;font-weight:600;display:inline-flex}
+[data-homeowner-hub-page] .resource-arrow{color:var(--gold);align-items:center;gap:6px;font-size:14px;font-weight:600;display:inline-flex;margin-top:auto;justify-content:center}
 [data-homeowner-hub-page] .resource-arrow svg{width:14px;height:14px}
 [data-homeowner-hub-page] .trust-strip{background:linear-gradient(135deg,var(--oxford-blue)0%,#151e30 100%);padding:56px 40px;position:relative;overflow:hidden}
 [data-homeowner-hub-page] .trust-strip:before{content:"";opacity:.12;background:url(/hero/builtwell-job-site-aerial-hero-ct.jpg) 50%/cover no-repeat;position:absolute;inset:0}

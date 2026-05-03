@@ -47,7 +47,7 @@ const defaultTrustStrip = [
 
 const defaultFinancing = {
   title: "Flexible Financing Available",
-  content: "Get approved in about 60 seconds and start your project today.",
+  content: "Get approved in about 60 seconds (through GreenSky, subject to credit approval) and start your project today.",
   cta: { label: "Check Financing Options", url: "https://www.greensky.com" },
 };
 
@@ -228,7 +228,7 @@ const referenceFaq = [
   {
     question: "Do you offer financing options?",
     answer:
-      "Yes. We partner with GreenSky to offer flexible financing options for qualified homeowners. You can get approved in about 60 seconds and choose from a variety of payment plans. Financing details are available during the proposal stage so you can factor monthly payments into your decision. We are happy to walk you through the options during your consultation.",
+      "Yes. We partner with GreenSky to offer flexible financing options for qualified homeowners. You can get approved in about 60 seconds (through GreenSky, subject to credit approval) and choose from a variety of payment plans. Financing details are available during the proposal stage so you can factor monthly payments into your decision. We are happy to walk you through the options during your consultation.",
   },
   {
     question: "How do you handle material selections and ordering?",

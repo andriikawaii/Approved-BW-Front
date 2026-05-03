@@ -523,46 +523,7 @@ export function CaseStudiesPageTemplate({ page }: { page: CMSPage }) {
   const contentBlocks = rich.filter((item) => item.style_variant !== "financing_strip");
   const intro = contentBlocks[0];
   const rawCards = contentBlocks.slice(1).map(parseCaseStudy);
-  const filtered = rawCards.filter((card) => !card.title.includes("Milford") && !card.title.includes("Primary Bathroom"));
-  /* Replace the remaining Westport bathroom with deck, add a screened porch card */
-  const cards = [
-    {
-      title: "Whole-Home Restoration , Hamden",
-      summary: filtered.find((c) => c.title.includes("Hamden"))?.summary || "Complete interior restoration after water damage. New flooring, drywall, paint, and bathroom remodel across the entire first and second floor.",
-      timeline: filtered.find((c) => c.title.includes("Hamden"))?.timeline || "5 weeks",
-      badge: filtered.find((c) => c.title.includes("Hamden"))?.badge || "Full Restoration",
-      quote: filtered.find((c) => c.title.includes("Hamden"))?.quote || "We were devastated when we saw the damage. BuiltWell took everything off our plate.",
-      attribution: "Hamden Homeowner",
-      link: "/case-studies/",
-    },
-    {
-      title: "Basement Finishing , Darien",
-      summary: filtered.find((c) => c.title.includes("Darien"))?.summary || "850 square feet of unfinished basement converted to recreation room, home office, and full bathroom with egress window.",
-      timeline: filtered.find((c) => c.title.includes("Darien"))?.timeline || "6 weeks",
-      badge: filtered.find((c) => c.title.includes("Darien"))?.badge || "850 sq ft",
-      quote: filtered.find((c) => c.title.includes("Darien"))?.quote || "We should have done this ten years ago.",
-      attribution: "Darien Resident",
-      link: "/case-studies/",
-    },
-    {
-      title: "Kitchen Remodeling , New Canaan",
-      summary: filtered.find((c) => c.title.includes("New Canaan"))?.summary || "A New Canaan family wanted to open up a kitchen closed off by a load-bearing wall. We engineered a beam solution, installed white shaker cabinets with a quartz island, and extended hardwood flooring.",
-      timeline: filtered.find((c) => c.title.includes("New Canaan"))?.timeline || "10 weeks",
-      badge: filtered.find((c) => c.title.includes("New Canaan"))?.badge || "Full Gut Remodel",
-      quote: filtered.find((c) => c.title.includes("New Canaan"))?.quote || "BuiltWell made it straightforward. Now we can not imagine how we lived before.",
-      attribution: "New Canaan Homeowner",
-      link: "/case-studies/",
-    },
-    {
-      title: "Deck Build , Shelton",
-      summary: "A Shelton homeowner needed their old deck torn down and rebuilt from the ground up. Our crew set new posts, framed the structure, and decked it over the course of a week. New footings poured to the 42-inch frost line, all framing pressure-treated to code.",
-      timeline: "1 week",
-      badge: "Composite Deck",
-      quote: "We use the deck every evening now. The composite was the right call for zero maintenance.",
-      attribution: "Shelton Homeowner",
-      link: "/decks-porches/",
-    },
-  ];
+  const cards = rawCards.filter((card) => card.title && !card.title.includes("Milford") && !card.title.includes("Primary Bathroom"));
 
   return (
     <div className="bg-white text-[#1E2B43]">
@@ -570,7 +531,7 @@ export function CaseStudiesPageTemplate({ page }: { page: CMSPage }) {
         <HeroSection hero={hero} phones={phones} />
         <StatsBar data={statsBar} />
         <IntroSection data={intro} />
-        <CaseStudyGrid cards={cards} />
+        {cards.length > 0 ? <CaseStudyGrid cards={cards} /> : null}
         <TrustStrip data={linkStrip} />
         <SharedLeadFormSection page={page} data={lead} accent={lead?.title_highlight || "Remodeling Project"} />
         <SharedFinancingStrip data={financing} />

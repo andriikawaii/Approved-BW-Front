@@ -963,7 +963,7 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
             <span style={{ fontWeight: 700, fontSize: 24, letterSpacing: '-0.3px' }}>
               <span style={{ color: '#6BBF4E' }}>Green</span><span style={{ color: '#1E2B43' }}>Sky</span>
             </span>
-            <p style={{ fontSize: 16, color: '#5C677D', lineHeight: 1.6 }}><strong style={{ color: '#1E2B43' }}>Flexible Financing Available.</strong> Get approved in about 60 seconds and start your project today.</p>
+            <p style={{ fontSize: 16, color: '#5C677D', lineHeight: 1.6 }}><strong style={{ color: '#1E2B43' }}>Flexible Financing Available.</strong> Get approved in about 60 seconds (through GreenSky, subject to credit approval) and start your project today.</p>
           </div>
           <a href="https://www.greensky.com" target="_blank" rel="noopener noreferrer" className="financing-strip-cta" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, minWidth: 280, minHeight: 52, padding: '14px 32px', borderRadius: 8, fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 15, background: '#BC9155', color: '#fff', letterSpacing: '0.3px', whiteSpace: 'nowrap', textDecoration: 'none', transition: 'background 0.2s, transform 0.2s, box-shadow 0.2s', border: 'none' }}>
             Check Financing Options <ArrowIcon />

@@ -1249,6 +1249,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             </div>
           </div>
         </section>
+        {(caseStudies?.projects || []).length > 0 ? (
         <section className="border-t border-t-[#1E2B43]/8 bg-[#F5F1E9] px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
           <div className="mx-auto max-w-[1240px]">
             <div className="mb-12 text-center">
@@ -1316,6 +1317,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             </div>
           </div>
         </section>
+        ) : null}
         <section className="border-t border-t-[#1E2B43]/8 bg-white px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
           <div className="mx-auto max-w-[1240px]">
             <div className="mb-10 text-center">

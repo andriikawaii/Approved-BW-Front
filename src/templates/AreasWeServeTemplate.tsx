@@ -1232,20 +1232,21 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
 
         .areas-page .where-we-work, .areas-page .areas-services-section { background:var(--cream); }
         .areas-page .areas-services-section { padding-top:60px; padding-bottom:60px; }
-        .areas-page .areas-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:start; }
-        .areas-page .area-card { background:#fff; border-radius:12px; overflow:hidden; border-bottom:3px solid transparent; box-shadow:0 2px 12px rgba(30,43,67,.06),0 1px 3px rgba(30,43,67,.04); transition:.35s cubic-bezier(.4,0,.2,1); position:relative; display:flex; flex-direction:column; }
+        .areas-page .areas-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:stretch; }
+        .areas-page .area-card { background:#fff; border-radius:12px; overflow:hidden; border-bottom:3px solid transparent; box-shadow:0 2px 12px rgba(30,43,67,.06),0 1px 3px rgba(30,43,67,.04); transition:.35s cubic-bezier(.4,0,.2,1); position:relative; display:flex; flex-direction:column; height:100%; }
         .areas-page .area-card:hover { transform:translateY(-6px); border-bottom-color:var(--gold); box-shadow:0 16px 40px rgba(30,43,67,.1),0 32px 64px rgba(30,43,67,.08); }
-        .areas-page .area-card-img { height:220px; position:relative; overflow:hidden; }
+        .areas-page .area-card-img { height:220px; position:relative; overflow:hidden; flex-shrink:0; }
         .areas-page .area-card-img:after { content:""; position:absolute; left:0; right:0; bottom:0; height:80px; background:linear-gradient(to top,rgba(30,43,67,.4),transparent); }
         .areas-page .area-card-img img { width:100%; height:100%; object-fit:cover; transition:transform .5s; }
         .areas-page .area-card:hover .area-card-img img { transform:scale(1.05); }
         .areas-page .area-card-img img.show-top { object-position:top; }
-        .areas-page .area-card-body { padding:28px 28px 32px; text-align:center; }
+        .areas-page .area-card-body { padding:28px 28px 32px; text-align:center; flex:1; display:flex; flex-direction:column; }
         .areas-page .area-card-body h3 { margin-bottom:6px; font:700 24px/1.2 "Playfair Display",serif; color:var(--oxford-blue); }
         .areas-page .area-card-phone { margin-bottom:14px; font-size:15px; color:var(--slate); }
         .areas-page .area-card-phone a { color:var(--gold); font-weight:600; }
-        .areas-page .area-card-desc { margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid rgba(30,43,67,.06); font-size:14px; line-height:1.7; color:var(--slate); flex:1; }
-        .areas-page .area-towns { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
+        .areas-page .area-card-desc { margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid rgba(30,43,67,.06); font-size:14px; line-height:1.7; color:var(--slate); }
+        .areas-page .area-towns { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; flex:1; align-content:start; }
+        .areas-page .area-link { margin-top:auto; }
         .areas-page .area-town { background:var(--cream); border-radius:50px; padding:7px 10px; text-align:center; font-size:11px; font-weight:600; letter-spacing:.2px; color:var(--oxford-blue); text-decoration:none; white-space:nowrap; transition:.2s; }
         .areas-page .area-town:hover { background:var(--gold-light); color:var(--gold-dark); }
         .areas-page a.area-town:hover { background:var(--gold); color:#fff; }

@@ -187,7 +187,7 @@ const defaultLeadForm = {
 const defaultFinancingStrip = {
   style_variant: "financing_strip",
   title: "Flexible Financing Available",
-  content: "Get approved in about 60 seconds and start your project today.",
+  content: "Get approved in about 60 seconds (through GreenSky, subject to credit approval) and start your project today.",
   cta: { label: "Check Financing Options", url: "https://www.greensky.com" },
 };
 

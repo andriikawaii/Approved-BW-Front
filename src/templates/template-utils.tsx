@@ -339,8 +339,8 @@ export function AreasSection({ data }: { data: any }) {
         .bw-areas-subtitle-link { color:#bc9155; font-weight:600; text-decoration:none !important; transition:color .2s; }
         .bw-areas-subtitle-link:hover, .bw-areas-subtitle-link:focus-visible { color:#9a7340; text-decoration:none !important; }
         .bw-gold { color:#bc9155; }
-        .bw-areas-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:start; }
-        .bw-area-card { background:#fff; border-radius:12px; overflow:hidden; border-bottom:3px solid transparent; box-shadow:0 2px 12px rgba(30,43,67,.06),0 1px 3px rgba(30,43,67,.04); transition:all .35s cubic-bezier(.4,0,.2,1); position:relative; display:flex; flex-direction:column; }
+        .bw-areas-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:stretch; }
+        .bw-area-card { background:#fff; border-radius:12px; overflow:hidden; border-bottom:3px solid transparent; box-shadow:0 2px 12px rgba(30,43,67,.06),0 1px 3px rgba(30,43,67,.04); transition:all .35s cubic-bezier(.4,0,.2,1); position:relative; display:flex; flex-direction:column; height:100%; }
         .bw-area-card:hover { transform:translateY(-6px); border-bottom-color:#bc9155; box-shadow:0 16px 40px rgba(30,43,67,.1),0 32px 64px rgba(30,43,67,.08); }
         .bw-area-card-img { width:100%; height:220px; overflow:hidden; position:relative; }
         .bw-area-card-img::after { content:""; position:absolute; bottom:0; left:0; right:0; height:80px; background:linear-gradient(to top,rgba(30,43,67,.4),transparent); pointer-events:none; }
@@ -353,7 +353,7 @@ export function AreasSection({ data }: { data: any }) {
         .bw-area-card-phone a { color:#bc9155; font-weight:600; text-decoration:none; }
         .bw-area-card-phone a:hover { text-decoration:underline; }
         .bw-area-card-desc { font-size:14px; line-height:1.7; color:#5c677d; margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid rgba(30,43,67,.06); min-height:120px; }
-        .bw-area-towns { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
+        .bw-area-towns { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; flex:1; align-content:start; }
         .bw-area-town { font-size:11px; font-weight:600; color:#1e2b43; background:#f5f1e9; padding:7px 10px; border-radius:50px; text-align:center; letter-spacing:.2px; transition:all .2s; white-space:nowrap; text-decoration:none; }
         .bw-area-town:hover { background:#e8dcc4; color:#9a7340; }
         a.bw-area-town:hover { background:#bc9155; color:#fff; }
