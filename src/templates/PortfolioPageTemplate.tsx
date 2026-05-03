@@ -8,7 +8,7 @@ import { usePageData } from "@/src/context/PageDataContext";
 
 const fallbackTopTrust = [
   { value: "15+", label: "Years of Experience" },
-  { value: "100+", label: "Completed Projects" },
+  { value: "100+", label: "Restoration Projects" },
   { value: "4.9", label: "Google Rating", url: "https://www.google.com/maps/search/?api=1&query=BuiltWell+CT,+206A+Boston+Post+Road,+Orange,+CT+06477" },
   { icon: "shield", label: "Fully Bonded and Insured" },
 ];
@@ -20,44 +20,13 @@ const fallbackTrustStrip = [
   { icon: "verified", label: "Verified on Angi", url: "https://www.angi.com/companylist/us/ct/orange/builtwell-ct-reviews-" },
 ];
 
-const fallbackGalleries = [
-  {
-    eyebrow: "Before and After",
-    title: "Kitchen Remodeling in CT",
-    title_highlight: "in CT",
-    subtitle:
-      "BuiltWell CT has completed 3 kitchen remodeling projects shown here, ranging from $28,000 to $65,000, with timelines of 3 to 6 weeks across Fairfield and New Haven Counties. Our kitchen renovations include cabinet replacement, countertop installation, and complete gut remodels with layout changes.",
-    items: [
-      { image: "/images/before-after/kitchen-before-after-1.jpg", alt: "BuiltWell CT kitchen remodeling in New Canaan, Connecticut" },
-      { image: "/images/before-after/kitchen-before-after-2.jpg", alt: "BuiltWell CT kitchen renovation in Milford, Connecticut" },
-      { image: "/images/before-after/kitchen-before-after-3.jpg", alt: "BuiltWell CT luxury kitchen remodel in Westport, Connecticut" },
-    ],
-  },
-  {
-    eyebrow: "Before and After",
-    title: "Bathroom Remodeling in CT",
-    title_highlight: "in CT",
-    subtitle:
-      "BuiltWell CT has completed 3 bathroom remodeling projects shown here, ranging from $15,000 to $42,000, with timelines of 2 to 4 weeks in towns like Westport, Hamden, and New Canaan. Our bathroom renovations include tile, vanities, showers, tubs, and plumbing upgrades for Connecticut homeowners.",
-    items: [
-      { image: "/images/before-after/bathroom-renovation-1.jpg", alt: "BuiltWell CT primary bathroom remodel in Westport, Connecticut" },
-      { image: "/images/before-after/bathroom-renovation-2.jpg", alt: "BuiltWell CT bathroom renovation in Hamden, Connecticut" },
-      { image: "/images/before-after/bathroom-renovation-3.jpg", alt: "BuiltWell CT guest bathroom update in Fairfield, Connecticut" },
-    ],
-  },
-  {
-    eyebrow: "Before and After",
-    title: "Basement Finishing in CT",
-    title_highlight: "in CT",
-    subtitle:
-      "BuiltWell CT has completed 3 basement finishing projects shown here, ranging from $22,000 to $55,000, with timelines of 4 to 8 weeks in Darien, Orange, and Norwalk, Connecticut. Our basement conversions include framing, insulation, electrical, flooring, egress windows, and full finish work.",
-    items: [
-      { image: "/images/before-after/basement-renovation-1.jpg", alt: "BuiltWell CT basement finishing into playroom in Darien, Connecticut" },
-      { image: "/images/before-after/basement-renovation-2.jpg", alt: "BuiltWell CT basement bedroom conversion in Hamden, Connecticut" },
-      { image: "/images/before-after/basement-renovation-3.jpg", alt: "BuiltWell CT basement laundry room finishing in Westport, Connecticut" },
-    ],
-  },
-];
+const fallbackGalleries: Array<{
+  eyebrow: string;
+  title: string;
+  title_highlight?: string;
+  subtitle?: string;
+  items: Array<{ image: string; alt: string }>;
+}> = [];
 
 function telHref(number: string) {
   return `tel:${number.replace(/\D/g, "")}`;
@@ -703,6 +672,7 @@ export function PortfolioPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
+      {galleryItems.length > 0 ? (
       <section className="section gallery-section">
         <div className="section-inner">
           {galleryItems.map((gallery: any, gi: number) => {
@@ -744,6 +714,7 @@ export function PortfolioPageTemplate({ page }: { page: CMSPage }) {
           })}
         </div>
       </section>
+      ) : null}
 
       {leadForm ? <LeadFormSection page={page} data={leadForm} accent={leadForm.title_highlight || "Consultation"} /> : null}
 
