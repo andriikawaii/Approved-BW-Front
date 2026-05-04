@@ -774,69 +774,8 @@ export function FreeConsultationPageTemplate({ page }: { page: CMSPage }) {
         </div>
       </section>
 
-      {/* â"€â"€ ON-SITE VS REMOTE â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ */}
-      <section style={{ background: '#F5F1E9', padding: '80px 40px' }}>
-        <div style={{ maxWidth: 1240, margin: '0 auto' }}>
-          <FadeUp>
-            <div style={{ textAlign: 'center', marginBottom: 48 }}>
-              <SectionLabel>{consultationEyebrow}</SectionLabel>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 3.5vw, 44px)', marginBottom: 20, letterSpacing: '-0.5px', maxWidth: 780, marginLeft: 'auto', marginRight: 'auto', color: '#1E2B43' }}>
-                {consultationTitleBefore}
-                {consultationTitleIndex >= 0 ? <span style={{ color: '#BC9155' }}>{consultationHighlight}</span> : null}
-                {consultationTitleAfter}
-              </h2>
-              <p style={{ fontSize: 17, color: '#5C677D', maxWidth: 700, margin: '0 auto', lineHeight: 1.75 }}>
-                {consultationSubtitle}
-              </p>
-            </div>
-          </FadeUp>
-          <FadeUp delay={100}>
-            <div className="two-col-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, maxWidth: 1240, margin: '0 auto' }}>
-              {consultationCards.map((card, index) => (
-                <div
-                  key={`${card.title}-${index}`}
-                  onClick={() => {
-                    setModalType('in-person');
-                    setModalOpen(true);
-                  }}
-                  className="area-card-hover"
-                  style={{
-                    borderRadius: 12,
-                    background: '#fff',
-                    borderBottom: '3px solid transparent',
-                    boxShadow: '0 2px 12px rgba(30,43,67,0.06)',
-                    transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    overflow: 'hidden',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <div style={{ width: '100%', height: 220, overflow: 'hidden', position: 'relative' }}>
-                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, background: 'linear-gradient(to top, rgba(30,43,67,0.4), transparent)', zIndex: 1, pointerEvents: 'none' }} />
-                    <img
-                      src={card.image || fallbackConsultationCards[index].image}
-                      alt={card.image_alt || card.title || `Consultation card ${index + 1}`}
-                      className="area-card-img-inner"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                  <div style={{ padding: '28px 28px 32px' }}>
-                    <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, marginBottom: 6, color: '#1E2B43' }}>
-                      {card.title}
-                    </h3>
-                    <p style={{ fontSize: 14, lineHeight: 1.7, color: '#5C677D' }}>
-                      {card.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </FadeUp>
-        </div>
-      </section>
+      {/* In-Person vs Remote consultation cards section removed — replaced by the
+          two-card root inside the unified ConsultationModal. */}
 
       {/* â"€â"€ SERVICE AREAS â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ */}
       {/* SERVICE AREAS */}

@@ -454,25 +454,8 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
         </section>
       ) : null}
 
-      <section className="bg-[#f5f1e9] px-5 py-16 md:px-10 md:py-20">
-        <div className="mx-auto max-w-[1240px]">
-          <div className="contact-fade-up mb-10 text-center">
-            {label(consultIntro?.eyebrow || "Get Started")}
-            <h2 className="text-[clamp(32px,3.5vw,48px)] font-bold tracking-[-0.02em]">{consultParts.before}{consultParts.accent ? <span className="text-[#bc9155]">{consultParts.accent}</span> : null}{consultParts.after}</h2>
-            {consultIntro?.content || consultIntro?.body ? <p className="mx-auto mt-3 max-w-[780px] text-[15px] leading-[1.8] text-[#5c677d]">{consultIntro?.content || consultIntro?.body}</p> : null}
-          </div>
-          <div className="contact-fade-up contact-reveal-stagger grid gap-7 md:grid-cols-2">
-            {consultCards.map((item: any, index: number) => (
-              <article key={`${item.title || "consult"}-${index}`} style={staggerStyle(index)} className="contact-stagger-item contact-consult-card">
-                <div className="contact-consult-card-icon">{index === 0 ? <Home className="h-6 w-6" /> : <Monitor className="h-6 w-6" />}</div>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-                <button type="button" onClick={() => openScheduleModal(index === 0 ? "in-person" : "remote")} className="contact-consult-card-btn">{index === 0 ? "Book In-Person" : "Book Remote"}</button>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* In-Person vs Remote consultation cards section removed — the unified
+          ConsultationModal now exposes both paths from a single CTA. */}
 
       <section className="bg-[#f5f1e9] px-5 pb-16 md:px-10 md:pb-24">
         <div className="mx-auto max-w-[1240px]">
