@@ -557,14 +557,14 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
             .svc-process-step h3 {
               font-size: 18px;
               margin: 0;
-              text-align: left;
+              text-align: center;
               flex: 1;
             }
             .svc-process-step p {
               display: block !important;
-              text-align: left;
+              text-align: center;
               margin-top: 0;
-              padding-left: 68px;
+              padding-left: 0;
               width: 100%;
             }
             .svc-process-step.is-active p {

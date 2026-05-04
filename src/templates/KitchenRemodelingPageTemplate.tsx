@@ -2115,16 +2115,16 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             box-shadow: 0 0 0 3px rgba(188, 145, 85, 0.12);
           }
           .kitchen-process-step h3 {
-            text-align: left;
+            text-align: center;
             font-size: 18px;
             margin: 0;
             flex: 1;
           }
           .kitchen-process-step p {
             display: block !important;
-            text-align: left;
+            text-align: center;
             margin-top: 0;
-            padding-left: 68px;
+            padding-left: 0;
             width: 100%;
           }
           .kitchen-process-step.is-active p {

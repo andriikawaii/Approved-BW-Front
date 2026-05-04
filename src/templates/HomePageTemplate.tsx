@@ -958,7 +958,7 @@ function HomeProcessSection({ data }: { data: ProcessStepsData | null }) {
             box-shadow: 0 0 0 3px rgba(188, 145, 85, 0.12);
           }
           .home-process-step h3 {
-            text-align: left;
+            text-align: center;
             font-size: 18px;
             margin: 0;
             flex: 1;
@@ -966,9 +966,9 @@ function HomeProcessSection({ data }: { data: ProcessStepsData | null }) {
           .home-process-step p {
             display: block !important;
             grid-column: 1 / -1;
-            text-align: left;
+            text-align: center;
             margin-top: 0;
-            padding-left: 68px;
+            padding-left: 0;
             width: 100%;
           }
           .home-process-step.is-active p {
