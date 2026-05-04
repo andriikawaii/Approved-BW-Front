@@ -549,8 +549,17 @@ function ProcessSection({ data }: { data?: any }) {
           .ins-process-step p { font-size:14px; color:rgba(255,255,255,0.7); line-height:1.65; max-height:0; opacity:0; overflow:hidden; margin:0; transition:max-height 0.4s ease,opacity 0.35s ease,margin-top 0.35s ease; text-align:center; }
           .ins-process-step.is-active p { max-height:640px; opacity:1; margin-top:8px; }
           .ins-process-hint { text-align:center; margin-top:28px; font-size:13px; color:rgba(255,255,255,0.4); }
-          @media (max-width:1023px) { .ins-process-timeline { grid-template-columns:repeat(3,1fr); gap:8px; } .ins-process-timeline::before { display:none; } .ins-process-step p { max-height:640px; opacity:1; margin-top:8px; } }
-          @media (max-width:639px) { .ins-process-timeline { grid-template-columns:1fr; gap:8px; } .ins-process-step { padding:14px; } .ins-process-step-num { width:56px; height:56px; font-size:20px; margin:-4px auto 14px; } }
+          @media (max-width:1023px) {
+            .ins-process-timeline { grid-template-columns:1fr; gap:12px; max-width:720px; margin:0 auto; }
+            .ins-process-timeline::before { display:none; }
+            .ins-process-step { padding:16px; flex-direction:row; flex-wrap:wrap; align-items:center; gap:16px; text-align:left; border:1px solid rgba(188,145,85,0.18); background:rgba(255,255,255,0.03); border-radius:10px; }
+            .ins-process-step.is-active { border-color:rgba(188,145,85,0.55); background:rgba(188,145,85,0.16); }
+            .ins-process-step-num { width:52px; height:52px; font-size:22px; margin:0; box-shadow:0 0 0 3px rgba(188,145,85,0.12); }
+            .ins-process-step h3 { text-align:left; font-size:18px; margin:0; flex:1; }
+            .ins-process-step p { display:block; max-height:0; opacity:0; text-align:left; margin-top:0; padding-left:68px; width:100%; }
+            .ins-process-step.is-active p { max-height:640px; opacity:1; margin-top:8px; }
+          }
+          @media (max-width:639px) { .ins-process-step { padding:14px; } }
         ` }} />
         <div className="ins-process-timeline">
           {(data.steps || []).map((step: any, index: number) => (
