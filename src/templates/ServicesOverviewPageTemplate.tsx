@@ -526,24 +526,57 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
           }
           @media (max-width: 1024px) {
             .svc-process-timeline {
-              grid-template-columns: repeat(3, minmax(0, 1fr));
-              gap: 24px;
-              max-width: 700px;
+              grid-template-columns: 1fr;
+              gap: 12px;
+              max-width: 720px;
               margin: 0 auto;
             }
             .svc-process-timeline::before { display: none; }
-            .svc-process-step { padding: 16px 8px; gap: 0; }
-            .svc-process-step-num { margin: 0 0 10px; }
-            .svc-process-step h3 { font-size: 15px; margin: 0; text-align: center; }
-            .svc-process-step p { display: none !important; }
+            .svc-process-step {
+              padding: 16px;
+              flex-direction: row;
+              flex-wrap: wrap;
+              align-items: center;
+              gap: 16px;
+              text-align: left;
+              border: 1px solid rgba(188, 145, 85, 0.18);
+              background: rgba(255, 255, 255, 0.03);
+              border-radius: 10px;
+            }
+            .svc-process-step.is-active {
+              border-color: rgba(188, 145, 85, 0.55);
+              background: rgba(188, 145, 85, 0.16);
+            }
+            .svc-process-step-num {
+              width: 52px;
+              height: 52px;
+              font-size: 22px;
+              margin: 0;
+              box-shadow: 0 0 0 3px rgba(188, 145, 85, 0.12);
+            }
+            .svc-process-step h3 {
+              font-size: 18px;
+              margin: 0;
+              text-align: left;
+              flex: 1;
+            }
+            .svc-process-step p {
+              display: block !important;
+              text-align: left;
+              margin-top: 0;
+              padding-left: 68px;
+              width: 100%;
+            }
+            .svc-process-step.is-active p {
+              max-height: 300px;
+              margin-top: 8px;
+            }
           }
           @media (max-width: 768px) {
             .svc-process-header { margin-bottom: 36px; }
             .svc-process-header h2 { font-size: 24px; margin-bottom: 14px; }
             .svc-process-header p { font-size: 15px; line-height: 1.7; }
-            .svc-process-timeline { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; max-width: 600px; }
-            .svc-process-step { padding: 14px 8px; }
-            .svc-process-step-num { width: 48px; height: 48px; font-size: 17px; margin: 0 0 8px; }
+            .svc-process-step { padding: 14px; }
           }
         `}</style>
       </section>
