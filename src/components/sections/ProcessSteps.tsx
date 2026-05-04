@@ -74,10 +74,41 @@ export default function ProcessSteps({ data }: Props) {
 
           {/* Timeline */}
           <div className="relative">
-            {/* Horizontal line (desktop) */}
+            {/* Horizontal line (desktop only) */}
             <div className="hidden lg:block absolute top-[34px] left-[10%] right-[10%] h-[2px] bg-[rgba(188,145,85,0.25)]" />
 
-            <div className={`grid grid-cols-1 ${tabletColsClass} ${desktopColsClass} gap-0 relative z-10`}>
+            {/* Mobile + tablet: one per row, click-to-expand */}
+            <div className="lg:hidden flex flex-col gap-3">
+              {steps.map((step, i) => {
+                const isActive = activeStep === i;
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    className={`w-full rounded-[10px] border text-left px-4 py-4 transition-colors duration-300 ${isActive ? 'bg-[rgba(188,145,85,0.16)] border-[rgba(188,145,85,0.55)]' : 'bg-[rgba(255,255,255,0.03)] border-[rgba(188,145,85,0.18)] hover:bg-[rgba(188,145,85,0.08)]'}`}
+                    onClick={() => setActiveStep(isActive ? null : i)}
+                    aria-expanded={isActive}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="flex-shrink-0 w-[52px] h-[52px] rounded-full bg-[rgba(188,145,85,0.42)] border-[2.5px] border-[#C89B5B] flex items-center justify-center" style={{ boxShadow: '0 0 0 3px rgba(188,145,85,0.12)' }}>
+                        <span className="font-serif text-[22px] font-bold text-[#f5e0c0]">{i + 1}</span>
+                      </div>
+                      <div className="flex-1 flex items-center justify-between gap-3">
+                        <h3 className="font-serif text-[18px] font-bold text-white">{step.title}</h3>
+                        <span className={`text-[#C89B5B] text-[18px] leading-none transition-transform duration-300 ${isActive ? 'rotate-180' : ''}`}>›</span>
+                      </div>
+                    </div>
+                    <div className={`text-[14px] text-white/75 leading-[1.65] overflow-hidden transition-all duration-400 ${isActive ? 'max-h-[300px] opacity-100 mt-3 pl-[68px]' : 'max-h-0 opacity-0'}`}>
+                      <p>{step.description}</p>
+                    </div>
+                  </button>
+                );
+              })}
+              <p className="text-center mt-2 text-[13px] text-white/40">Tap any step to learn more</p>
+            </div>
+
+            {/* Desktop: existing 5-column horizontal layout */}
+            <div className={`hidden lg:grid ${desktopColsClass} gap-0 relative z-10`}>
               {steps.map((step, i) => {
                 const isActive = activeStep === i;
                 return (
@@ -100,7 +131,7 @@ export default function ProcessSteps({ data }: Props) {
                 );
               })}
             </div>
-            <p className="text-center mt-7 text-[13px] text-white/40">Click any step to learn more</p>
+            <p className="hidden lg:block text-center mt-7 text-[13px] text-white/40">Click any step to learn more</p>
           </div>
         </div>
       </section>
