@@ -201,7 +201,7 @@ export default function Footer({ currentYear }: { currentYear: number }) {
 
         {/* Bottom bar */}
         <div className="flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-white/45 md:flex-row md:items-center md:justify-between">
-          <span>&copy; {currentYear} Legacy of Clean LLC d/b/a BuiltWell CT. All rights reserved.</span>
+          <span>&copy; {currentYear} BuiltWell CT. All rights reserved.</span>
           <span>
             Serving Fairfield &amp; New Haven Counties, CT
             {newHavenPhone ? ` | ${newHavenPhone.number}` : ''}
