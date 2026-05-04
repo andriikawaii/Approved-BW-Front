@@ -1255,7 +1255,7 @@ export function AreasWeServeTemplate({ page }: { page: CMSPage }) {
         .areas-page .area-towns-more.show { display:grid; }
         .areas-page .area-towns-toggle { grid-column:1 / -1; margin-top:4px; background:none; border:none; color:var(--gold); font-size:13px; font-weight:600; cursor:pointer; }
         .areas-page .area-towns-toggle:hover { color:var(--gold-dark); }
-        .areas-page .area-link { display:inline-flex; align-items:center; gap:6px; margin-top:4px; color:var(--gold); font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; }
+        .areas-page .area-link { display:flex; width:100%; align-items:center; justify-content:center; gap:6px; margin-top:4px; color:var(--gold); font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; text-align:center; }
         .areas-page .area-link:hover { gap:10px; }
 
         .areas-page .services-grid, .areas-page .services-more { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }

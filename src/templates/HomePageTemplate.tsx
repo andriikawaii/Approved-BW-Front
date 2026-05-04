@@ -1165,7 +1165,7 @@ function HomeAreasSection({
                   {county.url ? (
                     <Link
                       href={county.url}
-                      className="mt-auto inline-flex items-center justify-center gap-1.5 text-sm font-semibold text-[#BC9155] transition-all hover:gap-2.5"
+                      className="mt-auto flex w-full items-center justify-center gap-1.5 text-center text-sm font-semibold text-[#BC9155] transition-all hover:gap-2.5"
                     >
                       Learn more about {countyName}
                       <ArrowRight className="h-3.5 w-3.5" />
