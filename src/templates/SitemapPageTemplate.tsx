@@ -132,7 +132,7 @@ export function SitemapPageTemplate({ page }: { page: CMSPage }) {
             {hp.before}{hp.accent ? <span className="text-[#bc9155]">{hp.accent}</span> : null}{hp.after}
           </h1>
           <p className="subtitle">
-            {hero?.subtitle || "Every page on buildwellct.com, organized by category."}
+            {hero?.subtitle || "Every page on builtwellct.com, organized by category."}
           </p>
         </div>
       </section>

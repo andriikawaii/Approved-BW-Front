@@ -1061,7 +1061,7 @@ function AreasFooter({ phones }: { phones: PhoneItem[] }) {
   const fairfieldPhone = phones.find((phone) => phone.label.toLowerCase().includes("fairfield"));
   const newHavenPhone = phones.find((phone) => phone.label.toLowerCase().includes("new haven"));
   const year = new Date().getUTCFullYear();
-  const supportEmail = "info@buildwellct.com";
+  const supportEmail = "info@builtwellct.com";
 
   return (
     <footer className="bg-[#151e30] pb-8 pt-16 text-white">

@@ -10,7 +10,7 @@ type HomeFooterProps = {
   phones: PhoneItem[];
 };
 
-const SUPPORT_EMAIL = 'info@buildwellct.com';
+const SUPPORT_EMAIL = 'info@builtwellct.com';
 
 const SERVICE_LINKS = [
   { label: 'Kitchen Remodeling', href: '/kitchen-remodeling/' },

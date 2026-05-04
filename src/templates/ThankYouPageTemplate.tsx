@@ -134,7 +134,7 @@ export function ThankYouPageTemplate({ page }: { page: CMSPage }) {
               </div>
             )}
           </div>
-          <p className="ty-email">Email: <a href="mailto:info@buildwellct.com">info@buildwellct.com</a></p>
+          <p className="ty-email">Email: <a href="mailto:info@builtwellct.com">info@builtwellct.com</a></p>
           <p className="ty-note">If you need to reach us sooner, call or text either number above.</p>
         </div>
       </section>

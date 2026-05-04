@@ -47,15 +47,15 @@ function linkifyInline(text: string, keyPrefix: string): ReactNode[] {
     }
 
     const normalized = token.toLowerCase();
-    if (normalized.includes("info@buildwellct.com")) {
+    if (normalized.includes("info@builtwellct.com")) {
       nodes.push(
-        <a key={`${keyPrefix}-mail-${index}`} href="mailto:info@buildwellct.com">
-          info@buildwellct.com
+        <a key={`${keyPrefix}-mail-${index}`} href="mailto:info@builtwellct.com">
+          info@builtwellct.com
         </a>,
       );
     } else if (normalized.includes("contact/")) {
       nodes.push(
-        <a key={`${keyPrefix}-contact-${index}`} href="https://buildwellct.com/contact/" target="_blank" rel="noreferrer">
+        <a key={`${keyPrefix}-contact-${index}`} href="https://builtwellct.com/contact/" target="_blank" rel="noreferrer">
           {token.replace(/^https?:\/\//i, "")}
         </a>,
       );

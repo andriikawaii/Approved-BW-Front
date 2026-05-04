@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import type { PhoneItem } from '@/lib/phones';
 
-const SUPPORT_EMAIL = 'info@buildwellct.com';
+const SUPPORT_EMAIL = 'info@builtwellct.com';
 const FAIRFIELD_FALLBACK = '(203) 919-9616';
 const NEW_HAVEN_FALLBACK = '(203) 466-9148';
 

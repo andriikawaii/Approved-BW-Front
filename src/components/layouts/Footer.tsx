@@ -8,7 +8,7 @@ import FooterB from './FooterB';
 import FooterC from './FooterC';
 import FooterD from './FooterD';
 
-const SUPPORT_EMAIL = 'info@buildwellct.com';
+const SUPPORT_EMAIL = 'info@builtwellct.com';
 
 const PhoneIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#BC9155" strokeWidth="2">
