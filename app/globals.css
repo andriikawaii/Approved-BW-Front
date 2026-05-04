@@ -532,6 +532,10 @@ h1 {
   font-family: "Playfair Display", Georgia, serif;
   font-size: 24px;
   line-height: 1.18;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--gwc-navy);
 }
 [data-gwc-page] .gwc-alt-copy p,
@@ -592,7 +596,23 @@ h1 {
 [data-gwc-page] .gwc-prose-block h3 { font-size: 22px; }
 [data-gwc-page] .gwc-prose-block p { font-size: 16px; }
 [data-gwc-page] .gwc-cost-block { margin-top: 26px; }
-[data-gwc-page] .gwc-cost-title { font-size: 22px; margin-bottom: 16px; }
+[data-gwc-page] .gwc-cost-title {
+  font-size: clamp(15px, 4vw, 22px);
+  margin-bottom: 18px;
+  text-align: center;
+  white-space: normal;
+  position: relative;
+  padding-bottom: 14px;
+}
+[data-gwc-page] .gwc-cost-title::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 3px;
+  background: var(--gwc-gold);
+  border-radius: 2px;
+  margin: 12px auto 0;
+}
 [data-gwc-page] .gwc-table-wrap {
   overflow-x: auto;
   margin-bottom: 32px;
