@@ -869,7 +869,8 @@ h1 {
 }
 [data-gwc-page] .gwc-area-toggle:hover { color: var(--gwc-gold-dark); }
 [data-gwc-page] .gwc-area-link {
-  display: inline-flex;
+  display: flex;
+  width: 100%;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -878,6 +879,7 @@ h1 {
   font-size: 15px;
   font-weight: 600;
   text-decoration: none;
+  text-align: center;
   transition: gap .3s ease;
 }
 [data-gwc-page] .gwc-area-link:hover { gap: 10px; }
