@@ -8,7 +8,7 @@ type Props = {
   onClose: () => void;
 };
 
-type PathMode = 'schedule' | 'question';
+type PathMode = 'schedule' | 'question' | null;
 type ScheduleType = 'in_person' | 'remote';
 type SubmitMode = 'schedule' | 'question' | null;
 type ErrorMap = Record<string, string>;
@@ -55,7 +55,7 @@ function cls(...values: Array<string | false | null | undefined>) {
 }
 
 export default function ConsultationModal({ open, onClose }: Props) {
-  const [pathMode, setPathMode] = useState<PathMode>('schedule');
+  const [pathMode, setPathMode] = useState<PathMode>(null);
   const [wizardStep, setWizardStep] = useState(1);
   const [scheduleType, setScheduleType] = useState<ScheduleType>('in_person');
   const [date, setDate] = useState(getTomorrowIsoDate());
@@ -103,7 +103,7 @@ export default function ConsultationModal({ open, onClose }: Props) {
     if (!open) {
       setErrors({});
       setSubmittedMode(null);
-      setPathMode('schedule');
+      setPathMode(null);
       setWizardStep(1);
       setDate(getTomorrowIsoDate());
       setScheduleType('in_person');
@@ -301,42 +301,47 @@ export default function ConsultationModal({ open, onClose }: Props) {
                 Close
               </button>
             </div>
+          ) : pathMode === null ? (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={() => {
+                  clearErrors();
+                  setPathMode('schedule');
+                  setWizardStep(1);
+                }}
+                className="group rounded-[10px] border-2 border-[#1e2b431a] bg-white p-6 text-center transition-all duration-200 hover:-translate-y-[2px] hover:border-[#bc9155] hover:bg-[#bc91550a] hover:shadow-[0_12px_28px_rgba(188,145,85,0.18)]"
+              >
+                <CalendarDays className="mx-auto mb-3 h-8 w-8 text-[#bc9155]" />
+                <h4 className="text-[16px] font-semibold text-[#1e2b43]">Schedule a Consultation</h4>
+                <p className="mt-1 text-[12px] leading-[1.5] text-[#5c677d]">In-person or Google Meet. No charge, no obligation.</p>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  clearErrors();
+                  setPathMode('question');
+                }}
+                className="group rounded-[10px] border-2 border-[#1e2b431a] bg-white p-6 text-center transition-all duration-200 hover:-translate-y-[2px] hover:border-[#bc9155] hover:bg-[#bc91550a] hover:shadow-[0_12px_28px_rgba(188,145,85,0.18)]"
+              >
+                <MessageSquare className="mx-auto mb-3 h-8 w-8 text-[#bc9155]" />
+                <h4 className="text-[16px] font-semibold text-[#1e2b43]">Just Have a Question</h4>
+                <p className="mt-1 text-[12px] leading-[1.5] text-[#5c677d]">Send us a quick message, we&rsquo;ll reply within one business day.</p>
+              </button>
+            </div>
           ) : (
             <>
-              <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    clearErrors();
-                    setPathMode('schedule');
-                  }}
-                  className={cls(
-                    'rounded-[8px] border-2 px-4 py-3 text-center transition-all duration-200',
-                    pathMode === 'schedule' ? 'border-[#bc9155] bg-[#bc915510]' : 'border-[#1e2b431a] bg-white hover:border-[#bc9155]',
-                  )}
-                >
-                  <div className="flex items-center justify-center gap-2">
-                    <CalendarDays className="h-5 w-5 text-[#bc9155]" />
-                    <span className="text-[14px] font-semibold text-[#1e2b43]">Schedule a Consultation</span>
-                  </div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    clearErrors();
-                    setPathMode('question');
-                  }}
-                  className={cls(
-                    'rounded-[8px] border-2 px-4 py-3 text-center transition-all duration-200',
-                    pathMode === 'question' ? 'border-[#bc9155] bg-[#bc915510]' : 'border-[#1e2b431a] bg-white hover:border-[#bc9155]',
-                  )}
-                >
-                  <div className="flex items-center justify-center gap-2">
-                    <MessageSquare className="h-5 w-5 text-[#bc9155]" />
-                    <span className="text-[14px] font-semibold text-[#1e2b43]">Just Have a Question?</span>
-                  </div>
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  clearErrors();
+                  setPathMode(null);
+                  setWizardStep(1);
+                }}
+                className="mb-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-[#5c677d] transition-colors hover:text-[#bc9155]"
+              >
+                <span aria-hidden="true">&lt;</span> Back
+              </button>
 
               {pathMode === 'schedule' ? (
                 <>
