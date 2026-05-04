@@ -31,7 +31,7 @@ type HeroData = {
 };
 
 const INLINE_LINK_PATTERN =
-  /(https?:\/\/buildwellct\.com\/contact\/|buildwellct\.com\/contact\/|info@buildwellct\.com|\(203\)\s*466-9148|203[\s.-]?466[\s.-]?9148)/gi;
+  /(https?:\/\/builtwellct\.com\/contact\/|builtwellct\.com\/contact\/|info@builtwellct\.com|\(203\)\s*466-9148|203[\s.-]?466[\s.-]?9148)/gi;
 
 function linkifyInline(text: string, keyPrefix: string): ReactNode[] {
   const nodes: ReactNode[] = [];
