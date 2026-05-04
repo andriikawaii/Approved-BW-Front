@@ -530,7 +530,7 @@ export function CaseStudiesPageTemplate({ page }: { page: CMSPage }) {
       <main>
         <HeroSection hero={hero} phones={phones} />
         <StatsBar data={statsBar} />
-        <IntroSection data={intro} />
+        {intro ? <IntroSection data={intro} /> : null}
         {cards.length > 0 ? <CaseStudyGrid cards={cards} /> : null}
         <TrustStrip data={linkStrip} />
         <SharedLeadFormSection page={page} data={lead} accent={lead?.title_highlight || "Remodeling Project"} />
