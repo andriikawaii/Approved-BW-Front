@@ -1,7 +1,6 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useState, useRef } from 'react';
-import { X } from 'lucide-react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 type SchedulerContextValue = {
   open: () => void;
@@ -19,8 +18,10 @@ export function useScheduler(): SchedulerContextValue {
   return ctx;
 }
 
-const SCHEDULER_URL = process.env.NEXT_PUBLIC_SCHEDULER_URL || '';
 const FREE_CONSULTATION_PATH = '/free-consultation/';
+const IN_PERSON_SLOTS = ['8:00 AM - 10:00 AM', '10:00 AM - 12:00 PM', '12:00 PM - 2:00 PM', '2:00 PM - 4:00 PM'];
+const REMOTE_WEEKDAY = ['8:00 AM - 9:00 AM', '9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '11:00 AM - 12:00 PM', '12:00 PM - 1:00 PM', '1:00 PM - 2:00 PM', '2:00 PM - 3:00 PM', '3:00 PM - 4:00 PM', '4:00 PM - 5:00 PM', '5:00 PM - 6:00 PM'];
+const REMOTE_SAT = ['9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '11:00 AM - 12:00 PM', '12:00 PM - 1:00 PM', '1:00 PM - 2:00 PM', '2:00 PM - 3:00 PM'];
 
 export function SchedulerProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,10 +34,8 @@ export function SchedulerProvider({ children }: { children: React.ReactNode }) {
       if (e.key === 'Escape') close();
     };
     document.addEventListener('keydown', onKey);
-    document.body.style.overflow = 'hidden';
     return () => {
       document.removeEventListener('keydown', onKey);
-      document.body.style.overflow = '';
     };
   }, [isOpen, close]);
 
@@ -64,251 +63,165 @@ export function SchedulerProvider({ children }: { children: React.ReactNode }) {
   return (
     <SchedulerContext.Provider value={{ open, close, isOpen }}>
       {children}
-      {isOpen ? <SchedulerModal onClose={close} /> : null}
+      <SchedulingModal open={isOpen} onClose={close} />
     </SchedulerContext.Provider>
   );
 }
 
-function SchedulerModal({ onClose }: { onClose: () => void }) {
-  const dialogRef = useRef<HTMLDivElement>(null);
-  return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label="Schedule a Free Consultation"
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 px-3 py-6 sm:px-6"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
-      <div
-        ref={dialogRef}
-        className="relative w-full max-w-[640px] overflow-hidden rounded-[16px] bg-white shadow-[0_30px_80px_rgba(0,0,0,0.3)]"
-      >
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close scheduler"
-          className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-[#1e2b43] shadow-md transition-colors hover:bg-[#f3eee6]"
-        >
-          <X className="h-5 w-5" strokeWidth={2.2} />
-        </button>
+/**
+ * Same SchedulingModal that powers /free-consultation/ — extracted so the
+ * sticky CTA and every Free Estimate / Schedule a Free Consultation link
+ * across the site opens it instead of navigating.
+ */
+export function SchedulingModal({ open, onClose, initialType = 'in-person' }: { open: boolean; onClose: () => void; initialType?: 'in-person' | 'remote' }) {
+  const [type, setType] = useState<'in-person' | 'remote'>(initialType);
+  const [county, setCounty] = useState<string | null>(null);
+  const [date, setDate] = useState('');
+  const [slot, setSlot] = useState<string | null>(null);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [zip, setZip] = useState('');
 
-        {SCHEDULER_URL ? (
-          <iframe
-            src={SCHEDULER_URL}
-            title="Schedule a Free Consultation"
-            className="h-[80vh] w-full border-0"
-            allow="payment"
-          />
-        ) : (
-          <SchedulerForm onClose={onClose} />
-        )}
-      </div>
-    </div>
-  );
-}
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const minDate = tomorrow.toISOString().split('T')[0];
 
-const SERVICES = [
-  'Kitchen Remodeling',
-  'Bathroom Remodeling',
-  'Basement Finishing',
-  'Flooring',
-  'Home Additions',
-  'Interior Painting',
-  'Other',
-];
+  const dayOfWeek = date ? new Date(date + 'T12:00:00').getDay() : null;
+  const isSat = dayOfWeek === 6;
 
-const TIMES = ['Morning (8am–12pm)', 'Afternoon (12pm–4pm)', 'Evening (4pm–6pm)', 'Anytime'];
+  const slots = type === 'in-person' ? (isSat ? [] : IN_PERSON_SLOTS) : (isSat ? REMOTE_SAT : REMOTE_WEEKDAY);
 
-function SchedulerForm({ onClose }: { onClose: () => void }) {
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const formRef = useRef<HTMLFormElement>(null);
+  const handleDateChange = (v: string) => {
+    const d = new Date(v + 'T12:00:00').getDay();
+    if (d === 0) { alert('We are closed on Sundays. Please select a weekday or Saturday.'); return; }
+    setDate(v);
+    setSlot(null);
+    if (d === 6 && type === 'in-person') setType('remote');
+  };
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSubmitting(true);
-    setError(null);
-
-    const fd = new FormData(e.currentTarget);
-    const services = (fd.getAll('services') as string[]).filter(Boolean);
+  const handleConfirm = async () => {
+    if (!name || !phone || !email || !zip || !date || !slot) { alert('Please fill in all fields and select a time slot.'); return; }
+    if (type === 'in-person' && !county) { alert('Please select your county.'); return; }
 
     try {
-      // Use the same Next.js proxy route as the /free-consultation page so we
-      // share its working CORS / CSRF / forwarding behavior.
-      const res = await fetch('/api/leads/', {
+      const response = await fetch('/api/leads/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
-          name: fd.get('name'),
-          phone: fd.get('phone'),
-          email: fd.get('email'),
-          zip: fd.get('zip'),
-          services,
-          best_time: fd.get('best_time'),
-          consultation_type: 'virtual',
+          name,
+          phone,
+          email,
+          zip,
+          consultation_type: type === 'in-person' ? 'in_person' : 'virtual',
+          county: type === 'in-person' ? county : null,
+          preferred_date: date,
+          preferred_time_slot: slot,
           source: 'scheduler_modal',
-          message: fd.get('message') || '',
           consent: true,
         }),
       });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error((data && typeof data === 'object' && (data as { message?: string }).message) || `Submission failed (${res.status})`);
+      const data: unknown = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const errorMessage = (data && typeof data === 'object' && 'error' in data && typeof (data as { error?: unknown }).error === 'string')
+          ? (data as { error: string }).error
+          : 'Submission failed. Please try again or call us.';
+        alert(errorMessage);
+        return;
       }
-      setSubmitted(true);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not submit. Please call us.');
-    } finally {
-      setSubmitting(false);
+    } catch {
+      alert('Network error. Please try again or call us.');
+      return;
     }
+
+    alert(`Thank you! Your consultation request has been submitted.\n\n${type === 'in-person' ? 'In-Person Visit in ' + (county === 'fairfield' ? 'Fairfield County' : 'New Haven County') : 'Google Meet'}\n${date} at ${slot}\n\nWe'll confirm by email within 24 hours.`);
+    onClose();
   };
 
-  if (submitted) {
-    return (
-      <div className="px-6 py-12 text-center sm:px-10">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#bc9155]/15 text-[#bc9155]">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M20 6 9 17l-5-5" />
-          </svg>
-        </div>
-        <h2 className="font-serif text-[26px] font-bold text-[#1e2b43]">Got it. We&rsquo;ll be in touch.</h2>
-        <p className="mx-auto mt-3 max-w-[420px] text-[15px] leading-[1.65] text-[#5c677d]">
-          We received your request and will reach out within one business day with a calendar invite, including the Google Meet link for your virtual consultation.
-        </p>
-        <button
-          type="button"
-          onClick={onClose}
-          className="mt-6 inline-flex items-center justify-center rounded-[10px] bg-[#1e2b43] px-6 py-3 text-[14px] font-bold uppercase tracking-[0.5px] text-white transition-colors hover:bg-[#2c3d5e]"
-        >
-          Close
-        </button>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (open) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = '';
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
+
+  if (!open) return null;
 
   return (
-    <div className="max-h-[85vh] overflow-y-auto px-6 pb-7 pt-7 sm:px-10 sm:pt-9 sm:pb-9">
-      <div className="mb-5">
-        <span className="text-[11px] font-bold uppercase tracking-[1.5px] text-[#9a7340]">Schedule a Free Consultation</span>
-        <h2 className="mt-2 font-serif text-[26px] font-bold leading-[1.15] text-[#1e2b43] sm:text-[30px]">
-          Tell us about your project
-        </h2>
-        <p className="mt-2 text-[14px] leading-[1.6] text-[#5c677d]">
-          We respond within one business day with next steps and a Google Meet calendar invite.
-        </p>
-      </div>
-
-      <form ref={formRef} onSubmit={onSubmit} className="space-y-4">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Name" name="name" required placeholder="Your full name" />
-          <Field label="Phone" name="phone" type="tel" required placeholder="(203) 000-0000" />
-          <Field label="Email" name="email" type="email" required placeholder="you@email.com" />
-          <Field label="Zip Code" name="zip" required placeholder="06477" />
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(21,30,48,0.7)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)', padding: 12 }} onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div style={{ background: '#fff', borderRadius: 12, width: '100%', maxWidth: 640, maxHeight: '92vh', overflowY: 'auto', boxShadow: '0 24px 80px rgba(0,0,0,0.3)' }}>
+        <div style={{ background: '#1E2B43', padding: '24px 24px', color: '#fff', borderRadius: '12px 12px 0 0', textAlign: 'center', position: 'relative' }}>
+          <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, marginBottom: 4 }}>Schedule a <span style={{ color: '#BC9155' }}>Free Consultation</span></h3>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', margin: 0 }}>No charge, no obligation. Pick a time that works for you.</p>
+          <button onClick={onClose} aria-label="Close" style={{ position: 'absolute', top: 10, right: 10, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', color: 'rgba(255,255,255,0.7)', cursor: 'pointer', fontSize: 26, lineHeight: 1 }}>×</button>
         </div>
-
-        <div>
-          <span className="mb-2 block text-[12px] font-semibold text-[#1e2b43]">What do you need? *</span>
-          <div className="grid grid-cols-2 gap-2">
-            {SERVICES.map((s) => (
-              <label key={s} className="flex cursor-pointer items-center gap-2 rounded-[8px] border border-[#e7eaf0] bg-white px-3 py-2 text-[13px] text-[#1e2b43] transition-colors hover:border-[#bc9155] has-[:checked]:border-[#bc9155] has-[:checked]:bg-[#bc9155]/8">
-                <input type="checkbox" name="services" value={s} className="h-4 w-4 rounded border-[#cbd2dd] text-[#bc9155] focus:ring-[#bc9155]" />
-                {s}
-              </label>
+        <div style={{ padding: 22 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 22 }}>
+            {(['in-person', 'remote'] as const).map((t) => (
+              <div key={t} onClick={() => { if (t === 'in-person' && isSat) return; setType(t); }}
+                style={{ padding: 14, borderRadius: 8, border: `2px solid ${type === t ? '#BC9155' : 'rgba(30,43,67,0.1)'}`, background: type === t ? 'rgba(188,145,85,0.1)' : '#fff', textAlign: 'center', cursor: t === 'in-person' && isSat ? 'not-allowed' : 'pointer', transition: 'all 0.2s', opacity: t === 'in-person' && isSat ? 0.4 : 1 }}>
+                {t === 'in-person'
+                  ? <><div style={{ marginBottom: 6, color: '#BC9155', display: 'flex', justifyContent: 'center' }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg></div><h4 style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, fontWeight: 600, marginBottom: 2 }}>In-Person Visit</h4><p style={{ fontSize: 11, color: '#5C677D', margin: 0 }}>We come to your home<br />Mon-Fri, 8am-4pm</p></>
+                  : <><div style={{ marginBottom: 6, color: '#BC9155', display: 'flex', justifyContent: 'center' }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg></div><h4 style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, fontWeight: 600, marginBottom: 2 }}>Google Meet</h4><p style={{ fontSize: 11, color: '#5C677D', margin: 0 }}>Video call from anywhere<br />Mon-Sat</p></>
+                }
+              </div>
             ))}
           </div>
-        </div>
-
-        <div>
-          <label className="mb-2 block text-[12px] font-semibold text-[#1e2b43]">
-            Best Time to Contact <span className="text-[#bc9155]">*</span>
-          </label>
-          <select
-            name="best_time"
-            required
-            defaultValue=""
-            className="block w-full rounded-[8px] border border-[#cbd2dd] bg-white px-3 py-2.5 text-[14px] text-[#1e2b43] focus:border-[#bc9155] focus:outline-none focus:ring-2 focus:ring-[#bc9155]/30"
-          >
-            <option value="" disabled>Pick a time</option>
-            {TIMES.map((t) => <option key={t} value={t}>{t}</option>)}
-          </select>
-        </div>
-
-        <Field label="Anything else?" name="message" textarea placeholder="Project details, timeline, budget range, or questions" />
-
-        <p className="text-[11px] leading-[1.55] text-[#68758d]">
-          By submitting, you agree BuiltWell CT may contact you by phone, text, or email. Reply STOP to opt out. See our Privacy Policy and Terms.
-        </p>
-
-        {error ? (
-          <div className="rounded-[8px] border border-red-200 bg-red-50 px-3 py-2 text-[13px] text-red-700">{error}</div>
-        ) : null}
-
-        <div className="flex items-center gap-3 pt-1">
-          <button
-            type="submit"
-            disabled={submitting}
-            className="flex-1 rounded-[10px] bg-[#bc9155] px-6 py-3 text-[14px] font-bold uppercase tracking-[0.5px] text-white transition-colors hover:bg-[#a57d48] disabled:opacity-60"
-          >
-            {submitting ? 'Sending…' : 'Request Consultation'}
+          {type === 'in-person' && (
+            <div style={{ marginBottom: 18 }}>
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#1E2B43', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Which county?</label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                {['fairfield', 'new-haven'].map((c) => (
+                  <div key={c} onClick={() => setCounty(c)} style={{ padding: 12, borderRadius: 6, border: `1px solid ${county === c ? '#BC9155' : 'rgba(30,43,67,0.12)'}`, background: county === c ? '#BC9155' : '#fff', color: county === c ? '#fff' : '#1E2B43', textAlign: 'center', cursor: 'pointer', fontSize: 13, fontWeight: 500, transition: 'all 0.2s' }}>
+                    {c === 'fairfield' ? 'Fairfield County' : 'New Haven County'}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          <div style={{ marginBottom: 18 }}>
+            <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#1E2B43', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Select a Date</label>
+            <input type="date" min={minDate} value={date} onChange={(e) => handleDateChange(e.target.value)} style={{ width: '100%', padding: '12px 14px', border: '1px solid rgba(30,43,67,0.15)', borderRadius: 4, fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#1E2B43', boxSizing: 'border-box' }} />
+          </div>
+          <div style={{ marginBottom: 18 }}>
+            <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#1E2B43', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Available Times</label>
+            {type === 'in-person' && isSat ? (
+              <p style={{ textAlign: 'center', color: '#5C677D', fontSize: 13, padding: '12px 0' }}>In-person visits are not available on Saturdays. Please select a weekday or choose Google Meet.</p>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
+                {slots.map((s) => (
+                  <div key={s} onClick={() => setSlot(s)} style={{ padding: 12, borderRadius: 6, border: `1px solid ${slot === s ? '#BC9155' : 'rgba(30,43,67,0.12)'}`, background: slot === s ? '#BC9155' : '#fff', color: slot === s ? '#fff' : '#1E2B43', textAlign: 'center', cursor: 'pointer', fontSize: 13, fontWeight: 500, transition: 'all 0.2s' }}>
+                    {s}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+            <div>
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#1E2B43', marginBottom: 5, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Your Name</label>
+              <input type="text" placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} style={{ width: '100%', padding: '11px 12px', border: '1px solid rgba(30,43,67,0.15)', borderRadius: 6, fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#1E2B43', boxSizing: 'border-box' }} />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#1E2B43', marginBottom: 5, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Phone Number</label>
+              <input type="tel" placeholder="(203) 000-0000" value={phone} onChange={(e) => setPhone(e.target.value)} style={{ width: '100%', padding: '11px 12px', border: '1px solid rgba(30,43,67,0.15)', borderRadius: 6, fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#1E2B43', boxSizing: 'border-box' }} />
+            </div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 18 }}>
+            <div>
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#1E2B43', marginBottom: 5, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Email</label>
+              <input type="email" placeholder="you@email.com" value={email} onChange={(e) => setEmail(e.target.value)} style={{ width: '100%', padding: '11px 12px', border: '1px solid rgba(30,43,67,0.15)', borderRadius: 6, fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#1E2B43', boxSizing: 'border-box' }} />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#1E2B43', marginBottom: 5, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Zip Code</label>
+              <input type="text" placeholder="06477" value={zip} onChange={(e) => setZip(e.target.value)} style={{ width: '100%', padding: '11px 12px', border: '1px solid rgba(30,43,67,0.15)', borderRadius: 6, fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#1E2B43', boxSizing: 'border-box' }} />
+            </div>
+          </div>
+          <button onClick={handleConfirm} style={{ width: '100%', padding: 14, background: '#BC9155', color: '#fff', border: 'none', borderRadius: 4, fontFamily: 'Inter, sans-serif', fontSize: 15, fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}>
+            Confirm Consultation
           </button>
+          <p style={{ fontSize: 12, color: '#5C677D', textAlign: 'center', marginTop: 14, fontStyle: 'italic' }}>We&apos;ll send a confirmation to your email within 24 hours.</p>
         </div>
-      </form>
+      </div>
     </div>
-  );
-}
-
-function Field({
-  label, name, type = 'text', required = false, placeholder, textarea = false,
-}: {
-  label: string; name: string; type?: string; required?: boolean; placeholder?: string; textarea?: boolean;
-}) {
-  return (
-    <label className="block">
-      <span className="mb-1 block text-[12px] font-semibold text-[#1e2b43]">
-        {label} {required ? <span className="text-[#bc9155]">*</span> : null}
-      </span>
-      {textarea ? (
-        <textarea
-          name={name}
-          required={required}
-          placeholder={placeholder}
-          rows={3}
-          className="block w-full rounded-[8px] border border-[#cbd2dd] bg-white px-3 py-2.5 text-[14px] text-[#1e2b43] focus:border-[#bc9155] focus:outline-none focus:ring-2 focus:ring-[#bc9155]/30"
-        />
-      ) : (
-        <input
-          type={type}
-          name={name}
-          required={required}
-          placeholder={placeholder}
-          className="block w-full rounded-[8px] border border-[#cbd2dd] bg-white px-3 py-2.5 text-[14px] text-[#1e2b43] focus:border-[#bc9155] focus:outline-none focus:ring-2 focus:ring-[#bc9155]/30"
-        />
-      )}
-    </label>
-  );
-}
-
-export function ScheduleButton({
-  className,
-  children,
-  ariaLabel,
-}: {
-  className?: string;
-  children: React.ReactNode;
-  ariaLabel?: string;
-}) {
-  const { open } = useScheduler();
-  return (
-    <button
-      type="button"
-      onClick={open}
-      aria-label={ariaLabel}
-      className={className}
-    >
-      {children}
-    </button>
   );
 }
