@@ -75,8 +75,8 @@ function useFadeUp() {
 }
 
 const fadeUpStyle: React.CSSProperties = {
-  opacity: 0,
-  transform: "translateY(30px)",
+  opacity: 1,
+  transform: "translateY(0)",
   transition: "opacity 0.7s ease, transform 0.7s ease",
 };
 

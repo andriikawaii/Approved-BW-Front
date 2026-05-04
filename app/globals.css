@@ -1483,6 +1483,18 @@ body:has(.gwc-sticky-cta) .bw-sticky-cta { display: none !important; }
     margin-top: 6px;
   }
 
+  /* Breadcrumbs — wrap onto multiple rows on mobile, never break inside an item */
+  ol.flex.list-none.items-center,
+  ol.flex.list-none.items-center.justify-center {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    row-gap: 4px;
+  }
+  ol.flex.list-none.items-center > li,
+  ol.flex.list-none.items-center.justify-center > li {
+    white-space: nowrap;
+  }
+
   /* Service-template Tailwind tables wrapped in .overflow-x-auto */
   .bw-pricing-mobile-stack,
   .overflow-x-auto:has(table) {
