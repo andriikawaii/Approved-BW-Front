@@ -2,7 +2,7 @@
 # Cache all BuiltWell API page responses to local JSON files
 # Run this whenever the API is up: bash scripts/cache-api.sh
 
-API="https://builtwell-api.petararsic.rs/api/pages"
+API="https://api.builtwellct.com/api/pages"
 CACHE_DIR="src/api/cache"
 
 mkdir -p "$CACHE_DIR"
