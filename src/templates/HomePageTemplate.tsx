@@ -927,28 +927,53 @@ function HomeProcessSection({ data }: { data: ProcessStepsData | null }) {
         }
         @media (max-width: 1024px) {
           .home-process-timeline {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 24px;
-            max-width: 700px;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            max-width: 720px;
             margin: 0 auto;
           }
           .home-process-timeline::before {
             display: none;
           }
           .home-process-step {
-            padding: 16px 8px;
-            gap: 0;
+            padding: 16px;
+            flex-direction: row;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            text-align: left;
+            border: 1px solid rgba(188, 145, 85, 0.18);
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+          }
+          .home-process-step.is-active {
+            border-color: rgba(188, 145, 85, 0.55);
+            background: rgba(188, 145, 85, 0.16);
           }
           .home-process-step-num {
-            margin: 0 0 10px;
+            width: 52px;
+            height: 52px;
+            font-size: 22px;
+            margin: 0;
+            box-shadow: 0 0 0 3px rgba(188, 145, 85, 0.12);
           }
           .home-process-step h3 {
-            text-align: center;
-            font-size: 15px;
+            text-align: left;
+            font-size: 18px;
             margin: 0;
+            flex: 1;
           }
           .home-process-step p {
-            display: none !important;
+            display: block !important;
+            grid-column: 1 / -1;
+            text-align: left;
+            margin-top: 0;
+            padding-left: 68px;
+            width: 100%;
+          }
+          .home-process-step.is-active p {
+            max-height: 300px;
+            margin-top: 8px;
           }
         }
         @media (max-width: 768px) {
@@ -963,19 +988,8 @@ function HomeProcessSection({ data }: { data: ProcessStepsData | null }) {
             font-size: 15px;
             line-height: 1.7;
           }
-          .home-process-timeline {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 20px;
-            max-width: 600px;
-          }
           .home-process-step {
-            padding: 14px 8px;
-          }
-          .home-process-step-num {
-            width: 48px;
-            height: 48px;
-            font-size: 17px;
-            margin: 0 0 8px;
+            padding: 14px;
           }
           .home-process-step h3 {
             font-size: 14px;
