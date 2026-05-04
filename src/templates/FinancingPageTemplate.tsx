@@ -95,7 +95,6 @@ const defaultTrustStrip = [
   { icon: "star", label: "Google Rating 4.9", url: "https://www.google.com/search?q=builtwell+ct+reviews" },
   { icon: "check-circle", label: "Trusted on Houzz", url: "https://www.houzz.com/professionals/general-contractors/builtwell-ct" },
   { icon: "calendar", label: "CT HIC License #0668405", url: "https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx" },
-  { icon: "check-circle", label: "Verified on Angi", url: "https://www.angi.com/companylist/us/ct/orange/builtwell-ct-reviews-" },
 ];
 
 const defaultFinancingCards = [

@@ -1196,7 +1196,6 @@ function HomeTrustStrip() {
       href: 'https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx',
       external: true,
     },
-    { label: 'Verified on Angi', icon: 'check', href: 'https://www.angi.com', external: true },
   ];
 
   return (

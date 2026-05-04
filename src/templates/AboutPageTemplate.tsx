@@ -153,7 +153,6 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
     },
     { icon: "check", label: "Trusted on Houzz", url: "#houzz" },
     { icon: "calendar", label: "CT HIC License #0668405", url: "https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx" },
-    { icon: "check", label: "Verified on Angi", url: "#angi" },
   ]).slice(0, 4);
 
   return (

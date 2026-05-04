@@ -381,11 +381,7 @@ export function NewHavenCTPageTemplate({ page }: { page: CMSPage }) {
   );
   const bottomTrustItems = (bottomTrust?.items || [])
     .filter((item) => !/bbb/i.test(`${item?.label || ''} ${item?.value || ''}`))
-    .map((item) =>
-      /angi/i.test(`${item?.label || ''} ${item?.value || ''}`)
-        ? { ...item, label: 'Verified on', value: 'Angi' }
-        : item
-    )
+    .filter((item) => !/angi/i.test(`${item?.label || ''} ${item?.value || ''}`))
     .slice(0, 4);
   const county = areas?.counties?.[0];
   const areaTitle = parts(areas?.title, areas?.highlight_text);

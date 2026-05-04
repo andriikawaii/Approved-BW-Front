@@ -75,11 +75,6 @@ const CONTACT_TRUST_ITEMS: Array<{ label: string; url: string; icon: ContactTrus
     icon: "license",
     external: true,
   },
-  {
-    label: "Verified on Angi",
-    url: "#angi",
-    icon: "check",
-  },
 ];
 
 function parts(text?: string | null, mark?: string | null) {

@@ -85,7 +85,6 @@ const defaultTrustStrip = [
   { icon: "star", label: "Google Rating", value: "4.9", url: "https://www.google.com/search?q=builtwell+ct+reviews" },
   { icon: "check-circle", label: "Trusted on Houzz", url: "#houzz" },
   { icon: "calendar", label: "CT HIC License #0668405", url: "https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx" },
-  { icon: "check-circle", label: "Verified on Angi", url: "#angi" },
 ];
 
 function ServicesTrustIcon({ icon }: { icon?: string | null }) {
