@@ -264,7 +264,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
               <span className="font-semibold text-white">Services</span>
             </li>
           </ol>
-          <h1 className="fade-up mb-3 whitespace-nowrap font-serif text-[clamp(28px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.5px] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]" style={{ ...fadeUpStyle, transitionDelay: "0.1s" }}>
+          <h1 className="fade-up mb-3 font-serif text-[clamp(26px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.5px] text-white md:whitespace-nowrap [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]" style={{ ...fadeUpStyle, transitionDelay: "0.1s" }}>
             <span className="text-white">{heroParts.before || "Home Remodeling "}</span>
             <span className="text-[#bc9155]">{heroParts.accent || "Services in Connecticut"}</span>
             <span className="text-white">{heroParts.after}</span>
