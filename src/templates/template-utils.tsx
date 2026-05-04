@@ -362,7 +362,7 @@ export function AreasSection({ data }: { data: any }) {
         .bw-area-towns-more.show { display:grid; }
         .bw-area-towns-toggle { grid-column:1 / -1; margin-top:4px; background:none; border:none; color:#bc9155; font-size:13px; font-weight:600; cursor:pointer; padding:4px 0; transition:color .2s; text-align:center; }
         .bw-area-towns-toggle:hover { color:#9a7340; }
-        .bw-area-link { display:inline-flex; align-items:center; gap:6px; margin-top:auto; padding-top:16px; color:#bc9155; font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; justify-content:center; }
+        .bw-area-link { display:flex; width:100%; align-items:center; justify-content:center; gap:6px; margin-top:auto; padding-top:16px; color:#bc9155; font-size:14px; font-weight:600; text-decoration:none; transition:gap .3s; text-align:center; }
         .bw-area-link:hover { gap:10px; }
         .bw-area-link-arrow { width:14px; height:14px; }
         .bw-areas-note { margin:20px auto 0; text-align:center; font-size:14px; line-height:1.7; color:#5c677d; }
