@@ -54,6 +54,138 @@ function cls(...values: Array<string | false | null | undefined>) {
   return values.filter(Boolean).join(' ');
 }
 
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+function startOfDay(d: Date) {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+
+function DayPicker({
+  value,
+  onChange,
+  disableSaturday,
+  hasError,
+}: {
+  value: string;
+  onChange: (iso: string) => void;
+  disableSaturday: boolean;
+  hasError: boolean;
+}) {
+  const today = startOfDay(new Date());
+  const minDate = new Date(today);
+  minDate.setDate(minDate.getDate() + 1);
+
+  const initial = value ? new Date(`${value}T12:00:00`) : minDate;
+  const [viewMonth, setViewMonth] = useState(new Date(initial.getFullYear(), initial.getMonth(), 1));
+
+  const firstOfMonth = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), 1);
+  const daysInMonth = new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 0).getDate();
+  // Monday-first grid: shift Sunday(0) to position 6
+  const jsDow = firstOfMonth.getDay();
+  const startOffset = jsDow === 0 ? 6 : jsDow - 1;
+
+  const cells: Array<{ iso: string; day: number; jsDow: number; isPast: boolean; isSunday: boolean; isSaturday: boolean; isSelected: boolean } | null> = [];
+  for (let i = 0; i < startOffset; i++) cells.push(null);
+  for (let day = 1; day <= daysInMonth; day++) {
+    const d = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), day);
+    const iso = toIsoDate(d);
+    const dow = d.getDay();
+    cells.push({
+      iso,
+      day,
+      jsDow: dow,
+      isPast: d < minDate,
+      isSunday: dow === 0,
+      isSaturday: dow === 6,
+      isSelected: iso === value,
+    });
+  }
+  while (cells.length % 7 !== 0) cells.push(null);
+
+  const canGoBack = (() => {
+    const first = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), 1);
+    const previous = new Date(first.getFullYear(), first.getMonth() - 1, 1);
+    const monthEnd = new Date(first.getFullYear(), first.getMonth(), 0);
+    return monthEnd >= minDate;
+  })();
+  void canGoBack;
+  const previousMonthEnd = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), 0);
+  const allowPrev = previousMonthEnd >= minDate;
+
+  return (
+    <div
+      className={cls(
+        'rounded-[10px] border bg-white p-3',
+        hasError ? 'border-red-500' : 'border-[#1e2b4326]',
+      )}
+    >
+      <div className="mb-2 flex items-center justify-between px-1">
+        <button
+          type="button"
+          disabled={!allowPrev}
+          onClick={() => setViewMonth(new Date(viewMonth.getFullYear(), viewMonth.getMonth() - 1, 1))}
+          aria-label="Previous month"
+          className={cls(
+            'flex h-8 w-8 items-center justify-center rounded-full text-[18px] leading-none transition-colors',
+            allowPrev ? 'text-[#1e2b43] hover:bg-[#bc91551a]' : 'cursor-not-allowed text-[#1e2b4340]',
+          )}
+        >
+          ‹
+        </button>
+        <div className="text-[14px] font-semibold text-[#1e2b43]">
+          {MONTH_NAMES[viewMonth.getMonth()]} {viewMonth.getFullYear()}
+        </div>
+        <button
+          type="button"
+          onClick={() => setViewMonth(new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 1))}
+          aria-label="Next month"
+          className="flex h-8 w-8 items-center justify-center rounded-full text-[18px] leading-none text-[#1e2b43] transition-colors hover:bg-[#bc91551a]"
+        >
+          ›
+        </button>
+      </div>
+
+      <div className="mb-1 grid grid-cols-7 gap-1 text-center text-[10px] font-bold uppercase tracking-[0.05em] text-[#5c677d]">
+        {DAY_LABELS.map((d, i) => (
+          <div key={i} className="py-1">{d}</div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-7 gap-1">
+        {cells.map((cell, idx) => {
+          if (!cell) return <div key={idx} className="h-9" />;
+          const blocked = cell.isPast || cell.isSunday || (cell.isSaturday && disableSaturday);
+          return (
+            <button
+              key={idx}
+              type="button"
+              disabled={blocked}
+              onClick={() => !blocked && onChange(cell.iso)}
+              className={cls(
+                'h-9 rounded-[6px] text-[13px] font-medium transition-all',
+                cell.isSelected
+                  ? 'bg-[#bc9155] text-white shadow-[0_2px_8px_rgba(188,145,85,0.4)]'
+                  : blocked
+                    ? 'cursor-not-allowed bg-[#f5f1e9]/40 text-[#1e2b4333] line-through decoration-[#1e2b4322]'
+                    : 'bg-white text-[#1e2b43] hover:bg-[#bc91551a] hover:text-[#bc9155]',
+              )}
+            >
+              {cell.day}
+            </button>
+          );
+        })}
+      </div>
+
+      <p className="mt-3 text-[11px] leading-[1.45] text-[#5c677d]">
+        {disableSaturday
+          ? 'In-person visits Mon-Fri. Sundays closed.'
+          : 'Google Meet Mon-Sat. Sundays closed.'}
+      </p>
+    </div>
+  );
+}
+
 export default function ConsultationModal({ open, onClose }: Props) {
   const [pathMode, setPathMode] = useState<PathMode>(null);
   const [wizardStep, setWizardStep] = useState(1);
@@ -434,19 +566,16 @@ export default function ConsultationModal({ open, onClose }: Props) {
                         <label className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">
                           Select a Date
                         </label>
-                        <div className="relative">
-                          <input
-                            type="date"
-                            min={getTomorrowIsoDate()}
-                            value={date}
-                            onChange={(event) => setDate(event.target.value)}
-                            className={cls(
-                              'h-[48px] w-full rounded-[6px] border px-4 pr-11 text-[15px] text-[#1e2b43] outline-none transition-colors focus:border-[#bc9155]',
-                              errors.date ? 'border-red-500' : 'border-[#1e2b4326]',
-                            )}
-                          />
-                          <CalendarDays className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#1e2b43]" />
-                        </div>
+                        <DayPicker
+                          value={date}
+                          onChange={(value) => {
+                            setDate(value);
+                            setSelectedSlot('');
+                            clearErrors();
+                          }}
+                          disableSaturday={scheduleType === 'in_person'}
+                          hasError={!!errors.date}
+                        />
                         {errors.date ? <p className="mt-1 text-[11px] text-red-600">{errors.date}</p> : null}
                       </div>
 
