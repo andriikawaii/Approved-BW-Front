@@ -40,26 +40,11 @@ export function SchedulerProvider({ children }: { children: React.ReactNode }) {
     };
   }, [isOpen, close]);
 
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      const target = e.target as HTMLElement;
-      const link = target.closest('a');
-      if (!link) return;
-      const href = link.getAttribute('href') || '';
-      if (
-        href === FREE_CONSULTATION_PATH ||
-        href === FREE_CONSULTATION_PATH.replace(/\/$/, '') ||
-        href.endsWith(FREE_CONSULTATION_PATH) ||
-        href.endsWith(FREE_CONSULTATION_PATH.replace(/\/$/, ''))
-      ) {
-        if (e.metaKey || e.ctrlKey || e.shiftKey || (e as MouseEvent).button === 1) return;
-        e.preventDefault();
-        open();
-      }
-    }
-    document.addEventListener('click', handleClick, true);
-    return () => document.removeEventListener('click', handleClick, true);
-  }, [open]);
+  // Intentionally NOT intercepting /free-consultation/ link clicks.
+  // The full /free-consultation/ page already has a polished, wired-up multi-step
+  // form with the proper backend endpoint. Let those links navigate normally.
+  // The modal stays available for future use (e.g. iframe-based scheduler) but
+  // isnt opened by global link clicks today.
 
   return (
     <SchedulerContext.Provider value={{ open, close, isOpen }}>

@@ -1,19 +1,18 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { Phone } from 'lucide-react';
-import { useScheduler } from '@/src/components/SchedulerModal';
 import { usePageData } from '@/src/context/PageDataContext';
 
 /**
  * Mobile-only sticky bottom bar. Two equal-width buttons:
- *  • Left: "Free Estimate" — opens the scheduler modal
+ *  • Left: "Free Estimate" — navigates to /free-consultation/ (the working page form)
  *  • Right: "Call Now"     — opens a small popover with county phone numbers,
  *                            or directly dials the only available number.
  * Auto-hides on town-template pages that ship their own `.gwc-sticky-cta`.
  */
 export default function StickyEstimateCta() {
-  const { open: openScheduler } = useScheduler();
   const { phones } = usePageData();
   const [callOpen, setCallOpen] = useState(false);
   const callRef = useRef<HTMLDivElement | null>(null);
@@ -83,13 +82,12 @@ export default function StickyEstimateCta() {
       ) : null}
 
       <div className="grid grid-cols-2 gap-2.5 rounded-[14px] bg-white/85 p-1.5 shadow-[0_18px_44px_rgba(15,25,45,0.22)] backdrop-blur-md">
-        <button
-          type="button"
-          onClick={openScheduler}
+        <Link
+          href="/free-consultation/"
           className="flex h-[50px] items-center justify-center rounded-[10px] bg-[#1E2B43] px-3 text-[14px] font-bold uppercase tracking-[0.4px] text-white transition-colors hover:bg-[#2a3957]"
         >
           Free Estimate
-        </button>
+        </Link>
         <button
           type="button"
           onClick={handleCallClick}
