@@ -24,7 +24,6 @@ import { ServicesOverviewPageTemplate } from './ServicesOverviewPageTemplate';
 import { TermsPageTemplate } from './TermsPageTemplate';
 import { TownPageTemplate } from './TownPageTemplate';
 import { CountyHubPageTemplate } from './CountyHubPageTemplate';
-import { FreeConsultationPageTemplate } from './FreeConsultationPageTemplate';
 import { PortfolioPageTemplate } from './PortfolioPageTemplate';
 import { ThankYouPageTemplate } from './ThankYouPageTemplate';
 import { ReviewsPageTemplate } from './ReviewsPageTemplate';
@@ -129,10 +128,6 @@ export function renderTemplate(page: CMSPage) {
 
   if (TOWN_HUB_SLUGS.has(normalizedSlug)) {
     return createElement(TownHubPageTemplate, { page: effectivePage });
-  }
-
-  if (normalizedSlug === 'free-consultation') {
-    return createElement(FreeConsultationPageTemplate, { page: effectivePage });
   }
 
   if (normalizedSlug === 'homeowner-hub') {
