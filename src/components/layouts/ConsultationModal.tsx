@@ -351,7 +351,6 @@ export default function ConsultationModal({ open, onClose }: Props) {
                         <button
                           type="button"
                           onClick={() => {
-                            if (isSaturday) return;
                             setScheduleType('in_person');
                             clearErrors();
                           }}
@@ -360,7 +359,6 @@ export default function ConsultationModal({ open, onClose }: Props) {
                             scheduleType === 'in_person'
                               ? 'border-[#bc9155] bg-[#bc915510]'
                               : 'border-[#1e2b431a] bg-white hover:border-[#bc9155]',
-                            isSaturday && 'cursor-not-allowed opacity-40',
                           )}
                         >
                           <Home className="mx-auto mb-2 h-7 w-7 text-[#bc9155]" />
