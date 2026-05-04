@@ -936,12 +936,11 @@ function HomeProcessSection({ data }: { data: ProcessStepsData | null }) {
             display: none;
           }
           .home-process-step {
-            padding: 16px;
-            flex-direction: row;
+            padding: 20px 16px;
+            flex-direction: column;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
-            text-align: left;
+            gap: 12px;
+            text-align: center;
             border: 1px solid rgba(188, 145, 85, 0.18);
             background: rgba(255, 255, 255, 0.03);
             border-radius: 10px;
@@ -961,7 +960,7 @@ function HomeProcessSection({ data }: { data: ProcessStepsData | null }) {
             text-align: center;
             font-size: 18px;
             margin: 0;
-            flex: 1;
+            width: 100%;
           }
           .home-process-step p {
             display: block !important;
