@@ -204,14 +204,63 @@ export default function ConsultationModal({ open, onClose }: Props) {
     return valid;
   }
 
-  function submitSchedule() {
-    if (!validateScheduleSubmit()) return;
-    setSubmittedMode('schedule');
+  async function postLead(payload: Record<string, unknown>): Promise<boolean> {
+    try {
+      const res = await fetch('/api/leads/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          ...payload,
+          source_page: 'Consultation Modal',
+          source_page_path: typeof window !== 'undefined' ? window.location.pathname : '/',
+          hp: '',
+        }),
+      });
+      const data: unknown = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const result = data as { error?: string; message?: string; errors?: Record<string, string[]> } | null;
+        const firstValidationError = result?.errors ? Object.values(result.errors)[0] : null;
+        const errorMessage = Array.isArray(firstValidationError)
+          ? firstValidationError[0]
+          : result?.error || result?.message || 'Submission failed. Please try again or call us.';
+        addError('submit', errorMessage);
+        return false;
+      }
+      return true;
+    } catch {
+      addError('submit', 'Network error. Please try again or call us.');
+      return false;
+    }
   }
 
-  function submitQuestion() {
+  async function submitSchedule() {
+    if (!validateScheduleSubmit()) return;
+    const consultationType = scheduleType === 'in_person' ? 'in_person' : 'virtual';
+    const summary = `${consultationType === 'in_person' ? 'In-Person Visit' : 'Google Meet (virtual)'}\nPreferred date: ${date}\nPreferred time: ${selectedSlot}${scheduleType === 'in_person' && scheduleAddress ? `\nAddress: ${scheduleAddress}` : ''}`;
+    const ok = await postLead({
+      name: scheduleName,
+      email: scheduleEmail,
+      phone: schedulePhone,
+      zip: scheduleZip,
+      property_address: scheduleType === 'in_person' ? scheduleAddress : undefined,
+      consultation_type: consultationType,
+      message: summary,
+    });
+    if (ok) setSubmittedMode('schedule');
+  }
+
+  async function submitQuestion() {
     if (!validateQuestionSubmit()) return;
-    setSubmittedMode('question');
+    const ok = await postLead({
+      name: questionName,
+      email: questionEmail,
+      phone: questionPhone || undefined,
+      zip: questionZip || undefined,
+      consultation_type: 'question',
+      contact_method: questionContact,
+      message: questionMessage,
+    });
+    if (ok) setSubmittedMode('question');
   }
 
   return (
