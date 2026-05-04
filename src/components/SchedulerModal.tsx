@@ -40,11 +40,26 @@ export function SchedulerProvider({ children }: { children: React.ReactNode }) {
     };
   }, [isOpen, close]);
 
-  // Intentionally NOT intercepting /free-consultation/ link clicks.
-  // The full /free-consultation/ page already has a polished, wired-up multi-step
-  // form with the proper backend endpoint. Let those links navigate normally.
-  // The modal stays available for future use (e.g. iframe-based scheduler) but
-  // isnt opened by global link clicks today.
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      const target = e.target as HTMLElement;
+      const link = target.closest('a');
+      if (!link) return;
+      const href = link.getAttribute('href') || '';
+      if (
+        href === FREE_CONSULTATION_PATH ||
+        href === FREE_CONSULTATION_PATH.replace(/\/$/, '') ||
+        href.endsWith(FREE_CONSULTATION_PATH) ||
+        href.endsWith(FREE_CONSULTATION_PATH.replace(/\/$/, ''))
+      ) {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || (e as MouseEvent).button === 1) return;
+        e.preventDefault();
+        open();
+      }
+    }
+    document.addEventListener('click', handleClick, true);
+    return () => document.removeEventListener('click', handleClick, true);
+  }, [open]);
 
   return (
     <SchedulerContext.Provider value={{ open, close, isOpen }}>
@@ -120,9 +135,10 @@ function SchedulerForm({ onClose }: { onClose: () => void }) {
     const fd = new FormData(e.currentTarget);
     const services = (fd.getAll('services') as string[]).filter(Boolean);
 
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://api.builtwellct.com';
     try {
-      const res = await fetch(`${apiBase}/api/leads`, {
+      // Use the same Next.js proxy route as the /free-consultation page so we
+      // share its working CORS / CSRF / forwarding behavior.
+      const res = await fetch('/api/leads/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
