@@ -82,6 +82,7 @@ export function SchedulingModal({ open, onClose, initialType = 'in-person' }: { 
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [zip, setZip] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -104,38 +105,51 @@ export function SchedulingModal({ open, onClose, initialType = 'in-person' }: { 
     if (!name || !phone || !email || !zip || !date || !slot) { alert('Please fill in all fields and select a time slot.'); return; }
     if (type === 'in-person' && !county) { alert('Please select your county.'); return; }
 
+    setSubmitting(true);
+
+    const consultationType = type === 'in-person' ? 'in_person' : 'virtual';
+    const countyLabel = county === 'fairfield' ? 'Fairfield County' : 'New Haven County';
+    const summary = `${type === 'in-person' ? `In-Person Visit in ${countyLabel}` : 'Google Meet (virtual)'}\nPreferred date: ${date}\nPreferred time: ${slot}`;
+
     try {
       const response = await fetch('/api/leads/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
           name,
-          phone,
           email,
+          phone,
           zip,
-          consultation_type: type === 'in-person' ? 'in_person' : 'virtual',
-          county: type === 'in-person' ? county : null,
-          preferred_date: date,
-          preferred_time_slot: slot,
-          source: 'scheduler_modal',
-          consent: true,
+          town: type === 'in-person' ? countyLabel : undefined,
+          consultation_type: consultationType,
+          message: summary,
+          source_page: 'Scheduler Modal',
+          source_page_path: typeof window !== 'undefined' ? window.location.pathname : '/',
+          hp: '',
         }),
       });
       const data: unknown = await response.json().catch(() => ({}));
       if (!response.ok) {
-        const errorMessage = (data && typeof data === 'object' && 'error' in data && typeof (data as { error?: unknown }).error === 'string')
-          ? (data as { error: string }).error
-          : 'Submission failed. Please try again or call us.';
+        const result = data as { error?: string; message?: string; errors?: Record<string, string[]> } | null;
+        const firstValidationError = result?.errors ? Object.values(result.errors)[0] : null;
+        const errorMessage = Array.isArray(firstValidationError)
+          ? firstValidationError[0]
+          : result?.error || result?.message || 'Submission failed. Please try again or call us.';
         alert(errorMessage);
+        setSubmitting(false);
         return;
       }
     } catch {
       alert('Network error. Please try again or call us.');
+      setSubmitting(false);
       return;
     }
 
-    alert(`Thank you! Your consultation request has been submitted.\n\n${type === 'in-person' ? 'In-Person Visit in ' + (county === 'fairfield' ? 'Fairfield County' : 'New Haven County') : 'Google Meet'}\n${date} at ${slot}\n\nWe'll confirm by email within 24 hours.`);
+    setSubmitting(false);
     onClose();
+    if (typeof window !== 'undefined') {
+      window.location.href = '/thank-you/';
+    }
   };
 
   useEffect(() => {
@@ -216,8 +230,8 @@ export function SchedulingModal({ open, onClose, initialType = 'in-person' }: { 
               <input type="text" placeholder="06477" value={zip} onChange={(e) => setZip(e.target.value)} style={{ width: '100%', padding: '11px 12px', border: '1px solid rgba(30,43,67,0.15)', borderRadius: 6, fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#1E2B43', boxSizing: 'border-box' }} />
             </div>
           </div>
-          <button onClick={handleConfirm} style={{ width: '100%', padding: 14, background: '#BC9155', color: '#fff', border: 'none', borderRadius: 4, fontFamily: 'Inter, sans-serif', fontSize: 15, fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}>
-            Confirm Consultation
+          <button onClick={handleConfirm} disabled={submitting} style={{ width: '100%', padding: 14, background: '#BC9155', color: '#fff', border: 'none', borderRadius: 4, fontFamily: 'Inter, sans-serif', fontSize: 15, fontWeight: 600, cursor: submitting ? 'wait' : 'pointer', opacity: submitting ? 0.7 : 1, transition: 'background 0.2s' }}>
+            {submitting ? 'Sending…' : 'Confirm Consultation'}
           </button>
           <p style={{ fontSize: 12, color: '#5C677D', textAlign: 'center', marginTop: 14, fontStyle: 'italic' }}>We&apos;ll send a confirmation to your email within 24 hours.</p>
         </div>
