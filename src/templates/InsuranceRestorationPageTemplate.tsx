@@ -552,7 +552,7 @@ function ProcessSection({ data }: { data?: any }) {
           @media (max-width:1023px) {
             .ins-process-timeline { grid-template-columns:1fr; gap:12px; max-width:720px; margin:0 auto; }
             .ins-process-timeline::before { display:none; }
-            .ins-process-step { padding:16px; flex-direction:row; flex-wrap:wrap; align-items:center; gap:16px; text-align:left; border:1px solid rgba(188,145,85,0.18); background:rgba(255,255,255,0.03); border-radius:10px; }
+            .ins-process-step { padding:20px 16px; flex-direction:column; align-items:center; gap:12px; text-align:center; border:1px solid rgba(188,145,85,0.18); background:rgba(255,255,255,0.03); border-radius:10px; }
             .ins-process-step.is-active { border-color:rgba(188,145,85,0.55); background:rgba(188,145,85,0.16); }
             .ins-process-step-num { width:52px; height:52px; font-size:22px; margin:0; box-shadow:0 0 0 3px rgba(188,145,85,0.12); }
             .ins-process-step h3 { text-align:center; font-size:18px; margin:0; width:100%; }
