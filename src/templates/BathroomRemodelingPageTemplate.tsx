@@ -424,12 +424,6 @@ const defaultSections: CMSSection[] = [
           value: "#0668405",
           url: "https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx",
         },
-        {
-          icon: "check",
-          label: "Angi",
-          value: "Verified on Angi",
-          url: "https://www.angi.com/companylist/us/ct/orange/builtwell-ct-reviews-",
-        },
       ],
     },
   },

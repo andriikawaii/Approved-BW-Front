@@ -864,17 +864,6 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
                 value: '#0668405',
                 url: 'https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx',
               },
-              {
-                icon: (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                    <polyline points="22 4 12 14.01 9 11.01" />
-                  </svg>
-                ),
-                label: 'Verified on',
-                value: 'Angi',
-                url: 'https://www.angi.com/companylist/us/ct/fairfield/builtwell-ct-reviews-10768',
-              },
             ].map((item, i, arr) => (
               <div key={i} className="gwch-trust-strip-item-wrap">
                 <a href={item.url} target="_blank" rel="noopener noreferrer" className="gwch-trust-strip-item">
