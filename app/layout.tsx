@@ -1,7 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Playfair_Display, Inter } from 'next/font/google';
-import CookieBanner from '@/src/components/CookieBanner';
 import { SchedulerProvider } from '@/src/components/SchedulerModal';
 
 const playfair = Playfair_Display({
@@ -73,7 +72,6 @@ export default function RootLayout({
       <body suppressHydrationWarning={isDevelopment} className="font-sans antialiased">
         <SchedulerProvider>
           {children}
-          <CookieBanner />
         </SchedulerProvider>
       </body>
     </html>
