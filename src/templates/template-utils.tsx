@@ -515,7 +515,7 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
             <div className="bw-cta-left">
               <div className="bw-cta-images">
                 {images.map((image, index) => (
-                  <div key={`${image.src}-${index}`} className="bw-cta-img-wrap" style={{ position: 'relative' }}>
+                  <div key={`${image.src}-${index}`} className="bw-cta-img-wrap" style={{ position: 'relative', minHeight: 180 }}>
                     <Image
                       src={image.src}
                       alt={image.alt}
