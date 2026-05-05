@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import type { CMSPage } from "@/types/cms";
 import { HeroTrustBar, cls, label, linkNode, media, parts, section, sections } from "./template-utils";
 import { ArrowRight, ArrowLeft, Check, Upload } from "lucide-react";
@@ -104,7 +105,7 @@ function ApplicationWizard({ data }: { data: any }) {
     setSubmitted(true);
   }
 
-  const progressWidth = step === 1 ? "0%" : step === 2 ? "33%" : step === 3 ? "66%" : "100%";
+  const progressScale = step === 1 ? 0 : step === 2 ? 0.33 : step === 3 ? 0.66 : 1;
 
   if (submitted) {
     return (
@@ -123,7 +124,7 @@ function ApplicationWizard({ data }: { data: any }) {
       {/* Progress */}
       <div className="careers-wizard-progress">
         <div className="careers-wizard-track" />
-        <div className="careers-wizard-fill" style={{ width: progressWidth }} />
+        <div className="careers-wizard-fill" style={{ transform: `translateY(-50%) scaleX(${progressScale})` }} />
         {[1, 2, 3, 4].map((s) => (
           <div key={s} className="contents">
             <div className={cls("careers-wizard-dot", s <= step ? "active" : "")}>{s <= step && s < step ? <Check className="h-3.5 w-3.5" /> : s}</div>
@@ -318,7 +319,7 @@ export function CareersPageTemplate({ page }: { page: CMSPage }) {
         .careers-wizard-wrap { background:#fff; border-radius:12px; padding:40px 48px; max-width:800px; margin:0 auto; border:1px solid rgba(30,43,67,0.08); box-shadow:0 16px 48px rgba(30,43,67,0.1),0 4px 12px rgba(30,43,67,0.04); }
         .careers-wizard-progress { display:flex; align-items:center; margin-bottom:40px; position:relative; }
         .careers-wizard-track { position:absolute; top:50%; left:0; right:0; height:3px; background:rgba(30,43,67,0.08); transform:translateY(-50%); z-index:0; border-radius:3px; }
-        .careers-wizard-fill { position:absolute; top:50%; left:0; height:3px; background:#bc9155; transform:translateY(-50%); z-index:1; border-radius:3px; transition:width 0.4s ease; }
+        .careers-wizard-fill { position:absolute; top:50%; left:0; right:0; height:3px; background:#bc9155; transform-origin:left center; z-index:1; border-radius:3px; transition:transform 0.4s ease; }
         .careers-wizard-dot { width:36px; height:36px; border-radius:50%; background:#fff; border:3px solid rgba(30,43,67,0.12); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#5c677d; position:relative; z-index:2; transition:all 0.3s; flex-shrink:0; }
         .careers-wizard-dot.active { border-color:#bc9155; background:#bc9155; color:#fff; }
         .careers-wizard-step-anim { animation:carWizFadeIn 0.35s ease; }
@@ -398,7 +399,7 @@ export function CareersPageTemplate({ page }: { page: CMSPage }) {
       <div className="careers-page">
         {/* ══════ HERO ══════ */}
         <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pt-[120px] text-white md:px-10">
-          <div className="absolute inset-0 bg-cover bg-[center_30%] opacity-[0.72]" style={{ backgroundImage: `url(${media(hero?.background_image, "/portfolio/builtwell-team-van-exterior-ct-01.jpg")})` }} />
+          <Image src={media(hero?.background_image, "/portfolio/builtwell-team-van-exterior-ct-01.jpg")} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_30%] opacity-[0.72]" />
           <div className="absolute inset-0" style={{
             background: [
               "radial-gradient(ellipse at 97% 97%, rgba(21,30,48,1) 0%, rgba(21,30,48,0.9) 8%, transparent 30%)",

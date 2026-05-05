@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Fragment, type ReactNode } from "react";
 import type { CMSPage } from "@/types/cms";
 import { linkNode, media, parts, section, sections } from "./template-utils";
@@ -96,13 +97,7 @@ export function PrivacyPolicyPageTemplate({ page }: { page: CMSPage }) {
   return (
     <div className="privacy-policy-page bg-white text-[#1e2b43]">
       <section className="privacy-hero relative isolate flex min-h-[50vh] items-stretch overflow-hidden bg-[#151e30] px-5 pb-12 pt-[120px] text-white md:px-10">
-        <div
-          className="absolute inset-0 bg-cover bg-[center_30%]"
-          style={{
-            backgroundImage: `url(${media(hero?.background_image, "/images/headers/kitchen-remodeling-header.jpg")})`,
-            opacity: 0.72,
-          }}
-        />
+        <Image src={media(hero?.background_image, "/images/headers/kitchen-remodeling-header.jpg")} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_30%] opacity-[0.72]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_97%_97%,rgba(21,30,48,1)_0%,rgba(21,30,48,0.9)_8%,transparent_30%),radial-gradient(ellipse_at_3%_97%,rgba(21,30,48,0.9)_0%,transparent_25%),linear-gradient(180deg,rgba(21,30,48,0.35)_0%,rgba(21,30,48,0.2)_30%,rgba(21,30,48,0.45)_65%,rgba(21,30,48,0.92)_100%)]" />
 
         <div className="page-hero-inner relative z-10 mx-auto flex w-full max-w-[1240px] flex-col items-center justify-center text-center">

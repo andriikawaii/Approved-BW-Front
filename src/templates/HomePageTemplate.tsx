@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   ArrowRight,
@@ -907,16 +908,18 @@ function HomeProcessSection({ data }: { data: ProcessStepsData | null }) {
           font-size: 14px;
           color: rgba(255, 255, 255, 0.7);
           line-height: 1.65;
-          max-height: 0;
+          height: 0;
           opacity: 0;
           overflow: hidden;
+          visibility: hidden;
           margin: 0;
-          transition: max-height 0.4s ease, opacity 0.35s ease, margin-top 0.35s ease;
+          transition: opacity 0.3s ease;
           text-align: center;
         }
         .home-process-step.is-active p {
-          max-height: 200px;
+          height: auto;
           opacity: 1;
+          visibility: visible;
           margin-top: 8px;
         }
         .home-process-hint {
@@ -971,7 +974,7 @@ function HomeProcessSection({ data }: { data: ProcessStepsData | null }) {
             width: 100%;
           }
           .home-process-step.is-active p {
-            max-height: 300px;
+            height: auto;
             margin-top: 8px;
           }
         }
@@ -1165,7 +1168,7 @@ function HomeAreasSection({
                   {county.url ? (
                     <Link
                       href={county.url}
-                      className="mt-auto flex w-full items-center justify-center gap-1.5 text-center text-sm font-semibold text-[#BC9155] transition-all hover:gap-2.5"
+                      className="mt-auto flex w-full items-center justify-center gap-1.5 text-center text-sm font-semibold text-[#BC9155] transition-colors duration-200 hover:text-[#a57d48]"
                     >
                       Learn more about {countyName}
                       <ArrowRight className="h-3.5 w-3.5" />
@@ -1200,14 +1203,12 @@ function HomeTrustStrip() {
 
   return (
     <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] px-5 py-10 md:px-8 md:py-14 lg:px-10">
-      <div
-        className="absolute inset-0 opacity-[0.12]"
-        style={{
-          backgroundImage: "url('/hero/builtwell-job-site-aerial-hero-ct.jpg')",
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-        }}
+      <Image
+        src="/hero/builtwell-job-site-aerial-hero-ct.jpg"
+        alt=""
+        fill
+        sizes="100vw"
+        className="object-cover opacity-[0.12]"
         aria-hidden="true"
       />
       <div className="home-fade-up relative z-10 mx-auto flex max-w-[1200px] flex-wrap items-center justify-center gap-0">
@@ -1244,9 +1245,12 @@ function HomeTrustStrip() {
 function HomeMidCta() {
   return (
     <section className="relative overflow-hidden bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] px-5 py-[52px] text-center md:px-10 md:py-[72px]">
-      <div
-        className="absolute inset-0 bg-cover bg-[center_40%] opacity-25"
-        style={{ backgroundImage: "url('/hero/builtwell-team-van-consultation-hero-ct.jpg')" }}
+      <Image
+        src="/hero/builtwell-team-van-consultation-hero-ct.jpg"
+        alt=""
+        fill
+        sizes="100vw"
+        className="object-cover object-[center_40%] opacity-25"
         aria-hidden="true"
       />
       <div className="home-fade-up relative z-10">
@@ -1421,9 +1425,12 @@ function HomeLicensedSection({
 
   return (
     <section className="relative overflow-hidden px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-[0.15]"
-        style={{ backgroundImage: "url('/hero/builtwell-job-site-aerial-hero-ct.jpg')" }}
+      <Image
+        src="/hero/builtwell-job-site-aerial-hero-ct.jpg"
+        alt=""
+        fill
+        sizes="100vw"
+        className="object-cover opacity-[0.15]"
         aria-hidden="true"
       />
       <div className="absolute inset-0 bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)]" />

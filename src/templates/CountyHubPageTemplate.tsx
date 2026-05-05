@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Check, ChevronDown, Shield, Upload } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
@@ -305,7 +306,7 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
   return (
     <div className="bg-[#f5f1e9] text-[#1e2b43]">
       <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pb-0 pt-[130px] text-white md:px-10">
-        <div className="absolute inset-0 bg-cover bg-center opacity-[0.72]" style={{ backgroundImage: `url(${media(hero?.background_image, slug === "fairfield-county" ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")})` }} />
+        <Image src={media(hero?.background_image, slug === "fairfield-county" ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover opacity-[0.72]" />
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(21,30,48,0.45) 0%, rgba(21,30,48,0.35) 24%, rgba(21,30,48,0.68) 70%, rgba(21,30,48,0.95) 100%)" }} />
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(188,145,85,0.06) 0%, transparent 50%)" }} />
         <div className="relative z-10 mx-auto flex min-h-[380px] max-w-[1240px] flex-col items-center justify-center pb-14 text-center md:min-h-[440px]">
@@ -475,7 +476,7 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
       {/* MID-PAGE CTA */}
       <div className="relative overflow-hidden" style={{ padding: "64px 0" }}>
         <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #1E2B43 0%, #151E30 100%)" }} />
-        <div className="absolute inset-0" style={{ backgroundImage: "url('/portfolio/builtwell-contractor-client-consultation-ct.jpeg')", backgroundPosition: "center 15%", backgroundSize: "cover", opacity: 0.25 }} />
+        <Image src="/portfolio/builtwell-contractor-client-consultation-ct.jpeg" alt="" fill sizes="100vw" className="object-cover object-[center_15%] opacity-25" />
         <div className="relative z-[1] mx-auto max-w-[700px] px-8 text-center">
           <h2 className="mb-3 font-serif text-[clamp(28px,3.5vw,40px)] font-bold">
             <span style={{ color: "#ffffff" }}>{countyCopy.midCtaTitle} </span><span style={{ color: "#BC9155" }}>{countyCopy.midCtaAccent}</span><span style={{ color: "#ffffff" }}>?</span>
@@ -524,7 +525,7 @@ export function CountyHubPageTemplate({ page }: { page: CMSPage }) {
                         {town.style ? <p className="mt-2 text-[13px] font-semibold uppercase tracking-[0.5px] text-[#9a7340]">{town.style}</p> : null}
                         <p className="mt-3 flex-1 text-[14px] leading-[1.65] text-[#5c677d]">{town.description}</p>
                         {town.linked && town.url ? (
-                          <span className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#bc9155] transition-all group-hover:gap-2.5">
+                          <span className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#bc9155] transition-colors duration-200 group-hover:text-[#a57d48]">
                             view {town.label} <ArrowRight className="h-3.5 w-3.5" />
                           </span>
                         ) : null}

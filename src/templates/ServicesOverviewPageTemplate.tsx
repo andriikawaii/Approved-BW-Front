@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
 import { AreasSection, FinancingStrip, HeroTrustBar, LeadFormSection, cls, label, linkNode, media, parts, section, sections } from "./template-utils";
@@ -248,7 +249,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
 
       {/* ══════ HERO ══════ */}
       <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pb-8 pt-[60px] text-white md:px-10">
-        <div className="absolute inset-0 bg-cover bg-[center_15%] opacity-[0.72]" style={{ backgroundImage: `url(${localMedia(hero?.background_image, "/hero/builtwell-job-site-aerial-hero-ct.jpg")})` }} />
+        <Image src={localMedia(hero?.background_image, "/hero/builtwell-job-site-aerial-hero-ct.jpg")} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_15%] opacity-[0.72]" />
         <div className="absolute inset-0" style={{
           background: [
             "radial-gradient(ellipse at 97% 97%, rgba(21,30,48,1) 0%, rgba(21,30,48,0.9) 8%, transparent 30%)",
@@ -334,7 +335,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
                     {item.price ? <span className="inline-flex w-[150px] items-center justify-center gap-[6px] rounded-full bg-[#bc91551a] px-[14px] py-[6px] text-[12px] font-semibold text-[#9a7340]"><svg className="h-[14px] w-[14px] flex-shrink-0 text-[#bc9155]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>{item.price}</span> : null}
                     {item.timeline ? <span className="inline-flex w-[150px] items-center justify-center gap-[6px] rounded-full bg-[#bc91551a] px-[14px] py-[6px] text-[12px] font-semibold text-[#9a7340]"><svg className="h-[14px] w-[14px] flex-shrink-0 text-[#bc9155]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{item.timeline}</span> : null}
                   </div>
-                  {item.url ? linkNode(item.url, <><span>{item.cta_label || "Learn More"}</span><ArrowRight className="h-[14px] w-[14px]" /></>, "inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-[10px]") : null}
+                  {item.url ? linkNode(item.url, <><span>{item.cta_label || "Learn More"}</span><ArrowRight className="h-[14px] w-[14px]" /></>, "inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#bc9155] transition-colors duration-200 hover:text-[#a57d48]") : null}
                 </div>
               </article>
             ))}
@@ -505,16 +506,18 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
             font-size: 14px;
             color: rgba(255,255,255,0.7);
             line-height: 1.65;
-            max-height: 0;
+            height: 0;
             opacity: 0;
             overflow: hidden;
+            visibility: hidden;
             margin: 0;
-            transition: max-height 0.4s ease, opacity 0.35s ease, margin-top 0.35s ease;
+            transition: opacity 0.3s ease;
             text-align: center;
           }
           .svc-process-step.is-active p {
-            max-height: 200px;
+            height: auto;
             opacity: 1;
+            visibility: visible;
             margin-top: 8px;
           }
           .svc-process-hint {
@@ -566,7 +569,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
               width: 100%;
             }
             .svc-process-step.is-active p {
-              max-height: 300px;
+              height: auto;
               margin-top: 8px;
             }
           }
@@ -744,7 +747,7 @@ function ServicesAreasSection({
                           <span>{county.cta_label || `Learn more about ${county.name}`}</span>
                           <ArrowRight className="h-4 w-4" />
                         </>,
-                        "mt-5 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-2.5",
+                        "mt-5 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#bc9155] transition-colors duration-200 hover:text-[#a57d48]",
                       )
                     : null}
                 </div>

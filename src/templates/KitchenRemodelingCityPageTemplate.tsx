@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { Components } from "react-markdown";
@@ -363,7 +364,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
     <div className="bg-white text-[#1e2b43]">
       <main id="main">
         <section className="kitchen-city-hero relative isolate overflow-hidden bg-[#151e30] px-5 pb-12 pt-[120px] text-white md:min-h-[50vh] md:px-10">
-          <div className="absolute inset-0 bg-cover bg-[center_30%] opacity-[0.72]" style={{ backgroundImage: `url(${media(hero?.background_image, config.defaultHeroImage)})` }} />
+          <Image src={media(hero?.background_image, config.defaultHeroImage)} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_30%] opacity-[0.72]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_97%_97%,rgba(21,30,48,1)_0%,rgba(21,30,48,0.9)_8%,transparent_30%),radial-gradient(ellipse_at_3%_97%,rgba(21,30,48,0.9)_0%,transparent_25%),linear-gradient(180deg,rgba(21,30,48,0.35)_0%,rgba(21,30,48,0.2)_30%,rgba(21,30,48,0.45)_65%,rgba(21,30,48,0.92)_100%)]" />
           <div className="relative mx-auto flex min-h-[430px] max-w-[1240px] flex-col items-center justify-center text-center">
             <ol className="mb-5 flex list-none items-center text-[13px] font-medium text-white/90">
@@ -599,7 +600,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
         </section>
 
         <section className="kitchen-city-process relative overflow-hidden px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
-          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/portfolio/builtwell-team-contractors-ct-04.png')" }} aria-hidden="true" />
+          <Image src="/portfolio/builtwell-team-contractors-ct-04.png" alt="" fill sizes="100vw" className="object-cover" aria-hidden="true" />
           <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(10,18,34,0.90)_0%,rgba(30,43,67,0.85)_100%)]" />
           <div className="relative z-10 mx-auto max-w-[1280px]">
             <div className="mb-16 text-center">
@@ -620,7 +621,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
                     </div>
                     <div>
                       <h3 className="mb-1.5 text-left text-base font-semibold text-white md:mb-3 md:text-lg lg:text-center">{item.title}</h3>
-                      <p className={`text-left text-[14px] leading-[1.6] text-white/70 transition-all duration-300 lg:text-center lg:leading-[1.65] ${isActive ? "max-h-[200px] opacity-100" : "max-h-none opacity-100 lg:max-h-0 lg:overflow-hidden lg:opacity-0"}`}>
+                      <p className={`text-left text-[14px] leading-[1.6] text-white/70 transition-opacity duration-300 lg:text-center lg:leading-[1.65] ${isActive ? "opacity-100" : "opacity-100 lg:overflow-hidden lg:opacity-0 lg:h-0"}`}>
                         {isActive ? item.description : item.short || item.description}
                       </p>
                     </div>
@@ -796,7 +797,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
                   <div className="flex flex-1 flex-col px-7 pb-8 pt-7">
                     <h3 className="mb-3 text-[22px] font-bold text-[#1e2b43]">{href ? linkNode(href, item.title, "text-[#1e2b43] hover:text-[#bc9155]") : item.title}</h3>
                     <p className="mb-5 flex-1 text-[15px] leading-[1.7] text-[#5c677d]">{item.description}</p>
-                    {href ? linkNode(href, <span className="inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#bc9155] transition-[gap] duration-300 hover:gap-[10px]">Learn More<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></span>) : null}
+                    {href ? linkNode(href, <span className="inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#bc9155] transition-colors duration-200 hover:text-[#a57d48]">Learn More<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></span>) : null}
                   </div>
                 </article>
                 );

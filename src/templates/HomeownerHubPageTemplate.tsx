@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -720,7 +721,7 @@ function PermitsSectionHub({ data }: { data?: FeatureGridData }) {
 
   return (
     <section id={data?.anchor_id || "permits"} className="section hub-dark-section">
-      <div className="hub-dark-bg" style={{ backgroundImage: `url('${bgImage}')` }} />
+      <Image src={bgImage} alt="" fill sizes="100vw" className="object-cover object-center opacity-[0.12]" style={{ zIndex: 0 }} />
       <div className="section-inner hub-dark-inner">
         <div className="section-header fade-up">
           {hubLabel(data?.eyebrow || "Permits and Codes", true)}
@@ -946,7 +947,7 @@ function FundingSectionHub({ data }: { data?: FeatureGridData }) {
 
   return (
     <section className="section hub-dark-section">
-      <div className="hub-dark-bg hub-dark-bg-soft" style={{ backgroundImage: `url('${bgImage}')` }} />
+      <Image src={bgImage} alt="" fill sizes="100vw" className="object-cover object-center opacity-[0.08]" style={{ zIndex: 0 }} />
       <div className="section-inner hub-dark-inner">
         <div className="section-header fade-up">
           {hubLabel(data?.eyebrow || "Funding and Assistance", true)}

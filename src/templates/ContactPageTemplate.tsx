@@ -2,6 +2,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Clock3, Home, Mail, MapPin, Monitor, Phone } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
@@ -332,7 +333,7 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
   return (
     <div ref={pageRef} data-contact-page className="bg-[#f5f1e9] text-[#1e2b43]">
       <section className="contact-page-hero relative isolate flex min-h-[50vh] items-stretch overflow-hidden bg-[#151e30] px-5 pb-12 pt-[60px] text-white md:px-10">
-        <div className="absolute inset-0 bg-cover bg-center opacity-70" style={{ backgroundImage: `url(${media(hero?.background_image, "/images/hero/hero-carousel-2.jpg")})` }} />
+        <Image src={media(hero?.background_image, "/images/hero/hero-carousel-2.jpg")} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover opacity-70" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_97%_97%,rgba(21,30,48,1)_0%,rgba(21,30,48,0.9)_8%,transparent_30%),radial-gradient(ellipse_at_3%_97%,rgba(21,30,48,0.9)_0%,transparent_25%),linear-gradient(180deg,rgba(21,30,48,0.35)_0%,rgba(21,30,48,0.2)_30%,rgba(21,30,48,0.45)_65%,rgba(21,30,48,0.92)_100%)]" />
         <div className="relative z-10 mx-auto flex w-full max-w-[1240px] flex-col items-center justify-center text-center">
           <ol className="mb-5 flex list-none items-center text-[13px] font-medium text-white/90">

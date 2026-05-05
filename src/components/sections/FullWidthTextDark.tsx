@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 type Props = {
   data: {
     title: string;
@@ -14,11 +16,12 @@ export default function FullWidthTextDark({ data }: Props) {
     <section className="relative bg-[#1E2F4A] py-16 px-6 lg:px-16 text-white text-center overflow-hidden">
       {data.background_image ? (
         <>
-          <img
+          <Image
             src={data.background_image}
             alt=""
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ opacity: 0.25 }}
+            fill
+            sizes="100vw"
+            className="object-cover opacity-25"
           />
           <div className="absolute inset-0 bg-[#1E2F4A]/60" />
         </>

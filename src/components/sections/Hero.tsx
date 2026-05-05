@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 interface Props {
@@ -69,10 +70,14 @@ export default function Hero({ data }: Props) {
           className="absolute inset-0 h-full w-full object-cover"
         />
       ) : (
-        <img
+        <Image
           src={backgroundImage}
           alt=""
-          className={`absolute inset-0 h-full w-full object-cover ${isTownHub ? 'object-[center_38%]' : 'object-[center_30%]'}`}
+          fill
+          priority
+          fetchPriority="high"
+          sizes="100vw"
+          className={`object-cover ${isTownHub ? 'object-[center_38%]' : 'object-[center_30%]'}`}
           style={{ opacity: isTownHub ? 0.76 : 0.72 }}
         />
       )}

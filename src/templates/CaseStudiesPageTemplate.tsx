@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { ArrowRight, CalendarDays, CheckCircle2, ChevronDown, Star, Upload } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
 import { FinancingStrip as SharedFinancingStrip, LeadFormSection as SharedLeadFormSection, cls, linkNode, media, opts, parts, section, sections } from "./template-utils";
@@ -189,7 +190,7 @@ function HeroSection({ hero, phones }: { hero?: HeroData; phones: PhoneItem[] })
 
   return (
     <section className="relative isolate overflow-hidden bg-[#151E30] px-5 pb-14 pt-[130px] text-white md:px-10">
-      <div className="absolute inset-0 bg-cover" style={{ backgroundImage: `url(${media(hero?.background_image, "/images/headers/kitchen-remodeling-header.jpg")})`, backgroundPosition: "center 15%", opacity: 0.72 }} />
+      <Image src={media(hero?.background_image, "/images/headers/kitchen-remodeling-header.jpg")} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_15%] opacity-[0.72]" />
       <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(21,30,48,0.45) 0%, rgba(21,30,48,0.25) 35%, rgba(21,30,48,0.50) 65%, rgba(21,30,48,0.95) 100%)" }} />
       <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 120%, rgba(21,30,48,0.9) 0%, transparent 55%)" }} />
       <div className="relative mx-auto flex min-h-[380px] max-w-[1240px] flex-col items-center justify-center text-center md:min-h-[440px]">
@@ -314,7 +315,7 @@ function TrustStrip({ data }: { data?: TrustBarData }) {
   return (
     <FadeUp>
       <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)] px-5 py-14 md:px-10">
-        <div className="absolute inset-0 bg-cover bg-center opacity-[0.06]" style={{ backgroundImage: "url(/portfolio/builtwell-job-site-aerial-ct.jpg)" }} />
+        <Image src="/portfolio/builtwell-job-site-aerial-ct.jpg" alt="" fill sizes="100vw" className="object-cover opacity-[0.06]" />
         <div className="relative mx-auto flex max-w-[1200px] flex-wrap items-center justify-center">
           {items.map((item, index) => (
             <div key={`${item.label}-${index}`} className="contents">

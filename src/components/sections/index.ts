@@ -1,12 +1,31 @@
+import dynamic from 'next/dynamic';
+
+// Above-fold: load synchronously (LCP-critical)
 import Hero from './Hero';
 import HeroSlider from './HeroSlider';
 import TrustBar from './TrustBar';
+import PageHero from './PageHero';
+import HeroServiceLocation from './HeroServiceLocation';
+import ServiceHero from './ServiceHero';
 import { RichText } from './RichText';
 import { CallToAction } from './CallToAction';
+
+// Synchronous — lightweight / SSR-critical
 import ProblemSection from './ProblemSection';
 import ServicesSection from './ServicesSection';
 import ServicesGrid from './ServicesGrid';
-import StatsCounterSection from './StatsCounterSection';
+import ProcessSteps from './ProcessSteps';
+import LeadForm from './LeadForm';
+import CtaSplitForm from './CtaSplitForm';
+import ServiceIntroSplit from './ServiceIntroSplit';
+import ServiceProcess from './ServiceProcess';
+import ImageTextSplit from './ImageTextSplit';
+import IconCards from './IconCards';
+import TwoColumnText from './TwoColumnText';
+import OfficeInfo from './OfficeInfo';
+import FeatureGrid from './FeatureGrid';
+import DarkTextSection from './DarkTextSection';
+import FullWidthTextDark from './FullWidthTextDark';
 import StorySplitSection from './StorySplitSection';
 import RichTextImage from './RichTextImage';
 import FeatureListTwoColumn from './FeatureListTwoColumn';
@@ -14,49 +33,41 @@ import Warranty from './Warranty';
 import FAQSection from './FAQ';
 import ServiceAreas from './ServiceAreas';
 import TownList from './TownList';
-import ProcessSteps from './ProcessSteps';
-import Testimonials from './Testimonials';
 import ProjectHighlights from './ProjectHighlights';
-import LeadForm from './LeadForm';
-import PageHero from './PageHero';
-import ImageTextSplit from './ImageTextSplit';
-import IconCards from './IconCards';
-import TeamMembers from './TeamMembers';
-import TwoColumnText from './TwoColumnText';
-import OfficeInfo from './OfficeInfo';
-import FeatureGrid from './FeatureGrid';
-import DarkTextSection from './DarkTextSection';
-import CtaSplitForm from './CtaSplitForm';
-import ServiceHero from './ServiceHero';
-import ServiceIntroSplit from './ServiceIntroSplit';
-import ServiceProcess from './ServiceProcess';
-import FullWidthTextDark from './FullWidthTextDark';
-import BeforeAfterGrid from './BeforeAfterGrid';
-import TestimonialSliderSmall from './TestimonialSliderSmall';
 import LogoStrip from './LogoStrip';
 import ServiceAreaText from './ServiceAreaText';
 import ServiceFaqAccordion from './ServiceFaqAccordion';
-import HeroServiceLocation from './HeroServiceLocation';
 import ServiceTwoColumn from './ServiceTwoColumn';
-import BeforeAfterShowcase from './BeforeAfterShowcase';
 import ServiceAreaHighlight from './ServiceAreaHighlight';
 import ConsultationCtaSplit from './ConsultationCtaSplit';
-import ProjectCategoryFilter from './ProjectCategoryFilter';
-import ProjectsMasonryGrid from './ProjectsMasonryGrid';
 import CaseStudyHighlight from './CaseStudyHighlight';
 import StatsBar from './StatsBar';
 import CtaDarkBand from './CtaDarkBand';
 import CtaLightSection from './CtaLightSection';
 import ContactSplitLayout from './ContactSplitLayout';
 import OfficeInfoCards from './OfficeInfoCards';
-import MapEmbedSection from './MapEmbedSection';
 import RequirementsSection from './RequirementsSection';
 import BenefitsGrid from './BenefitsGrid';
-import ApplicationFormSection from './ApplicationFormSection';
 import CaseStudyHeader from './CaseStudyHeader';
 import CaseStudyMeta from './CaseStudyMeta';
 import CaseStudyBody from './CaseStudyBody';
-import CaseStudyGallery from './CaseStudyGallery';
+
+// Below-fold: dynamically loaded to reduce initial JS bundle
+type LazySection = React.ComponentType<{ data: never }>;
+function lazySection<T>(factory: () => Promise<{ default: React.ComponentType<T> }>): LazySection {
+  return dynamic(factory, { ssr: false }) as unknown as LazySection;
+}
+const StatsCounterSection = lazySection(() => import('./StatsCounterSection'));
+const Testimonials = lazySection(() => import('./Testimonials'));
+const TestimonialSliderSmall = lazySection(() => import('./TestimonialSliderSmall'));
+const TeamMembers = lazySection(() => import('./TeamMembers'));
+const BeforeAfterGrid = lazySection(() => import('./BeforeAfterGrid'));
+const BeforeAfterShowcase = lazySection(() => import('./BeforeAfterShowcase'));
+const ProjectCategoryFilter = lazySection(() => import('./ProjectCategoryFilter'));
+const ProjectsMasonryGrid = lazySection(() => import('./ProjectsMasonryGrid'));
+const MapEmbedSection = lazySection(() => import('./MapEmbedSection'));
+const ApplicationFormSection = lazySection(() => import('./ApplicationFormSection'));
+const CaseStudyGallery = lazySection(() => import('./CaseStudyGallery'));
 
 export const sectionMap: Record<string, React.ComponentType<{ data: never }>> = {
   hero: Hero,

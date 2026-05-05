@@ -107,7 +107,7 @@ export default function Portfolio({ data }: Props) {
                       <div className="mt-7">
                         <Link
                           href={href}
-                          className="inline-flex items-center gap-2 text-[14px] font-semibold text-[#BC9155] transition-all hover:gap-3"
+                          className="inline-flex items-center gap-2 text-[14px] font-semibold text-[#BC9155] transition-colors duration-200 hover:text-[#a57d48]"
                         >
                           <span>{project.cta_label || 'View details'}</span>
                           <ArrowRight className="h-[14px] w-[14px]" />
@@ -200,7 +200,7 @@ export default function Portfolio({ data }: Props) {
                   <div className="mt-8">
                     <Link
                       href={href}
-                      className="mt-6 inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#BC9155] transition-all hover:gap-[10px]"
+                      className="mt-6 inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#BC9155] transition-colors duration-200 hover:text-[#a57d48]"
                     >
                       <span>{project.cta_label || 'Learn More'}</span>
                       <ArrowRight className="h-[14px] w-[14px]" />

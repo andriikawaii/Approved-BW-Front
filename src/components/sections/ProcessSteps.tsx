@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 type Step = {
   title: string;
@@ -47,12 +48,7 @@ export default function ProcessSteps({ data }: Props) {
     return (
       <section className="relative overflow-hidden py-24 md:py-28 text-white isolate">
         {/* Background image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center z-0"
-          style={{
-            backgroundImage: `url(${data.background_image || '/images/team/builtwell-team-contractors-ct-05.png'})`,
-          }}
-        />
+        <Image src={data.background_image || '/images/team/builtwell-team-contractors-ct-05.png'} alt="" fill sizes="100vw" className="object-cover z-0" />
         <div className="absolute inset-0 z-0" style={{ background: 'linear-gradient(135deg, rgba(10,18,34,0.90) 0%, rgba(30,43,67,0.85) 100%)' }} />
 
         <div className="relative z-10 mx-auto max-w-[1240px] px-6">
@@ -98,7 +94,7 @@ export default function ProcessSteps({ data }: Props) {
                         <span className={`text-[#C89B5B] text-[18px] leading-none transition-transform duration-300 ${isActive ? 'rotate-180' : ''}`}>›</span>
                       </div>
                     </div>
-                    <div className={`text-[14px] text-white/75 leading-[1.65] overflow-hidden transition-all duration-400 ${isActive ? 'max-h-[300px] opacity-100 mt-3 pl-[68px]' : 'max-h-0 opacity-0'}`}>
+                    <div className={`text-[14px] text-white/75 leading-[1.65] transition-opacity duration-300 ${isActive ? 'opacity-100 mt-3 pl-[68px]' : 'invisible opacity-0 h-0 overflow-hidden'}`}>
                       <p>{step.description}</p>
                     </div>
                   </button>
@@ -124,7 +120,7 @@ export default function ProcessSteps({ data }: Props) {
                       <span className="font-serif text-2xl font-bold text-[#f5e0c0]">{i + 1}</span>
                     </div>
                     <h3 className="font-serif text-lg font-bold text-white mb-3">{step.title}</h3>
-                    <div className={`text-sm text-white/70 leading-[1.65] transition-all duration-400 overflow-hidden ${isActive ? 'max-h-[200px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                    <div className={`text-sm text-white/70 leading-[1.65] transition-opacity duration-300 ${isActive ? 'opacity-100' : 'invisible opacity-0 h-0 overflow-hidden'}`}>
                       <p>{step.description}</p>
                     </div>
                   </button>

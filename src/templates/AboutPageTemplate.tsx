@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -158,7 +159,7 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
   return (
     <div className="about-page-template bg-[#f5f1e9] text-[#1e2b43]">
       <section className="relative isolate flex min-h-[50vh] items-stretch overflow-hidden bg-[#151e30] px-5 pb-12 pt-[60px] text-white md:px-10">
-        <div className="absolute inset-0 bg-cover bg-[center_15%] opacity-[0.72]" style={{ backgroundImage: `url(${media(hero?.background_image, "/images/hero/hero-carousel-2.jpg")})` }} />
+        <Image src={media(hero?.background_image, "/images/hero/hero-carousel-2.jpg")} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_15%] opacity-[0.72]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_97%_97%,rgba(21,30,48,1)_0%,rgba(21,30,48,0.9)_8%,transparent_30%),radial-gradient(ellipse_at_3%_97%,rgba(21,30,48,0.9)_0%,transparent_25%),linear-gradient(180deg,rgba(21,30,48,0.35)_0%,rgba(21,30,48,0.2)_30%,rgba(21,30,48,0.45)_65%,rgba(21,30,48,0.92)_100%)]" />
         <div className="relative z-10 mx-auto flex w-full max-w-[1240px] flex-col items-center justify-center text-center">
           {hero?.badge ? <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#bc91554d] bg-[#bc915526] px-[22px] py-2.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#bc9155]"><span className="h-1.5 w-1.5 rounded-full bg-[#bc9155]" />{hero.badge}</div> : null}
@@ -194,7 +195,7 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
               </div>
             </div>
             <div className="overflow-hidden rounded-[8px] shadow-[0_24px_60px_rgba(30,43,67,0.12)]">
-              <img src={media(intro?.image, "/portfolio/builtwell-contractor-client-consultation-ct.jpeg")} alt={intro?.image_alt || "BuiltWell CT consultation"} className="h-full min-h-[320px] w-full object-cover object-top" />
+              <Image src={media(intro?.image, "/portfolio/builtwell-contractor-client-consultation-ct.jpeg")} alt={intro?.image_alt || "BuiltWell CT consultation"} width={700} height={480} className="h-full min-h-[320px] w-full object-cover object-top" />
             </div>
           </FadeUp>
         </div>
@@ -214,12 +215,12 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
               return (
                 <article key={`${member.name || "member"}-${index}`} className="flex flex-col overflow-hidden rounded-[8px] border-b-2 border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-[350ms] [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:border-b-[#bc9155] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]">
                   <div className="h-[420px] overflow-hidden md:h-[520px]">
-                    <img src={image} alt={member.image_alt || member.name || "BuiltWell CT team"} className="h-full w-full object-cover object-[center_20%]" />
+                    <Image src={image} alt={member.image_alt || member.name || "BuiltWell CT team"} width={520} height={520} className="h-full w-full object-cover object-[center_20%]" />
                   </div>
                   <div className="flex flex-1 flex-col p-8 text-center">
                     <h3 className="text-[24px] font-bold">{member.name}</h3>
                     <p className="mt-1 text-[14px] font-semibold uppercase tracking-[0.08em] text-[#bc9155]">{member.position}</p>
-                    <div className={cls("mt-5 overflow-hidden text-[15px] leading-[1.8] text-[#5c677d] transition-[max-height] duration-300", expanded ? "max-h-[620px]" : "max-h-[10.5em]")}>
+                    <div className={cls("mt-5 overflow-hidden text-[15px] leading-[1.8] text-[#5c677d] transition-opacity duration-300", expanded ? "opacity-100" : "opacity-100 max-h-[10.5em]")}>
                       {paras(member.bio).map((paragraph) => <p key={paragraph.slice(0, 30)} className="mb-4 last:mb-0">{paragraph}</p>)}
                     </div>
                     <button type="button" onClick={() => setBioOpen((current) => ({ ...current, [index]: !current[index] }))} className="mt-4 inline-flex items-center justify-center gap-1 text-[14px] font-semibold text-[#bc9155] transition-colors hover:text-[#a57d48]">
@@ -383,16 +384,18 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
             font-size: 14px;
             color: rgba(255, 255, 255, 0.7);
             line-height: 1.65;
-            max-height: 0;
+            height: 0;
             opacity: 0;
             overflow: hidden;
+            visibility: hidden;
             margin: 0;
-            transition: max-height 0.4s ease, opacity 0.35s ease, margin-top 0.35s ease;
+            transition: opacity 0.3s ease;
             text-align: center;
           }
           .home-process-step.is-active p {
-            max-height: 200px;
+            height: auto;
             opacity: 1;
+            visibility: visible;
             margin-top: 8px;
           }
           .home-process-hint {
@@ -475,7 +478,7 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
               width: 100%;
             }
             .home-process-step.is-active p {
-              max-height: 300px;
+              height: auto;
               margin-top: 8px;
             }
           }
@@ -540,7 +543,7 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
       </section>
 
       <section className="relative overflow-hidden px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
-        <div className="absolute inset-0 bg-cover bg-center opacity-[0.15]" style={{ backgroundImage: `url(${media("/hero/builtwell-job-site-aerial-hero-ct.jpg")})` }} aria-hidden="true" />
+        <Image src={media("/hero/builtwell-job-site-aerial-hero-ct.jpg")} alt="" fill sizes="100vw" className="object-cover opacity-[0.15]" aria-hidden="true" />
         <div className="absolute inset-0 bg-[linear-gradient(135deg,#1e2b43_0%,#151e30_100%)]" />
         <div className="relative z-10 mx-auto grid max-w-[1280px] gap-8 md:gap-10 lg:grid-cols-2 lg:items-center lg:gap-20">
           <FadeUp>

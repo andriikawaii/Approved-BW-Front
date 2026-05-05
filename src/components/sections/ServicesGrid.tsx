@@ -126,7 +126,7 @@ export default function ServicesGrid({ data }: Props) {
                 </div>
               ) : null}
 
-              <span className={isTownHub ? 'inline-flex items-center gap-1.5 text-[13px] font-semibold uppercase tracking-[0.06em] text-[#B98649] transition-all group-hover:gap-2.5' : 'inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#C89B5B] transition-all group-hover:gap-2.5'}>
+              <span className={isTownHub ? 'inline-flex items-center gap-1.5 text-[13px] font-semibold uppercase tracking-[0.06em] text-[#B98649] transition-colors duration-200 group-hover:text-[#9f7440]' : 'inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#C89B5B] transition-colors duration-200 group-hover:text-[#a57d48]'}>
                 {item.cta_label || 'Learn More'}
                 <ArrowRight className="h-[14px] w-[14px]" />
               </span>

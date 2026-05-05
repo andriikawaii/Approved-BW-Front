@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import {
   ArrowRight,
   CalendarDays,
@@ -521,12 +522,7 @@ function ProcessSection({ data }: { data?: any }) {
 
   return (
     <section className="relative overflow-hidden bg-[linear-gradient(135deg,#1e2b43_0%,#151e30_100%)] px-5 py-[52px] text-white md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-[0.12]"
-        style={{
-          backgroundImage: `url(${media("/portfolio/builtwell-job-site-aerial-ct.jpg")})`,
-        }}
-      />
+      <Image src={media("/portfolio/builtwell-job-site-aerial-ct.jpg")} alt="" fill sizes="100vw" className="object-cover opacity-[0.12]" />
       <div className={cls(SECTION_WIDTH, "relative")}>
         <div className="mb-10 text-center kitchen-fade-up">
           {label("How It Works", true)}
@@ -546,8 +542,8 @@ function ProcessSection({ data }: { data?: any }) {
           .ins-process-step.is-active { background:rgba(188,145,85,0.14); z-index:2; position:relative; }
           .ins-process-step-num { width:68px; height:68px; border-radius:9999px; background:rgba(188,145,85,0.42); border:2.5px solid #bc9155; display:flex; align-items:center; justify-content:center; margin:-8px auto 20px; font-family:"Playfair Display",serif; font-size:24px; font-weight:700; color:#f5e0c0; position:relative; z-index:2; box-shadow:0 0 0 4px rgba(188,145,85,0.12); flex-shrink:0; }
           .ins-process-step h3 { font-size:18px; margin:0 0 12px; color:#fff; font-weight:700; font-family:"Playfair Display",serif; line-height:1.25; text-align:center; }
-          .ins-process-step p { font-size:14px; color:rgba(255,255,255,0.7); line-height:1.65; max-height:0; opacity:0; overflow:hidden; margin:0; transition:max-height 0.4s ease,opacity 0.35s ease,margin-top 0.35s ease; text-align:center; }
-          .ins-process-step.is-active p { max-height:640px; opacity:1; margin-top:8px; }
+          .ins-process-step p { font-size:14px; color:rgba(255,255,255,0.7); line-height:1.65; height:0; opacity:0; overflow:hidden; visibility:hidden; margin:0; transition:opacity 0.3s ease; text-align:center; }
+          .ins-process-step.is-active p { height:auto; opacity:1; visibility:visible; margin-top:8px; }
           .ins-process-hint { text-align:center; margin-top:28px; font-size:13px; color:rgba(255,255,255,0.4); }
           @media (max-width:1023px) {
             .ins-process-timeline { grid-template-columns:1fr; gap:12px; max-width:720px; margin:0 auto; }
@@ -556,8 +552,8 @@ function ProcessSection({ data }: { data?: any }) {
             .ins-process-step.is-active { border-color:rgba(188,145,85,0.55); background:rgba(188,145,85,0.16); }
             .ins-process-step-num { width:52px; height:52px; font-size:22px; margin:0; box-shadow:0 0 0 3px rgba(188,145,85,0.12); }
             .ins-process-step h3 { text-align:center; font-size:18px; margin:0; width:100%; }
-            .ins-process-step p { display:block; max-height:0; opacity:0; text-align:center; margin-top:0; padding-left:0; width:100%; }
-            .ins-process-step.is-active p { max-height:640px; opacity:1; margin-top:8px; }
+            .ins-process-step p { display:block; height:0; opacity:0; visibility:hidden; text-align:center; margin-top:0; padding-left:0; width:100%; }
+            .ins-process-step.is-active p { height:auto; opacity:1; visibility:visible; margin-top:8px; }
           }
           @media (max-width:639px) { .ins-process-step { padding:14px; } }
         ` }} />
@@ -771,7 +767,7 @@ function AreasSection({ data }: { data?: any }) {
                           </span>
                           <ArrowRight className="h-4 w-4" />
                         </>,
-                        "inline-flex items-center gap-2 text-[14px] font-semibold text-[#bc9155] transition-all hover:gap-3",
+                        "inline-flex items-center gap-2 text-[14px] font-semibold text-[#bc9155] transition-colors duration-200 hover:text-[#a57d48]",
                       )}
                     </div>
                   ) : null}
@@ -1213,12 +1209,7 @@ export function InsuranceRestorationPageTemplate({ page }: { page: CMSPage }) {
   return (
     <div data-template={page.template} data-page-slug={page.slug}>
       <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pb-8 pt-[80px] text-white sm:pb-9 sm:pt-[92px] md:px-10 md:pb-12 md:pt-[120px]">
-        <div
-          className="absolute inset-0 bg-cover bg-[position:center_30%] opacity-[0.72]"
-          style={{
-            backgroundImage: `url(${media(hero?.background_image, "/portfolio/builtwell-team-client-arrival-ct.jpeg")})`,
-          }}
-        />
+        <Image src={media(hero?.background_image, "/portfolio/builtwell-team-client-arrival-ct.jpeg")} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_30%] opacity-[0.72]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(21,30,48,1)_0%,rgba(21,30,48,0.92)_10%,transparent_34%),radial-gradient(ellipse_at_bottom_left,rgba(21,30,48,0.95)_0%,transparent_28%),linear-gradient(180deg,rgba(21,30,48,0.3)_0%,rgba(21,30,48,0.22)_28%,rgba(21,30,48,0.48)_64%,rgba(21,30,48,0.94)_100%)]" />
         <div className="relative mx-auto flex min-h-[35vh] max-w-[1240px] flex-col items-center justify-center text-center sm:min-h-[40vh] lg:min-h-[50vh]">
           <ol className="mb-5 flex list-none items-center text-[13px] font-medium text-white/90 [text-shadow:0_1px_6px_rgba(0,0,0,0.7)]">

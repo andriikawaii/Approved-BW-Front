@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -194,7 +195,7 @@ function HeroSection({ data, meta }: { data?: HeaderData; meta?: MetaData }) {
 
   return (
     <section className="relative isolate overflow-hidden bg-[#151E30] text-white">
-      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${cover})`, backgroundPosition: "center 30%" }} />
+      <Image src={cover} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_30%]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_97%_97%,rgba(21,30,48,1)_0%,rgba(21,30,48,0.93)_8%,transparent_30%),radial-gradient(ellipse_at_3%_97%,rgba(21,30,48,0.93)_0%,transparent_25%),linear-gradient(180deg,rgba(21,30,48,0.45)_0%,rgba(21,30,48,0.2)_20%,rgba(21,30,48,0.5)_55%,rgba(21,30,48,0.98)_100%)]" />
       <div className="absolute inset-0 bg-[url('/portfolio/builtwell-job-site-aerial-ct.jpg')] bg-cover bg-center opacity-[0.03]" />
 
@@ -616,7 +617,7 @@ function RelatedSection({ currentSlug }: { currentSlug: string }) {
                   <MapPin className="h-3.5 w-3.5 text-[#BC9155]" />
                   {cs.location}
                 </div>
-                <span className="mt-auto inline-flex items-center gap-[6px] pt-5 text-[14px] font-semibold text-[#BC9155] transition-all duration-300 group-hover:gap-3">
+                <span className="mt-auto inline-flex items-center gap-[6px] pt-5 text-[14px] font-semibold text-[#BC9155] transition-colors duration-200 group-hover:text-[#a57d48]">
                   View Case Study <ArrowRight className="h-[14px] w-[14px]" />
                 </span>
               </div>

@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 type Step = {
   number: number;
   text: string;
@@ -36,7 +38,7 @@ export default function ConsultationCtaSplit({ data }: Props) {
       <div className="mx-auto max-w-6xl px-6 lg:px-16">
         <div className="grid gap-8 lg:grid-cols-2">
           <div className="relative overflow-hidden rounded-xl bg-[#1E2F4A] text-white">
-            <img src="/images/hero/hero-carousel-final.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
+            <Image src="/images/hero/hero-carousel-final.png" alt="" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
             <div className="absolute inset-0 bg-[#1E2F4A]/80" />
 
             <div className="relative z-10 p-10">
@@ -63,13 +65,17 @@ export default function ConsultationCtaSplit({ data }: Props) {
 
             <form className="mt-6 space-y-4">
               {fields.map((field) => {
+                const fieldId = `ccs-${field.name}`;
+
                 if (field.type === 'textarea') {
                   return (
                     <div key={field.name}>
-                      <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.06em] text-[#6B7280]">
+                      <label htmlFor={fieldId} className="mb-1 block text-xs font-semibold uppercase tracking-[0.06em] text-[#6B7280]">
                         {field.label}
                       </label>
                       <textarea
+                        id={fieldId}
+                        name={field.name}
                         required={field.required}
                         placeholder={field.label}
                         rows={4}
@@ -82,10 +88,10 @@ export default function ConsultationCtaSplit({ data }: Props) {
                 if (field.type === 'select') {
                   return (
                     <div key={field.name}>
-                      <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.06em] text-[#6B7280]">
+                      <label htmlFor={fieldId} className="mb-1 block text-xs font-semibold uppercase tracking-[0.06em] text-[#6B7280]">
                         {field.label}
                       </label>
-                      <select required={field.required} className="w-full rounded-md border px-4 py-2">
+                      <select id={fieldId} name={field.name} required={field.required} className="w-full rounded-md border px-4 py-2">
                         <option value="">Select...</option>
                         {(field.options || []).map((option) => (
                           <option key={option.value} value={option.value}>
@@ -99,10 +105,12 @@ export default function ConsultationCtaSplit({ data }: Props) {
 
                 return (
                   <div key={field.name}>
-                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.06em] text-[#6B7280]">
+                    <label htmlFor={fieldId} className="mb-1 block text-xs font-semibold uppercase tracking-[0.06em] text-[#6B7280]">
                       {field.label}
                     </label>
                     <input
+                      id={fieldId}
+                      name={field.name}
                       type={field.type || 'text'}
                       required={field.required}
                       placeholder={field.label}

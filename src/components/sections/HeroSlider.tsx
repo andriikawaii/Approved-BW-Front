@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Clock3, ShieldCheck, Star } from 'lucide-react';
 
@@ -112,18 +113,17 @@ export default function HeroSlider({ data }: HeroProps) {
         slides.map((slide, i) => (
           <div
             key={i}
-            role="img"
-            aria-label={slide.alt || `Slide ${i + 1}`}
-            className={`absolute inset-0 bg-cover bg-top transition-opacity duration-1000 ease-in-out ${
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
               i === active ? 'opacity-100' : 'opacity-0'
             }`}
-            style={{ backgroundImage: `url(${slide.image})` }}
           >
+            <Image src={slide.image} alt={slide.alt || ''} fill sizes="100vw" className="object-cover object-top" priority={i === 0} fetchPriority={i === 0 ? 'high' : 'auto'} />
             <div className="absolute inset-0 bg-[#1A2B45]/40" />
           </div>
         ))
       ) : (
-        <div className="absolute inset-0 bg-[#1A2B45] bg-cover bg-top" style={{ backgroundImage: `url(${data.background_image || ''})` }}>
+        <div className="absolute inset-0 bg-[#1A2B45]">
+          {data.background_image ? <Image src={data.background_image} alt="" fill sizes="100vw" className="object-cover object-top" priority fetchPriority="high" /> : null}
           <div className="absolute inset-0 bg-[#1A2B45]/40" />
         </div>
       )}
@@ -228,8 +228,8 @@ export default function HeroSlider({ data }: HeroProps) {
             <button
               key={i}
               onClick={() => setActive(i)}
-              className={`h-2 rounded-full transition-all ${
-                i === active ? 'h-3 w-8 bg-[#C68E4D]' : 'h-3 w-3 bg-white/50 hover:bg-white'
+              className={`rounded-full transition-opacity duration-300 ${
+                i === active ? 'h-3 w-8 bg-[#C68E4D] opacity-100' : 'h-3 w-3 bg-white/50 opacity-60 hover:opacity-100 hover:bg-white'
               }`}
               aria-label={`Go to slide ${i + 1}`}
             />

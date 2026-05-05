@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 
 type HeroSlide = {
@@ -75,10 +76,15 @@ export default function HomeHero({ data }: HomeHeroProps) {
       ) : (
         /* Fallback: slide background images */
         data.slides?.filter((s) => s.image).map((slide, index) => (
-          <div
+          <Image
             key={`${slide.image}-${index}`}
-            className="absolute inset-0 bg-cover bg-center opacity-[0.18]"
-            style={{ backgroundImage: `url(${slide.image})` }}
+            src={slide.image!}
+            alt={slide.alt || ''}
+            fill
+            priority={index === 0}
+            fetchPriority={index === 0 ? 'high' : 'auto'}
+            sizes="100vw"
+            className="object-cover opacity-[0.18]"
             aria-hidden="true"
           />
         ))

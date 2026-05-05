@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { CheckCircle2 } from 'lucide-react';
 
 type Field = {
@@ -114,14 +115,11 @@ export default function LeadForm({ data }: Props) {
         <div className={isTownHub ? 'flex min-h-[640px] flex-col overflow-hidden rounded-[22px] border border-[#e2d4bd] bg-white shadow-[0_24px_58px_rgba(30,47,74,0.16)] lg:min-h-[680px] lg:flex-row lg:items-stretch' : 'bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-[600px]'}>
           {/* LEFT */}
           <div
-            className={isTownHub ? 'relative min-h-[420px] lg:w-1/2 lg:min-h-[680px]' : 'relative lg:w-1/2 min-h-[400px] lg:min-h-full'}
-            style={{
-              backgroundImage: data.background_image ? `url(${data.background_image})` : undefined,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundColor: '#1A2B45',
-            }}
+            className={isTownHub ? 'relative min-h-[420px] lg:w-1/2 lg:min-h-[680px] bg-[#1A2B45]' : 'relative lg:w-1/2 min-h-[400px] lg:min-h-full bg-[#1A2B45]'}
           >
+            {data.background_image ? (
+              <Image src={data.background_image} alt="" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
+            ) : null}
             <div className={isTownHub ? 'absolute inset-0 bg-[#1A2B45]/76' : 'absolute inset-0 bg-[#1A2B45]/70'} />
 
             <div className={`absolute inset-0 flex flex-col ${isTownHub ? 'px-8 pt-14 pb-8 md:px-12 lg:px-14 lg:pt-16 lg:pb-10' : 'justify-start pt-16 px-12 lg:px-16'}`}>

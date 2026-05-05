@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -473,10 +474,7 @@ function AreasHero({ data, phones }: { data?: HeroData; phones: PhoneItem[] }) {
 
   return (
     <section className="page-hero areas-hero-section">
-      <div
-        className="areas-hero-image"
-        style={{ backgroundImage: `url(${backgroundImage})` }}
-      />
+      <Image src={backgroundImage} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover" style={{ zIndex: -1, opacity: 0.72 }} />
       <div className="areas-hero-overlay" />
 
       <div className="page-hero-inner">

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import type { CMSBreadcrumb, CMSPage } from '@/types/cms';
 import {
@@ -405,7 +406,7 @@ export function OrangeCTPageTemplate({ page }: { page: CMSPage }) {
     <div data-gwc-page>
       <main id="main">
         <section className="gwc-hero">
-          <div className="gwc-hero-bg" aria-hidden="true" style={{ backgroundImage: `url('${heroBg}')` }} />
+          <Image src={heroBg} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_28%] opacity-[0.72]" style={{ zIndex: -1 }} />
           <div className="gwc-hero-overlay" />
           <div className="gwc-container gwc-hero-inner">
             {breadcrumbs.length > 0 ? (
@@ -512,7 +513,7 @@ export function OrangeCTPageTemplate({ page }: { page: CMSPage }) {
 
         {housing ? (
           <section className="gwc-dark-band">
-            <div className="gwc-dark-band-image" aria-hidden="true" style={{ backgroundImage: `url('${ORANGE_HOUSING_BG}')` }} />
+            <Image src={ORANGE_HOUSING_BG} alt="" fill sizes="100vw" className="object-cover object-[center_40%] opacity-30" style={{ zIndex: 0 }} />
             <div className="gwc-dark-band-pattern" />
             <div className="gwc-container gwc-narrow gwc-dark-band-inner">
               <FadeUp>

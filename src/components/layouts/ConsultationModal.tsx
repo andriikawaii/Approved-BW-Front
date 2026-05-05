@@ -545,10 +545,11 @@ export default function ConsultationModal({ open, onClose }: Props) {
                     <>
                       {scheduleType === 'in_person' ? (
                         <div className="mb-4">
-                          <label className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">
+                          <label htmlFor="cm-schedule-address" className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">
                             Property Address
                           </label>
                           <input
+                            id="cm-schedule-address"
                             type="text"
                             value={scheduleAddress}
                             onChange={(event) => setScheduleAddress(event.target.value)}
@@ -645,8 +646,9 @@ export default function ConsultationModal({ open, onClose }: Props) {
                     <>
                       <div className="mb-3 grid gap-3 sm:grid-cols-2">
                         <div>
-                          <label className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Your Name</label>
+                          <label htmlFor="cm-schedule-name" className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Your Name</label>
                           <input
+                            id="cm-schedule-name"
                             type="text"
                             value={scheduleName}
                             onChange={(event) => setScheduleName(event.target.value)}
@@ -659,8 +661,9 @@ export default function ConsultationModal({ open, onClose }: Props) {
                           {errors.scheduleName ? <p className="mt-1 text-[11px] text-red-600">{errors.scheduleName}</p> : null}
                         </div>
                         <div>
-                          <label className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Phone Number</label>
+                          <label htmlFor="cm-schedule-phone" className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Phone Number</label>
                           <input
+                            id="cm-schedule-phone"
                             type="tel"
                             value={schedulePhone}
                             onChange={(event) => setSchedulePhone(event.target.value)}
@@ -676,8 +679,9 @@ export default function ConsultationModal({ open, onClose }: Props) {
 
                       <div className="mb-4 grid gap-3 sm:grid-cols-2">
                         <div>
-                          <label className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Email</label>
+                          <label htmlFor="cm-schedule-email" className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Email</label>
                           <input
+                            id="cm-schedule-email"
                             type="email"
                             value={scheduleEmail}
                             onChange={(event) => setScheduleEmail(event.target.value)}
@@ -690,8 +694,9 @@ export default function ConsultationModal({ open, onClose }: Props) {
                           {errors.scheduleEmail ? <p className="mt-1 text-[11px] text-red-600">{errors.scheduleEmail}</p> : null}
                         </div>
                         <div>
-                          <label className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Zip Code</label>
+                          <label htmlFor="cm-schedule-zip" className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Zip Code</label>
                           <input
+                            id="cm-schedule-zip"
                             type="text"
                             value={scheduleZip}
                             onChange={(event) => setScheduleZip(event.target.value)}
@@ -746,8 +751,9 @@ export default function ConsultationModal({ open, onClose }: Props) {
               ) : (
                 <>
                   <div className="mb-4">
-                    <label className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Your Name</label>
+                    <label htmlFor="cm-question-name" className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Your Name</label>
                     <input
+                      id="cm-question-name"
                       type="text"
                       value={questionName}
                       onChange={(event) => setQuestionName(event.target.value)}
@@ -762,8 +768,9 @@ export default function ConsultationModal({ open, onClose }: Props) {
 
                   <div className="mb-4 grid gap-3 sm:grid-cols-2">
                     <div>
-                      <label className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Phone</label>
+                      <label htmlFor="cm-question-phone" className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Phone</label>
                       <input
+                        id="cm-question-phone"
                         type="tel"
                         value={questionPhone}
                         onChange={(event) => setQuestionPhone(event.target.value)}
@@ -776,8 +783,9 @@ export default function ConsultationModal({ open, onClose }: Props) {
                       {errors.questionPhone ? <p className="mt-1 text-[11px] text-red-600">{errors.questionPhone}</p> : null}
                     </div>
                     <div>
-                      <label className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Email</label>
+                      <label htmlFor="cm-question-email" className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Email</label>
                       <input
+                        id="cm-question-email"
                         type="email"
                         value={questionEmail}
                         onChange={(event) => setQuestionEmail(event.target.value)}
@@ -793,8 +801,9 @@ export default function ConsultationModal({ open, onClose }: Props) {
 
                   <div className="mb-4 grid gap-3 sm:grid-cols-2">
                     <div>
-                      <label className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Zip Code</label>
+                      <label htmlFor="cm-question-zip" className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Zip Code</label>
                       <input
+                        id="cm-question-zip"
                         type="text"
                         value={questionZip}
                         onChange={(event) => setQuestionZip(event.target.value)}
@@ -803,8 +812,9 @@ export default function ConsultationModal({ open, onClose }: Props) {
                       />
                     </div>
                     <div>
-                      <label className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Preferred Contact</label>
+                      <label htmlFor="cm-question-contact" className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Preferred Contact</label>
                       <select
+                        id="cm-question-contact"
                         value={questionContact}
                         onChange={(event) => setQuestionContact(event.target.value as 'phone' | 'text' | 'email')}
                         className="h-[48px] w-full cursor-pointer rounded-[6px] border border-[#1e2b4326] px-4 text-[15px] text-[#1e2b43] outline-none transition-colors focus:border-[#bc9155]"
@@ -817,8 +827,9 @@ export default function ConsultationModal({ open, onClose }: Props) {
                   </div>
 
                   <div className="mb-4">
-                    <label className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Your Question</label>
+                    <label htmlFor="cm-question-message" className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1e2b43]">Your Question</label>
                     <textarea
+                      id="cm-question-message"
                       value={questionMessage}
                       onChange={(event) => setQuestionMessage(event.target.value)}
                       placeholder="Tell us about your project, ask about pricing, timelines, or anything else..."

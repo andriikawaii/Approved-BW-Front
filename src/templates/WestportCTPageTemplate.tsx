@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import type { CMSPage } from '@/types/cms';
 import { AreasSection as SharedAreasSection, FinancingStrip as SharedFinancingStrip, LeadFormSection as SharedLeadFormSection } from './template-utils';
@@ -239,10 +240,11 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
 
         {/* ── 1. HERO ─────────────────────────────────────────────────── */}
         <section className="gwch-page-hero gwch-page-hero-westport">
-          <div
-            className="gwch-hero-bg gwch-hero-bg-westport"
-            style={heroImage ? { backgroundImage: `url('${heroImage}')` } : undefined}
-          />
+          {heroImage ? (
+            <Image src={heroImage} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_40%] opacity-[0.72]" style={{ zIndex: -2 }} />
+          ) : (
+            <div className="gwch-hero-bg gwch-hero-bg-westport" />
+          )}
           <div className="gwch-hero-gradient" />
           <div className="gwch-hero-inner">
             <ol className="gwch-breadcrumb">
@@ -733,7 +735,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
         {/* ── 10. MID-PAGE CTA ──────────────────────────────────────── */}
         <div style={{ position: 'relative', overflow: 'hidden', padding: '64px 0' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #1E2B43 0%, #151E30 100%)' }} />
-          <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/portfolio/builtwell-contractor-client-consultation-ct.jpeg')", backgroundPosition: 'center 15%', backgroundSize: 'cover', opacity: 0.25 }} />
+          <Image src="/portfolio/builtwell-contractor-client-consultation-ct.jpeg" alt="" fill sizes="100vw" className="object-cover object-[center_15%] opacity-25" />
           <div style={{ position: 'relative', zIndex: 1, maxWidth: 700, margin: '0 auto', textAlign: 'center', padding: '0 32px' }}>
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 3.5vw, 40px)', color: '#fff', marginBottom: 12 }}>
               Ready to Remodel in <span style={{ color: '#BC9155' }}>Westport</span>?

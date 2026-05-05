@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import type { CMSPage } from "@/types/cms";
 import { AreasSection as SharedAreasSection, FinancingStrip as SharedFinancingStrip, LeadFormSection as SharedLeadFormSection } from "./template-utils";
@@ -1021,15 +1022,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
     <div className="bg-white text-[#1E2B43]">
       <main id="main">
         <section className="relative isolate overflow-hidden bg-[#151E30] px-5 pb-8 pt-[72px] text-white sm:pb-8 sm:pt-[84px] md:px-10 md:pb-10 md:pt-[104px]">
-          <div
-            className="absolute inset-0 bg-cover bg-[position:center_30%] opacity-[0.72]"
-            style={{
-              backgroundImage: `url(${media(
-                hero?.background_image,
-                "/images/headers/kitchen-remodeling-header.jpg",
-              )})`,
-            }}
-          />
+          <Image src={media(hero?.background_image, "/images/headers/kitchen-remodeling-header.jpg")} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_30%] opacity-[0.72]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_97%_97%,rgba(21,30,48,1)_0%,rgba(21,30,48,0.9)_8%,transparent_30%),radial-gradient(ellipse_at_3%_97%,rgba(21,30,48,0.9)_0%,transparent_25%),linear-gradient(180deg,rgba(21,30,48,0.35)_0%,rgba(21,30,48,0.2)_30%,rgba(21,30,48,0.45)_65%,rgba(21,30,48,0.92)_100%)]" />
           <div className="relative mx-auto flex min-h-[30vh] max-w-[1240px] flex-col items-center justify-center text-center sm:min-h-[34vh] lg:min-h-[40vh]">
             <ol className="mb-5 flex list-none items-center text-[13px] font-medium text-white/90 [text-shadow:0_1px_6px_rgba(0,0,0,0.7)]">
@@ -1397,13 +1390,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
         {midPageCta ? (
           <section className="relative overflow-hidden px-5 py-16 text-white md:px-10">
             <div className="absolute inset-0 bg-[linear-gradient(135deg,#1E2B43_0%,#151E30_100%)]" />
-            <div
-              className="absolute inset-0 bg-cover bg-[center_15%] opacity-[0.25]"
-              style={{
-                backgroundImage:
-                  "url('/portfolio/builtwell-contractor-client-consultation-ct.jpeg')",
-              }}
-            />
+            <Image src="/portfolio/builtwell-contractor-client-consultation-ct.jpeg" alt="" fill sizes="100vw" className="object-cover object-[center_15%] opacity-25" />
             <div className="relative z-10 mx-auto max-w-[700px] px-3 text-center">
               <h2 className="font-serif text-[clamp(28px,3.5vw,40px)] font-bold tracking-[-0.5px]">
                 <AccentTitle
@@ -1772,7 +1759,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
                           <span>Learn More</span>
                           <Arrow />
                         </>,
-                        "mt-[18px] inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#BC9155] transition-all hover:gap-[10px]",
+                        "mt-[18px] inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#BC9155] transition-colors duration-200 hover:text-[#a57d48]",
                       )}
                     </div>
                   </article>
@@ -1924,16 +1911,18 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
           font-size: 14px;
           color: rgba(255, 255, 255, 0.7);
           line-height: 1.65;
-          max-height: 0;
+          height: 0;
           opacity: 0;
           overflow: hidden;
+          visibility: hidden;
           margin: 0;
-          transition: max-height 0.4s ease, opacity 0.35s ease, margin-top 0.35s ease;
+          transition: opacity 0.3s ease;
           text-align: center;
         }
         .kitchen-process-step.is-active p {
-          max-height: 640px;
+          height: auto;
           opacity: 1;
+          visibility: visible;
           margin-top: 8px;
         }
         .kitchen-process-hint {
@@ -2127,7 +2116,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             width: 100%;
           }
           .kitchen-process-step.is-active p {
-            max-height: 300px;
+            height: auto;
             margin-top: 8px;
           }
         }

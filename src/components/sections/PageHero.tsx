@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 type Props = {
   data: {
     eyebrow?: string;
@@ -55,7 +57,7 @@ export default function PageHero({ data }: Props) {
 
   return (
     <section className="relative isolate overflow-hidden bg-[#1E2F4A]">
-      <img src={heroImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
+      <Image src={heroImage} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover" />
       <div className="absolute inset-0 bg-[#15263f]" style={{ opacity: isServicesHero ? 0.66 : data.overlay_opacity ?? 0.62 }} />
       <div className={`absolute inset-0 ${isServicesHero ? 'bg-gradient-to-b from-[#15263f]/25 via-[#15263f]/48 to-[#15263f]/82' : 'bg-gradient-to-b from-[#15263f]/40 via-[#15263f]/55 to-[#15263f]/75'}`} />
 

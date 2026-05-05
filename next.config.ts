@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  compress: true,
+  productionBrowserSourceMaps: false,
+
   // Allow images from the backend API domain
   images: {
     remotePatterns: [
@@ -10,6 +13,8 @@ const nextConfig: NextConfig = {
       },
     ],
     formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
   },
 
   // Ensure trailing slashes match backend canonical URLs
@@ -17,32 +22,32 @@ const nextConfig: NextConfig = {
 
   experimental: {
     optimizeCss: true,
+    optimizePackageImports: ['lucide-react'],
   },
 
-  async redirects() {
-    const droppedTownHubs = [
-      'stamford-ct', 'new-canaan-ct', 'norwalk-ct', 'darien-ct', 'fairfield-ct', 'ridgefield-ct',
-    ].map((slug) => ({ source: `/fairfield-county/${slug}/:path*`, destination: '/fairfield-county/', permanent: true }));
-
-    const droppedNHTownHubs = [
-      'hamden-ct', 'branford-ct', 'guilford-ct', 'madison-ct', 'milford-ct', 'woodbridge-ct',
-    ].map((slug) => ({ source: `/new-haven-county/${slug}/:path*`, destination: '/new-haven-county/', permanent: true }));
-
-    const droppedCaseStudies = [
-      'basement-finishing-darien',
-      'bathroom-remodeling-westport',
-      'kitchen-remodeling-milford',
-      'kitchen-remodeling-new-canaan',
-      'whole-home-restoration-hamden',
-    ].map((slug) => ({ source: `/case-studies/${slug}/:path*`, destination: '/case-studies/', permanent: true }));
-
+  async headers() {
     return [
-      ...droppedTownHubs,
-      ...droppedNHTownHubs,
-      ...droppedCaseStudies,
-      { source: '/kitchen-remodeling/fairfield-county/:path*', destination: '/kitchen-remodeling/', permanent: true },
+      {
+        source: '/:path(hero|images|portfolio|logos|fonts)/:file*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 's-maxage=60, stale-while-revalidate=600',
+          },
+        ],
+      },
     ];
   },
+
 };
 
 export default nextConfig;

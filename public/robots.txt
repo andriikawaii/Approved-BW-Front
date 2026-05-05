@@ -33,7 +33,7 @@ User-agent: Google-Extended
 Allow: /
 
 # Sitemap
-Sitemap: https://buildwellct.com/sitemap.xml
+Sitemap: https://builtwellct.com/sitemap.xml
 
 # LLMs.txt (for AI assistants)
-# See: https://buildwellct.com/llms.txt
+# See: https://builtwellct.com/llms.txt

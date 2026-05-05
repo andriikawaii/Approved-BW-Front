@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
 import { DarkTrustStrip, FinancingStrip, HeroTrustBar, LeadFormSection, cls, label, linkNode, media, parts, section, sections } from "./template-utils";
@@ -313,7 +314,7 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
       {/* ══════ HERO ══════ */}
       <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pt-[120px] text-white md:px-10">
         {/* Background image */}
-        <div className="absolute inset-0 bg-cover bg-[center_30%] opacity-[0.72]" style={{ backgroundImage: `url(${media(hero?.background_image, "/images/headers/design-planning-header.jpg")})` }} />
+        <Image src={media(hero?.background_image, "/images/headers/design-planning-header.jpg")} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_30%] opacity-[0.72]" />
         {/* Multi-layer overlay matching reference */}
         <div className="absolute inset-0" style={{
           background: [
@@ -479,7 +480,7 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
                 <h3 className="mb-0 text-center font-serif text-[14px] font-bold leading-[1.3] text-white sm:text-[15px] lg:mb-3 lg:text-[18px]">
                   {card.title}
                 </h3>
-                <p className={cls("hidden text-[14px] leading-[1.65] text-white/70 transition-all duration-300 lg:block lg:max-h-0 lg:overflow-hidden lg:opacity-0", activeValue === index && "lg:mt-2 lg:max-h-[200px] lg:opacity-100")}>{card.description}</p>
+                <p className={cls("hidden text-[14px] leading-[1.65] text-white/70 transition-opacity duration-300 lg:block lg:overflow-hidden lg:opacity-0", activeValue === index && "lg:mt-2 lg:opacity-100")}>{card.description}</p>
               </button>
             ))}
             {linkNode(
@@ -589,7 +590,7 @@ export function ProcessPageTemplate({ page }: { page: CMSPage }) {
                         <span>{item.cta_label || "Learn More"}</span>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                       </>,
-                      "mt-5 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-2.5",
+                      "mt-5 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#bc9155] transition-colors duration-200 hover:text-[#a57d48]",
                     )
                   ) : null}
                 </div>
@@ -916,7 +917,7 @@ function ProcessAreasSection({
                           <span>{county.cta_label || `Learn more about ${county.name}`}</span>
                           <ArrowRight className="h-4 w-4" />
                         </>,
-                        "mt-5 inline-flex items-center justify-center gap-1.5 text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-2.5",
+                        "mt-5 inline-flex items-center justify-center gap-1.5 text-[14px] font-semibold text-[#bc9155] transition-colors duration-200 hover:text-[#a57d48]",
                       )
                     : null}
                 </div>

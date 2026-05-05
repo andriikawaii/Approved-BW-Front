@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import type { CMSPage } from "@/types/cms";
 import { AreasSection, DarkTrustStrip, FinancingStrip, HeroTrustBar, LeadFormSection, cls, label, linkNode, media, parts, section, sections } from "./template-utils";
 import { useEffect, useRef, useState } from "react";
@@ -90,7 +91,7 @@ export function PricingPageTemplate({ page }: { page: CMSPage }) {
       {/* ══════ HERO ══════ */}
       <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pt-[120px] text-white md:px-10">
         {/* Background image with opacity */}
-        <div className="absolute inset-0 bg-cover bg-[center_30%] opacity-[0.72]" style={{ backgroundImage: `url(${media(hero?.background_image, "/hero/builtwell-team-approaching-home-hero-ct.png")})` }} />
+        <Image src={media(hero?.background_image, "/hero/builtwell-team-approaching-home-hero-ct.png")} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_30%] opacity-[0.72]" />
         {/* Multi-layer overlay matching reference */}
         <div className="absolute inset-0" style={{
           background: [
@@ -221,7 +222,7 @@ export function PricingPageTemplate({ page }: { page: CMSPage }) {
                         <span>{item.cta_label || "View Full Details"}</span>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                       </>,
-                      "inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-2.5",
+                      "inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#bc9155] transition-colors duration-200 hover:text-[#a57d48]",
                     )}
                   </div>
                 ) : null}
@@ -491,7 +492,7 @@ function PricingAreasSection({ data }: { data: any }) {
                           <span>{county.cta_label || `Learn more about ${county.name}`}</span>
                           <ArrowRight className="h-4 w-4" />
                         </>,
-                        "mt-auto inline-flex items-center gap-1.5 pt-5 text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-2.5",
+                        "mt-auto inline-flex items-center gap-1.5 pt-5 text-[14px] font-semibold text-[#bc9155] transition-colors duration-200 hover:text-[#a57d48]",
                       )
                     : null}
                 </div>

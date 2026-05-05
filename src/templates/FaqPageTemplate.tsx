@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Check, ChevronDown, Shield, Star, Upload } from "lucide-react";
@@ -104,7 +105,7 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
   return (
     <div className="faq-ref bg-[#f5f1e9] text-[#1e2b43]">
       <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pt-[120px] text-white md:px-10">
-        <div className="absolute inset-0 bg-cover bg-[center_30%]" style={{ backgroundImage: "url(/hero/builtwell-team-van-consultation-hero-ct.jpg)", opacity: 0.72 }} />
+        <Image src="/hero/builtwell-team-van-consultation-hero-ct.jpg" alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_30%] opacity-[0.72]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_97%_97%,rgba(21,30,48,1)_0%,rgba(21,30,48,0.9)_8%,transparent_30%),radial-gradient(ellipse_at_3%_97%,rgba(21,30,48,0.9)_0%,transparent_25%),linear-gradient(180deg,rgba(21,30,48,0.35)_0%,rgba(21,30,48,0.2)_30%,rgba(21,30,48,0.45)_65%,rgba(21,30,48,0.92)_100%)]" />
         <div className="relative z-10 mx-auto flex min-h-[50vh] w-full max-w-[1240px] flex-col items-center justify-center pb-12 text-center">
           <ol className="mb-5 flex list-none items-center p-0 text-[13px] font-medium text-white/90 [text-shadow:0_1px_6px_rgba(0,0,0,0.7)]">
@@ -315,7 +316,7 @@ export function FaqPageTemplate({ page }: { page: CMSPage }) {
                   <div className="faq-related-body p-6">
                     <h3 className="text-[24px] font-bold">{item.title}</h3>
                     <p className="mt-3 text-[14px] leading-[1.76] text-[#5c677d]">{item.description}</p>
-                    {href ? linkNode(href, <><span>Learn More</span><ArrowRight className="h-4 w-4" /></>, "faq-related-link mt-5 inline-flex items-center gap-2 text-[14px] font-semibold text-[#bc9155] transition-all") : null}
+                    {href ? linkNode(href, <><span>Learn More</span><ArrowRight className="h-4 w-4" /></>, "faq-related-link mt-5 inline-flex items-center gap-2 text-[14px] font-semibold text-[#bc9155] transition-opacity duration-200 hover:opacity-75") : null}
                   </div>
                 </article>
               );
