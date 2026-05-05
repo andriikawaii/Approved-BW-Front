@@ -342,10 +342,12 @@ export function AboutPageTemplate({ page }: { page: CMSPage }) {
             width: 100%;
             outline: none;
           }
-          .home-process-step:focus,
-          .home-process-step:focus-visible {
+          .home-process-step:focus {
             outline: none;
-            box-shadow: none;
+          }
+          .home-process-step:focus-visible {
+            outline: 2px solid #bc9155;
+            outline-offset: 2px;
           }
           .home-process-step.is-active {
             background: rgba(188, 145, 85, 0.14);

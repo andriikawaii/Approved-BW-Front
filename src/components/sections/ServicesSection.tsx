@@ -44,7 +44,7 @@ export default function ServicesSection({ data }: ServicesSectionProps) {
               <Link
                 key={i}
                 href={href}
-                className="group flex h-full flex-col overflow-hidden rounded-xl border border-[#ece7dc] bg-white shadow-[0_8px_22px_rgba(30,47,74,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_38px_rgba(30,47,74,0.14)]"
+                className="group flex h-full flex-col overflow-hidden rounded-xl border border-[#ece7dc] bg-white shadow-[0_8px_22px_rgba(30,47,74,0.08)] transition-transform duration-300 hover:-translate-y-1"
               >
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#1E2F4A]/10">
                   <img

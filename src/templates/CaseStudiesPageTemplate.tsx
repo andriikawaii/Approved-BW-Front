@@ -436,11 +436,11 @@ function ContactSection({ page, data }: { page: CMSPage; data?: LeadFormData }) 
 
                   {bestTimeField ? (
                     <div>
-                      <label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1E2B43]">
+                      <label htmlFor={`cs-select-${bestTimeField.name}`} className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.5px] text-[#1E2B43]">
                         {bestTimeField.label}
                         {bestTimeField.required ? " *" : ""}
                       </label>
-                      <select required={bestTimeField.required} value={formValues[bestTimeField.name] || ""} onChange={(event) => setFormValues((current) => ({ ...current, [bestTimeField.name]: event.target.value }))} className="w-full rounded-[6px] border border-[#1E2B43]/15 bg-white px-[14px] py-3 text-[15px] text-[#1E2B43] outline-none transition-colors focus:border-[#BC9155]">
+                      <select id={`cs-select-${bestTimeField.name}`} required={bestTimeField.required} value={formValues[bestTimeField.name] || ""} onChange={(event) => setFormValues((current) => ({ ...current, [bestTimeField.name]: event.target.value }))} className="w-full rounded-[6px] border border-[#1E2B43]/15 bg-white px-[14px] py-3 text-[15px] text-[#1E2B43] outline-none transition-colors focus:border-[#BC9155]">
                         <option value="">Select a time</option>
                         {bestTimeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                       </select>

@@ -50,14 +50,14 @@ export default function TrustBar({ data }: Props) {
             return (
               <div
                 key={i}
-                className={`group cursor-default px-5 py-8 transition-all duration-300 hover:-translate-y-[2px] ${
+                className={`group cursor-default px-5 py-8 transition-[transform,background-color] duration-300 hover:-translate-y-[2px] ${
                   isTownHub
                     ? `hover:bg-[#f6efdf] ${showBorder ? 'border-r border-[#e4d4b8]' : ''}`
                     : `hover:bg-[rgba(188,145,85,0.08)] ${showBorder ? 'border-r border-[rgba(188,145,85,0.12)]' : ''}`
                 }`}
               >
                 <div
-                  className={`text-[42px] font-bold leading-none transition-all duration-300 ${
+                  className={`text-[42px] font-bold leading-none transition-colors duration-300 ${
                     isTownHub
                       ? 'text-[#b7884f] group-hover:text-[#9f7440]'
                       : 'text-[#BC9155] group-hover:text-[#d4a95a] group-hover:[text-shadow:0_0_20px_rgba(188,145,85,0.3)]'

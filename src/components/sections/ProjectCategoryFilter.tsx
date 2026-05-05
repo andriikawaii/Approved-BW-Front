@@ -45,7 +45,7 @@ export default function ProjectCategoryFilter({ data }: Props) {
                 key={filter.value}
                 type="button"
                 onClick={() => setActiveFilter(filter.value)}
-                className={`min-h-[44px] rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                className={`min-h-[44px] rounded-full px-5 py-2.5 text-sm font-semibold transition-[background-color,color,border-color] duration-200 ${
                   isActive
                     ? 'bg-[#1E2F4A] text-white shadow-[0_6px_18px_rgba(30,47,74,0.2)]'
                     : 'border border-[#d9cfbb] bg-white text-[#1E2F4A] hover:border-[#C89B5B] hover:text-[#C89B5B]'

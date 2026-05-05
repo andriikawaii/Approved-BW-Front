@@ -1859,10 +1859,12 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
           outline: none;
           text-decoration: none;
         }
-        .kitchen-process-step:focus,
-        .kitchen-process-step:focus-visible {
+        .kitchen-process-step:focus {
           outline: none;
-          box-shadow: none;
+        }
+        .kitchen-process-step:focus-visible {
+          outline: 2px solid #bc9155;
+          outline-offset: 2px;
         }
         .kitchen-process-step.is-active {
           background: rgba(188, 145, 85, 0.14);

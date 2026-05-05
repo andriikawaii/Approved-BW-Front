@@ -97,8 +97,8 @@ export function parts(text?: string | null, mark?: string | null) {
 
 export function label(text: React.ReactNode, dark = false) {
   return (
-    <span className={cls("mb-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em]", dark ? "text-[#c89b5b]" : "text-[#9a7340]")}>
-      <span className={cls("h-0.5 w-[10px]", dark ? "bg-[#c89b5b]" : "bg-[#bc9155]")} />
+    <span className={cls("mb-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em]", dark ? "text-[#c89b5b]" : "text-[#7a5222]")}>
+      <span className={cls("h-0.5 w-[10px]", dark ? "bg-[#c89b5b]" : "bg-[#8B6325]")} />
       {text}
     </span>
   );

@@ -538,7 +538,7 @@ function ProcessSection({ data }: { data?: any }) {
           .ins-process-timeline { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:0; position:relative; }
           .ins-process-timeline::before { content:""; position:absolute; top:34px; left:10%; right:10%; height:2px; background:rgba(188,145,85,0.25); }
           .ins-process-step { text-align:center; padding:16px 16px 20px; position:relative; cursor:pointer; border-radius:8px; transition:background 0.3s; border:0; background:transparent; color:inherit; display:flex; flex-direction:column; align-items:center; width:100%; outline:none; }
-          .ins-process-step:focus,.ins-process-step:focus-visible { outline:none; box-shadow:none; }
+          .ins-process-step:focus { outline:none; } .ins-process-step:focus-visible { outline:2px solid #bc9155; outline-offset:2px; }
           .ins-process-step.is-active { background:rgba(188,145,85,0.14); z-index:2; position:relative; }
           .ins-process-step-num { width:68px; height:68px; border-radius:9999px; background:rgba(188,145,85,0.42); border:2.5px solid #bc9155; display:flex; align-items:center; justify-content:center; margin:-8px auto 20px; font-family:"Playfair Display",serif; font-size:24px; font-weight:700; color:#f5e0c0; position:relative; z-index:2; box-shadow:0 0 0 4px rgba(188,145,85,0.12); flex-shrink:0; }
           .ins-process-step h3 { font-size:18px; margin:0 0 12px; color:#fff; font-weight:700; font-family:"Playfair Display",serif; line-height:1.25; text-align:center; }
@@ -999,11 +999,12 @@ function ContactSection({ page, data }: { page: CMSPage; data?: any }) {
 
                   {timeField ? (
                     <div>
-                      <label className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.05em] text-[#1e2b43]">
+                      <label htmlFor={`ins-select-${timeField.name}`} className="mb-1.5 block text-[13px] font-semibold uppercase tracking-[0.05em] text-[#1e2b43]">
                         {timeField.label}
                         {timeField.required ? " *" : ""}
                       </label>
                       <select
+                        id={`ins-select-${timeField.name}`}
                         required={timeField.required}
                         value={formValues[timeField.name] || ""}
                         onChange={(event) =>

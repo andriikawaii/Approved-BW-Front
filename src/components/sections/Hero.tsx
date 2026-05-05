@@ -165,14 +165,14 @@ export default function Hero({ data }: Props) {
         {primaryCta || data.cta_secondary ? (
           <div className={`mt-8 flex flex-wrap gap-4 ${isCentered ? 'justify-center' : 'flex-col items-start sm:flex-row'} ${isTownHub ? 'mt-10 md:mt-11' : ''}`}>
             {isPhoneCta && data.cta_secondary ? (
-              <a href={data.cta_secondary.url} className="flex min-w-[192px] flex-col items-center rounded-xl border border-white/[0.2] border-b-2 border-b-[#C89B5B] bg-[rgba(10,18,35,0.42)] px-7 py-4 text-center text-white backdrop-blur-[12px] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[rgba(10,18,35,0.62)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
+              <a href={data.cta_secondary.url} className="flex min-w-[192px] flex-col items-center rounded-xl border border-white/[0.2] border-b-2 border-b-[#C89B5B] bg-[rgba(10,18,35,0.42)] px-7 py-4 text-center text-white backdrop-blur-[12px] transition-[transform,background-color] duration-300 hover:-translate-y-0.5 hover:bg-[rgba(10,18,35,0.62)]">
                 <span className="text-[11px] uppercase tracking-[1.2px] opacity-70">New Haven County</span>
                 <span className="text-lg font-semibold" style={{ fontFamily: "'Playfair Display', serif" }}>{data.cta_secondary.label}</span>
               </a>
             ) : null}
             {primaryCta ? (
               isPhoneCta ? (
-                <a href={primaryCta.url} className="flex min-w-[192px] flex-col items-center rounded-xl border border-[#C89B5B] border-b-2 border-b-[#a57d48] bg-[#C89B5B] px-7 py-4 text-center text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#d4a95a] hover:shadow-[0_8px_24px_rgba(188,145,85,0.4)]">
+                <a href={primaryCta.url} className="flex min-w-[192px] flex-col items-center rounded-xl border border-[#C89B5B] border-b-2 border-b-[#a57d48] bg-[#C89B5B] px-7 py-4 text-center text-white transition-[transform,background-color] duration-300 hover:-translate-y-0.5 hover:bg-[#d4a95a]">
                   <span className="text-[11px] uppercase tracking-[1.2px] opacity-90">Free Estimate</span>
                   <span className="text-lg font-semibold" style={{ fontFamily: "'Playfair Display', serif" }}>{primaryCta.label}</span>
                 </a>

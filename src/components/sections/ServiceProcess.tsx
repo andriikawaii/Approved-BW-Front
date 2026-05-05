@@ -30,7 +30,7 @@ export default function ServiceProcess({ data }: Props) {
           {data.steps.map((step) => (
             <div
               key={step.step_number}
-              className="bg-white p-8 rounded-lg shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col h-full group"
+              className="bg-white p-8 rounded-lg shadow-sm border border-gray-100 transition-none flex flex-col h-full group"
             >
               {/* STEP LABEL */}
               <span className="text-[#C68E4D] font-bold text-sm tracking-[0.2em] mb-6 block">

@@ -163,7 +163,7 @@ function DayPicker({
               disabled={blocked}
               onClick={() => !blocked && onChange(cell.iso)}
               className={cls(
-                'h-9 rounded-[6px] text-[13px] font-medium transition-all',
+                'h-9 rounded-[6px] text-[13px] font-medium transition-[background-color,color]',
                 cell.isSelected
                   ? 'bg-[#bc9155] text-white shadow-[0_2px_8px_rgba(188,145,85,0.4)]'
                   : blocked
@@ -442,7 +442,7 @@ export default function ConsultationModal({ open, onClose }: Props) {
                   setPathMode('schedule');
                   setWizardStep(1);
                 }}
-                className="group rounded-[10px] border-2 border-[#1e2b431a] bg-white p-6 text-center transition-all duration-200 hover:-translate-y-[2px] hover:border-[#bc9155] hover:bg-[#bc91550a] hover:shadow-[0_12px_28px_rgba(188,145,85,0.18)]"
+                className="group rounded-[10px] border-2 border-[#1e2b431a] bg-white p-6 text-center transition-[transform,border-color,background-color] duration-200 hover:-translate-y-[2px] hover:border-[#bc9155] hover:bg-[#bc91550a]"
               >
                 <CalendarDays className="mx-auto mb-3 h-8 w-8 text-[#bc9155]" />
                 <h4 className="text-[16px] font-semibold text-[#1e2b43]">Schedule a Consultation</h4>
@@ -454,7 +454,7 @@ export default function ConsultationModal({ open, onClose }: Props) {
                   clearErrors();
                   setPathMode('question');
                 }}
-                className="group rounded-[10px] border-2 border-[#1e2b431a] bg-white p-6 text-center transition-all duration-200 hover:-translate-y-[2px] hover:border-[#bc9155] hover:bg-[#bc91550a] hover:shadow-[0_12px_28px_rgba(188,145,85,0.18)]"
+                className="group rounded-[10px] border-2 border-[#1e2b431a] bg-white p-6 text-center transition-[transform,border-color,background-color] duration-200 hover:-translate-y-[2px] hover:border-[#bc9155] hover:bg-[#bc91550a]"
               >
                 <MessageSquare className="mx-auto mb-3 h-8 w-8 text-[#bc9155]" />
                 <h4 className="text-[16px] font-semibold text-[#1e2b43]">Just Have a Question</h4>
@@ -487,7 +487,7 @@ export default function ConsultationModal({ open, onClose }: Props) {
                             clearErrors();
                           }}
                           className={cls(
-                            'rounded-[8px] border-2 p-4 text-center transition-all duration-200',
+                            'rounded-[8px] border-2 p-4 text-center transition-[border-color,background-color] duration-200',
                             scheduleType === 'in_person'
                               ? 'border-[#bc9155] bg-[#bc915510]'
                               : 'border-[#1e2b431a] bg-white hover:border-[#bc9155]',
@@ -510,7 +510,7 @@ export default function ConsultationModal({ open, onClose }: Props) {
                             clearErrors();
                           }}
                           className={cls(
-                            'rounded-[8px] border-2 p-4 text-center transition-all duration-200',
+                            'rounded-[8px] border-2 p-4 text-center transition-[border-color,background-color] duration-200',
                             scheduleType === 'remote'
                               ? 'border-[#bc9155] bg-[#bc915510]'
                               : 'border-[#1e2b431a] bg-white hover:border-[#bc9155]',
@@ -603,7 +603,7 @@ export default function ConsultationModal({ open, onClose }: Props) {
                                   clearErrors();
                                 }}
                                 className={cls(
-                                  'rounded-[6px] border px-4 py-[14px] text-center text-[14px] font-medium transition-all',
+                                  'rounded-[6px] border px-4 py-[14px] text-center text-[14px] font-medium transition-[border-color,background-color,color]',
                                   selectedSlot === slot
                                     ? 'border-[#bc9155] bg-[#bc9155] text-white'
                                     : 'border-[#1e2b431f] bg-white text-[#1e2b43] hover:border-[#bc9155] hover:bg-[#bc915510]',

@@ -107,7 +107,7 @@ export default function TextUsWidget() {
         onClick={() => setPhoneOpen((current) => !current)}
         aria-label="Call us"
         aria-expanded={phoneOpen}
-        className="flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#b88439] text-white shadow-[0_10px_24px_rgba(20,30,50,0.28)] transition-all hover:bg-[#a97731]"
+        className="flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#b88439] text-white shadow-[0_10px_24px_rgba(20,30,50,0.28)] transition-[background-color] hover:bg-[#a97731]"
       >
         <Phone className="h-[24px] w-[24px]" strokeWidth={1.9} />
       </button>

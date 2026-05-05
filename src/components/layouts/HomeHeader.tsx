@@ -38,7 +38,7 @@ export default function HomeHeader({ phones }: HomeHeaderProps) {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-300 ${
+        className={`fixed inset-x-0 top-0 z-50 border-b transition-[background-color,box-shadow] duration-300 ${
           scrolled
             ? 'border-[#BC9155]/20 bg-[rgba(30,43,67,0.98)] shadow-[0_12px_32px_rgba(0,0,0,0.2)]'
             : 'border-[#BC9155]/15 bg-[rgba(30,43,67,0.94)]'

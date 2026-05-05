@@ -866,10 +866,12 @@ function HomeProcessSection({ data }: { data: ProcessStepsData | null }) {
           width: 100%;
           outline: none;
         }
-        .home-process-step:focus,
-        .home-process-step:focus-visible {
+        .home-process-step:focus {
           outline: none;
-          box-shadow: none;
+        }
+        .home-process-step:focus-visible {
+          outline: 2px solid #bc9155;
+          outline-offset: 2px;
         }
         .home-process-step.is-active {
           background: rgba(188, 145, 85, 0.14);
@@ -1218,7 +1220,7 @@ function HomeTrustStrip() {
               href={item.href}
               target={item.external ? '_blank' : undefined}
               rel={item.external ? 'noopener noreferrer' : undefined}
-              className="flex min-w-[50%] flex-1 flex-col items-center gap-2.5 px-3 py-4 text-center text-[11px] font-semibold tracking-[0.4px] whitespace-nowrap text-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:text-[#BC9155] md:min-w-[180px] md:px-8 md:py-5 md:text-[13px]"
+              className="flex min-w-[50%] flex-1 flex-col items-center gap-2.5 px-3 py-4 text-center text-[11px] font-semibold tracking-[0.4px] whitespace-nowrap text-white/90 transition-[transform,color] duration-300 hover:-translate-y-0.5 hover:text-[#BC9155] md:min-w-[180px] md:px-8 md:py-5 md:text-[13px]"
             >
               {item.icon === 'star' ? (
                 <Star className="h-[18px] w-[18px] fill-[#BC9155] text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]" />
@@ -1262,7 +1264,7 @@ function HomeMidCta() {
         </p>
         <Link
           href="/free-consultation/"
-          className="inline-flex min-h-[52px] w-full items-center justify-center rounded-lg bg-[#BC9155] px-6 py-4 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#a57d48] md:min-h-0 md:min-w-[min(340px,100%)] md:w-auto md:rounded-md md:px-11 md:py-[18px]"
+          className="inline-flex min-h-[52px] w-full items-center justify-center rounded-lg bg-[#BC9155] px-6 py-4 text-[15px] font-semibold text-white transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-[#a57d48] md:min-h-0 md:min-w-[min(340px,100%)] md:w-auto md:rounded-md md:px-11 md:py-[18px]"
         >
           Get Your Free Estimate
           <ArrowRight className="ml-2 h-4 w-4" />

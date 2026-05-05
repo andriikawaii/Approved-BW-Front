@@ -22,13 +22,22 @@ const nextConfig: NextConfig = {
 
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['lucide-react'],
+    optimizePackageImports: ['lucide-react', 'react-markdown', 'remark-gfm'],
   },
 
   async headers() {
     return [
       {
-        source: '/:path(hero|images|portfolio|logos|fonts)/:file*',
+        source: '/:path(hero|images|portfolio|logos|fonts|team|services|avatars)/:file*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/og-default.jpg',
         headers: [
           {
             key: 'Cache-Control',

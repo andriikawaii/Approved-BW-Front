@@ -152,7 +152,7 @@ export default function HeroSlider({ data }: HeroProps) {
             {cta_primary && (
               <Link
                 href={cta_primary.url}
-                className="inline-flex h-[60px] min-w-[280px] items-center justify-center rounded-md bg-[#C68E4D] px-8 py-4 font-sans text-base font-bold uppercase tracking-wider text-white shadow-md transition-all hover:bg-[#B07C3C]"
+                className="inline-flex h-[60px] min-w-[280px] items-center justify-center rounded-md bg-[#C68E4D] px-8 py-4 font-sans text-base font-bold uppercase tracking-wider text-white shadow-md transition-[background-color] hover:bg-[#B07C3C]"
               >
                 {cta_primary.label}
               </Link>
@@ -161,7 +161,7 @@ export default function HeroSlider({ data }: HeroProps) {
             {cta_secondary && (
               <Link
                 href={cta_secondary.url}
-                className="inline-flex h-[60px] min-w-[280px] items-center justify-center whitespace-nowrap rounded-md border-2 border-white/20 px-8 py-4 font-sans text-sm font-bold uppercase tracking-wider text-white transition-all hover:bg-white/10 md:text-base"
+                className="inline-flex h-[60px] min-w-[280px] items-center justify-center whitespace-nowrap rounded-md border-2 border-white/20 px-8 py-4 font-sans text-sm font-bold uppercase tracking-wider text-white transition-[background-color] hover:bg-white/10 md:text-base"
               >
                 {cta_secondary.label}
               </Link>

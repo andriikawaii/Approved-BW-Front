@@ -400,7 +400,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
             display: inline-block;
             font-size: 13px;
             font-weight: 700;
-            color: #9a7340;
+            color: #7a5222;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             margin-bottom: 16px;
@@ -463,10 +463,12 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
             width: 100%;
             outline: none;
           }
-          .svc-process-step:focus,
-          .svc-process-step:focus-visible {
+          .svc-process-step:focus {
             outline: none;
-            box-shadow: none;
+          }
+          .svc-process-step:focus-visible {
+            outline: 2px solid #bc9155;
+            outline-offset: 2px;
           }
           .svc-process-step:hover { background: rgba(188,145,85,0.08); }
           .svc-process-step.is-active {

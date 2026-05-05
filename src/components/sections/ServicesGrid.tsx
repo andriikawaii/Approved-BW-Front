@@ -88,8 +88,8 @@ export default function ServicesGrid({ data }: Props) {
             href={item.url || cta?.url || '#'}
             className={
               isTownHub
-                ? 'group flex flex-col overflow-hidden rounded-[14px] border border-[#e4d8c3] bg-white shadow-[0_8px_20px_rgba(30,43,67,0.07)] transition-all duration-300 hover:-translate-y-1 hover:border-[#cfab76] hover:shadow-[0_16px_34px_rgba(30,43,67,0.15)]'
-                : 'group flex flex-col overflow-hidden rounded-[8px] border-b-2 border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-b-[#C89B5B] hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]'
+                ? 'group flex flex-col overflow-hidden rounded-[14px] border border-[#e4d8c3] bg-white shadow-[0_8px_20px_rgba(30,43,67,0.07)] transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-[#cfab76]'
+                : 'group flex flex-col overflow-hidden rounded-[8px] border-b-2 border-b-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-b-[#C89B5B]'
             }
           >
             {/* IMAGE */}
@@ -140,7 +140,7 @@ export default function ServicesGrid({ data }: Props) {
           <button
             type="button"
             onClick={() => setShowAll((prev) => !prev)}
-            className="inline-flex min-w-[280px] items-center justify-center rounded-[8px] border border-[#C89B5B] bg-white px-10 py-4 text-sm font-bold uppercase tracking-[0.12em] text-[#C89B5B] shadow-sm transition-all duration-300 hover:bg-[#C89B5B] hover:text-white hover:shadow-md"
+            className="inline-flex min-w-[280px] items-center justify-center rounded-[8px] border border-[#C89B5B] bg-white px-10 py-4 text-sm font-bold uppercase tracking-[0.12em] text-[#C89B5B] shadow-sm transition-[background-color,color] duration-300 hover:bg-[#C89B5B] hover:text-white"
           >
             {showAll
               ? (data.toggle_less_label || 'Show Fewer Services')
@@ -151,7 +151,7 @@ export default function ServicesGrid({ data }: Props) {
         <div className="mt-20 text-center">
           <button
             type="button"
-            className="inline-flex min-w-[280px] items-center justify-center rounded-[8px] bg-[#C89B5B] px-10 py-4 text-sm font-bold uppercase tracking-[0.12em] text-white shadow-md transition-all duration-300 hover:bg-[#B98747] hover:shadow-lg"
+            className="inline-flex min-w-[280px] items-center justify-center rounded-[8px] bg-[#C89B5B] px-10 py-4 text-sm font-bold uppercase tracking-[0.12em] text-white shadow-md transition-[background-color] duration-300 hover:bg-[#B98747]"
           >
             Book a Free Consultation
           </button>
@@ -163,7 +163,7 @@ export default function ServicesGrid({ data }: Props) {
         <div className={isTownHub ? 'mt-12 text-center' : 'mt-20 text-center'}>
           <Link
             href={cta.url}
-            className="inline-flex items-center justify-center rounded-md bg-[#C89B5B] px-10 py-4 text-sm font-bold uppercase tracking-wider text-white shadow-md transition-all duration-300 hover:bg-[#B98747] hover:shadow-lg"
+            className="inline-flex items-center justify-center rounded-md bg-[#C89B5B] px-10 py-4 text-sm font-bold uppercase tracking-wider text-white shadow-md transition-[background-color] duration-300 hover:bg-[#B98747]"
           >
             {cta.label}
           </Link>

@@ -124,7 +124,7 @@ export default function Portfolio({ data }: Props) {
             <div className="mt-12 text-center">
               <Link
                 href={data.cta.url}
-                className="inline-flex min-h-[54px] items-center justify-center rounded-[8px] bg-[#C89B5B] px-8 py-3 text-[14px] font-semibold uppercase tracking-[0.08em] text-white transition-all hover:-translate-y-0.5 hover:bg-[#B98747]"
+                className="inline-flex min-h-[54px] items-center justify-center rounded-[8px] bg-[#C89B5B] px-8 py-3 text-[14px] font-semibold uppercase tracking-[0.08em] text-white transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-[#B98747]"
               >
                 {data.cta.label}
               </Link>
@@ -168,7 +168,7 @@ export default function Portfolio({ data }: Props) {
             return (
               <article
                 key={i}
-                className="overflow-hidden rounded-[10px] border border-[#E7E0D4] bg-white shadow-[0_8px_24px_rgba(30,43,67,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_30px_rgba(30,43,67,0.10)]"
+                className="overflow-hidden rounded-[10px] border border-[#E7E0D4] bg-white shadow-[0_8px_24px_rgba(30,43,67,0.06)] transition-transform duration-300 hover:-translate-y-1"
               >
                 <Link href={href} className="block">
                   <div className="relative overflow-hidden">
@@ -216,7 +216,7 @@ export default function Portfolio({ data }: Props) {
           <div className="mt-12 text-center">
             <Link
               href={data.cta.url}
-              className="inline-flex min-h-[54px] items-center justify-center rounded-[8px] bg-[#C89B5B] px-8 py-3 text-[14px] font-semibold uppercase tracking-[0.08em] text-white transition-all hover:-translate-y-0.5 hover:bg-[#B98747]"
+              className="inline-flex min-h-[54px] items-center justify-center rounded-[8px] bg-[#C89B5B] px-8 py-3 text-[14px] font-semibold uppercase tracking-[0.08em] text-white transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-[#B98747]"
             >
               {data.cta.label}
             </Link>

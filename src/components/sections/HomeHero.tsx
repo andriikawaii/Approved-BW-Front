@@ -130,7 +130,7 @@ export default function HomeHero({ data }: HomeHeroProps) {
               {data.cta_primary ? (
                 <Link
                   href={data.cta_primary.url}
-                  className="inline-flex min-h-[64px] w-full max-w-full items-center justify-center rounded-[8px] bg-[#BC9155] px-8 text-[16px] font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-[#a57d48] md:w-[340px]"
+                  className="inline-flex min-h-[64px] w-full max-w-full items-center justify-center rounded-[8px] bg-[#BC9155] px-8 text-[16px] font-semibold text-white transition-[transform,background-color] duration-200 hover:-translate-y-px hover:bg-[#a57d48] md:w-[340px]"
                 >
                   {primaryLabel}
                   <svg className="ml-2 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -142,14 +142,14 @@ export default function HomeHero({ data }: HomeHeroProps) {
                 data.cta_secondary.url.startsWith('tel:') ? (
                   <a
                     href={data.cta_secondary.url}
-                    className="inline-flex min-h-[64px] w-full max-w-full items-center justify-center rounded-[8px] border border-white/25 px-8 text-[16px] font-medium text-white transition-all duration-200 hover:border-[#BC9155] hover:text-[#BC9155] md:w-[340px]"
+                    className="inline-flex min-h-[64px] w-full max-w-full items-center justify-center rounded-[8px] border border-white/25 px-8 text-[16px] font-medium text-white transition-[border-color,color] duration-200 hover:border-[#BC9155] hover:text-[#BC9155] md:w-[340px]"
                   >
                     {data.cta_secondary.label}
                   </a>
                 ) : (
                   <Link
                     href={data.cta_secondary.url}
-                    className="inline-flex min-h-[64px] w-full max-w-full items-center justify-center rounded-[8px] border border-white/25 px-8 text-[16px] font-medium text-white transition-all duration-200 hover:border-[#BC9155] hover:text-[#BC9155] md:w-[340px]"
+                    className="inline-flex min-h-[64px] w-full max-w-full items-center justify-center rounded-[8px] border border-white/25 px-8 text-[16px] font-medium text-white transition-[border-color,color] duration-200 hover:border-[#BC9155] hover:text-[#BC9155] md:w-[340px]"
                   >
                     {data.cta_secondary.label}
                   </Link>

@@ -29,7 +29,7 @@ export default function BenefitsGrid({ data }: Props) {
           {benefits.map((benefit, index) => (
             <article
               key={`${benefit.title}-${index}`}
-              className="group rounded-2xl border border-[#e6dcc9] bg-[#f9f6ef] p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_30px_rgba(30,47,74,0.1)]"
+              className="group rounded-2xl border border-[#e6dcc9] bg-[#f9f6ef] p-6 transition-transform duration-300 hover:-translate-y-1"
             >
               <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#1E2F4A] text-white">
                 <ArrowUpRight className="h-4 w-4" />

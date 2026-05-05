@@ -97,7 +97,7 @@ async function fetchFromApi(slug: string): Promise<ApiFetchResult> {
   const timeout = setTimeout(() => controller.abort(), 8000);
 
   try {
-    const res = await fetch(url, { cache: 'no-store', signal: controller.signal });
+    const res = await fetch(url, { next: { revalidate: 60 }, signal: controller.signal });
     clearTimeout(timeout);
 
     if (res.status === 404) {
