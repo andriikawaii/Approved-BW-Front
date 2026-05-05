@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import ConsultationModal from './ConsultationModal';
+import { useScheduler } from '@/src/components/SchedulerModal';
 
 const NAV_LINKS = [
   { label: 'Services', href: '/services/' },
@@ -14,8 +14,8 @@ const NAV_LINKS = [
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [consultationOpen, setConsultationOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { open: openScheduler } = useScheduler();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -64,7 +64,7 @@ export default function Header() {
           <div className="flex items-center gap-3">
             <button
               type="button"
-              onClick={() => setConsultationOpen(true)}
+              onClick={openScheduler}
               className="hidden whitespace-nowrap rounded-[6px] bg-[#C68E4D] px-[22px] py-[10px] text-[12px] font-semibold uppercase tracking-[0.5px] text-white transition-[transform,background-color] duration-200 hover:-translate-y-px hover:bg-[#a57d48] lg:inline-flex"
             >
               Get Your Free Estimate
@@ -107,7 +107,7 @@ export default function Header() {
               type="button"
               onClick={() => {
                 setMobileOpen(false);
-                setConsultationOpen(true);
+                openScheduler();
               }}
               className="mt-4 inline-flex items-center gap-2 rounded-[4px] bg-[#C68E4D] px-8 py-4 text-[15px] font-semibold text-white transition-[transform,background-color] duration-200 hover:-translate-y-px hover:bg-[#a57d48]"
             >
@@ -127,10 +127,6 @@ export default function Header() {
         </div>
       ) : null}
 
-      <ConsultationModal
-        open={consultationOpen}
-        onClose={() => setConsultationOpen(false)}
-      />
     </>
   );
 }
