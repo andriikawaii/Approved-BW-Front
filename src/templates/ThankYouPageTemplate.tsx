@@ -57,8 +57,8 @@ export function ThankYouPageTemplate({ page }: { page: CMSPage }) {
         .ty-step-card p{font-size:15px;color:#5C677D;line-height:1.7}
 
         /* Explore */
-        .ty-explore{padding:80px 40px;background:#fff;border-top:1px solid rgba(30,43,67,0.06)}
-        .ty-explore-inner{max-width:1100px;margin:0 auto;text-align:center}
+        .ty-explore{padding:80px 40px;background:#fff;border-top:1px solid rgba(30,43,67,0.06);width:100%;display:flex;justify-content:center}
+        .ty-explore-inner{max-width:1100px;width:100%;margin:0 auto;text-align:center}
         .ty-explore-inner h2{font-size:clamp(26px,3vw,34px);margin-bottom:8px}
         .ty-explore-sub{font-size:16px;color:#5C677D;margin-bottom:40px}
         .ty-explore-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
