@@ -61,13 +61,26 @@ export default function HomeHero({ data }: HomeHeroProps) {
 
   return (
     <section className="relative isolate flex min-h-[92vh] items-center justify-center overflow-hidden bg-[#151E30] pt-16">
-      {/* Video background */}
+      {/* Poster image — LCP element, paints immediately */}
+      {hasVideo && data.background_poster ? (
+        <Image
+          src={data.background_poster}
+          alt="BuiltWell CT team and vehicles at a Connecticut home remodeling project"
+          fill
+          priority
+          fetchPriority="high"
+          sizes="100vw"
+          className="object-cover object-[center_top] opacity-65"
+        />
+      ) : null}
+      {/* Video background — loads in background, replaces poster once ready */}
       {hasVideo ? (
         <video
           autoPlay
           muted
           loop
           playsInline
+          preload="metadata"
           src={data.background_video}
           poster={data.background_poster || undefined}
           className="absolute inset-0 h-[110%] w-full object-cover object-[center_top] opacity-65"
