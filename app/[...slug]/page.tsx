@@ -94,6 +94,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+// Fallback hero images per slug — these match the hardcoded fallbacks in each template.
+// Preloading here allows the browser to fetch the image before the lazy JS chunk loads.
+const HERO_FALLBACKS: Record<string, string> = {
+  'new-haven-county/orange-ct': '/portfolio/builtwell-team-office-exterior-ct.jpg',
+  'new-haven-county/new-haven-ct': '/images/areas/new-haven-ct-skyline.jpg',
+  'fairfield-county/greenwich-ct': '/images/areas/greenwich-ct-avenue.jpg',
+  'fairfield-county/madison-ct': '/images/areas/madison-ct-town.jpg',
+};
+
+function resolveHeroImage(
+  page: Awaited<ReturnType<typeof getPageBySlug>>,
+  slug: string,
+): string | null {
+  if (!page) return null;
+  const heroSection = page.sections.find((s) => s.type === 'hero');
+  const bg = heroSection
+    ? (heroSection.data as Record<string, unknown>)['background_image']
+    : null;
+  if (typeof bg === 'string' && bg.trim()) return bg.trim();
+  // Use static fallback if we know the template's default
+  return HERO_FALLBACKS[slug] ?? null;
+}
+
 export default async function DynamicPage({ params }: Props) {
   const { slug } = await params;
   const path = slug.join('/');
@@ -108,8 +131,18 @@ export default async function DynamicPage({ params }: Props) {
   const apiPhones = normalizeApiPhones(page.phones?.items);
   const phones = apiPhones.length > 0 ? apiPhones : resolvePhones(footerVariant);
 
+  const heroImage = resolveHeroImage(page, path);
+
   return (
     <PageDataProvider footerVariant={footerVariant} phones={phones}>
+      {heroImage && (
+        <link
+          rel="preload"
+          as="image"
+          href={`/_next/image?url=${encodeURIComponent(heroImage)}&w=1080&q=85`}
+          fetchPriority="high"
+        />
+      )}
       {page.schema && (
         <script
           type="application/ld+json"
