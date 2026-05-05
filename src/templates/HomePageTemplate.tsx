@@ -1258,6 +1258,7 @@ function HomeMidCta() {
         sizes="100vw"
         className="object-cover object-[center_40%] opacity-25"
         aria-hidden="true"
+        loading="lazy"
       />
       <div className="home-fade-up relative z-10">
         <h2 className="font-serif text-[clamp(28px,3vw,40px)] font-bold tracking-[-0.3px] !text-white">
