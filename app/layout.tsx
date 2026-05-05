@@ -75,22 +75,6 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://api.builtwellct.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://api.builtwellct.com" />
-        <link
-          rel="preload"
-          as="image"
-          href="/images/hero/hero-carousel-final.avif"
-          type="image/avif"
-          // @ts-expect-error: fetchpriority is valid HTML but missing from React types
-          fetchpriority="high"
-        />
-        <link
-          rel="preload"
-          as="image"
-          href="/images/hero/hero-carousel-final.webp"
-          type="image/webp"
-          // @ts-expect-error: fetchpriority is valid HTML but missing from React types
-          fetchpriority="high"
-        />
       </head>
       <body suppressHydrationWarning={isDevelopment} className="font-sans antialiased">
         <SchedulerProvider>
