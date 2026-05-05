@@ -2,7 +2,6 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { Clock3, Home, Mail, MapPin, Monitor, Phone } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
@@ -75,6 +74,11 @@ const CONTACT_TRUST_ITEMS: Array<{ label: string; url: string; icon: ContactTrus
     url: "https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx",
     icon: "license",
     external: true,
+  },
+  {
+    label: "Verified on Angi",
+    url: "#angi",
+    icon: "check",
   },
 ];
 
@@ -333,7 +337,7 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
   return (
     <div ref={pageRef} data-contact-page className="bg-[#f5f1e9] text-[#1e2b43]">
       <section className="contact-page-hero relative isolate flex min-h-[50vh] items-stretch overflow-hidden bg-[#151e30] px-5 pb-12 pt-[60px] text-white md:px-10">
-        <Image src={media(hero?.background_image, "/images/hero/hero-carousel-2.jpg")} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover opacity-70" />
+        <div className="absolute inset-0 bg-cover bg-center opacity-70" style={{ backgroundImage: `url(${media(hero?.background_image, "/images/hero/hero-carousel-2.jpg")})` }} />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_97%_97%,rgba(21,30,48,1)_0%,rgba(21,30,48,0.9)_8%,transparent_30%),radial-gradient(ellipse_at_3%_97%,rgba(21,30,48,0.9)_0%,transparent_25%),linear-gradient(180deg,rgba(21,30,48,0.35)_0%,rgba(21,30,48,0.2)_30%,rgba(21,30,48,0.45)_65%,rgba(21,30,48,0.92)_100%)]" />
         <div className="relative z-10 mx-auto flex w-full max-w-[1240px] flex-col items-center justify-center text-center">
           <ol className="mb-5 flex list-none items-center text-[13px] font-medium text-white/90">
@@ -450,8 +454,25 @@ export function ContactPageTemplate({ page }: { page: CMSPage }) {
         </section>
       ) : null}
 
-      {/* In-Person vs Remote consultation cards section removed — the unified
-          ConsultationModal now exposes both paths from a single CTA. */}
+      <section className="bg-[#f5f1e9] px-5 py-16 md:px-10 md:py-20">
+        <div className="mx-auto max-w-[1240px]">
+          <div className="contact-fade-up mb-10 text-center">
+            {label(consultIntro?.eyebrow || "Get Started")}
+            <h2 className="text-[clamp(32px,3.5vw,48px)] font-bold tracking-[-0.02em]">{consultParts.before}{consultParts.accent ? <span className="text-[#bc9155]">{consultParts.accent}</span> : null}{consultParts.after}</h2>
+            {consultIntro?.content || consultIntro?.body ? <p className="mx-auto mt-3 max-w-[780px] text-[15px] leading-[1.8] text-[#5c677d]">{consultIntro?.content || consultIntro?.body}</p> : null}
+          </div>
+          <div className="contact-fade-up contact-reveal-stagger grid gap-7 md:grid-cols-2">
+            {consultCards.map((item: any, index: number) => (
+              <article key={`${item.title || "consult"}-${index}`} style={staggerStyle(index)} className="contact-stagger-item contact-consult-card">
+                <div className="contact-consult-card-icon">{index === 0 ? <Home className="h-6 w-6" /> : <Monitor className="h-6 w-6" />}</div>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+                <button type="button" onClick={() => openScheduleModal(index === 0 ? "in-person" : "remote")} className="contact-consult-card-btn">{index === 0 ? "Book In-Person" : "Book Remote"}</button>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="bg-[#f5f1e9] px-5 pb-16 md:px-10 md:pb-24">
         <div className="mx-auto max-w-[1240px]">
