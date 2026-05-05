@@ -603,17 +603,17 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
                   <div className="bw-form-row">
                     {topFields.map((field: any) => (
                       <div key={field.name} className="bw-form-group">
-                        <label>{field.label}{field.required ? " *" : ""}</label>
-                        <input type={field.type} required={field.required} value={formValues[field.name] || ""} placeholder={field.placeholder || ""} onChange={(event) => setFormValues((current) => ({ ...current, [field.name]: event.target.value }))} />
+                        <label htmlFor={`bw-lead-${field.name}`}>{field.label}{field.required ? " *" : ""}</label>
+                        <input id={`bw-lead-${field.name}`} type={field.type} required={field.required} value={formValues[field.name] || ""} placeholder={field.placeholder || ""} onChange={(event) => setFormValues((current) => ({ ...current, [field.name]: event.target.value }))} />
                       </div>
                     ))}
                   </div>
                   <div className="bw-form-row">
                     {servicesField ? (
                       <div className="bw-form-group">
-                        <label>{servicesField.label}{servicesField.required ? " *" : ""}</label>
+                        <label id="bw-lead-services-label">{servicesField.label}{servicesField.required ? " *" : ""}</label>
                         <div className="bw-multi-select-wrap" ref={multiSelectRef}>
-                          <button type="button" className="bw-multi-select-toggle" aria-expanded={serviceOpen} onClick={() => setServiceOpen((current) => !current)}>
+                          <button type="button" className="bw-multi-select-toggle" aria-expanded={serviceOpen} aria-labelledby="bw-lead-services-label" onClick={() => setServiceOpen((current) => !current)}>
                             <span className={cls("bw-multi-select-text", pickedServices.length > 0 && "bw-has-selection")}>{selectedServicesLabel}</span>
                             <ChevronDown className="h-3 w-3" />
                           </button>
@@ -633,8 +633,8 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
                     ) : null}
                     {timeField ? (
                       <div className="bw-form-group">
-                        <label>{timeField.label}{timeField.required ? " *" : ""}</label>
-                        <select required={timeField.required} value={formValues[timeField.name] || ""} onChange={(event) => setFormValues((current) => ({ ...current, [timeField.name]: event.target.value }))}>
+                        <label htmlFor="bw-lead-best-time">{timeField.label}{timeField.required ? " *" : ""}</label>
+                        <select id="bw-lead-best-time" required={timeField.required} value={formValues[timeField.name] || ""} onChange={(event) => setFormValues((current) => ({ ...current, [timeField.name]: event.target.value }))}>
                           <option value="">Select a time</option>
                           {opts(timeField.options).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                         </select>
@@ -662,14 +662,14 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
                   </div>
                   {messageField ? (
                     <div className="bw-form-group">
-                      <label>{messageField.label}</label>
-                      <textarea rows={4} value={formValues[messageField.name] || ""} placeholder={messageField.placeholder || ""} onChange={(event) => setFormValues((current) => ({ ...current, [messageField.name]: event.target.value }))} />
+                      <label htmlFor="bw-lead-message">{messageField.label}</label>
+                      <textarea id="bw-lead-message" rows={4} value={formValues[messageField.name] || ""} placeholder={messageField.placeholder || ""} onChange={(event) => setFormValues((current) => ({ ...current, [messageField.name]: event.target.value }))} />
                     </div>
                   ) : null}
                   {fileField ? (
                     <div className="bw-form-group">
-                      <label>{fileField.label}{fileField.required ? " *" : ""}</label>
-                      <input type="file" required={fileField.required} />
+                      <label htmlFor="bw-lead-file">{fileField.label}{fileField.required ? " *" : ""}</label>
+                      <input id="bw-lead-file" type="file" required={fileField.required} />
                     </div>
                   ) : null}
                   <div className="bw-form-consent">
