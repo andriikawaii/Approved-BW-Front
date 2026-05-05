@@ -35,6 +35,16 @@ type HomeHeroProps = {
   };
 };
 
+/**
+ * Returns the best-quality poster path: prefer avif > webp > original
+ * Only applies to local /images/hero/ paths.
+ */
+function getBestPosterSrc(src: string): string {
+  if (!src.startsWith('/images/hero/')) return src;
+  const withoutExt = src.replace(/\.(png|jpg|jpeg|webp)$/i, '');
+  return `${withoutExt}.avif`;
+}
+
 export default function HomeHero({ data }: HomeHeroProps) {
   const hasVideo = !!data.background_video;
   const heroEyebrow = 'SERVING FAIRFIELD & NEW HAVEN COUNTIES';
@@ -64,7 +74,7 @@ export default function HomeHero({ data }: HomeHeroProps) {
       {/* Poster image — LCP element, paints immediately */}
       {hasVideo && data.background_poster ? (
         <Image
-          src={data.background_poster}
+          src={getBestPosterSrc(data.background_poster)}
           alt="BuiltWell CT team and vehicles at a Connecticut home remodeling project"
           fill
           priority
@@ -80,9 +90,9 @@ export default function HomeHero({ data }: HomeHeroProps) {
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="none"
           src={data.background_video}
-          poster={data.background_poster || undefined}
+          poster={data.background_poster ? getBestPosterSrc(data.background_poster) : undefined}
           className="absolute inset-0 h-[110%] w-full object-cover object-[center_top] opacity-65"
           aria-label="BuiltWell CT team and vehicles at a Connecticut home remodeling project"
         />
