@@ -1224,7 +1224,7 @@ function HomeTrustStrip() {
               href={item.href}
               target={item.external ? '_blank' : undefined}
               rel={item.external ? 'noopener noreferrer' : undefined}
-              className="flex min-w-[50%] flex-1 flex-col items-center gap-2.5 px-3 py-4 text-center text-[11px] font-semibold tracking-[0.4px] whitespace-nowrap text-white/90 transition-[transform,color] duration-300 hover:-translate-y-0.5 hover:text-[#BC9155] md:min-w-[180px] md:px-8 md:py-5 md:text-[13px]"
+              className="flex flex-1 basis-[33%] flex-col items-center gap-2 px-2 py-3 text-center text-[10px] font-semibold tracking-[0.3px] text-white/90 transition-[transform,color] duration-300 hover:-translate-y-0.5 hover:text-[#BC9155] md:basis-auto md:min-w-[180px] md:px-8 md:py-5 md:text-[13px] md:tracking-[0.4px] md:gap-2.5 md:whitespace-nowrap"
             >
               {item.icon === 'star' ? (
                 <Star className="h-[18px] w-[18px] fill-[#BC9155] text-[#BC9155] [filter:drop-shadow(0_2px_4px_rgba(188,145,85,0.3))] md:h-[22px] md:w-[22px]" />
