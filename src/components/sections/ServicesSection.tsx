@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
@@ -45,16 +44,13 @@ export default function ServicesSection({ data }: ServicesSectionProps) {
               <Link
                 key={i}
                 href={href}
-                className="group flex h-full flex-col overflow-hidden rounded-xl border border-[#ece7dc] bg-white shadow-[0_8px_22px_rgba(30,47,74,0.08)] transition-transform duration-300 hover:-translate-y-1"
+                className="group flex h-full flex-col overflow-hidden rounded-xl border border-[#ece7dc] bg-white shadow-[0_8px_22px_rgba(30,47,74,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_38px_rgba(30,47,74,0.14)]"
               >
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#1E2F4A]/10">
-                  <Image
+                  <img
                     src={item.image}
                     alt={item.image_alt || item.title}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    loading={i < 2 ? 'eager' : 'lazy'}
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                   />
                 </div>
 

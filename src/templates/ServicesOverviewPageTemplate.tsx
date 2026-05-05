@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
 import { AreasSection, FinancingStrip, HeroTrustBar, LeadFormSection, cls, label, linkNode, media, parts, section, sections } from "./template-utils";
@@ -76,8 +75,8 @@ function useFadeUp() {
 }
 
 const fadeUpStyle: React.CSSProperties = {
-  opacity: 1,
-  transform: "translateY(0)",
+  opacity: 0,
+  transform: "translateY(30px)",
   transition: "opacity 0.7s ease, transform 0.7s ease",
 };
 
@@ -86,6 +85,7 @@ const defaultTrustStrip = [
   { icon: "star", label: "Google Rating", value: "4.9", url: "https://www.google.com/search?q=builtwell+ct+reviews" },
   { icon: "check-circle", label: "Trusted on Houzz", url: "#houzz" },
   { icon: "calendar", label: "CT HIC License #0668405", url: "https://www.elicense.ct.gov/Lookup/LicenseLookup.aspx" },
+  { icon: "check-circle", label: "Verified on Angi", url: "#angi" },
 ];
 
 function ServicesTrustIcon({ icon }: { icon?: string | null }) {
@@ -249,7 +249,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
 
       {/* ══════ HERO ══════ */}
       <section className="relative isolate overflow-hidden bg-[#151e30] px-5 pb-8 pt-[60px] text-white md:px-10">
-        <Image src={localMedia(hero?.background_image, "/hero/builtwell-job-site-aerial-hero-ct.jpg")} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_15%] opacity-[0.72]" />
+        <div className="absolute inset-0 bg-cover bg-[center_15%] opacity-[0.72]" style={{ backgroundImage: `url(${localMedia(hero?.background_image, "/hero/builtwell-job-site-aerial-hero-ct.jpg")})` }} />
         <div className="absolute inset-0" style={{
           background: [
             "radial-gradient(ellipse at 97% 97%, rgba(21,30,48,1) 0%, rgba(21,30,48,0.9) 8%, transparent 30%)",
@@ -264,7 +264,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
               <span className="font-semibold text-white">Services</span>
             </li>
           </ol>
-          <h1 className="fade-up mb-3 font-serif text-[clamp(26px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.5px] text-white md:whitespace-nowrap [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]" style={{ ...fadeUpStyle, transitionDelay: "0.1s" }}>
+          <h1 className="fade-up mb-3 whitespace-nowrap font-serif text-[clamp(28px,4.5vw,56px)] font-bold leading-[1.08] tracking-[-0.5px] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]" style={{ ...fadeUpStyle, transitionDelay: "0.1s" }}>
             <span className="text-white">{heroParts.before || "Home Remodeling "}</span>
             <span className="text-[#bc9155]">{heroParts.accent || "Services in Connecticut"}</span>
             <span className="text-white">{heroParts.after}</span>
@@ -335,7 +335,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
                     {item.price ? <span className="inline-flex w-[150px] items-center justify-center gap-[6px] rounded-full bg-[#bc91551a] px-[14px] py-[6px] text-[12px] font-semibold text-[#9a7340]"><svg className="h-[14px] w-[14px] flex-shrink-0 text-[#bc9155]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>{item.price}</span> : null}
                     {item.timeline ? <span className="inline-flex w-[150px] items-center justify-center gap-[6px] rounded-full bg-[#bc91551a] px-[14px] py-[6px] text-[12px] font-semibold text-[#9a7340]"><svg className="h-[14px] w-[14px] flex-shrink-0 text-[#bc9155]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{item.timeline}</span> : null}
                   </div>
-                  {item.url ? linkNode(item.url, <><span>{item.cta_label || "Learn More"}</span><ArrowRight className="h-[14px] w-[14px]" /></>, "inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#bc9155] transition-colors duration-200 hover:text-[#a57d48]") : null}
+                  {item.url ? linkNode(item.url, <><span>{item.cta_label || "Learn More"}</span><ArrowRight className="h-[14px] w-[14px]" /></>, "inline-flex items-center gap-[6px] text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-[10px]") : null}
                 </div>
               </article>
             ))}
@@ -400,7 +400,7 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
             display: inline-block;
             font-size: 13px;
             font-weight: 700;
-            color: #7a5222;
+            color: #9a7340;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             margin-bottom: 16px;
@@ -463,12 +463,10 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
             width: 100%;
             outline: none;
           }
-          .svc-process-step:focus {
-            outline: none;
-          }
+          .svc-process-step:focus,
           .svc-process-step:focus-visible {
-            outline: 2px solid #bc9155;
-            outline-offset: 2px;
+            outline: none;
+            box-shadow: none;
           }
           .svc-process-step:hover { background: rgba(188,145,85,0.08); }
           .svc-process-step.is-active {
@@ -508,18 +506,16 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
             font-size: 14px;
             color: rgba(255,255,255,0.7);
             line-height: 1.65;
-            height: 0;
+            max-height: 0;
             opacity: 0;
             overflow: hidden;
-            visibility: hidden;
             margin: 0;
-            transition: opacity 0.3s ease;
+            transition: max-height 0.4s ease, opacity 0.35s ease, margin-top 0.35s ease;
             text-align: center;
           }
           .svc-process-step.is-active p {
-            height: auto;
+            max-height: 200px;
             opacity: 1;
-            visibility: visible;
             margin-top: 8px;
           }
           .svc-process-hint {
@@ -530,56 +526,24 @@ export function ServicesOverviewPageTemplate({ page }: { page: CMSPage }) {
           }
           @media (max-width: 1024px) {
             .svc-process-timeline {
-              grid-template-columns: 1fr;
-              gap: 12px;
-              max-width: 720px;
+              grid-template-columns: repeat(3, minmax(0, 1fr));
+              gap: 24px;
+              max-width: 700px;
               margin: 0 auto;
             }
             .svc-process-timeline::before { display: none; }
-            .svc-process-step {
-              padding: 20px 16px;
-              flex-direction: column;
-              align-items: center;
-              gap: 12px;
-              text-align: center;
-              border: 1px solid rgba(188, 145, 85, 0.18);
-              background: rgba(255, 255, 255, 0.03);
-              border-radius: 10px;
-            }
-            .svc-process-step.is-active {
-              border-color: rgba(188, 145, 85, 0.55);
-              background: rgba(188, 145, 85, 0.16);
-            }
-            .svc-process-step-num {
-              width: 52px;
-              height: 52px;
-              font-size: 22px;
-              margin: 0;
-              box-shadow: 0 0 0 3px rgba(188, 145, 85, 0.12);
-            }
-            .svc-process-step h3 {
-              font-size: 18px;
-              margin: 0;
-              text-align: center;
-              width: 100%;
-            }
-            .svc-process-step p {
-              display: block !important;
-              text-align: center;
-              margin-top: 0;
-              padding-left: 0;
-              width: 100%;
-            }
-            .svc-process-step.is-active p {
-              height: auto;
-              margin-top: 8px;
-            }
+            .svc-process-step { padding: 16px 8px; gap: 0; }
+            .svc-process-step-num { margin: 0 0 10px; }
+            .svc-process-step h3 { font-size: 15px; margin: 0; text-align: center; }
+            .svc-process-step p { display: none !important; }
           }
           @media (max-width: 768px) {
             .svc-process-header { margin-bottom: 36px; }
             .svc-process-header h2 { font-size: 24px; margin-bottom: 14px; }
             .svc-process-header p { font-size: 15px; line-height: 1.7; }
-            .svc-process-step { padding: 14px; }
+            .svc-process-timeline { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; max-width: 600px; }
+            .svc-process-step { padding: 14px 8px; }
+            .svc-process-step-num { width: 48px; height: 48px; font-size: 17px; margin: 0 0 8px; }
           }
         `}</style>
       </section>
@@ -749,7 +713,7 @@ function ServicesAreasSection({
                           <span>{county.cta_label || `Learn more about ${county.name}`}</span>
                           <ArrowRight className="h-4 w-4" />
                         </>,
-                        "mt-5 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#bc9155] transition-colors duration-200 hover:text-[#a57d48]",
+                        "mt-5 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#bc9155] transition-all duration-300 hover:gap-2.5",
                       )
                     : null}
                 </div>
