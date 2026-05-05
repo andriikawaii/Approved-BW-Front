@@ -139,6 +139,30 @@ const GREENWICH_KITCHEN_COST_NOTE =
 const GREENWICH_COST_DRIVERS_TEXT =
   'Greenwich permit fees run $13.26 per $1,000 of renovation budget with separate electrical and plumbing fees of $12 per $1,000 each, plus a 5% surcharge on pre-1940 homes. Multi-department sign-offs from Zoning, Health, the Fire Marshal, and DPW add review time. FAR limits constrain buildable square footage. Ledge rock in Back Country and Mid-Country creates excavation contingencies of $20,000 to $80,000 that less experienced contractors either miss or do not disclose. And the subcontractor network that works at the finish level Greenwich homeowners expect charges accordingly.';
 
+let sharedObserver: IntersectionObserver | null = null;
+const fadeUpCallbacks = new WeakMap<Element, () => void>();
+
+function getSharedObserver(): IntersectionObserver {
+  if (!sharedObserver) {
+    sharedObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const cb = fadeUpCallbacks.get(entry.target);
+            if (cb) {
+              cb();
+              sharedObserver?.unobserve(entry.target);
+              fadeUpCallbacks.delete(entry.target);
+            }
+          }
+        }
+      },
+      { threshold: 0.14 }
+    );
+  }
+  return sharedObserver;
+}
+
 function FadeUp({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -147,18 +171,14 @@ function FadeUp({ children, delay = 0 }: { children: ReactNode; delay?: number }
     const node = ref.current;
     if (!node) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.14 }
-    );
-
+    fadeUpCallbacks.set(node, () => setVisible(true));
+    const observer = getSharedObserver();
     observer.observe(node);
-    return () => observer.disconnect();
+
+    return () => {
+      observer.unobserve(node);
+      fadeUpCallbacks.delete(node);
+    };
   }, []);
 
   return (

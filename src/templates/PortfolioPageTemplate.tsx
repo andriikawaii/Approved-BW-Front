@@ -8,7 +8,7 @@ import { usePageData } from "@/src/context/PageDataContext";
 
 const fallbackTopTrust = [
   { value: "15+", label: "Years of Experience" },
-  { value: "100+", label: "Restoration Projects" },
+  { value: "100+", label: "Completed Projects" },
   { value: "4.9", label: "Google Rating", url: "https://www.google.com/maps/search/?api=1&query=BuiltWell+CT,+206A+Boston+Post+Road,+Orange,+CT+06477" },
   { icon: "shield", label: "Fully Bonded and Insured" },
 ];

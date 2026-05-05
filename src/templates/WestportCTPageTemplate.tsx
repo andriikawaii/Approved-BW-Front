@@ -7,18 +7,43 @@ import type { CMSPage } from '@/types/cms';
 import { AreasSection as SharedAreasSection, FinancingStrip as SharedFinancingStrip, LeadFormSection as SharedLeadFormSection } from './template-utils';
 
 // ─── FadeUp ───────────────────────────────────────────────────────────────────
+let sharedObserver: IntersectionObserver | null = null;
+const fadeUpCallbacks = new WeakMap<Element, () => void>();
+
+function getSharedObserver(): IntersectionObserver {
+  if (!sharedObserver) {
+    sharedObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const cb = fadeUpCallbacks.get(entry.target);
+            if (cb) {
+              cb();
+              sharedObserver?.unobserve(entry.target);
+              fadeUpCallbacks.delete(entry.target);
+            }
+          }
+        }
+      },
+      { threshold: 0.12 }
+    );
+  }
+  return sharedObserver;
+}
+
 function FadeUp({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
-      { threshold: 0.12 }
-    );
+    fadeUpCallbacks.set(el, () => setVisible(true));
+    const observer = getSharedObserver();
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => {
+      observer.unobserve(el);
+      fadeUpCallbacks.delete(el);
+    };
   }, []);
   return (
     <div
