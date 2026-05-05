@@ -1,52 +1,43 @@
 import { createElement } from 'react';
-import dynamic from 'next/dynamic';
 import type { CMSPage } from '@/types/cms';
+import { AboutPageTemplate } from './AboutPageTemplate';
+import { AreasWeServeTemplate } from './AreasWeServeTemplate';
+import { BathroomRemodelingPageTemplate } from './BathroomRemodelingPageTemplate';
+import { CaseStudiesPageTemplate } from './CaseStudiesPageTemplate';
+import { CareersPageTemplate } from './CareersPageTemplate';
+import { CaseStudyDetailPageTemplate } from './CaseStudyDetailPageTemplate';
+import { ContactPageTemplate } from './ContactPageTemplate';
+import { CountyPageTemplate } from './CountyPageTemplate';
 import { DefaultPageTemplate } from './DefaultPageTemplate';
+import { FaqPageTemplate } from './FaqPageTemplate';
+import { FinancingPageTemplate } from './FinancingPageTemplate';
 import { HomePageTemplate } from './HomePageTemplate';
+import { InsuranceRestorationPageTemplate } from './InsuranceRestorationPageTemplate';
+import { KitchenRemodelingCityPageTemplate } from './KitchenRemodelingCityPageTemplate';
+import { KitchenRemodelingPageTemplate } from './KitchenRemodelingPageTemplate';
+import { PremiumServicePageTemplate } from './PremiumServicePageTemplate';
+import { PricingPageTemplate } from './PricingPageTemplate';
+import { PrivacyPolicyPageTemplate } from './PrivacyPolicyPageTemplate';
+import { ProcessPageTemplate } from './ProcessPageTemplate';
+import { ServicePageTemplate } from './ServicePageTemplate';
+import { ServicesOverviewPageTemplate } from './ServicesOverviewPageTemplate';
+import { TermsPageTemplate } from './TermsPageTemplate';
+import { TownPageTemplate } from './TownPageTemplate';
+import { CountyHubPageTemplate } from './CountyHubPageTemplate';
+import { PortfolioPageTemplate } from './PortfolioPageTemplate';
+import { ThankYouPageTemplate } from './ThankYouPageTemplate';
+import { ReviewsPageTemplate } from './ReviewsPageTemplate';
+import { SitemapPageTemplate } from './SitemapPageTemplate';
+import { WarrantyPageTemplate } from './WarrantyPageTemplate';
+import { TownHubPageTemplate } from './TownHubPageTemplate';
+import { GreenwichCTPageTemplate } from './GreenwichCTPageTemplate';
+import { WestportCTPageTemplate } from './WestportCTPageTemplate';
+import { OrangeCTPageTemplate } from './OrangeCTPageTemplate';
+import { NewHavenCTPageTemplate } from './NewHavenCTPageTemplate';
+import { HomeownerHubPageTemplate } from './HomeownerHubPageTemplate';
+import { MadisonCTPageTemplate } from './MadisonCTPageTemplate';
 
-// Lazy-load all secondary templates so each page only bundles what it renders.
-const lazyTemplate = <T extends { page: CMSPage }>(loader: () => Promise<{ [k: string]: React.ComponentType<T> } | { default: React.ComponentType<T> }>, exportName?: string) =>
-  dynamic<T>(async () => {
-    const mod = await loader();
-    return (exportName ? (mod as Record<string, React.ComponentType<T>>)[exportName] : (mod as { default: React.ComponentType<T> }).default) as React.ComponentType<T>;
-  });
-
-const AboutPageTemplate = lazyTemplate(() => import('./AboutPageTemplate'), 'AboutPageTemplate');
-const AreasWeServeTemplate = lazyTemplate(() => import('./AreasWeServeTemplate'), 'AreasWeServeTemplate');
-const BathroomRemodelingPageTemplate = lazyTemplate(() => import('./BathroomRemodelingPageTemplate'), 'BathroomRemodelingPageTemplate');
-const CaseStudiesPageTemplate = lazyTemplate(() => import('./CaseStudiesPageTemplate'), 'CaseStudiesPageTemplate');
-const CareersPageTemplate = lazyTemplate(() => import('./CareersPageTemplate'), 'CareersPageTemplate');
-const CaseStudyDetailPageTemplate = lazyTemplate(() => import('./CaseStudyDetailPageTemplate'), 'CaseStudyDetailPageTemplate');
-const ContactPageTemplate = lazyTemplate(() => import('./ContactPageTemplate'), 'ContactPageTemplate');
-const CountyPageTemplate = lazyTemplate(() => import('./CountyPageTemplate'), 'CountyPageTemplate');
-const FaqPageTemplate = lazyTemplate(() => import('./FaqPageTemplate'), 'FaqPageTemplate');
-const FinancingPageTemplate = lazyTemplate(() => import('./FinancingPageTemplate'), 'FinancingPageTemplate');
-const InsuranceRestorationPageTemplate = lazyTemplate(() => import('./InsuranceRestorationPageTemplate'), 'InsuranceRestorationPageTemplate');
-const KitchenRemodelingCityPageTemplate = lazyTemplate(() => import('./KitchenRemodelingCityPageTemplate'), 'KitchenRemodelingCityPageTemplate');
-const KitchenRemodelingPageTemplate = lazyTemplate(() => import('./KitchenRemodelingPageTemplate'), 'KitchenRemodelingPageTemplate');
-const PremiumServicePageTemplate = lazyTemplate(() => import('./PremiumServicePageTemplate'), 'PremiumServicePageTemplate');
-const PricingPageTemplate = lazyTemplate(() => import('./PricingPageTemplate'), 'PricingPageTemplate');
-const PrivacyPolicyPageTemplate = lazyTemplate(() => import('./PrivacyPolicyPageTemplate'), 'PrivacyPolicyPageTemplate');
-const ProcessPageTemplate = lazyTemplate(() => import('./ProcessPageTemplate'), 'ProcessPageTemplate');
-const ServicePageTemplate = lazyTemplate(() => import('./ServicePageTemplate'), 'ServicePageTemplate');
-const ServicesOverviewPageTemplate = lazyTemplate(() => import('./ServicesOverviewPageTemplate'), 'ServicesOverviewPageTemplate');
-const TermsPageTemplate = lazyTemplate(() => import('./TermsPageTemplate'), 'TermsPageTemplate');
-const TownPageTemplate = lazyTemplate(() => import('./TownPageTemplate'), 'TownPageTemplate');
-const CountyHubPageTemplate = lazyTemplate(() => import('./CountyHubPageTemplate'), 'CountyHubPageTemplate');
-const PortfolioPageTemplate = lazyTemplate(() => import('./PortfolioPageTemplate'), 'PortfolioPageTemplate');
-const ThankYouPageTemplate = lazyTemplate(() => import('./ThankYouPageTemplate'), 'ThankYouPageTemplate');
-const ReviewsPageTemplate = lazyTemplate(() => import('./ReviewsPageTemplate'), 'ReviewsPageTemplate');
-const SitemapPageTemplate = lazyTemplate(() => import('./SitemapPageTemplate'), 'SitemapPageTemplate');
-const WarrantyPageTemplate = lazyTemplate(() => import('./WarrantyPageTemplate'), 'WarrantyPageTemplate');
-const TownHubPageTemplate = lazyTemplate(() => import('./TownHubPageTemplate'), 'TownHubPageTemplate');
-const GreenwichCTPageTemplate = lazyTemplate(() => import('./GreenwichCTPageTemplate'), 'GreenwichCTPageTemplate');
-const WestportCTPageTemplate = lazyTemplate(() => import('./WestportCTPageTemplate'), 'WestportCTPageTemplate');
-const OrangeCTPageTemplate = lazyTemplate(() => import('./OrangeCTPageTemplate'), 'OrangeCTPageTemplate');
-const NewHavenCTPageTemplate = lazyTemplate(() => import('./NewHavenCTPageTemplate'), 'NewHavenCTPageTemplate');
-const HomeownerHubPageTemplate = lazyTemplate(() => import('./HomeownerHubPageTemplate'), 'HomeownerHubPageTemplate');
-const MadisonCTPageTemplate = lazyTemplate(() => import('./MadisonCTPageTemplate'), 'MadisonCTPageTemplate');
-
-type TemplateComponent = React.ComponentType<{ page: CMSPage }>;
+type TemplateComponent = (props: { page: CMSPage }) => React.JSX.Element;
 
 const TEMPLATE_COMPONENTS: Record<string, TemplateComponent> = {
   default: DefaultPageTemplate,
