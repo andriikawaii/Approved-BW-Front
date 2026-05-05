@@ -3,13 +3,13 @@
 /**
  * DynamicTemplateRenderer
  *
- * Houses all next/dynamic imports for heavy 'use client' templates so that
- * each template ships in its own JS chunk instead of one giant catch-all bundle.
+ * Houses ALL template imports behind next/dynamic so that each template ships
+ * in its own JS chunk.  This keeps the initial slug-page JS payload minimal —
+ * only the routing logic (this file) and shared layout (Header/Footer) are
+ * in the initial client bundle.
  *
- * The slug-matching logic mirrors src/templates/index.ts but runs client-side
- * after the RSC shell has streamed.  SEO-critical content (schema, HTML structure)
- * is still SSR'd because Next.js RSC pre-renders the dynamic() boundary on the
- * server — only the JS payload is deferred on the client.
+ * SEO note: Next.js pre-renders dynamic() boundaries on the server, so all
+ * HTML is still server-rendered.  The JS chunk is deferred; the HTML is not.
  */
 
 import dynamic from 'next/dynamic';
@@ -131,6 +131,25 @@ const TermsPageTemplate = dynamic(
 
 const ThankYouPageTemplate = dynamic(
   () => import('./ThankYouPageTemplate').then((m) => ({ default: m.ThankYouPageTemplate })),
+);
+
+// Server-safe templates — also loaded dynamically here so that SectionRenderer
+// and sections/index.ts are NOT in the initial client bundle for pages that
+// use a custom template (e.g. Orange CT).
+const DefaultPageTemplate = dynamic(
+  () => import('./DefaultPageTemplate').then((m) => ({ default: m.DefaultPageTemplate })),
+);
+
+const CountyPageTemplate = dynamic(
+  () => import('./CountyPageTemplate').then((m) => ({ default: m.CountyPageTemplate })),
+);
+
+const TownPageTemplate = dynamic(
+  () => import('./TownPageTemplate').then((m) => ({ default: m.TownPageTemplate })),
+);
+
+const ServicePageTemplate = dynamic(
+  () => import('./ServicePageTemplate').then((m) => ({ default: m.ServicePageTemplate })),
 );
 
 // --- slug helpers ---
@@ -261,8 +280,41 @@ export function DynamicTemplateRenderer({ page }: Props) {
     return <WarrantyPageTemplate page={effectivePage} />;
   }
 
-  // Fallback — these are the simple server-safe templates; keep them here as
-  // a safety net but they should normally be handled by renderTemplate in
-  // index.ts before we ever reach DynamicTemplateRenderer.
-  return null;
+  // --- Template-key fallback (covers DefaultPageTemplate, TownPageTemplate,
+  //     CountyPageTemplate, ServicePageTemplate, and any unknown templates) ---
+
+  const normalizedTemplate = effectivePage.template
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-]+/g, '_');
+
+  if (normalizedTemplate === 'county' || normalizedTemplate === 'county_page') {
+    return <CountyPageTemplate page={effectivePage} />;
+  }
+
+  if (
+    normalizedTemplate === 'town' ||
+    normalizedTemplate === 'town_page' ||
+    normalizedTemplate === 'service_town' ||
+    (normalizedTemplate.includes('service') && normalizedTemplate.includes('town')) ||
+    normalizedTemplate.includes('town')
+  ) {
+    return <TownPageTemplate page={effectivePage} />;
+  }
+
+  if (
+    normalizedTemplate === 'service' ||
+    normalizedTemplate === 'service_page' ||
+    normalizedTemplate === 'service_global' ||
+    normalizedTemplate.includes('service')
+  ) {
+    return <ServicePageTemplate page={effectivePage} />;
+  }
+
+  if (normalizedTemplate.includes('county')) {
+    return <CountyPageTemplate page={effectivePage} />;
+  }
+
+  // Default fallback for all remaining templates (home, about, contact, office, etc.)
+  return <DefaultPageTemplate page={effectivePage} />;
 }
