@@ -395,7 +395,7 @@ export function NewHavenCTPageTemplate({ page }: { page: CMSPage }) {
     <div data-gwc-page>
       <main id="main">
         <section className="gwc-hero">
-          <Image src={heroBg} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_28%] opacity-[0.72]" style={{ zIndex: -1 }} />
+          <Image src={heroBg} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_28%] opacity-[0.72]" style={{ zIndex: 0 }} />
           <div className="gwc-hero-overlay" />
           <div className="gwc-container gwc-hero-inner">
             {breadcrumbs.length > 0 ? (

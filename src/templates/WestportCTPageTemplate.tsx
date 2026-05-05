@@ -241,7 +241,7 @@ export function WestportCTPageTemplate({ page: _page }: { page: CMSPage }) {
         {/* ── 1. HERO ─────────────────────────────────────────────────── */}
         <section className="gwch-page-hero gwch-page-hero-westport">
           {heroImage ? (
-            <Image src={heroImage} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_40%] opacity-[0.72]" style={{ zIndex: -2 }} />
+            <Image src={heroImage} alt="" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-[center_40%] opacity-[0.72]" style={{ zIndex: 0 }} />
           ) : (
             <div className="gwch-hero-bg gwch-hero-bg-westport" />
           )}
