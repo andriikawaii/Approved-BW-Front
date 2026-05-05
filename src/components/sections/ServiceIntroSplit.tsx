@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 type BulletPoint = {
   text: string;
 };
@@ -37,20 +39,28 @@ export default function ServiceIntroSplit({ data }: Props) {
           
           {/* LEFT IMAGE STACK */}
           <div className="relative">
-            <div className="aspect-[16/10] bg-[#F3EFE7] rounded-lg overflow-hidden">
-              <img
+            <div className="aspect-[16/10] bg-[#F3EFE7] rounded-lg overflow-hidden relative">
+              <Image
                 src={mainImage}
                 alt={data.image_main_alt || data.title}
-                className="w-full h-full object-cover object-center"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover object-center"
+                loading="lazy"
               />
             </div>
 
-            <div className="absolute -bottom-8 -right-8 w-2/3 aspect-video bg-white p-2 shadow-xl rounded-lg transform rotate-3 hidden md:block">
-              <img
-                src={secondaryImage}
-                alt={data.image_secondary_alt || ''}
-                className="w-full h-full object-cover object-center rounded bg-[#F3EFE7]"
-              />
+            <div className="absolute -bottom-8 -right-8 w-2/3 aspect-video bg-white p-2 shadow-xl rounded-lg transform rotate-3 hidden md:block overflow-hidden">
+              <div className="relative w-full h-full rounded bg-[#F3EFE7]">
+                <Image
+                  src={secondaryImage}
+                  alt={data.image_secondary_alt || ''}
+                  fill
+                  sizes="33vw"
+                  className="object-cover object-center rounded"
+                  loading="lazy"
+                />
+              </div>
             </div>
           </div>
 

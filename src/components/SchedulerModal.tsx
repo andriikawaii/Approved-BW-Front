@@ -1,7 +1,11 @@
 'use client';
 
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import ConsultationModal from '@/src/components/layouts/ConsultationModal';
+import dynamic from 'next/dynamic';
+
+const ConsultationModal = dynamic(() => import('@/src/components/layouts/ConsultationModal'), {
+  ssr: false,
+});
 
 type SchedulerContextValue = {
   open: () => void;

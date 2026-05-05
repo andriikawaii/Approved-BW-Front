@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 type LogoItem = {
   name: string;
@@ -19,7 +20,16 @@ type Props = {
 
 function LogoMark({ item }: { item: LogoItem }) {
   if (item.logo) {
-    return <img src={item.logo} alt={item.logo_alt || item.name} className="h-8 w-auto object-contain" />;
+    return (
+      <Image
+        src={item.logo}
+        alt={item.logo_alt || item.name}
+        width={120}
+        height={32}
+        className="h-8 w-auto object-contain"
+        loading="lazy"
+      />
+    );
   }
 
   return <span className="text-sm font-medium text-[#6B7280]">{item.name}</span>;

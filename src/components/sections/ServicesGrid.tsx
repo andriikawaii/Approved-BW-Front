@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 
@@ -95,13 +96,14 @@ export default function ServicesGrid({ data }: Props) {
             {/* IMAGE */}
             <div className={isTownHub ? 'relative h-[220px] overflow-hidden' : 'relative h-[280px] overflow-hidden'}>
               {item.image ? (
-                <>
-                  <img
-                    src={item.image}
-                    alt={item.image_alt || item.title || 'Service'}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                </>
+                <Image
+                  src={item.image}
+                  alt={item.image_alt || item.title || 'Service'}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                />
               ) : (
                 <div className="flex h-full items-center justify-center bg-[#1E2F4A]/10">
                   <span className="text-[#1E2F4A]/40">{item.title}</span>

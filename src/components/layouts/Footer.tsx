@@ -68,7 +68,7 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-white">{title}</h4>
+      <p className="text-sm font-semibold uppercase tracking-[0.16em] text-white">{title}</p>
       <ul className="mt-4 space-y-0">
         {links.map((link) => (
           <li key={link.href}>
@@ -144,7 +144,7 @@ export default function Footer({ currentYear }: { currentYear: number }) {
                 {fairfieldPhone && (
                   <a
                     href={`tel:${fairfieldPhone.number.replace(/\D/g, '')}`}
-                    className="inline-flex items-center gap-2 text-[15px] font-semibold text-white transition-colors hover:text-[#bc9155]"
+                    className="inline-flex min-h-[44px] items-center gap-2 py-1.5 text-[15px] font-semibold text-white transition-colors hover:text-[#bc9155]"
                   >
                     <PhoneIcon />
                     Fairfield County: {fairfieldPhone.number}
@@ -153,7 +153,7 @@ export default function Footer({ currentYear }: { currentYear: number }) {
                 {newHavenPhone && (
                   <a
                     href={`tel:${newHavenPhone.number.replace(/\D/g, '')}`}
-                    className="inline-flex items-center gap-2 text-[15px] font-semibold text-white transition-colors hover:text-[#bc9155]"
+                    className="inline-flex min-h-[44px] items-center gap-2 py-1.5 text-[15px] font-semibold text-white transition-colors hover:text-[#bc9155]"
                   >
                     <PhoneIcon />
                     New Haven County: {newHavenPhone.number}
@@ -161,7 +161,7 @@ export default function Footer({ currentYear }: { currentYear: number }) {
                 )}
                 <a
                   href={`mailto:${SUPPORT_EMAIL}`}
-                  className="inline-flex items-center gap-2 text-[13px] text-white/70 transition-colors hover:text-[#bc9155]"
+                  className="inline-flex min-h-[44px] items-center gap-2 py-1.5 text-[13px] text-white/70 transition-colors hover:text-[#bc9155]"
                 >
                   <MailIcon />
                   {SUPPORT_EMAIL}

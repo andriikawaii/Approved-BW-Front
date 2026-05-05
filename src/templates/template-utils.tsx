@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, CalendarDays, Check, CheckCircle, ChevronDown, CreditCard, Shield } from "lucide-react";
 import type { CMSPage } from "@/types/cms";
 
@@ -262,12 +263,19 @@ export function AreasSection({ data }: { data: any }) {
               const extraTownKeyCounts: Record<string, number> = {};
               return (
                 <article key={countyKey} className="bw-area-card">
-                  <div className="bw-area-card-img">
-                    <img src={media(county.image, index === 0 ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")} alt={county.image_alt || county.name || "BuiltWell CT service area"} className={(county.name || "").toLowerCase().includes("new haven") ? "bw-show-top" : undefined} />
+                  <div className="bw-area-card-img" style={{ position: 'relative', overflow: 'hidden' }}>
+                    <Image
+                      src={media(county.image, index === 0 ? "/images/areas/fairfield-county.jpg" : "/images/areas/new-haven-county.jpg")}
+                      alt={county.image_alt || county.name || "BuiltWell CT service area"}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className={(county.name || "").toLowerCase().includes("new haven") ? "bw-show-top object-cover" : "object-cover"}
+                      loading="lazy"
+                    />
                   </div>
                   <div className="bw-area-card-body">
                     <h3>{county.name}</h3>
-                    {county.phone ? <div className="bw-area-card-phone">Call: {county.name ? <span style={{color:"#bc9155",fontWeight:600}}>{county.name.replace(/ County$/, "")}: </span> : null}<a href={`tel:${county.phone.replace(/\D/g, "")}`}>{county.phone}</a></div> : null}
+                    {county.phone ? <div className="bw-area-card-phone">Call: {county.name ? <span style={{color:"#8B6325",fontWeight:600}}>{county.name.replace(/ County$/, "")}: </span> : null}<a href={`tel:${county.phone.replace(/\D/g, "")}`}>{county.phone}</a></div> : null}
                     {county.description ? <p className="bw-area-card-desc">{county.description}</p> : null}
                     <div className="bw-area-towns">
                       {featuredTowns.map((town: string) => {
@@ -485,7 +493,7 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
               <p className="bw-cta-sub">
                 {(data.subtitle as string).split(/(\(\d{3}\) \d{3}-\d{4})/).map((part: string, i: number) =>
                   /^\(\d{3}\) \d{3}-\d{4}$/.test(part) ? (
-                    <a key={i} href={`tel:${part.replace(/\D/g, "")}`} style={{ color: "var(--bw-gold, #bc9155)", fontWeight: 600 }}>{part}</a>
+                    <a key={i} href={`tel:${part.replace(/\D/g, "")}`} style={{ color: "var(--bw-gold, #8B6325)", fontWeight: 600 }}>{part}</a>
                   ) : (
                     <span key={i}>{part}</span>
                   )
@@ -507,8 +515,15 @@ export function LeadFormSection({ page, data, accent, phones }: { page: CMSPage;
             <div className="bw-cta-left">
               <div className="bw-cta-images">
                 {images.map((image, index) => (
-                  <div key={`${image.src}-${index}`} className="bw-cta-img-wrap">
-                    <img src={image.src} alt={image.alt} />
+                  <div key={`${image.src}-${index}`} className="bw-cta-img-wrap" style={{ position: 'relative' }}>
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 300px"
+                      className="object-cover"
+                      loading="lazy"
+                    />
                   </div>
                 ))}
               </div>
