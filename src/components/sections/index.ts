@@ -55,7 +55,7 @@ import CaseStudyBody from './CaseStudyBody';
 // Below-fold: dynamically loaded to reduce initial JS bundle
 type LazySection = React.ComponentType<{ data: never }>;
 function lazySection<T>(factory: () => Promise<{ default: React.ComponentType<T> }>): LazySection {
-  return dynamic(factory, { ssr: false }) as unknown as LazySection;
+  return dynamic(factory) as unknown as LazySection;
 }
 const StatsCounterSection = lazySection(() => import('./StatsCounterSection'));
 const Testimonials = lazySection(() => import('./Testimonials'));
