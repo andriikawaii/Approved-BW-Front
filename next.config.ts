@@ -23,6 +23,7 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['lucide-react', 'react-markdown', 'remark-gfm'],
+    cssChunking: 'strict',
   },
 
   async headers() {
