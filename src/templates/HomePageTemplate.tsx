@@ -1114,7 +1114,7 @@ function HomeAreasSection({
                   <h3 className="font-serif text-[22px] font-bold text-[#1E2B43] md:text-2xl">{countyName}</h3>
                   {county.phone ? (
                     <div className="mb-3.5 mt-1.5 text-[15px] text-[#5C677D]">
-                      Call: <a href={`tel:${county.phone.replace(/\D/g, '')}`} className="font-semibold text-[#BC9155] hover:underline">{county.phone}</a>
+                      Call: <a href={`tel:${county.phone.replace(/\D/g, '')}`} className="font-semibold text-[#8B6325] hover:underline">{county.phone}</a>
                     </div>
                   ) : null}
                   {county.description ? (
@@ -1157,7 +1157,7 @@ function HomeAreasSection({
                     {hiddenTowns.length > 0 ? (
                       <button
                         type="button"
-                        className="col-span-full mt-1 bg-transparent px-0 py-1 text-center text-[13px] font-semibold text-[#BC9155] transition-colors hover:text-[#9A7340]"
+                        className="col-span-full mt-1 bg-transparent px-0 py-1 text-center text-[13px] font-semibold text-[#8B6325] transition-colors hover:text-[#6B4C1A]"
                         onClick={() =>
                           setExpandedCounties((current) => ({
                             ...current,
@@ -1174,7 +1174,7 @@ function HomeAreasSection({
                   {county.url ? (
                     <Link
                       href={county.url}
-                      className="mt-auto flex w-full items-center justify-center gap-1.5 text-center text-sm font-semibold text-[#BC9155] transition-colors duration-200 hover:text-[#a57d48]"
+                      className="mt-auto flex w-full items-center justify-center gap-1.5 text-center text-sm font-semibold text-[#8B6325] transition-colors duration-200 hover:text-[#6B4C1A]"
                     >
                       Learn more about {countyName}
                       <ArrowRight className="h-3.5 w-3.5" />
@@ -1319,7 +1319,7 @@ function HomeProjectsSection({
             {phraseIndex >= 0 ? (
               <>
                 {projectsDescription.slice(0, phraseIndex)}
-                <Link href="/case-studies/" className="font-semibold text-[#BC9155] transition-colors hover:text-[#a57d48]">
+                <Link href="/case-studies/" className="font-semibold text-[#8B6325] transition-colors hover:text-[#6B4C1A]">
                   {projectsDescription.slice(phraseIndex, phraseIndex + caseStudiesPhrase.length)}
                 </Link>
                 {projectsDescription.slice(phraseIndex + caseStudiesPhrase.length)}
@@ -1327,7 +1327,7 @@ function HomeProjectsSection({
             ) : (
               <>
                 {projectsDescription}{" "}
-                <Link href="/case-studies/" className="font-semibold text-[#BC9155] transition-colors hover:text-[#a57d48]">
+                <Link href="/case-studies/" className="font-semibold text-[#8B6325] transition-colors hover:text-[#6B4C1A]">
                   case studies
                 </Link>
                 .
