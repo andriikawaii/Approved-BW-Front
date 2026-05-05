@@ -29,6 +29,7 @@ export default function TrustBar({ data }: Props) {
       : [
           { icon: 'calendar', value: '15+', label: data.experience || 'Years of Experience' },
           { icon: 'check-circle', value: '100+', label: 'Completed Projects' },
+          { icon: 'star', value: data.rating || '4.9', label: 'Google Rating' },
           { icon: 'shield', value: '✓', label: data.license || 'Fully Bonded & Insured' },
         ];
 
