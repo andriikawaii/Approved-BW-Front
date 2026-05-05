@@ -26,34 +26,19 @@ const nextConfig: NextConfig = {
   },
 
   async headers() {
+    const immutable = [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }];
     return [
-      {
-        source: '/:path(hero|images|portfolio|logos|fonts|team|services|avatars)/:file*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-      {
-        source: '/og-default.jpg',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 's-maxage=60, stale-while-revalidate=600',
-          },
-        ],
-      },
+      { source: '/hero/:file*', headers: immutable },
+      { source: '/portfolio/:file*', headers: immutable },
+      { source: '/logos/:file*', headers: immutable },
+      { source: '/team/:file*', headers: immutable },
+      { source: '/services/:file*', headers: immutable },
+      { source: '/avatars/:file*', headers: immutable },
+      { source: '/images/:file*', headers: immutable },
+      { source: '/fonts/:file*', headers: immutable },
+      { source: '/og-default.jpg', headers: immutable },
+      { source: '/_next/image/:path*', headers: immutable },
+      { source: '/:slug(.+\\.(?:svg|jpg|jpeg|png|webp|avif|gif|ico|woff|woff2|ttf|otf|eot|mp4|webm))', headers: immutable },
     ];
   },
 

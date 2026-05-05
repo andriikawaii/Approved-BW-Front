@@ -73,10 +73,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
       <head>
-        {/* Preload primary hero images — AVIF first, then WebP fallback */}
+        <link rel="preconnect" href="https://api.builtwellct.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://api.builtwellct.com" />
+        <link rel="preload" as="image" href="/hero/builtwell-team-van-consultation-hero-ct.avif" type="image/avif" fetchPriority="high" />
         <link rel="preload" as="image" href="/hero/builtwell-team-van-consultation-hero-ct.webp" type="image/webp" fetchPriority="high" />
-        <link rel="preload" as="image" href="/hero/builtwell-job-site-aerial-hero-ct.avif" type="image/avif" fetchPriority="high" />
-        <link rel="preload" as="image" href="/hero/builtwell-job-site-aerial-hero-ct.webp" type="image/webp" fetchPriority="high" />
       </head>
       <body suppressHydrationWarning={isDevelopment} className="font-sans antialiased">
         <SchedulerProvider>

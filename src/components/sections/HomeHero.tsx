@@ -74,18 +74,17 @@ export default function HomeHero({ data }: HomeHeroProps) {
           aria-label="BuiltWell CT team and vehicles at a Connecticut home remodeling project"
         />
       ) : (
-        /* Fallback: slide background images */
-        data.slides?.filter((s) => s.image).map((slide, index) => (
+        /* Single primary hero image — LCP candidate, eager load, high priority */
+        data.slides?.filter((s) => s.image).slice(0, 1).map((slide, index) => (
           <Image
             key={`${slide.image}-${index}`}
             src={slide.image!}
-            alt={slide.alt || ''}
+            alt={slide.alt || 'BuiltWell CT home remodeling in Connecticut'}
             fill
-            priority={index === 0}
-            fetchPriority={index === 0 ? 'high' : 'auto'}
+            priority
+            fetchPriority="high"
             sizes="100vw"
-            className="object-cover opacity-[0.18]"
-            aria-hidden="true"
+            className="object-cover opacity-[0.45]"
           />
         ))
       )}
