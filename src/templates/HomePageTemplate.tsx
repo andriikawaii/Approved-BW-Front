@@ -668,10 +668,12 @@ function HomeServicesSection({
               >
                 <div className="relative h-[180px] overflow-hidden md:h-[200px]">
                   {service.image ? (
-                    <img
+                    <Image
                       src={service.image}
                       alt={service.image_alt || service.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
                     />
                   ) : (
@@ -1094,11 +1096,13 @@ function HomeAreasSection({
               >
                 {county.image ? (
                   <div className="relative h-[180px] overflow-hidden md:h-[200px]">
-                    <img
+                    <Image
                       src={county.image}
                       alt={`${countyName}, Connecticut home remodeling service area`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className={joinClasses(
-                        'h-full w-full object-cover transition-transform duration-500 md:group-hover:scale-105',
+                        'object-cover transition-transform duration-500 md:group-hover:scale-105',
                         normalizeTitle(countyName) === 'new haven county' && 'object-[center_15%]'
                       )}
                       loading="lazy"
@@ -1337,12 +1341,14 @@ function HomeProjectsSection({
               key={project.title}
               className="group flex flex-col overflow-hidden rounded-lg border-b-2 border-transparent bg-white shadow-[0_2px_12px_rgba(30,43,67,0.06),0_1px_3px_rgba(30,43,67,0.04)] transition-all duration-300 md:hover:-translate-y-1 md:hover:border-[#BC9155] md:hover:shadow-[0_12px_28px_rgba(30,43,67,0.1),0_28px_56px_rgba(30,43,67,0.12)]"
             >
-              <div className="h-[200px] overflow-hidden md:h-[260px]">
+              <div className="relative h-[200px] overflow-hidden md:h-[260px]">
                 {project.image ? (
-                  <img
+                  <Image
                     src={project.image}
                     alt={project.image_alt || project.title || ''}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                     loading="lazy"
                   />
                 ) : null}
@@ -1635,19 +1641,23 @@ function HomeLeadFormSection({ data }: { data: LeadFormData }) {
           <div className="home-fade-up flex h-full flex-col">
             <div className="flex h-full flex-1 flex-col gap-3">
               <div className="relative min-h-[220px] overflow-hidden rounded-[8px] shadow-[0_12px_24px_-18px_rgba(30,43,67,0.6)] md:min-h-[250px] lg:min-h-0 lg:flex-1">
-                <img
+                <Image
                   src={data.background_image || '/team/builtwell-owner-handshake-client-ct-02.jpg'}
                   alt="BuiltWell consultation arrival"
-                  className="h-full w-full object-cover [object-position:center_30%]"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover [object-position:center_30%]"
                   loading="lazy"
                 />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[60px] bg-[linear-gradient(to_top,rgba(245,241,233,1)_0%,rgba(245,241,233,0.6)_40%,transparent_100%)]" />
               </div>
               <div className="relative min-h-[220px] overflow-hidden rounded-[8px] shadow-[0_12px_24px_-18px_rgba(30,43,67,0.6)] md:min-h-[250px] lg:min-h-0 lg:flex-1">
-                <img
+                <Image
                   src="/portfolio/builtwell-job-site-aerial-ct.jpg"
                   alt="BuiltWell CT job site with two vans at a Connecticut home renovation"
-                  className="h-full w-full object-cover"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
                   loading="lazy"
                 />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[60px] bg-[linear-gradient(to_top,rgba(245,241,233,1)_0%,rgba(245,241,233,0.6)_40%,transparent_100%)]" />
