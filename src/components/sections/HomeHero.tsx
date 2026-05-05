@@ -36,13 +36,12 @@ type HomeHeroProps = {
 };
 
 /**
- * Returns the best-quality poster path: prefer avif > webp > original
- * Only applies to local /images/hero/ paths.
+ * Returns the best-quality poster path for hero images.
+ * Uses AVIF for /hero/ and /images/hero/ paths when available.
  */
 function getBestPosterSrc(src: string): string {
-  if (!src.startsWith('/images/hero/')) return src;
-  const withoutExt = src.replace(/\.(png|jpg|jpeg|webp)$/i, '');
-  return `${withoutExt}.avif`;
+  if (!src.startsWith('/hero/') && !src.startsWith('/images/hero/')) return src;
+  return src.replace(/\.(png|jpg|jpeg|webp)$/i, '.avif');
 }
 
 export default function HomeHero({ data }: HomeHeroProps) {
@@ -71,28 +70,16 @@ export default function HomeHero({ data }: HomeHeroProps) {
 
   return (
     <section className="relative isolate flex min-h-[92vh] items-center justify-center overflow-hidden bg-[#151E30] pt-16">
-      {/* Poster image — LCP element, paints immediately */}
-      {hasVideo && data.background_poster ? (
-        <Image
-          src={getBestPosterSrc(data.background_poster)}
-          alt="BuiltWell CT team and vehicles at a Connecticut home remodeling project"
-          fill
-          priority
-          fetchPriority="high"
-          sizes="100vw"
-          className="object-cover object-[center_top] opacity-65"
-        />
-      ) : null}
-      {/* Video background — loads in background, replaces poster once ready */}
+      {/* Video background — single layer, poster paints first then video plays */}
       {hasVideo ? (
         <video
           autoPlay
           muted
           loop
           playsInline
-          preload="none"
+          preload="metadata"
           src={data.background_video}
-          poster={data.background_poster ? getBestPosterSrc(data.background_poster) : undefined}
+          poster={data.background_poster || undefined}
           className="absolute inset-0 h-[110%] w-full object-cover object-[center_top] opacity-65"
           aria-label="BuiltWell CT team and vehicles at a Connecticut home remodeling project"
         />
