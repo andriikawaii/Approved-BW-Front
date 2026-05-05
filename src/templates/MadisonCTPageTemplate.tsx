@@ -131,6 +131,30 @@ type CtaBlockData = {
 
 const MADISON_HOUSING_BG = '/images/areas/madison-ct-town.jpg';
 
+let sharedObserver: IntersectionObserver | null = null;
+const fadeUpCallbacks = new WeakMap<Element, () => void>();
+
+function getSharedObserver(): IntersectionObserver {
+  if (!sharedObserver) {
+    sharedObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const cb = fadeUpCallbacks.get(entry.target);
+            if (cb) {
+              cb();
+              sharedObserver?.unobserve(entry.target);
+              fadeUpCallbacks.delete(entry.target);
+            }
+          }
+        }
+      },
+      { threshold: 0.14 }
+    );
+  }
+  return sharedObserver;
+}
+
 function FadeUp({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -139,18 +163,14 @@ function FadeUp({ children, delay = 0 }: { children: ReactNode; delay?: number }
     const node = ref.current;
     if (!node) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.14 }
-    );
-
+    fadeUpCallbacks.set(node, () => setVisible(true));
+    const observer = getSharedObserver();
     observer.observe(node);
-    return () => observer.disconnect();
+
+    return () => {
+      observer.unobserve(node);
+      fadeUpCallbacks.delete(node);
+    };
   }, []);
 
   return (
