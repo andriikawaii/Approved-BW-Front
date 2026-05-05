@@ -133,6 +133,19 @@ const ThankYouPageTemplate = dynamic(
   () => import('./ThankYouPageTemplate').then((m) => ({ default: m.ThankYouPageTemplate })),
 );
 
+const AboutPageTemplate = dynamic(
+  () => import('./AboutPageTemplate').then((m) => ({ default: m.AboutPageTemplate })),
+);
+
+const ContactPageTemplate = dynamic(
+  () => import('./ContactPageTemplate').then((m) => ({ default: m.ContactPageTemplate })),
+);
+
+const HomePageTemplate = dynamic(
+  () => import('./HomePageTemplate').then((m) => ({ default: m.HomePageTemplate })),
+);
+
+
 // Server-safe templates — also loaded dynamically here so that SectionRenderer
 // and sections/index.ts are NOT in the initial client bundle for pages that
 // use a custom template (e.g. Orange CT).
@@ -187,6 +200,15 @@ export function DynamicTemplateRenderer({ page }: Props) {
   const templateOverride = TEMPLATE_OVERRIDES_BY_SLUG[rawSlug];
   const effectivePage = templateOverride ? { ...page, template: templateOverride } : page;
 
+  if (rawSlug === '' || rawSlug === '/') {
+    return <HomePageTemplate page={effectivePage} />;
+  }
+  if (rawSlug === 'about') {
+    return <AboutPageTemplate page={effectivePage} />;
+  }
+  if (rawSlug === 'contact') {
+    return <ContactPageTemplate page={effectivePage} />;
+  }
   if (rawSlug === 'fairfield-county/greenwich-ct') {
     return <GreenwichCTPageTemplate page={effectivePage} />;
   }
