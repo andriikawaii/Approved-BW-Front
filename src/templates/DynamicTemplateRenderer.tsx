@@ -12,6 +12,7 @@
  * HTML is still server-rendered.  The JS chunk is deferred; the HTML is not.
  */
 
+import { applyContentOverrides } from '@/lib/content-overrides';
 import dynamic from 'next/dynamic';
 import type { CMSPage } from '@/types/cms';
 
@@ -198,7 +199,8 @@ interface Props {
 export function DynamicTemplateRenderer({ page }: Props) {
   const rawSlug = normalizeSlug(page.slug);
   const templateOverride = TEMPLATE_OVERRIDES_BY_SLUG[rawSlug];
-  const effectivePage = templateOverride ? { ...page, template: templateOverride } : page;
+  const templatedPage = templateOverride ? { ...page, template: templateOverride } : page;
+  const effectivePage = applyContentOverrides(templatedPage);
 
   if (rawSlug === '' || rawSlug === '/') {
     return <HomePageTemplate page={effectivePage} />;
