@@ -140,3 +140,30 @@ export function linkServiceAreaTowns<T extends { slug: string; sections?: unknow
 
   return touched ? { ...page, sections } : page;
 }
+
+export const SERVICE_LABELS: Record<string, string> = {
+  'kitchen-remodeling': 'Kitchen Remodeling',
+  'bathroom-remodeling': 'Bathroom Remodeling',
+  'basement-finishing': 'Basement Finishing',
+  'flooring': 'Flooring',
+};
+
+/**
+ * Other services that have a real page for this same town. Town pages previously linked
+ * zero sibling services, so each was reachable from almost nothing; this turns the set
+ * into a mesh. Only returns routes that exist, so it can never emit a 404.
+ */
+export function otherServicesForTown(
+  currentService: string,
+  townSlug: string,
+): Array<{ service: string; label: string; href: string }> {
+  const out: Array<{ service: string; label: string; href: string }> = [];
+  const wanted = `-${townSlug.replace(/^\/+|\/+$/g, '')}-ct/`;
+  for (const service of Object.keys(SERVICE_TOWN_ROUTES)) {
+    if (service === currentService) continue;
+    const table = SERVICE_TOWN_ROUTES[service];
+    const hit = Object.values(table).find((url) => url.endsWith(wanted.slice(1)) || url === `/${service}/${townSlug}-ct/`);
+    if (hit) out.push({ service, label: SERVICE_LABELS[service] ?? service, href: hit });
+  }
+  return out;
+}

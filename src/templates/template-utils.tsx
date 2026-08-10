@@ -201,7 +201,12 @@ export function AreasSection({ data , serviceRoot }: { data: any , serviceRoot?:
   // Fall back to the service's own town page when one genuinely exists. The route table is
   // generated from the live sitemap, so an unknown town stays unlinked and never 404s.
   const resolveTownUrl = (county: any, town: string) => {
-    const fallback = serviceRoot ? serviceTownUrl(serviceRoot, town) || "" : "";
+    // Prefer this service's own town page. The CMS town_links map points at COUNTY town
+    // pages, which are already fully indexed and well linked; the service town pages are
+    // the ones starved of inbound links, so they win here when one exists.
+    const own = serviceRoot ? serviceTownUrl(serviceRoot, town) || "" : "";
+    if (own) return own;
+    const fallback = "";
     const links = county.town_links;
     if (!links) return fallback;
     if (!links) return "";
