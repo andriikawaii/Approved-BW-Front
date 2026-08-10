@@ -163,7 +163,12 @@ export function otherServicesForTown(
     if (service === currentService) continue;
     const table = SERVICE_TOWN_ROUTES[service];
     const hit = Object.values(table).find((url) => url.endsWith(wanted.slice(1)) || url === `/${service}/${townSlug}-ct/`);
-    if (hit) out.push({ service, label: SERVICE_LABELS[service] ?? service, href: hit });
+    if (!hit) continue;
+    // NOTE: do not write `SERVICE_LABELS[service] ?? service` here. The SWC transform emits an
+    // undeclared temp for nullish-coalescing over a computed member access, which type-checks and
+    // builds clean but throws `_SERVICE_LABELS_service is not defined` on hydration. Assign first.
+    const label = SERVICE_LABELS[service];
+    out.push({ service, label: label || service, href: hit });
   }
   return out;
 }

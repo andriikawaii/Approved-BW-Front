@@ -2,6 +2,9 @@
 
 import { useMemo, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { otherServicesForTown } from "@/lib/service-town-routes";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { Components } from "react-markdown";
@@ -253,6 +256,8 @@ function deriveCityConfig(slug: string) {
   const isFairfield = FAIRFIELD_TOWNS.has(townSlug);
   const meta = SERVICE_META[serviceSlug] || SERVICE_META["kitchen-remodeling"];
   return {
+    serviceSlug,
+    townSlug,
     cityLabel: `${cityShort}, CT`,
     cityShort,
     countyLabel: isFairfield ? "Fairfield County" : "New Haven County",
@@ -346,6 +351,7 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
   const related = section<ProjectHighlightsData>(page, "project_highlights");
   const slug = normalizeSlug(page.slug);
   const config = deriveCityConfig(slug);
+  const siblingServices = otherServicesForTown(config.serviceSlug, config.townSlug);
   const phones = ((page as CMSPage & { phones?: { items?: PhoneItem[] } }).phones?.items) || [];
   const primaryPhone = resolveCountyPhone(phones, config.countyLabel, config.defaultPhone);
   const isFairfieldPrimary = config.countyLabel.includes("Fairfield");
@@ -659,6 +665,27 @@ export function KitchenRemodelingCityPageTemplate({ page }: { page: CMSPage }) {
         </section>
 
         <SharedAreasSection data={areas} />
+
+        {siblingServices.length > 0 ? (
+          <section className="border-t border-t-[#1E2B43]/8 bg-[#F5F1E9] px-5 py-[52px] md:px-8 md:py-20">
+            <div className="mx-auto max-w-[1080px]">
+              <div className="mb-9 text-center md:mb-12">
+                <span className="mb-4 inline-block pl-5 text-[11px] font-bold uppercase tracking-[1.5px] text-[#9A7340] before:relative before:-left-5 before:top-[-3px] before:inline-block before:h-[2px] before:w-[10px] before:bg-[#BC9155]">More In {config.cityShort}</span>
+                <h2 className="font-serif text-[clamp(26px,3.4vw,42px)] font-bold tracking-[-0.5px] text-[#1E2B43]">Other Services We Offer In {config.cityShort}</h2>
+                <p className="mx-auto mt-4 max-w-[560px] text-[15px] leading-[1.7] text-[#5c677d]">Same crew, same standards, same {config.cityShort} permitting.</p>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {siblingServices.map((svc) => (
+                  <Link key={svc.href} href={svc.href} className="group flex items-center justify-between gap-4 rounded-2xl border border-[#1E2B43]/10 bg-white px-6 py-6 transition-all duration-200 hover:-translate-y-[2px] hover:border-[#BC9155]">
+                    <span className="font-serif text-[19px] font-bold text-[#1E2B43]">{svc.label}</span>
+                    <ArrowRight className="h-[18px] w-[18px] shrink-0 text-[#BC9155]" />
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
+
 
         <section className="bg-white px-5 py-20 md:px-10">
           <div className="mx-auto max-w-[800px]">
