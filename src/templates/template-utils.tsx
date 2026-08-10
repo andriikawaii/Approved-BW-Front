@@ -1,5 +1,6 @@
 "use client";
 
+import { serviceTownUrl } from '@/lib/service-town-routes';
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -183,7 +184,7 @@ export function DarkTrustStrip({ items }: { items?: any[] }) {
   );
 }
 
-export function AreasSection({ data }: { data: any }) {
+export function AreasSection({ data , serviceRoot }: { data: any , serviceRoot?: string }) {
   const [expanded, setExpanded] = useState<Record<number, boolean>>({});
   const titleParts = parts(data?.title, data?.highlight_text);
   const counties: any[] = data?.counties || [];
@@ -193,11 +194,19 @@ export function AreasSection({ data }: { data: any }) {
   const subtitleLinkIndex = subtitle.toLowerCase().indexOf(subtitleLinkText.toLowerCase());
   const hasSubtitleInlineLink = Boolean(subtitle && subtitleLinkText && subtitleLinkUrl && subtitleLinkIndex >= 0);
 
+  // The CMS only ever populated town_links with a couple of towns per county, so every
+  // other town rendered as plain text. That left all 64 service/town pages with a single
+  // inbound internal link and Google declined to crawl them (measured 2026-08-09: indexed
+  // pages median 25 inbound links, non-indexed median 1, 56 of 103 never crawled).
+  // Fall back to the service's own town page when one genuinely exists. The route table is
+  // generated from the live sitemap, so an unknown town stays unlinked and never 404s.
   const resolveTownUrl = (county: any, town: string) => {
+    const fallback = serviceRoot ? serviceTownUrl(serviceRoot, town) || "" : "";
     const links = county.town_links;
+    if (!links) return fallback;
     if (!links) return "";
-    if (Array.isArray(links)) return links.find((e: any) => e?.name?.toLowerCase() === town.toLowerCase())?.url || "";
-    return links[town] || "";
+    if (Array.isArray(links)) return links.find((e: any) => e?.name?.toLowerCase() === town.toLowerCase())?.url || fallback;
+    return links[town] || fallback;
   };
 
   return (

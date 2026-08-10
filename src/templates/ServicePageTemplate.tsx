@@ -72,10 +72,10 @@ export function ServicePageTemplate({ page }: ServicePageTemplateProps) {
 
   return (
     <div data-template={page.template}>
-      <SectionRenderer sections={mainSections} />
+      <SectionRenderer sections={mainSections} pageSlug={page.slug} />
       {relatedLinkSections.length > 0 ? (
         <div data-template-block="services-related-links">
-          <SectionRenderer sections={relatedLinkSections} />
+          <SectionRenderer sections={relatedLinkSections} pageSlug={page.slug} />
         </div>
       ) : null}
     </div>

@@ -1,4 +1,5 @@
 import { sectionMap } from '@/src/components/sections';
+import { serviceTownUrl } from '@/lib/service-town-routes';
 import type { CMSSection } from '@/types/cms';
 
 type SectionRendererContext = 'default' | 'town_hub';
@@ -6,6 +7,8 @@ type SectionRendererContext = 'default' | 'town_hub';
 type SectionRendererProps = {
   sections: CMSSection[];
   context?: SectionRendererContext;
+  /** Slug of the page being rendered, e.g. '/flooring'. Enables service-aware town links. */
+  pageSlug?: string;
 };
 
 function asString(value: unknown, fallback = ''): string {
@@ -354,7 +357,46 @@ function normalizeTownHubSection(
   return { renderType: section.type, renderData: data };
 }
 
-export default function SectionRenderer({ sections, context = 'default' }: SectionRendererProps) {
+/**
+ * The CMS ships areas-served towns as bare strings, so ServiceAreas renders them as
+ * plain text and every service/town page is left with a single inbound link from
+ * /areas-we-serve/ (measured 2026-08-09: indexed pages median 25 inbound links,
+ * non-indexed median 1). Where a town page genuinely exists for this service, hand
+ * ServiceAreas a { name, url } so it renders a real link. Unknown towns are left as
+ * plain strings, so this can never emit a 404.
+ */
+function withServiceTownLinks(
+  data: Record<string, unknown>,
+  pageSlug: string | undefined,
+): Record<string, unknown> {
+  const service = (pageSlug ?? '').replace(/^\/+|\/+$/g, '');
+  if (!service) return data;
+
+  const counties = data.counties;
+  if (!Array.isArray(counties)) return data;
+
+  let changed = false;
+  const nextCounties = counties.map((countyRaw) => {
+    const county = asRecord(countyRaw);
+    const towns = county.towns ?? county.cities;
+    if (!Array.isArray(towns)) return countyRaw;
+
+    const nextTowns = towns.map((town) => {
+      if (typeof town !== 'string') return town;
+      const url = serviceTownUrl(service, town);
+      if (!url) return town;
+      changed = true;
+      return { name: town, url };
+    });
+
+    if (!changed) return countyRaw;
+    return county.towns ? { ...county, towns: nextTowns } : { ...county, cities: nextTowns };
+  });
+
+  return changed ? { ...data, counties: nextCounties } : data;
+}
+
+export default function SectionRenderer({ sections, context = 'default', pageSlug }: SectionRendererProps) {
   const neighborhoodLabelSet = new Set(
     sections
       .filter((section) => section.is_active && section.type === 'neighborhoods')
@@ -391,10 +433,15 @@ export default function SectionRenderer({ sections, context = 'default' }: Secti
               ? sectionData.variant
               : undefined;
 
+        const isAreasServed =
+          normalized.renderType === 'areas_served' || normalized.renderType === 'service_areas';
+
         const componentData =
           normalized.renderType === 'rich_text' || normalized.renderType === 'local_context'
             ? ({ ...(sectionData ?? {}), _section_index: index } as Record<string, unknown>)
-            : sectionData;
+            : isAreasServed
+              ? withServiceTownLinks(sectionData ?? {}, pageSlug)
+              : sectionData;
 
         const sectionTypeClass = section.type.replace(/_/g, '-');
         const wrapperClass =

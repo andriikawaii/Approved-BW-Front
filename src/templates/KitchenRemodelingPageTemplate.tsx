@@ -1580,7 +1580,7 @@ export function KitchenRemodelingPageTemplate({ page }: { page: CMSPage }) {
             </p>
           </div>
         </section>
-        <SharedAreasSection data={areas} />
+        <SharedAreasSection data={areas} serviceRoot={serviceRoot} />
         <section className="border-t border-t-[#1E2B43]/8 bg-white px-5 py-[52px] md:px-8 md:py-20 lg:px-10 lg:py-[100px]">
           <div className="mx-auto max-w-[800px]">
             <div className="mb-10 text-center kitchen-fade-up">
