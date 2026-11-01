@@ -416,6 +416,9 @@ export default function FooterC({
           color: rgba(255, 255, 255, 0.35);
           font-size: 13px;
           display: inline-flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          row-gap: 8px;
           align-items: center;
           white-space: nowrap;
           line-height: 1.1;
