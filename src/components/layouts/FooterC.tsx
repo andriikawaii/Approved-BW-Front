@@ -233,6 +233,12 @@ export default function FooterC({
           background: #1e2b43;
           color: rgba(255, 255, 255, 0.78);
         }
+        /* room for the mobile sticky CTA bar so the legal row stays visible */
+        @media (max-width: 767px) {
+          .footer-a {
+            padding-bottom: 88px;
+          }
+        }
         .footer-a-inner {
           max-width: 1240px;
           margin: 0 auto;
