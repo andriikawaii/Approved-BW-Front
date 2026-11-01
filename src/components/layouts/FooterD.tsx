@@ -224,6 +224,8 @@ export default function FooterD({
             <Link href="/warranty/">Warranty</Link>
             <span className="footer-a-sep">|</span>
             <Link href="/financing/">Financing</Link>
+            <span className="footer-a-sep">|</span>
+            <a href="https://marketmovers.ai" target="_blank" rel="noopener">Built by Market Movers</a>
           </span>
         </div>
       </div>
