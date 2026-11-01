@@ -229,7 +229,7 @@ export default function FooterA({
             <span className="footer-a-sep">|</span>
             <Link href="/financing/">Financing</Link>
             <span className="footer-a-sep">|</span>
-            <a href="https://marketmovers.ai" target="_blank" rel="noopener">Built by Market Movers</a>
+            <a href="https://marketmovers.ai" target="_blank" rel="noopener">Built by <span className="mm-mark">Market Movers</span></a>
           </span>
         </div>
       </div>
@@ -402,6 +402,22 @@ export default function FooterA({
         .footer-a-hic {
           color: rgba(255, 255, 255, 0.35);
           font-size: 11px;
+        }
+        .mm-mark {
+          position: relative;
+          display: inline-block;
+          line-height: 1.25;
+        }
+        .mm-mark::after {
+          content: "";
+          position: absolute;
+          left: 50%;
+          bottom: -7px;
+          width: 22px;
+          height: 2px;
+          margin-left: -11px;
+          border-radius: 2px;
+          background: #2ee6c8;
         }
         .footer-a-legal {
           color: rgba(255, 255, 255, 0.35);
